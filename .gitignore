@@ -1,0 +1,66 @@
+# Object files
+*.o
+
+# Execute files
+*.exe
+*.out
+*.app
+
+# Class files
+*.class
+
+# NetBeans folders
+**/nbproject/private/
+**/nbproject/*
+!**/nbproject/project.properties
+!**/nbproject/configurations.xml
+!**/nbproject/project.xml
+build/
+dist/
+
+# NetBeans files
+*/.dep.inc
+*.inc
+
+# Visual Studio folders
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+build/
+bld/
+msbuild.log
+msbuild.err
+msbuild.wrn
+.vs/
+
+# Visual Studio Code
+.vscode/
+
+
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+src/main/resources/application.properties
