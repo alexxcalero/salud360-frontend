@@ -1,4 +1,4 @@
 package pe.edu.pucp.salud360.comunidad.models;
 
-public class Calificacion {
+public class Testimonio {
 }

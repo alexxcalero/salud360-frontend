@@ -19,15 +19,42 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idUsuario;
+
+    @Column(name = "nombres", unique = false, nullable = false, updatable = true)
     private String nombres;
+
+    @Column(name = "apellidos", unique = false, nullable = false, updatable = true)
     private String apellidos;
-    private TipoDocumento tipoDocumento;
-    private String numeroDocumento;
+
+    @Column(name = "numeroDocumento", unique = true, nullable = false, updatable = false)
+    private String numeroDocumento;  // Va a tener que contactar con el admin si quiere cambiar su numero de documento
+
+    @Column(name = "correo", unique = true, nullable = false, updatable = true)
     private String correo;
+
+    @Column(name = "contrasenha", unique = false, nullable = false, updatable = true)
     private String contrasenha;
+
+    @Column(name = "telefono", unique = true, nullable = false, updatable = true)
     private String telefono;
-    private LocalDate fechaNacimiento;
-    private Boolean estado;
+
+    @Column(name = "fechaNacimiento", unique = false, nullable = false, updatable = false)
+    private LocalDate fechaNacimiento;  // Va a tener que contactar con el admin si quiere cambiar su fecha de nacimiento
+
+    @Column(name = "activo", unique = false, nullable = false, updatable = true)
+    private Boolean activo;
+
+    @Column(name = "fechaCreacion", unique = false, nullable = false, updatable = false)
     private LocalDateTime fechaCreacion;
-    private LocalDateTime fechaEliminacion;
+
+    @Column(name = "fechaDesactivacion", unique = false, nullable = true, updatable = true)
+    private LocalDateTime fechaDesactivacion;
+
+    @ManyToOne
+    @JoinColumn(name = "idTipoDocumento")
+    private TipoDocumento tipoDocumento;
+
+    @ManyToOne
+    @JoinColumn(name = "idRol")
+    private Rol rol;
 }

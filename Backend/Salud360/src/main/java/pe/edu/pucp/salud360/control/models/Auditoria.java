@@ -13,11 +13,11 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "LogModificacion")
-public class LogModificacion {
+@Table(name = "Auditoria")
+public class Auditoria {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idLogModificacion;
+    private Integer idAuditoria;
 
     @Column(name = "nombreTabla", unique = false, nullable = false, updatable = false)
     private String nombreTabla;
