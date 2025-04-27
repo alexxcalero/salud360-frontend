@@ -1,8 +1,5 @@
 package pe.edu.pucp.salud360.comunidad.models;
 
-<<<<<<< HEAD
-public class Testimonio {
-=======
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -29,5 +26,4 @@ public class Testimonio {
     @ManyToOne
     @JoinColumn(name = "idPersona")
     private Persona usuario;
->>>>>>> a2492f769097a3ed8a8e52c222a7a1e754798669
 }
