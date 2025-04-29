@@ -35,7 +35,14 @@ public class Permiso {
     @Column(name = "fechaDesactivacion", unique = false, nullable = true, updatable = true)
     private LocalDateTime fechaDesactivacion;
 
-    @ManyToMany
-    @JoinTable()
+    @ManyToMany(mappedBy = "permisos")
     private List<Rol> roles;
+
+    public Permiso(Integer idPermiso, String nombre, String descripcion, Boolean activo, List<Rol> roles) {
+        this.idPermiso = idPermiso;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.activo = activo;
+        this.roles = roles;
+    }
 }

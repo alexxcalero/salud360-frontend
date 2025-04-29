@@ -27,9 +27,6 @@ public class Clase {
     @Column(name = "descripcion", unique = false, nullable = false, updatable = true)
     private String descripcion;
 
-    @Column(name = "estado", unique = false, nullable = false, updatable = true)
-    private String estado;
-
     @Column(name = "fechaClase", unique = false, nullable = false, updatable = true)
     private LocalDateTime fechaClase;
 
@@ -45,19 +42,27 @@ public class Clase {
     @Column(name = "cantAsistentes", unique = false, nullable = false, updatable = true)
     private Integer cantAsistentes;
 
+    @Column(name = "estado", unique = false, nullable = false, updatable = true)
+    private String estado;
+
     @Column(name = "activo", unique = false, nullable = false, updatable = true)
     private Boolean activo;
 
-    @Column(name = "fechaCreacion", unique = false, nullable = false, updatable = true)
+    @Column(name = "fechaCreacion", unique = false, nullable = false, updatable = false)
     private LocalDateTime fechaCreacion;
 
-    @Column(name = "fechaDesactivacion", unique = false, nullable = false, updatable = true)
+    @Column(name = "fechaDesactivacion", unique = false, nullable = true, updatable = true)
     private LocalDateTime fechaDesactivacion;
 
     @ManyToMany
+    @JoinTable(
+            name = "claseXpersona",
+            joinColumns = @JoinColumn(name = "idClase"),
+            inverseJoinColumns = @JoinColumn(name = "idUsuario")
+    )
     private List<Persona> personas;
 
-    @ManyToMany
+    @OneToMany(mappedBy = "clase")
     private List<Reserva> reservas;
 
     @ManyToOne
