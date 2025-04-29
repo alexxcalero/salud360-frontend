@@ -1,5 +1,6 @@
 import "./App.css";
 import { NavLink } from "react-router";
+
 import Button from './components/Button';
 import Input from './components/Input';
 import Label from './components/Label';
@@ -7,7 +8,12 @@ import InputLabel from './components/InputLabel';
 import Select from './components/Select';
 import SelectLabel from "./components/SelectLabel";
 
+
+import ModalError from "./components/ModalError";
+import ModalExito
+ from "./components/ModalExito";
 function App() {
+
 
   const optionsSelect = [
       { value: "Hombre", content: "Hombre" },
@@ -15,12 +21,14 @@ function App() {
       { value: "Rodrigo Roller", content: "Rodrigo Roller" }]
   
 
+
   return (
     <>
       <div>
         <h1 className="text-emerald-600">
           Proyecto React.js (o .ts XD) + TailwindCSS + Shadcn configurado!!!
           Cortesía de Fabián(U)
+
         </h1>
 
         <div className="space-y-10">
@@ -57,6 +65,19 @@ function App() {
 
       </div>
 
+      <div>
+        <h1 className="text-emerald-600">
+          Proyecto React.js (o .ts XD) + TailwindCSS + Shadcn configurado!!!
+          Modales de Eliminación y Éxito Cortesía IGorillaVR(U)
+        </h1>
+
+        <div className="mt-4">
+          <ModalError />
+        </div>
+        <div className="mt-4">
+          <ModalExito />
+        </div>
+      </div>
       
     </>
   );
