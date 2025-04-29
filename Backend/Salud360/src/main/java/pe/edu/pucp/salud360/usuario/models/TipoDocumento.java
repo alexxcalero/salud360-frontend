@@ -34,4 +34,11 @@ public class TipoDocumento {
 
     @OneToMany(mappedBy = "tipoDocumento")
     private List<Usuario> usuarios;
+
+    public TipoDocumento(Integer idTipoDocumento, String nombre, Boolean activo, List<Usuario> usuarios) {
+        this.idTipoDocumento = idTipoDocumento;
+        this.nombre = nombre;
+        this.activo = activo;
+        this.usuarios = usuarios;
+    }
 }
