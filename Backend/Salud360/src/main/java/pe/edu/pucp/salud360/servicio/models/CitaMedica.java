@@ -21,22 +21,22 @@ public class CitaMedica {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idCitaMedica;
 
-    @Column(nullable = false)
+    @Column(name = "fecha", unique = false, nullable = false, updatable = true)
     private LocalDateTime fecha;
 
-    @Column(nullable = false)
+    @Column(name = "horaInicio", unique = false, nullable = false, updatable = true)
     private LocalDateTime horaInicio;
 
-    @Column(nullable = false)
+    @Column(name = "estado", unique = false, nullable = false, updatable = true)
     private String estado;
 
-    @Column(nullable = false)
+    @Column(name = "activo", unique = false, nullable = false, updatable = true)
     private Boolean activo;
 
-    @Column(nullable = false)
+    @Column(name = "fechaCreacion", unique = false, nullable = false, updatable = true)
     private LocalDateTime fechaCreacion;
 
-    @Column(nullable = false)
+    @Column(name = "fechaDesactivacion", unique = false, nullable = false, updatable = true)
     private LocalDateTime fechaDesactivacion;
 
     @ManyToOne
