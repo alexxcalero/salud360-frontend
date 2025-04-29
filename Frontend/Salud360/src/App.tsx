@@ -1,21 +1,28 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import "./App.css";
+import { NavLink } from "react-router";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
-     <div>
-        <h1 className='text-emerald-600'>
-          Proyecto React.js (o .ts XD) + TailwindCSS + Shadcn configurado!!! Cortesía de Fabián(U) 
+      <div>
+        <h1 className="text-emerald-600">
+          Proyecto React.js (o .ts XD) + TailwindCSS + Shadcn configurado!!!
+          Cortesía de Fabián(U)
         </h1>
-     </div>
-     <img src="https://universitario.pe/media/images/banners/PORTDA_WEB.jpg" alt="" />
+      </div>
+      <img
+        src="https://universitario.pe/media/images/banners/PORTDA_WEB.jpg"
+        alt=""
+      />
+      <NavLink
+        className="bg-gray-100 py-2 px-7 border-1 border-gray-800 rounded-xl hover:bg-gray-300 cursor-pointer"
+        to="/example"
+        end
+      >
+        Example
+      </NavLink>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
