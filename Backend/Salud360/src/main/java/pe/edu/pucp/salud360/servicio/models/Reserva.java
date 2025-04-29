@@ -32,10 +32,10 @@ public class Reserva {
     @Column(name = "fechaReserva", unique = false, nullable = false, updatable = true)
     private LocalDateTime fechaReserva;
 
-    @Column(name = "fechaCancelacion", unique = false, nullable = false, updatable = true)
+    @Column(name = "fechaCancelacion", unique = false, nullable = true, updatable = true)
     private LocalDateTime fechaCancelacion;
 
-    @Column(name = "fechaReprogramacion", unique = false, nullable = false, updatable = true)
+    @Column(name = "fechaReprogramacion", unique = false, nullable = true, updatable = true)
     private LocalDateTime fechaReprogramacion;
 
     @ManyToOne
@@ -46,9 +46,9 @@ public class Reserva {
     @JoinColumn(name = "idClase")
     private Clase clase;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "idCitaMedica")
-    private CitaMedica cita;
+    private CitaMedica citaMedica;
 
     @OneToMany(mappedBy = "reserva")
     private List<Notificacion> notificaciones;

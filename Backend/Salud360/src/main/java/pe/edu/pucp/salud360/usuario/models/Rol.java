@@ -39,6 +39,19 @@ public class Rol {
     private List<Usuario> usuarios;
 
     @ManyToMany
-    @JoinTable()
+    @JoinTable(
+            name = "rolXpermiso",
+            joinColumns = @JoinColumn(name = "idRol"),
+            inverseJoinColumns = @JoinColumn(name = "idPermiso")
+    )
     private List<Permiso> permisos;
+
+    public Rol(Integer idRol, String nombre, String descripcion, Boolean activo, List<Usuario> usuarios, List<Permiso> permisos) {
+        this.idRol = idRol;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.activo = activo;
+        this.usuarios = usuarios;
+        this.permisos = permisos;
+    }
 }

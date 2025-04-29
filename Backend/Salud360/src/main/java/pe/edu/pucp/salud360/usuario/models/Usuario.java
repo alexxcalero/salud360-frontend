@@ -19,43 +19,56 @@ import java.time.LocalDateTime;
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idUsuario;
+    protected Integer idUsuario;
 
     @Column(name = "nombres", unique = false, nullable = false, updatable = true)
-    private String nombres;
+    protected String nombres;
 
     @Column(name = "apellidos", unique = false, nullable = false, updatable = true)
-    private String apellidos;
+    protected String apellidos;
 
     @Column(name = "numeroDocumento", unique = true, nullable = false, updatable = false)
-    private String numeroDocumento;  // Va a tener que contactar con el admin si quiere cambiar su numero de documento
+    protected String numeroDocumento;  // Va a tener que contactar con el admin si quiere cambiar su numero de documento
 
     @Column(name = "correo", unique = true, nullable = false, updatable = true)
-    private String correo;
+    protected String correo;
 
     @Column(name = "contrasenha", unique = false, nullable = false, updatable = true)
-    private String contrasenha;
+    protected String contrasenha;
 
     @Column(name = "telefono", unique = true, nullable = false, updatable = true)
-    private String telefono;
+    protected String telefono;
 
     @Column(name = "fechaNacimiento", unique = false, nullable = false, updatable = false)
-    private LocalDate fechaNacimiento;  // Va a tener que contactar con el admin si quiere cambiar su fecha de nacimiento
+    protected LocalDate fechaNacimiento;  // Va a tener que contactar con el admin si quiere cambiar su fecha de nacimiento
 
     @Column(name = "activo", unique = false, nullable = false, updatable = true)
-    private Boolean activo;
+    protected Boolean activo;
 
     @Column(name = "fechaCreacion", unique = false, nullable = false, updatable = false)
-    private LocalDateTime fechaCreacion;
+    protected LocalDateTime fechaCreacion;
 
     @Column(name = "fechaDesactivacion", unique = false, nullable = true, updatable = true)
-    private LocalDateTime fechaDesactivacion;
+    protected LocalDateTime fechaDesactivacion;
 
     @ManyToOne
     @JoinColumn(name = "idTipoDocumento")
-    private TipoDocumento tipoDocumento;
+    protected TipoDocumento tipoDocumento;
 
     @ManyToOne
     @JoinColumn(name = "idRol")
-    private Rol rol;
+    protected Rol rol;
+
+    public Usuario(String nombres, String apellidos, String numeroDocumento, String correo, String contrasenha, String telefono, LocalDate fechaNacimiento, Boolean activo, TipoDocumento tipoDocumento, Rol rol) {
+        this.nombres = nombres;
+        this.apellidos = apellidos;
+        this.numeroDocumento = numeroDocumento;
+        this.correo = correo;
+        this.contrasenha = contrasenha;
+        this.telefono = telefono;
+        this.fechaNacimiento = fechaNacimiento;
+        this.activo = activo;
+        this.tipoDocumento = tipoDocumento;
+        this.rol = rol;
+    }
 }
