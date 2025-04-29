@@ -1,6 +1,9 @@
 import "./App.css";
 import { NavLink } from "react-router";
 
+import ModalError from "./components/ModalError";
+import ModalExito
+ from "./components/ModalExito";
 function App() {
   return (
     <>
@@ -21,7 +24,25 @@ function App() {
       >
         Example
       </NavLink>
+
+
+      <div>
+        <h1 className="text-emerald-600">
+          Proyecto React.js (o .ts XD) + TailwindCSS + Shadcn configurado!!!
+          Modales de Eliminación y Éxito Cortesía IGorillaVR(U)
+        </h1>
+
+        <div className="mt-4">
+          <ModalError />
+        </div>
+        <div className="mt-4">
+          <ModalExito />
+        </div>
+      </div>
+
     </>
+
+    
   );
 }
 
