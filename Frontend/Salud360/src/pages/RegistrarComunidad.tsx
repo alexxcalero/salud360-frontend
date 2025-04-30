@@ -1,5 +1,5 @@
 //esto es por ahora pq creo q todav no hay carpeta
-import {Badge,UserCog ,Filter,UserPlus,Bell, User, LayoutDashboard, Settings, ShieldCheck, Users, Star, MapPin, ClipboardList, UserCircle2, BookOpen, ClipboardCheck, BarChart3, Pencil, Trash2, Search } from "lucide-react";
+import {Badge,UserCog ,Filter,UserPlus,Bell, User, LayoutDashboard, Settings, ShieldCheck, Users, Star, MapPin, ClipboardList, BookOpen, ClipboardCheck, BarChart3, Pencil, Trash2, Search } from "lucide-react";
 
 import LogoMono from "../assets/LogoMono.jpg";
 

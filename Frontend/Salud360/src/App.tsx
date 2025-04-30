@@ -5,7 +5,7 @@ import Button from './components/Button';
 import Input from './components/Input';
 import Label from './components/Label';
 import InputLabel from './components/InputLabel';
-import Select from './components/Select';
+//import Select from './components/Select';
 import SelectLabel from "./components/SelectLabel";
 
 
