@@ -8,13 +8,19 @@ public class MedicoMapper {
         if(medico == null)
             return null;
 
-        return new MedicoDTO(medico.getEspecialidad(), medico.getDescripcion(), medico.getCitasMedicas());
+        return new MedicoDTO(medico.getIdUsuario(), medico.getNombres(), medico.getApellidos(), medico.getNumeroDocumento(),
+                             medico.getCorreo(), medico.getContrasenha(), medico.getTelefono(), medico.getFechaNacimiento(),
+                             medico.getActivo(), medico.getTipoDocumento(), medico.getRol(), medico.getEspecialidad(),
+                             medico.getDescripcion(), medico.getCitasMedicas());
     }
 
     public static Medico mapToModel(MedicoDTO medicoDTO) {
         if(medicoDTO == null)
             return null;
 
-        return new Medico(medicoDTO.getEspecialidad(), medicoDTO.getDescripcion(), medicoDTO.getCitaMedica());
+        return new Medico(medicoDTO.getIdUsuario(), medicoDTO.getNombres(), medicoDTO.getApellidos(), medicoDTO.getNumeroDocumento(),
+                          medicoDTO.getCorreo(), medicoDTO.getContrasenha(), medicoDTO.getTelefono(), medicoDTO.getFechaNacimiento(),
+                          medicoDTO.getActivo(), medicoDTO.getTipoDocumento(), medicoDTO.getRol(), medicoDTO.getEspecialidad(),
+                          medicoDTO.getDescripcion(), medicoDTO.getCitasMedicas());
     }
 }
