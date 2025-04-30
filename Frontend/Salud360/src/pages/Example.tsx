@@ -16,6 +16,13 @@ function Example() {
           Hola
         </button>
       </NavLink>
+
+      <NavLink to="/RegistrarComunidad" end>
+        <button className="bg-gray-100 py-2 px-7 border-1 border-gray-800 rounded-xl hover:bg-gray-300 cursor-pointer">
+          RegistrarComunidad
+        </button>
+      </NavLink>
+
     </div>
   );
 }

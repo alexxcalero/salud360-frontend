@@ -3,11 +3,12 @@ import { Input as ShadInput} from "@/components/ui/input"
 interface Props{
     type?: string;
     placeholder?: string;
+    leftPadding?: string;
 }
 
-function Input({type= "text", placeholder=""}: Props){
+function Input({type= "text", placeholder="", leftPadding=""}: Props){
     return(
-        <ShadInput type={type} placeholder={placeholder} className="border-[#6A6262] border-2 rounded-[5px] py-5 px-4 w-full"/>
+        <ShadInput type={type} placeholder={placeholder} className={`border-[#6A6262] border-2 rounded-[5px] py-5 px-4 ${leftPadding}`}/>
     );
 }
 
@@ -19,7 +20,9 @@ function Input({type= "text", placeholder=""}: Props){
 //Para darle grosor al borde: border-2
 //Para hacer el borde redondo: rounded-[5px]
 //Para agregarle padding (el espacio interior): p-5
-//Para
+
+//Ese leftPadding? del props es para el caso en el que coloquemos visualmente íconos dentro del input. Funciona como un condicional y debe de recibir el left padding a aplicarse
+
 //Para
 
 export default Input;
