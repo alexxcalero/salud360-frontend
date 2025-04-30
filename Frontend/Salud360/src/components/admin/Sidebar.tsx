@@ -40,8 +40,8 @@ function Sidebar({ active = 0 }: { active: number }) {
           [BriefcaseMedical, "Personal médico"],
           [MessageSquare, "Calificaciones"],
           [LayoutDashboard, "Logs"],
-          [ShieldUser, "Autitorías"],
-          [LayoutDashboard, "Reporetes"],
+          [ShieldUser, "Auditorías"],
+          [LayoutDashboard, "Reportes"],
         ].map(([Icon, label], index) => (
           <li
             key={index} // Como react hincha las bolas con eso del key
