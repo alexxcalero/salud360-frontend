@@ -7,6 +7,8 @@ import "@/index.css";
 import App from "@/App.tsx";
 import Example from "@/pages/Example";
 import RegistrarComunidad from "./pages/RegistrarComunidad";
+import Test from "@/pages/admin/test";
+import AdminLayout from "@/layouts/AdminLayout";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -16,6 +18,10 @@ createRoot(document.getElementById("root")!).render(
         <Route path="/" element={<App />} />
         <Route path="/example" element={<Example />} />
         <Route path="/RegistrarComunidad" element={<RegistrarComunidad />} />
+        <Route path="/admin" element={<AdminLayout active={2} />}>
+          {/* Ejemplo de ruta anidada con un layout */}
+          <Route path="example" element={<Test />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   </StrictMode>
