@@ -6,6 +6,7 @@ import "@/index.css";
 // La manera de utilizar esto es importando los componentes que sean páginas y las referencian en el elemento de abajo
 import App from "@/App.tsx";
 import Example from "@/pages/Example";
+import RegistrarComunidad from "./pages/RegistrarComunidad";
 import Test from "@/pages/admin/test";
 import AdminLayout from "@/layouts/AdminLayout";
 
@@ -16,6 +17,7 @@ createRoot(document.getElementById("root")!).render(
         {/* // A este nivel tienen que insertar nuevas rutas. Especificando la ruta "/usuarios/register" y el elemento que será la página */}
         <Route path="/" element={<App />} />
         <Route path="/example" element={<Example />} />
+        <Route path="/RegistrarComunidad" element={<RegistrarComunidad />} />
         <Route path="/admin" element={<AdminLayout active={2} />}>
           {/* Ejemplo de ruta anidada con un layout */}
           <Route path="example" element={<Test />} />
