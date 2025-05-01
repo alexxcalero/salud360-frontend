@@ -10,6 +10,7 @@ import InputLabel from './components/InputLabel';
 //import Select from './components/Select';
 import SelectLabel from "./components/SelectLabel";
 import InputIcon from "./components/InputIcon";
+import FormContainer from "./components/FormContainer";
 
 import ModalError from "./components/ModalError";
 import ModalExito
@@ -40,10 +41,24 @@ function App() {
           <Button>Hola</Button>
 
           <Button variant="danger">DANGER</Button>
-
           <Button variant="outline">OUTLINE</Button>
-          
           <Button variant="primary">PRIMARY</Button>
+
+          <Button variant="danger" size="sm" >DANGER sm</Button>
+          <Button variant="outline" size="sm">OUTLINE sm</Button>
+          <Button variant="primary" size="sm">PRIMARY sm</Button>
+
+          <Button variant="danger" size="md">DANGER md</Button>
+          <Button variant="outline" size="md">OUTLINE md</Button>
+          <Button variant="primary"size="md" >PRIMARY md</Button>
+
+          <Button variant="danger" size="lg">DANGER lg</Button>
+          <Button variant="outline" size="lg">OUTLINE lg</Button>
+          <Button variant="primary"size="lg" >PRIMARY lg</Button>
+
+          <Button variant="danger" size="lg" className="w-48 mx-auto">DANGER w-48</Button>
+          <Button variant="outline" size="lg" className="w-48 mx-auto">OUTLINE w-48</Button>
+          <Button variant="primary"size="lg" className="w-48 mx-auto">PRIMARY w-48</Button>
 
           <Input/>
 
@@ -57,6 +72,29 @@ function App() {
 
           <SelectLabel options={optionsSelect} placeholder="Seleccione su genero" htmlFor="email" label="Género" />
           
+          <div className="min-h-screen w-full flex items-center justify-center bg-gray-100">
+            <FormContainer>
+              <Button variant="primary"size="lg" className="w-48 mx-auto">PRIMARY w-48</Button>
+              <Button variant="danger" size="lg" className="w-48 mx-auto">DANGER w-48</Button>
+              <InputLabel type="email" placeholder="Nombre del usuario" htmlFor="email" label="Escriba su nombre:"/>
+              <InputLabel type="email" placeholder="Nombre del usuario" htmlFor="email" label="Escriba su apellido:"/>
+              <SelectLabel options={optionsSelect} placeholder="Seleccione su genero" htmlFor="email" label="Género" />
+              <InputIcon icon={<Phone className="w-5 h-5" />} placeholder="Teléfono" type="tel" />
+            </FormContainer>
+          </div>
+
+          <FormContainer>
+              <Button variant="primary"size="lg" className="w-48 mx-auto">PRIMARY w-48</Button>
+              <Button variant="danger" size="lg" className="w-48 mx-auto">DANGER w-48</Button>
+              <InputLabel type="email" placeholder="Nombre del usuario" htmlFor="email" label="Escriba su nombre:"/>
+              <InputLabel type="email" placeholder="Nombre del usuario" htmlFor="email" label="Escriba su apellido:"/>
+              <SelectLabel options={optionsSelect} placeholder="Seleccione su genero" htmlFor="email" label="Género" />
+              <InputIcon icon={<Phone className="w-5 h-5" />} placeholder="Teléfono" type="tel" />
+          </FormContainer>
+
+
+
+
           <NavLink
             className="bg-gray-100 py-2 px-7 border-1 border-gray-800 rounded-xl hover:bg-gray-300 cursor-pointer"
             to="/example"
@@ -70,6 +108,8 @@ function App() {
             <InputIcon icon={<Phone className="w-5 h-5" />} placeholder="Teléfono" type="tel" />
           </div>
 
+          <InputIcon icon={<Search className="w-5 h-5" />} placeholder="Buscar monos"  />
+          <InputIcon icon={<Phone className="w-5 h-5" />} placeholder="Teléfono" type="tel" />
 
         </div>
 
