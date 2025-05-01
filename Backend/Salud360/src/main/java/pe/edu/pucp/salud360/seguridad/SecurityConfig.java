@@ -14,7 +14,15 @@ public class SecurityConfig {
         httpSecurity.csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/usuarios/**")
+                .requestMatchers(
+                        "/api/medicos/**",
+                        "/api/notificaciones/**",
+                        "/api/permisos/**",
+                        "/api/personas/**",
+                        "/api/roles/**",
+                        "/api/tiposDocumentos/**",
+                        "/api/usuarios/**"
+                        )
                 .permitAll();
         return httpSecurity.build();
     }

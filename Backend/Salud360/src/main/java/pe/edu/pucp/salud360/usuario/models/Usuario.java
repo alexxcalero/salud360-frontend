@@ -59,7 +59,8 @@ public class Usuario {
     @JoinColumn(name = "idRol")
     protected Rol rol;
 
-    public Usuario(String nombres, String apellidos, String numeroDocumento, String correo, String contrasenha, String telefono, LocalDate fechaNacimiento, Boolean activo, TipoDocumento tipoDocumento, Rol rol) {
+    public Usuario(Integer idUsuario, String nombres, String apellidos, String numeroDocumento, String correo, String contrasenha, String telefono, LocalDate fechaNacimiento, Boolean activo, TipoDocumento tipoDocumento, Rol rol) {
+        this.idUsuario = idUsuario;
         this.nombres = nombres;
         this.apellidos = apellidos;
         this.numeroDocumento = numeroDocumento;
