@@ -282,6 +282,15 @@ function App() {
           >
             Botón con ícono
           </ButtonIcon>
+          <InputIcon
+            icon={<Search className="w-5 h-5" />}
+            placeholder="Buscar monos"
+          />
+          <InputIcon
+            icon={<Phone className="w-5 h-5" />}
+            placeholder="Teléfono"
+            type="tel"
+          />
         </div>
       </div>
 
