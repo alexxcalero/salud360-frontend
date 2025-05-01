@@ -17,7 +17,7 @@ import colors from "tailwindcss/colors";
 
 function Sidebar({ active = 0 }: { active: number }) {
   return (
-    <div className="bg-blue-500">
+    <div className="bg-brand-primary">
       <section className="mb-[20px] border-b-1 border-blue-900  p-[20px] flex items-center gap-[10px]">
         <img
           src="/img/mono/medico.png"
@@ -52,7 +52,7 @@ function Sidebar({ active = 0 }: { active: number }) {
               color={index === active ? colors.blue["500"] : "white"}
               className="inline-block"
             />{" "}
-            <span className="text-white group-data-[active=true]:text-blue-500 rounded-l-full ml-[8px]">
+            <span className="text-white group-data-[active=true]:text-brand-primary rounded-l-full ml-[8px]">
               {label as string}
             </span>
             {index === active && (
