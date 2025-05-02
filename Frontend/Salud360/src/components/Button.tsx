@@ -10,7 +10,7 @@ interface Props{
 }
 
 function Button({children, size="sm", variant = "primary", className="", type="button"}: Props){
-    const base = "px-4 py-2 text-sm font-semibold rounded-md";
+    const base = "px-4 py-2 text-sm font-semibold rounded-md cursor-pointer";
     const variants = {
         primary: "bg-[#2A86FF] text-white hover:bg-blue-600",
         outline: "bg-black text-white hover:bg-gray-700",
@@ -19,8 +19,8 @@ function Button({children, size="sm", variant = "primary", className="", type="b
     }
     const sizes ={
         sm: "px-3 py-1 text-xs",
-        md: "px-4 py-1 text-sm",
-        lg: "px-6 py-3 text-base"
+        md: "px-4 py-2 text-sm",
+        lg: "px-6 py-4 text-base"
     };
     
     return(

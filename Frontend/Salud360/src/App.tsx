@@ -1,6 +1,6 @@
 import "./App.css";
 import { NavLink } from "react-router";
-import { Search, Phone } from "lucide-react";
+import { Search, Phone, Mail } from "lucide-react";
 
 
 import Button from './components/Button';
@@ -11,6 +11,8 @@ import InputLabel from './components/InputLabel';
 import SelectLabel from "./components/SelectLabel";
 import InputIcon from "./components/InputIcon";
 import FormContainer from "./components/FormContainer";
+import InputIconLabel from "./components/InputIconLabel";
+import ButtonIcon from "./components/ButtonIcon";
 
 import ModalError from "./components/ModalError";
 import ModalExito
@@ -42,7 +44,7 @@ function App() {
 
           <Button variant="danger">DANGER</Button>
           <Button variant="outline">OUTLINE</Button>
-          <Button variant="primary">PRIMARY</Button>
+          z<Button variant="primary">PRIMARY</Button>
 
           <Button variant="danger" size="sm" >DANGER sm</Button>
           <Button variant="outline" size="sm">OUTLINE sm</Button>
@@ -92,6 +94,20 @@ function App() {
               <InputIcon icon={<Phone className="w-5 h-5" />} placeholder="Teléfono" type="tel" />
           </FormContainer>
 
+          <FormContainer>
+              <h1>Registrar Usuario</h1>
+              <h2>Rellene los siguientes campos para completar el registro del usuario.</h2>
+              <InputLabel type="email" placeholder="Ingrese los nombres" htmlFor="email" label="Nombres"/>
+              <InputLabel type="email" placeholder="Ingrese los apellidos" htmlFor="email" label="Apellidos"/>
+              <InputLabel type="email" placeholder="Ingrese el número de documento de identidad" htmlFor="email" label="DNI"/>
+              <InputIconLabel icon={<Phone className="w-5 h-5" />} placeholder="Teléfono" type="tel" htmlFor="tel" label="Teléfono"></InputIconLabel>
+              <SelectLabel options={optionsSelect} placeholder="Seleccione el rol" htmlFor="email" label="Rol" />
+              <InputIconLabel icon={<Mail className="w-5 h-5" />} placeholder="Mail" type="email" htmlFor="email" label="Email"></InputIconLabel>
+              <SelectLabel options={optionsSelect} placeholder="Seleccione su genero" htmlFor="email" label="Género" />
+              <InputLabel type="date" placeholder="Ingrese la fecha de nacimiento" htmlFor="date" label="Fecha de nacimiento"/>
+              <InputLabel type="password" placeholder="" htmlFor="password" label="Contraseña"/>
+              <Button variant="primary"size="md" >Crear Usuario</Button>
+          </FormContainer>
 
 
 
@@ -110,6 +126,13 @@ function App() {
 
           <InputIcon icon={<Search className="w-5 h-5" />} placeholder="Buscar monos"  />
           <InputIcon icon={<Phone className="w-5 h-5" />} placeholder="Teléfono" type="tel" />
+
+          <ButtonIcon icon={<Search className="w-4 h-4" />} variant="primary"size="sm" >Botón con ícono</ButtonIcon>
+          <ButtonIcon icon={<Search className="w-5 h-5" />} variant="primary"size="md" >Botón con ícono</ButtonIcon>
+          <ButtonIcon icon={<Search className="w-6 h-6" />} variant="primary"size="lg" >Botón con ícono</ButtonIcon>
+
+
+          <ButtonIcon icon={<Search className="w-6 h-6" />} variant="danger" size="lg" className="w-96 mx-auto">Botón con ícono</ButtonIcon>
 
         </div>
 
