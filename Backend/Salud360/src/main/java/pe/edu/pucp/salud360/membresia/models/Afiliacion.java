@@ -1,14 +1,60 @@
 package pe.edu.pucp.salud360.membresia.models;
 
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import pe.edu.pucp.salud360.control.models.Reporte;
+import pe.edu.pucp.salud360.usuario.models.Persona;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
-public class Afiliacion {
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "afiliacion")
+public class Afiliacion extends Membresia{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idAfiliacion;
-    private Membresia membresia;
+
+    @Column(name = "estado", unique = false, nullable = false, updatable = true)
     private String estado;  // Activado, Cancelado, Suspendido
+
+    @Column(name = "fechaAfiliacion", unique = false, nullable = false, updatable = true)
     private LocalDateTime fechaAfiliacion;
+
+    @Column(name = "fechaDesafiliacion", unique = false, nullable = false, updatable = true)
     private LocalDateTime fechaDesafiliacion;
+
+    @Column(name = "maxReservas", unique = false, nullable = false, updatable = true)
     private Integer maxReservas;
+
+    @Column(name = "fechaReactivacion", unique = false, nullable = false, updatable = true)
     private LocalDate fechaReactivacion;
+
+    @ManyToMany(mappedBy = "afiliacion")
+    private List<Reporte> reportes;
+
+    @OneToMany(mappedBy = "afiliacion")
+    private List<Pago> pagos;
+
+    @OneToMany(mappedBy = "afiliacion")
+    private List<Solicitud> solicitudes;
+
+    @ManyToOne
+    @JoinColumn(name = "idMedioDePago")
+    private MedioDePago mediosDePago;
+
+    @OneToMany(mappedBy = "periodo")
+    private List<Periodo> periodos;
+
+    @ManyToOne
+    @JoinColumn(name = "idUsuario")
+    private Persona usuario;
 }
