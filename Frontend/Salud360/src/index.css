@@ -160,12 +160,15 @@
   .use-display-small {
     @apply font-bold text-display-small/tight;
   }
+  h1,
   .use-title-large {
     @apply font-semibold text-title-large/tight;
   }
+  h2,
   .use-title-medium {
     @apply font-medium text-title-medium/tight;
   }
+  h3,
   .use-title-small {
     @apply font-medium text-title-small/tight;
   }
@@ -175,6 +178,7 @@
   .use-body-medium {
     @apply font-normal text-body-medium/tight;
   }
+  p,
   .use-body-small {
     @apply font-normal text-body-small/tight;
   }
