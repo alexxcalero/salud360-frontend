@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import pe.edu.pucp.salud360.membresia.models.Membresia;
 import pe.edu.pucp.salud360.servicio.models.Servicio;
 import pe.edu.pucp.salud360.usuario.models.Persona;
 
@@ -46,7 +47,7 @@ public class Comunidad {
     private LocalDateTime fechaDesactivacion;
 
     @OneToMany(mappedBy = "comunidad")
-    private List<Comentario> membresia;
+    private List<Membresia> membresia;
 
     @OneToOne
     @JoinColumn(name = "idForo")
@@ -55,9 +56,9 @@ public class Comunidad {
     @OneToMany(mappedBy = "comunidad")
     private List<Testimonio> testimonios;
 
-    @ManyToMany(mappedBy = "comunidades")
+    @ManyToMany(mappedBy = "comunidad")
     private List<Servicio> servicios;
 
     @ManyToMany
-    private List<Persona> usuarios;
+    private List<Persona> persona;
 }

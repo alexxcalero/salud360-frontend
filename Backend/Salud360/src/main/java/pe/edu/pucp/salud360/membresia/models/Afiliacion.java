@@ -18,10 +18,9 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "afiliacion")
+@PrimaryKeyJoinColumn(name = "idMembresia")
 public class Afiliacion extends Membresia{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idAfiliacion;
+
 
     @Column(name = "estado", unique = false, nullable = false, updatable = true)
     private String estado;  // Activado, Cancelado, Suspendido
@@ -49,10 +48,10 @@ public class Afiliacion extends Membresia{
 
     @ManyToOne
     @JoinColumn(name = "idMedioDePago")
-    private MedioDePago mediosDePago;
+    private MedioDePago medioDePago;
 
-    @OneToMany(mappedBy = "periodo")
-    private List<Periodo> periodos;
+    @OneToMany(mappedBy = "afiliacion")
+    private List<Periodo> periodo;
 
     @ManyToOne
     @JoinColumn(name = "idUsuario")

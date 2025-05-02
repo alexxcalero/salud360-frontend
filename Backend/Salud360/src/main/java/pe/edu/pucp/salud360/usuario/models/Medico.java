@@ -1,9 +1,6 @@
 package pe.edu.pucp.salud360.usuario.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,6 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "medico")
+@PrimaryKeyJoinColumn(name = "idUsuario")
 public class Medico extends Usuario {
     @Column(name = "especialidad", unique = false, nullable = false, updatable = true)
     private String especialidad;
