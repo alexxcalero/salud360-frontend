@@ -1,42 +1,31 @@
-import { Button as ShadButton } from "@/components/ui/button";
+import { Button as ShadButton} from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-interface Props {
-  children: React.ReactNode;
-  variant?: "primary" | "outline" | "danger";
-  size?: "sm" | "md" | "lg";
-  className?: string;
-  type?: "button" | "submit" | "reset";
+interface Props{
+    children: React.ReactNode;
+    variant?: "primary" | "outline" | "danger";
+    size?: "sm" | "md" | "lg";
+    className?: string;
+    type?: "button" | "submit" | "reset";
 }
 
-function Button({
-  children,
-  size = "sm",
-  variant = "primary",
-  className = "",
-  type = "button",
-}: Props) {
-  const base = "px-4 py-2 text-sm font-semibold rounded-md";
-  const variants = {
-    primary: "bg-[#2A86FF] text-white hover:bg-blue-600",
-    outline: "bg-black text-white hover:bg-gray-700",
-    //outline: "border border-[#2A86FF] text-[#2A86FF] hover:bg-blue-50",
-    danger: "bg-red-500 text-white hover:bg-red-600",
-  };
-  const sizes = {
-    sm: "px-3 py-1 text-xs",
-    md: "px-4 py-1 text-sm",
-    lg: "px-6 py-3 text-base",
-  };
-
-  return (
-    <ShadButton
-      type={type}
-      className={cn(base, sizes[size], variants[variant], className)}
-    >
-      {children}
-    </ShadButton>
-  );
+function Button({children, size="sm", variant = "primary", className="", type="button"}: Props){
+    const base = "px-4 py-2 text-sm font-semibold rounded-md cursor-pointer";
+    const variants = {
+        primary: "bg-[#2A86FF] text-white hover:bg-blue-600",
+        outline: "bg-black text-white hover:bg-gray-700",
+        //outline: "border border-[#2A86FF] text-[#2A86FF] hover:bg-blue-50",
+        danger: "bg-red-500 text-white hover:bg-red-600"
+    }
+    const sizes ={
+        sm: "px-3 py-1 text-xs",
+        md: "px-4 py-2 text-sm",
+        lg: "px-6 py-4 text-base"
+    };
+    
+    return(
+        <ShadButton type={type} className={cn(base, sizes[size], variants[variant], className)}>{children}</ShadButton>
+    );
 }
 
 /*return(
