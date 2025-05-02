@@ -18,7 +18,7 @@ public class CitaMedicaMapper {
                 c.getEstado(),
                 c.getActivo(),
                 c.getServicio() != null ? c.getServicio().getIdServicio() : null,
-                c.getUsuario() != null ? c.getUsuario().getIdUsuario() : null,
+                c.getPersona() != null ? c.getPersona().getIdUsuario() : null,
                 c.getMedico() != null ? c.getMedico().getIdUsuario() : null
         );
     }
@@ -33,7 +33,7 @@ public class CitaMedicaMapper {
         cita.setEstado(dto.getEstado());
         cita.setActivo(dto.getActivo());
         cita.setServicio(servicio);
-        cita.setUsuario(usuario);
+        cita.setPersona(usuario);
         cita.setMedico(medico);
         return cita;
     }

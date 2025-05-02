@@ -54,10 +54,10 @@ public class CitaMedica {
     private List<Reserva> reservas;
 
     @ManyToOne
-    @JoinColumn(name = "idUsuario")
+    @JoinColumn(name = "idPersona")
     private Persona persona;
 
     @ManyToOne
-    @JoinColumn(name = "idUsuario")
+    @JoinColumn(name = "idMedico")
     private Medico medico;
 }
