@@ -52,7 +52,7 @@ function Sidebar({ active = 0 }: { active: number }) {
               color={index === active ? colors.blue["500"] : "white"}
               className="inline-block"
             />{" "}
-            <span className="text-white group-data-[active=true]:text-brand-primary rounded-l-full ml-[8px]">
+            <span className="text-white group-data-[active=true]:text-blue-500 group-data-[active=true]:font-bold rounded-l-full ml-[8px]">
               {label as string}
             </span>
             {index === active && (
