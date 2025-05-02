@@ -72,4 +72,16 @@ public class Usuario {
         this.tipoDocumento = tipoDocumento;
         this.rol = rol;
     }
+
+    public Usuario(Integer idUsuario, String nombres, String apellidos, String numeroDocumento, String correo, String contrasenha, String telefono, LocalDate fechaNacimiento, Boolean activo) {
+        this.idUsuario = idUsuario;
+        this.nombres = nombres;
+        this.apellidos = apellidos;
+        this.numeroDocumento = numeroDocumento;
+        this.correo = correo;
+        this.contrasenha = contrasenha;
+        this.telefono = telefono;
+        this.fechaNacimiento = fechaNacimiento;
+        this.activo = activo;
+    }
 }
