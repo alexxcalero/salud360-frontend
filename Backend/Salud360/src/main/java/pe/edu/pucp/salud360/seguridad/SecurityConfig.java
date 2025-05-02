@@ -9,21 +9,18 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.csrf()
-                .disable()
-                .authorizeHttpRequests()
-                .requestMatchers(
-                        "/api/medicos/**",
-                        "/api/notificaciones/**",
-                        "/api/permisos/**",
-                        "/api/personas/**",
-                        "/api/roles/**",
-                        "/api/tiposDocumentos/**",
-                        "/api/usuarios/**"
-                        )
-                .permitAll();
-        return httpSecurity.build();
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf().disable() // ❗ Solo para pruebas; idealmente manejar token CSRF luego
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/usuarios/**").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .httpBasic(); // Soporta autenticación básica vía Postman
+        return http.build();
     }
 }
+
+
