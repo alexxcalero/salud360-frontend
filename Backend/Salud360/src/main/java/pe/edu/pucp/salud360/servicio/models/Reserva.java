@@ -40,7 +40,7 @@ public class Reserva {
 
     @ManyToOne
     @JoinColumn(name = "idUsuario")
-    private Persona usuario;
+    private Persona persona;
 
     @ManyToOne
     @JoinColumn(name = "idClase")

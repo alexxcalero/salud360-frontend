@@ -41,5 +41,5 @@ public class Testimonio {
 
     @ManyToOne
     @JoinColumn(name = "idUsuario")
-    private Persona usuario;
+    private Persona persona;
 }
