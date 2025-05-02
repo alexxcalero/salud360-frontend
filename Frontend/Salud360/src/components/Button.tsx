@@ -28,7 +28,6 @@ function Button({children, size="sm", variant = "primary", className="", type="b
     );
 }
 
-
 /*return(
         <ShadButton className="bg-[#2A86FF]">Hola</ShadButton>
     ); */

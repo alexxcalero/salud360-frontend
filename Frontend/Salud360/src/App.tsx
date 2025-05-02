@@ -2,11 +2,10 @@ import "./App.css";
 import { NavLink } from "react-router";
 import { Search, Phone, Mail } from "lucide-react";
 
-
-import Button from './components/Button';
-import Input from './components/Input';
-import Label from './components/Label';
-import InputLabel from './components/InputLabel';
+import Button from "./components/Button";
+import Input from "./components/Input";
+import Label from "./components/Label";
+import InputLabel from "./components/InputLabel";
 //import Select from './components/Select';
 import SelectLabel from "./components/SelectLabel";
 import InputIcon from "./components/InputIcon";
@@ -15,17 +14,13 @@ import InputIconLabel from "./components/InputIconLabel";
 import ButtonIcon from "./components/ButtonIcon";
 
 import ModalError from "./components/ModalError";
-import ModalExito
- from "./components/ModalExito";
+import ModalExito from "./components/ModalExito";
 function App() {
-
-
   const optionsSelect = [
-      { value: "Hombre", content: "Hombre" },
-      { value: "Mujer", content: "Mujer" },
-      { value: "Rodrigo Roller", content: "Rodrigo Roller" }]
-  
-
+    { value: "Hombre", content: "Hombre" },
+    { value: "Mujer", content: "Mujer" },
+    { value: "Rodrigo Roller", content: "Rodrigo Roller" },
+  ];
 
   return (
     <>
@@ -33,12 +28,14 @@ function App() {
         <h1 className="text-emerald-600">
           Proyecto React.js (o .ts XD) + TailwindCSS + Shadcn configurado!!!
           Cortesía de Fabián(U)
-
         </h1>
 
         <div className="space-y-10">
           <div>
-            <img src="https://universitario.pe/media/images/banners/PORTDA_WEB.jpg" alt="" />
+            <img
+              src="https://universitario.pe/media/images/banners/PORTDA_WEB.jpg"
+              alt=""
+            />
           </div>
           <Button>Hola</Button>
 
@@ -108,9 +105,6 @@ function App() {
               <InputLabel type="password" placeholder="" htmlFor="password" label="Contraseña"/>
               <Button variant="primary"size="md" >Crear Usuario</Button>
           </FormContainer>
-
-
-
           <NavLink
             className="bg-gray-100 py-2 px-7 border-1 border-gray-800 rounded-xl hover:bg-gray-300 cursor-pointer"
             to="/example"
@@ -133,12 +127,7 @@ function App() {
 
 
           <ButtonIcon icon={<Search className="w-6 h-6" />} variant="danger" size="lg" className="w-96 mx-auto">Botón con ícono</ButtonIcon>
-
         </div>
-
-
-
-
       </div>
 
       <div>
@@ -154,7 +143,6 @@ function App() {
           <ModalExito />
         </div>
       </div>
-      
     </>
   );
 }
