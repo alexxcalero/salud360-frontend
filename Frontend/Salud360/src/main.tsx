@@ -20,7 +20,7 @@ createRoot(document.getElementById("root")!).render(
         {/* // A este nivel tienen que insertar nuevas rutas. Especificando la ruta "/usuarios/register" y el elemento que será la página */}
         <Route path="/" element={<App />} />
         <Route path="/example" element={<Example />} />
-        <Route path="/admin" element={<AdminLayout active={2} />}> {/* ESTO ES PARA LA PANTALLAS DE ROLES Y PERMISOS*/} 
+        <Route path="/admin" element={<AdminLayout active={7} />}> {/* ESTO ES PARA LA PANTALLAS DE ROLES Y PERMISOS*/} 
           {/* Ejemplo de ruta anidada con un layout */}
           <Route path="example" element={<Test />} />
           <Route path="usuariosPage" element={<UsuariosPage />} />
