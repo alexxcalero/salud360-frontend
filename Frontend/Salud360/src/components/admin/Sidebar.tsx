@@ -45,7 +45,7 @@ function Sidebar({ active = 0 }: { active: number }) {
         ].map(([Icon, label], index) => (
           <li
             key={index} // Como react hincha las bolas con eso del key
-            className="relative px-[20px] py-[7px] data-[active=true]:bg-white rounded-l-full group cursor-pointer hover:bg-blue-600 ease-out duration-150 transition-colors"
+            className="relative px-[20px] py-[7px] data-[active=true]:bg-gray-200 rounded-l-full group cursor-pointer hover:bg-blue-600 ease-out duration-150 transition-colors"
             data-active={index === active}
           >
             <Icon

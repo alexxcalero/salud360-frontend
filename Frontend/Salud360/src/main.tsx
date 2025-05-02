@@ -9,6 +9,8 @@ import Example from "@/pages/Example";
 import RegistrarComunidad from "./pages/RegistrarComunidad";
 import Test from "@/pages/admin/test";
 import AdminLayout from "@/layouts/AdminLayout";
+import UsuariosPage from "./pages/admin/usuarios/UsuariosPage";
+import CrearUsuario from "./pages/admin/usuarios/CrearUsuario";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -21,6 +23,8 @@ createRoot(document.getElementById("root")!).render(
         <Route path="/admin" element={<AdminLayout active={2} />}>
           {/* Ejemplo de ruta anidada con un layout */}
           <Route path="example" element={<Test />} />
+          <Route path="usuariosPage" element={<UsuariosPage />} />
+          <Route path="crearUsuario" element={<CrearUsuario />} />
         </Route>
       </Routes>
     </BrowserRouter>

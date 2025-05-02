@@ -226,6 +226,72 @@ function App() {
               Crear Usuario
             </Button>
           </FormContainer>
+          <FormContainer>
+            <h1>Registrar Usuario</h1>
+            <h2>
+              Rellene los siguientes campos para completar el registro del
+              usuario.
+            </h2>
+            <InputLabel
+              type="email"
+              placeholder="Ingrese los nombres"
+              htmlFor="email"
+              label="Nombres"
+            />
+            <InputLabel
+              type="email"
+              placeholder="Ingrese los apellidos"
+              htmlFor="email"
+              label="Apellidos"
+            />
+            <InputLabel
+              type="email"
+              placeholder="Ingrese el número de documento de identidad"
+              htmlFor="email"
+              label="DNI"
+            />
+            <InputIconLabel
+              icon={<Phone className="w-5 h-5" />}
+              placeholder="Teléfono"
+              type="tel"
+              htmlFor="tel"
+              label="Teléfono"
+            ></InputIconLabel>
+            <SelectLabel
+              options={optionsSelect}
+              placeholder="Seleccione el rol"
+              htmlFor="email"
+              label="Rol"
+            />
+            <InputIconLabel
+              icon={<Mail className="w-5 h-5" />}
+              placeholder="Mail"
+              type="email"
+              htmlFor="email"
+              label="Email"
+            ></InputIconLabel>
+            <SelectLabel
+              options={optionsSelect}
+              placeholder="Seleccione su genero"
+              htmlFor="email"
+              label="Género"
+            />
+            <InputLabel
+              type="date"
+              placeholder="Ingrese la fecha de nacimiento"
+              htmlFor="date"
+              label="Fecha de nacimiento"
+            />
+            <InputLabel
+              type="password"
+              placeholder=""
+              htmlFor="password"
+              label="Contraseña"
+            />
+            <Button variant="primary" size="md">
+              Crear Usuario
+            </Button>
+          </FormContainer>
           <NavLink
             className="bg-gray-100 py-2 px-7 border-1 border-gray-800 rounded-xl hover:bg-gray-300 cursor-pointer"
             to="/example"

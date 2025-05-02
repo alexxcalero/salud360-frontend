@@ -5,7 +5,7 @@ import { Outlet } from "react-router";
 function AdminLayout({ active = 0 }: { active?: number }) {
   // Nota personal: Usar esto con context
   return (
-    <div className="min-w-[100dvw] min-h-[100dvh] grid grid-cols-[350px_1fr]">
+    <div className="min-w-[100dvw] min-h-[100dvh] grid grid-cols-[350px_1fr] bg-gray-200">
       <Sidebar active={active} />
       <Outlet />
     </div>
