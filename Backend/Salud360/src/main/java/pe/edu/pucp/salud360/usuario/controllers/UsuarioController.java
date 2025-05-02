@@ -9,6 +9,7 @@ import pe.edu.pucp.salud360.usuario.services.UsuarioService;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:5173") //PARA QUE SE CONECTE CON EL FRONT
 @RestController
 @RequestMapping("/api/usuarios")
 public class UsuarioController {

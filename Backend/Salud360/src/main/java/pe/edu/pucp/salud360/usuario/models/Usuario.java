@@ -53,6 +53,7 @@ public class Usuario {
 
     @ManyToOne
     @JoinColumn(name = "idTipoDocumento")
+    @JsonBackReference
     protected TipoDocumento tipoDocumento;
 
     @ManyToOne

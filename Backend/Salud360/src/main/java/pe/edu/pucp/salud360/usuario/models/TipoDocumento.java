@@ -33,6 +33,7 @@ public class TipoDocumento {
     private LocalDateTime fechaDesactivacion;
 
     @OneToMany(mappedBy = "tipoDocumento")
+    @JsonManagedReference
     private List<Usuario> usuarios;
 
     public TipoDocumento(Integer idTipoDocumento, String nombre, Boolean activo, List<Usuario> usuarios) {

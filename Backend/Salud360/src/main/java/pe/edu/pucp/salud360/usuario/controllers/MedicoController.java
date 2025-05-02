@@ -9,6 +9,7 @@ import pe.edu.pucp.salud360.usuario.services.MedicoService;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:5173") //PARA QUE SE CONECTE CON EL FRONT
 @RestController
 @RequestMapping("/api/medicos")
 public class MedicoController {

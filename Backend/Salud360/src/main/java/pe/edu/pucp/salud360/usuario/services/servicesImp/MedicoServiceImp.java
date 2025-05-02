@@ -60,11 +60,11 @@ public class MedicoServiceImp implements MedicoService {
     @Override
     public List<MedicoDTO> listarMedicosTodos() {
         List<Medico> medicos = medicoRepository.findAll();
-        if(medicos.isEmpty()) {
-            return null;
-        } else {
-            return medicos.stream().map(MedicoMapper::mapToDTO).toList();
-        }
+        return medicos.stream().map(medico -> {
+            MedicoDTO dto = MedicoMapper.mapToDTO(medico);
+            System.out.println("Especialidad: " + dto.getEspecialidad()); // 👈 revisa en consola
+            return dto;
+        }).toList();
     }
 
     @Override
