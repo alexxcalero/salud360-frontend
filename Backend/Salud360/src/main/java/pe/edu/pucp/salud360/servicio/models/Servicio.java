@@ -44,8 +44,8 @@ public class Servicio {
     @Column(name = "fechaDesactivacion", unique = false, nullable = true, updatable = true)
     private LocalDateTime fechaDesactivacion;
 
-    @ManyToMany(mappedBy = "servicios")
-    private List<Comunidad> comunidades;
+    @ManyToMany
+    private List<Comunidad> comunidad;
 
     @OneToMany(mappedBy = "servicio")
     private List<CitaMedica> citasMedicas;

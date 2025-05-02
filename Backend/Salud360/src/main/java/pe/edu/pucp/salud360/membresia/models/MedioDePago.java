@@ -33,10 +33,10 @@ public class MedioDePago {
     @Column(name = "fechaDesactivacion", unique = false, nullable = false, updatable = true)
     private LocalDateTime fechaDesactivacion;
 
-    @OneToMany(mappedBy = "mediodepago")
+    @OneToMany(mappedBy = "medioDePago")
     private List<Afiliacion> afiliaciones;
 
-    @OneToMany(mappedBy = "mediodepago")
+    @OneToMany(mappedBy = "medioDePago")
     private List<Pago> pagos;
 
     @ManyToOne

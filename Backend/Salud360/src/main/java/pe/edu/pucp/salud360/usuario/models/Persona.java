@@ -25,6 +25,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "persona")
+@PrimaryKeyJoinColumn(name = "idUsuario")
 public class Persona extends Usuario {
     @Column(name = "fotoPerfil", unique = false, nullable = false, updatable = true)
     private String fotoPerfil;
