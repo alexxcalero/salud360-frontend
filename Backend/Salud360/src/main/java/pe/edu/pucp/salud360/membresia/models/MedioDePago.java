@@ -41,6 +41,6 @@ public class MedioDePago {
 
     @ManyToOne
     @JoinColumn(name = "idUsuario")
-    private Persona usuario;
+    private Persona persona;
 
 }

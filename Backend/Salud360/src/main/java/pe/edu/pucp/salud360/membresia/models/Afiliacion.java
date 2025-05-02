@@ -55,5 +55,5 @@ public class Afiliacion extends Membresia{
 
     @ManyToOne
     @JoinColumn(name = "idUsuario")
-    private Persona usuario;
+    private Persona persona;
 }
