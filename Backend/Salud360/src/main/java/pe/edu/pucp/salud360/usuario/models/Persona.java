@@ -33,19 +33,19 @@ public class Persona extends Usuario {
     @ManyToMany(mappedBy = "persona")
     private List<Comunidad> comunidades;
 
-    @OneToMany(mappedBy = "usuario")
+    @OneToMany(mappedBy = "persona")
     private List<Afiliacion> afiliaciones;
 
-    @OneToMany(mappedBy = "usuario")
+    @OneToMany(mappedBy = "persona")
     private List<MedioDePago> mediosDePago;
 
-    @OneToMany(mappedBy = "usuario")
+    @OneToMany(mappedBy = "persona")
     private List<Publicacion> publicaciones;
 
-    @OneToMany(mappedBy = "usuario")
+    @OneToMany(mappedBy = "persona")
     private List<Comentario> comentarios;
 
-    @OneToMany(mappedBy = "usuario")
+    @OneToMany(mappedBy = "persona")
     private List<Testimonio> testimonios;
 
     @ManyToMany(mappedBy = "personas")
@@ -54,10 +54,10 @@ public class Persona extends Usuario {
     @OneToMany(mappedBy = "usuario")
     private List<Notificacion> notificaciones;
 
-    @OneToMany(mappedBy = "usuario")
+    @OneToMany(mappedBy = "persona")
     private List<Reserva> reservas;
 
-    @OneToMany(mappedBy = "usuario")
+    @OneToMany(mappedBy = "persona")
     private List<CitaMedica> citasMedicas;
 
     public Persona(Integer idUsuario, String nombres, String apellidos, String numeroDocumento, String correo, String contrasenha, String telefono, LocalDate fechaNacimiento, Boolean activo, TipoDocumento tipoDocumento, Rol rol, String fotoPerfil) {

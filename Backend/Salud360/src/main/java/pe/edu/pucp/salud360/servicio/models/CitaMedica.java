@@ -55,7 +55,7 @@ public class CitaMedica {
 
     @ManyToOne
     @JoinColumn(name = "idUsuario")
-    private Persona usuario;
+    private Persona persona;
 
     @ManyToOne
     @JoinColumn(name = "idUsuario")
