@@ -63,7 +63,7 @@ public class PagoImp implements PagoService {
                 pago.getIdPago(),
                 pago.getMonto(),
                 pago.getFechaPago(),
-                pago.getAfiliacion() != null ? pago.getAfiliacion().getIdAfiliacion() : null,
+                pago.getAfiliacion() != null ? pago.getAfiliacion().getIdMembresia() : null,
                 pago.getMedioDePago() != null ? pago.getMedioDePago().getIdMedioDePago() : null
         );
     }
