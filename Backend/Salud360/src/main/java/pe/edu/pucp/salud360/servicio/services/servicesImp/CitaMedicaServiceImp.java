@@ -64,7 +64,7 @@ public class CitaMedicaServiceImp implements CitaMedicaService {
             servicioRepository.findById(dto.getIdServicio()).ifPresent(cita::setServicio);
         }
         if (dto.getIdUsuario() != null) {
-            personaRepository.findById(dto.getIdUsuario()).ifPresent(cita::setUsuario);
+            personaRepository.findById(dto.getIdUsuario()).ifPresent(cita::setPersona);
         }
         if (dto.getIdMedico() != null) {
             medicoRepository.findById(dto.getIdMedico()).ifPresent(cita::setMedico);
