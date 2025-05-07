@@ -13,9 +13,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                //.cors() // 👈 Esto activa el CORS configurado en WebConfig
                 .csrf().disable() // ❗ Solo para pruebas; idealmente manejar token CSRF luego
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/usuarios/**").permitAll()
+                        .requestMatchers("/api/usuarios/**", "/api/medicos/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(); // Soporta autenticación básica vía Postman

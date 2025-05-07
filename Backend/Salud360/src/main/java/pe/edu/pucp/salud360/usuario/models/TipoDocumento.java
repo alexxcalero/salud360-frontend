@@ -8,6 +8,8 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Getter
 @Setter
@@ -33,6 +35,7 @@ public class TipoDocumento {
     private LocalDateTime fechaDesactivacion;
 
     @OneToMany(mappedBy = "tipoDocumento")
+    @JsonManagedReference
     private List<Usuario> usuarios;
 
     public TipoDocumento(Integer idTipoDocumento, String nombre, Boolean activo, List<Usuario> usuarios) {

@@ -8,6 +8,8 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Getter
 @Setter
@@ -53,6 +55,7 @@ public class Usuario {
 
     @ManyToOne
     @JoinColumn(name = "idTipoDocumento")
+    @JsonBackReference
     protected TipoDocumento tipoDocumento;
 
     @ManyToOne

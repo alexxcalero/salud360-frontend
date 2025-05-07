@@ -60,7 +60,7 @@ public class PeriodoImp implements PeriodoService {
                 periodo.getFechaInicio(),
                 periodo.getFechaFin(),
                 periodo.getCantReservas(),
-                periodo.getAfiliacion() != null ? periodo.getAfiliacion().getIdAfiliacion() : null
+                periodo.getAfiliacion() != null ? periodo.getAfiliacion().getIdMembresia() : null
         );
     }
 

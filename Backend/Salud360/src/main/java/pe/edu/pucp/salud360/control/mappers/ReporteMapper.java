@@ -5,6 +5,7 @@ import pe.edu.pucp.salud360.control.models.Reporte;
 import pe.edu.pucp.salud360.membresia.models.Afiliacion;
 import pe.edu.pucp.salud360.membresia.models.Pago;
 
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,7 +15,7 @@ public class ReporteMapper {
         if (reporte == null) return null;
 
         List<Integer> idAfiliaciones = reporte.getAfiliacion() != null ?
-                reporte.getAfiliacion().stream().map(Afiliacion::getIdAfiliacion).collect(Collectors.toList()) : null;
+                reporte.getAfiliacion().stream().map(Afiliacion::getIdMembresia).collect(Collectors.toList()) : null;
 
         List<Integer> idPagos = reporte.getPago() != null ?
                 reporte.getPago().stream().map(Pago::getIdPago).collect(Collectors.toList()) : null;

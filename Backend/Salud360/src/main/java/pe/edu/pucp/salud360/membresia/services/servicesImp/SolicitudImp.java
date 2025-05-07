@@ -59,7 +59,7 @@ public class SolicitudImp implements SolicitudService {
                 s.getIdSolicitud(),
                 s.getCantDias(),
                 s.getEstado(),
-                s.getAfiliacion() != null ? s.getAfiliacion().getIdAfiliacion() : null
+                s.getAfiliacion() != null ? s.getAfiliacion().getIdMembresia() : null
         );
     }
 
