@@ -62,6 +62,16 @@ public class Usuario {
     @JoinColumn(name = "idRol")
     protected Rol rol;
 
+    @JsonBackReference
+    public TipoDocumento getTipoDocumento() {
+        return tipoDocumento;
+    }
+
+    @JsonBackReference
+    public Rol getRol() {
+        return rol;
+    }
+
     public Usuario(Integer idUsuario, String nombres, String apellidos, String numeroDocumento, String correo, String contrasenha, String telefono, LocalDate fechaNacimiento, Boolean activo, TipoDocumento tipoDocumento, Rol rol) {
         this.idUsuario = idUsuario;
         this.nombres = nombres;
