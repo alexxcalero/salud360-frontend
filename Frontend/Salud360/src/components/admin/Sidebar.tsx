@@ -12,10 +12,30 @@ import {
 } from "lucide-react";
 
 import Edge from "@/assets/edge.svg";
-
 import colors from "tailwindcss/colors";
+import { useNavigate } from "react-router";
+//useNavigate para poder darle click al modulo del sidebar y que vaya. Lo estoy colocando dentro del map del ul
+
+const routes = [
+  "dashboard",
+  "configuracion",
+  "roles",
+  "membresias",
+  "comunidades",
+  "servicios",
+  "locales",
+  "usuarios",
+  "personalMedico",
+  "calificaciones",
+  "logs",
+  "auditorias",
+  "reportes",
+];
 
 function Sidebar({ active = 0 }: { active: number }) {
+
+  const navigate = useNavigate();
+
   return (
     <div className="bg-brand-primary">
       <section className="mb-[20px] border-b-1 border-blue-900  p-[20px] flex items-center gap-[10px]">
@@ -43,8 +63,10 @@ function Sidebar({ active = 0 }: { active: number }) {
           [ShieldUser, "Auditorías"],
           [LayoutDashboard, "Reportes"],
         ].map(([Icon, label], index) => (
+
           <li
             key={index} // Como react hincha las bolas con eso del key
+            onClick={() => navigate(routes[index])}
             className="relative px-[20px] py-[7px] data-[active=true]:bg-gray-200 rounded-l-full group cursor-pointer hover:bg-blue-600 ease-out duration-150 transition-colors"
             data-active={index === active}
           >
