@@ -21,7 +21,7 @@ import CalificacionesPage from "./pages/admin/calificaciones/CalificacionesPage"
 import LogsPage from "./pages/admin/logs/LogsPage";
 import AuditoriasPage from "./pages/admin/auditoria/AuditoriasPage";
 import ReportesPage from "./pages/admin/reportes/ReportesPage";
-import ConfiguracionGeneralPage from "./pages/admin/configuracionGeneral/configuracionGeneralPage";
+import ConfiguracionGeneralPage from "./pages/admin/configuracionGeneral/ConfiguracionGeneralPage";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
