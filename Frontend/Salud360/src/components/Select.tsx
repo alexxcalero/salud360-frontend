@@ -14,11 +14,13 @@ interface Option {
 interface Props {
     options: Option[];
     placeholder?: string;
+    value?: string;
+    onChange?: (value: string) => void;
 }
 
-function Select({options, placeholder="Selecciona una opción"}: Props){
+function Select({options, placeholder="Selecciona una opción", value="", onChange = () => {}}: Props){
     return(
-        <ShadSelect>
+        <ShadSelect value={value} onValueChange={onChange}>
             <SelectTrigger className="border-[#6A6262] border-2 rounded-[5px] py-5 px-4 w-full">
                 <SelectValue placeholder={placeholder} />
             </SelectTrigger>

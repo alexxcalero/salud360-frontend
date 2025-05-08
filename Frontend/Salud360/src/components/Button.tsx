@@ -7,9 +7,10 @@ interface Props{
     size?: "sm" | "md" | "lg";
     className?: string;
     type?: "button" | "submit" | "reset";
+    onClick?: React.MouseEventHandler<HTMLButtonElement>
 }
 
-function Button({children, size="sm", variant = "primary", className="", type="button"}: Props){
+function Button({children, size="sm", variant = "primary", className="", type="button", onClick = () =>{}}: Props){
     const base = "px-4 py-2 text-sm font-semibold rounded-md cursor-pointer";
     const variants = {
         primary: "bg-[#2A86FF] text-white hover:bg-blue-600",
@@ -24,7 +25,7 @@ function Button({children, size="sm", variant = "primary", className="", type="b
     };
     
     return(
-        <ShadButton type={type} className={cn(base, sizes[size], variants[variant], className)}>{children}</ShadButton>
+        <ShadButton type={type} className={cn(base, sizes[size], variants[variant], className)} onClick={onClick}>{children}</ShadButton>
     );
 }
 

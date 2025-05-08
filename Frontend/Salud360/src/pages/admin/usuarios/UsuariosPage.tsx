@@ -1,6 +1,7 @@
 import  { useState, useEffect } from "react";
 import axios from "axios";
 import { Search, Info, Trash2, Pencil, Filter, UserPlus } from "lucide-react";
+import { useNavigate } from "react-router";
 
 import TableHeader from "@/components/admin/TableHeader";
 import TableBody from "@/components/admin/TableBody";
@@ -9,10 +10,10 @@ import ButtonIcon from "@/components/ButtonIcon";
 
 function UsuariosPage() {
   const [selectAll, setSelectAll] = useState(false);
-  const [medicos, setMedicos] = useState([]);
+  const [usuarios, setUsuarios] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:8080/api/medicos", {
+    axios.get("http://localhost:8080/api/usuarios", {
       auth: {
         username: "admin",
         password: "admin123"
@@ -20,10 +21,10 @@ function UsuariosPage() {
     })
       .then(res => {
         console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
-        setMedicos(res.data);
-        console.log("Médicos:", res.data);
+        setUsuarios(res.data);
+        console.log("Usuarios:", res.data);
       })
-      .catch(err => console.error("Error cargando médicos", err));
+      .catch(err => console.error("Error cargando usuarios", err));
   }, []);
 
   const handleSelectAll = () => {
@@ -41,31 +42,31 @@ function UsuariosPage() {
     { label: "Actions", className: "w-24 text-center" },
   ];
 
-  const rows = medicos.map((medico: any) => [
+  const rows = usuarios.map((usuario: any) => [
     {
       content: <input type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
       className: "w-10",
     },
-    { content: medico.idUsuario, className: "w-16" },
+    { content: usuario.idUsuario, className: "w-16" },
     {
       content: (
         <img
-          src={medico.fotoPerfil?.startsWith("http") ? medico.fotoPerfil : "/default-user.png"}
+          src={usuario.fotoPerfil?.startsWith("http") ? usuario.fotoPerfil : "/default-user.png"}
           alt="foto"
           className="w-6 h-6 rounded-full object-cover"
         />
       ),
       className: "w-16",
     },
-    { content: `${medico.nombres} ${medico.apellidos}`, className: "w-1/4 text-left" },
-    { content: medico.correo, className: "w-1/3 text-left" },
-    { content: medico.telefono, className: "w-1/6 text-left" },
+    { content: `${usuario.nombres} ${usuario.apellidos}`, className: "w-1/4 text-left" },
+    { content: usuario.correo, className: "w-1/3 text-left" },
+    { content: usuario.telefono, className: "w-1/6 text-left" },
     {
       content: (
         <span className={`px-2 py-1 rounded text-xs font-medium ${
-          medico.activo ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+          usuario.activo ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
         }`}>
-          {medico.activo ? "Activo" : "Inactivo"}
+          {usuario.activo ? "Activo" : "Inactivo"}
         </span>
       ),
       className: "w-1/6 text-left",
@@ -82,6 +83,8 @@ function UsuariosPage() {
     },
   ]);
 
+  const navigate = useNavigate();
+
   return (
     <div className="w-full px-6 py-4 overflow-auto">
       <div className="grid grid-cols-12 gap-4 items-center mb-4">
@@ -93,7 +96,7 @@ function UsuariosPage() {
           <ButtonIcon icon={<Filter className="w-6 h-6" />} size="lg" variant="primary">Aplicar filtros</ButtonIcon>
         </div>
         <div className="col-span-2 flex justify-end">
-          <ButtonIcon icon={<UserPlus className="w-6 h-6" />} size="lg" variant="primary">Agregar usuario</ButtonIcon>
+          <ButtonIcon icon={<UserPlus className="w-6 h-6" />} size="lg" variant="primary" onClick={() => navigate("/admin/usuarios/crear")}>Agregar usuario</ButtonIcon>
         </div>
       </div>
 

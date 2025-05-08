@@ -8,9 +8,10 @@ interface Props{
     size?: "sm" | "md" | "lg";
     className?: string;
     type?: "button" | "submit" | "reset";
+    onClick?: React.MouseEventHandler<HTMLButtonElement>
 }
 
-function ButtonIcon({icon, children, size="sm", variant = "primary", className="", type="button"}: Props){
+function ButtonIcon({icon, children, size, variant, className, type, onClick}: Props){
     
     let padding = "";
 
@@ -36,7 +37,7 @@ function ButtonIcon({icon, children, size="sm", variant = "primary", className="
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white"> 
                 {icon}
             </span>
-            <Button variant={variant} size={size} className={cn(className, padding)} type={type}>{children}</Button>
+            <Button variant={variant} size={size} className={cn(className, padding)} type={type} onClick={onClick}>{children}</Button>
         </div>
     );
 }

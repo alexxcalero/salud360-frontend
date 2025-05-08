@@ -16,8 +16,15 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
+    @PostMapping("/test")
+    public ResponseEntity<String> test() {
+        System.out.println("¡Hola desde /test!");
+        return ResponseEntity.ok("OK");
+    }
+
     @PostMapping
     public ResponseEntity<UsuarioDTO> crearUsuario(@RequestBody UsuarioDTO usuarioDTO) {
+        System.out.println("Payload recibido: " + usuarioDTO);
         UsuarioDTO usuarioCreado = usuarioService.crearUsuario(usuarioDTO);
         return new ResponseEntity<>(usuarioCreado, HttpStatus.CREATED);
     }

@@ -4,11 +4,13 @@ interface Props{
     type?: string;
     placeholder?: string;
     leftPadding?: string;
+    value?: string;
+    onChange?: React.ChangeEventHandler<HTMLInputElement>;
 }
 
-function Input({type= "text", placeholder="", leftPadding=""}: Props){
+function Input({type= "text", placeholder="", leftPadding="", value="", onChange = () => {}}: Props){
     return(
-        <ShadInput type={type} placeholder={placeholder} className={`border-[#6A6262] border-2 rounded-[5px] py-5 px-4 ${leftPadding}`}/>
+        <ShadInput type={type} placeholder={placeholder} className={`border-[#6A6262] border-2 rounded-[5px] py-5 px-4 ${leftPadding}`} value={value} onChange={onChange}/>
     );
 }
 
