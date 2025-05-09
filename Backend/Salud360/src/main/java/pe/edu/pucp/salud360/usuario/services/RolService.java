@@ -10,4 +10,6 @@ public interface RolService {
     void eliminarRol(Integer idRol);
     List<RolDTO> listarRolesTodos();
     RolDTO buscarRolPorId(Integer idRol);
+
+    List<RolDTO> listarRolesPorPermisosId(Integer idPermiso);
 }

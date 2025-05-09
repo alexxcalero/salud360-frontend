@@ -47,7 +47,7 @@ public class TipoDocumentoController {
         return new ResponseEntity<>(tiposDocumentos, HttpStatus.OK);
     }
 
-    @GetMapping("{idUsuario}")
+    @GetMapping("{idTipoDocumento}")
     public ResponseEntity<TipoDocumentoDTO> buscarTipoDocumentoPorId(@PathVariable("idTipoDocumento") Integer idTipoDocumento) {
         TipoDocumentoDTO tipoDocumentoBuscado = tipoDocumentoService.buscarTipoDocumentoPorId(idTipoDocumento);
         if(tipoDocumentoBuscado != null)

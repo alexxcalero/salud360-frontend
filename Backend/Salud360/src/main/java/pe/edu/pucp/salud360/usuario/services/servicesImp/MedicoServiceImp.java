@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pe.edu.pucp.salud360.usuario.dto.MedicoDTO;
 import pe.edu.pucp.salud360.usuario.mappers.MedicoMapper;
+import pe.edu.pucp.salud360.usuario.mappers.RolMapper;
+import pe.edu.pucp.salud360.usuario.mappers.TipoDocumentoMapper;
 import pe.edu.pucp.salud360.usuario.models.Medico;
 import pe.edu.pucp.salud360.usuario.repositories.MedicoRepository;
 import pe.edu.pucp.salud360.usuario.services.MedicoService;
@@ -22,6 +24,7 @@ public class MedicoServiceImp implements MedicoService {
         Medico medico = MedicoMapper.mapToModel(medicoDTO);
         medico.setActivo(true);
         medico.setFechaCreacion(LocalDateTime.now());
+        medico.setFechaDesactivacion(null);
         Medico medicoCreado = medicoRepository.save(medico);
         return MedicoMapper.mapToDTO(medicoCreado);
     }
@@ -33,10 +36,8 @@ public class MedicoServiceImp implements MedicoService {
             medico.setNombres(medicoDTO.getNombres());
             medico.setApellidos(medicoDTO.getApellidos());
             medico.setNumeroDocumento(medicoDTO.getNumeroDocumento());
-            medico.setTelefono(medicoDTO.getTelefono());
-            medico.setFechaNacimiento(medicoDTO.getFechaNacimiento());
-            medico.setTipoDocumento(medicoDTO.getTipoDocumento());
-            medico.setRol(medicoDTO.getRol());
+            medico.setTipoDocumento(TipoDocumentoMapper.mapToModel(medicoDTO.getTipoDocumento()));
+            medico.setRol(RolMapper.mapToModel(medicoDTO.getRol()));
             medico.setEspecialidad(medicoDTO.getEspecialidad());
             medico.setDescripcion(medicoDTO.getDescripcion());
             Medico medicoActualizado = medicoRepository.save(medico);

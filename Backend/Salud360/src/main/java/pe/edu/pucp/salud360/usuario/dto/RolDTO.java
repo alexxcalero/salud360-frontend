@@ -1,16 +1,12 @@
 package pe.edu.pucp.salud360.usuario.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import pe.edu.pucp.salud360.usuario.models.Permiso;
-import pe.edu.pucp.salud360.usuario.models.Usuario;
+import lombok.*;
 
 import java.util.List;
 
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class RolDTO {
@@ -18,6 +14,5 @@ public class RolDTO {
     private String nombre;
     private String descripcion;
     private Boolean activo;
-    private List<Usuario> usuarios;
-    private List<Permiso> permisos;
+    private List<PermisoDTO> permisos;
 }

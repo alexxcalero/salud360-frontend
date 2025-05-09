@@ -8,18 +8,35 @@ public class UsuarioMapper {
         if(usuario == null)
             return null;
 
-        return new UsuarioDTO(usuario.getIdUsuario(), usuario.getNombres(), usuario.getApellidos(),
-                              usuario.getNumeroDocumento(), usuario.getCorreo(), usuario.getContrasenha(),
-                              usuario.getTelefono(), usuario.getFechaNacimiento(), usuario.getActivo(),
-                              usuario.getTipoDocumento(), usuario.getRol());
+        return UsuarioDTO.builder()
+                .idUsuario(usuario.getIdUsuario())
+                .nombres(usuario.getNombres())
+                .apellidos(usuario.getApellidos())
+                .numeroDocumento(usuario.getNumeroDocumento())
+                .correo(usuario.getCorreo())
+                .contrasenha(usuario.getContrasenha())
+                .fotoPefil(usuario.getFotoPerfil())
+                .activo(usuario.getActivo())
+                .tipoDocumento(TipoDocumentoMapper.mapToDTO(usuario.getTipoDocumento()))
+                .rol(RolMapper.mapToDTO(usuario.getRol()))
+                .build();
     }
 
     public static Usuario mapToModel(UsuarioDTO usuarioDTO) {
         if(usuarioDTO == null)
             return null;
 
-        return new Usuario(usuarioDTO.getIdUsuario(), usuarioDTO.getNombres(), usuarioDTO.getApellidos(),
-                           usuarioDTO.getNumeroDocumento(), usuarioDTO.getCorreo(), usuarioDTO.getContrasenha(), usuarioDTO.getTelefono(),
-                           usuarioDTO.getFechaNacimiento(), usuarioDTO.getActivo(), usuarioDTO.getTipoDocumento(), usuarioDTO.getRol());
+        return Usuario.builder()
+                .idUsuario(usuarioDTO.getIdUsuario())
+                .nombres(usuarioDTO.getNombres())
+                .apellidos(usuarioDTO.getApellidos())
+                .numeroDocumento(usuarioDTO.getNumeroDocumento())
+                .correo(usuarioDTO.getCorreo())
+                .contrasenha(usuarioDTO.getContrasenha())
+                .fotoPerfil(usuarioDTO.getFotoPefil())
+                .activo(usuarioDTO.getActivo())
+                .tipoDocumento(TipoDocumentoMapper.mapToModel(usuarioDTO.getTipoDocumento()))
+                .rol(RolMapper.mapToModel(usuarioDTO.getRol()))
+                .build();
     }
 }

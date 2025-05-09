@@ -8,19 +8,39 @@ public class MedicoMapper {
         if(medico == null)
             return null;
 
-        return new MedicoDTO(medico.getIdUsuario(), medico.getNombres(), medico.getApellidos(), medico.getNumeroDocumento(),
-                             medico.getCorreo(), medico.getContrasenha(), medico.getTelefono(), medico.getFechaNacimiento(),
-                             medico.getActivo(), medico.getTipoDocumento(), medico.getRol(), medico.getEspecialidad(),
-                             medico.getDescripcion(), medico.getCitasMedicas());
+        return MedicoDTO.builder()
+                .idUsuario(medico.getIdUsuario())
+                .nombres(medico.getNombres())
+                .apellidos(medico.getApellidos())
+                .numeroDocumento(medico.getNumeroDocumento())
+                .correo(medico.getCorreo())
+                .contrasenha(medico.getContrasenha())
+                .activo(medico.getActivo())
+                .tipoDocumento(TipoDocumentoMapper.mapToDTO(medico.getTipoDocumento()))
+                .rol(RolMapper.mapToDTO(medico.getRol()))
+                .especialidad(medico.getEspecialidad())
+                .descripcion(medico.getDescripcion())
+                .citasMedicas(medico.getCitasMedicas())
+                .build();
     }
 
     public static Medico mapToModel(MedicoDTO medicoDTO) {
         if(medicoDTO == null)
             return null;
 
-        return new Medico(medicoDTO.getIdUsuario(), medicoDTO.getNombres(), medicoDTO.getApellidos(), medicoDTO.getNumeroDocumento(),
-                          medicoDTO.getCorreo(), medicoDTO.getContrasenha(), medicoDTO.getTelefono(), medicoDTO.getFechaNacimiento(),
-                          medicoDTO.getActivo(), medicoDTO.getTipoDocumento(), medicoDTO.getRol(), medicoDTO.getEspecialidad(),
-                          medicoDTO.getDescripcion(), medicoDTO.getCitasMedicas());
+        return Medico.builder()
+                .idUsuario(medicoDTO.getIdUsuario())
+                .nombres(medicoDTO.getNombres())
+                .apellidos(medicoDTO.getApellidos())
+                .numeroDocumento(medicoDTO.getNumeroDocumento())
+                .correo(medicoDTO.getCorreo())
+                .contrasenha(medicoDTO.getContrasenha())
+                .activo(medicoDTO.getActivo())
+                .tipoDocumento(TipoDocumentoMapper.mapToModel(medicoDTO.getTipoDocumento()))
+                .rol(RolMapper.mapToModel(medicoDTO.getRol()))
+                .especialidad(medicoDTO.getEspecialidad())
+                .descripcion(medicoDTO.getDescripcion())
+                .citasMedicas(medicoDTO.getCitasMedicas())
+                .build();
     }
 }

@@ -5,14 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Getter
 @Setter
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -21,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idUsuario", unique = true, nullable = false, updatable = false)
     protected Integer idUsuario;
 
     @Column(name = "nombres", unique = false, nullable = false, updatable = true)
@@ -38,11 +38,8 @@ public class Usuario {
     @Column(name = "contrasenha", unique = false, nullable = false, updatable = true)
     protected String contrasenha;
 
-    @Column(name = "telefono", unique = true, nullable = false, updatable = true)
-    protected String telefono;
-
-    @Column(name = "fechaNacimiento", unique = false, nullable = false, updatable = false)
-    protected LocalDate fechaNacimiento;  // Va a tener que contactar con el admin si quiere cambiar su fecha de nacimiento
+    @Column(name = "fotoPerfil", unique = false, nullable = true, updatable = true)
+    protected String fotoPerfil;
 
     @Column(name = "activo", unique = false, nullable = false, updatable = true)
     protected Boolean activo;
@@ -54,47 +51,10 @@ public class Usuario {
     protected LocalDateTime fechaDesactivacion;
 
     @ManyToOne
-    @JoinColumn(name = "idTipoDocumento")
-    @JsonBackReference
+    @JoinColumn(name = "idTipoDocumento", unique = false, nullable = false, updatable = true)
     protected TipoDocumento tipoDocumento;
 
     @ManyToOne
-    @JoinColumn(name = "idRol")
+    @JoinColumn(name = "idRol", unique = false, nullable = false, updatable = true)
     protected Rol rol;
-
-    @JsonBackReference
-    public TipoDocumento getTipoDocumento() {
-        return tipoDocumento;
-    }
-
-    @JsonBackReference
-    public Rol getRol() {
-        return rol;
-    }
-
-    public Usuario(Integer idUsuario, String nombres, String apellidos, String numeroDocumento, String correo, String contrasenha, String telefono, LocalDate fechaNacimiento, Boolean activo, TipoDocumento tipoDocumento, Rol rol) {
-        this.idUsuario = idUsuario;
-        this.nombres = nombres;
-        this.apellidos = apellidos;
-        this.numeroDocumento = numeroDocumento;
-        this.correo = correo;
-        this.contrasenha = contrasenha;
-        this.telefono = telefono;
-        this.fechaNacimiento = fechaNacimiento;
-        this.activo = activo;
-        this.tipoDocumento = tipoDocumento;
-        this.rol = rol;
-    }
-
-    public Usuario(Integer idUsuario, String nombres, String apellidos, String numeroDocumento, String correo, String contrasenha, String telefono, LocalDate fechaNacimiento, Boolean activo) {
-        this.idUsuario = idUsuario;
-        this.nombres = nombres;
-        this.apellidos = apellidos;
-        this.numeroDocumento = numeroDocumento;
-        this.correo = correo;
-        this.contrasenha = contrasenha;
-        this.telefono = telefono;
-        this.fechaNacimiento = fechaNacimiento;
-        this.activo = activo;
-    }
 }
