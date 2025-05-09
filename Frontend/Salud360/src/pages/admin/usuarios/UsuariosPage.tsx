@@ -7,12 +7,17 @@ import TableHeader from "@/components/admin/TableHeader";
 import TableBody from "@/components/admin/TableBody";
 import InputIcon from "@/components/InputIcon";
 import ButtonIcon from "@/components/ButtonIcon";
+import ModalExito from "@/components/ModalExito";
+import ModalError from "@/components/ModalError";
 
 function UsuariosPage() {
   const [selectAll, setSelectAll] = useState(false);
   const [usuarios, setUsuarios] = useState([]);
+  const [usuarioSeleccionado, setUsuarioSeleccionado] = useState<any>();
+  const [showModalExito, setShowModalExito] = useState(false);
+  const [showModalError, setShowModalError] = useState(false);
 
-  useEffect(() => {
+  const fetchUsuarios = () => {
     axios.get("http://localhost:8080/api/usuarios", {
       auth: {
         username: "admin",
@@ -25,11 +30,24 @@ function UsuariosPage() {
         console.log("Usuarios:", res.data);
       })
       .catch(err => console.error("Error cargando usuarios", err));
+  }
+
+  useEffect(() => {
+    fetchUsuarios(); //hago esto para que al eliminar un usuario y darle a "volver" se actualice todo automaticamente
   }, []);
 
   const handleSelectAll = () => {
     setSelectAll(!selectAll);
   };
+
+  const handleEliminarUsuario = (): void => {
+    axios.delete(`http://localhost:8080/api/usuarios/${usuarioSeleccionado.idUsuario}`)
+    .then(() => {
+      setShowModalExito(true);
+      setShowModalError(false)
+    })
+    .catch(() => console.log("Error"));
+  }
 
   const columns = [
     { label: <input type="checkbox" checked={selectAll} onChange={handleSelectAll} />, className: "w-10" },
@@ -74,9 +92,12 @@ function UsuariosPage() {
     {
       content: (
         <div className="flex justify-center gap-2">
-          <Info className="w-5 h-5 text-[#2A86FF] cursor-pointer" />
-          <Pencil className="w-5 h-5 text-[#2A86FF] cursor-pointer" />
-          <Trash2 className="w-5 h-5 text-[#2A86FF] cursor-pointer" />
+          <Info className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => navigate(`/admin/usuarios/detalle/${usuario.idUsuario}`)}/>
+          <Pencil className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => navigate(`/admin/usuarios/editar/${usuario.idUsuario}`)}/>
+          <Trash2 className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => {
+            setUsuarioSeleccionado(usuario);
+            setShowModalError(true);
+          }}/>
         </div>
       ),
       className: "w-24 text-center",
@@ -106,6 +127,33 @@ function UsuariosPage() {
           <TableBody rows={rows} />
         </table>
       </div>
+
+      {showModalError && (
+        <>
+          <div className="fixed inset-0 bg-black/60 z-40" />
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <ModalError modulo="Usuario" detalle={`${usuarioSeleccionado?.nombres} ${usuarioSeleccionado.apellidos}`} onConfirm={() => {
+              handleEliminarUsuario();
+              
+            }} onCancel={() => setShowModalError(false)}/>
+          </div>
+        </>
+      )}
+
+      {showModalExito && (
+        <>
+          <div className="fixed inset-0 bg-black/60 z-40" />
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <ModalExito modulo="Usuario" detalle="El usuario fue eliminado correctamente" onConfirm={() => {
+              setShowModalExito(false);
+              fetchUsuarios();
+            }}/>
+          </div>
+        </>
+      )}
+
+      
+
     </div>
   );
 }

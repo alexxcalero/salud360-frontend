@@ -26,9 +26,9 @@ function AdminLayout() {
   const URLContent = location.pathname.split("/")
   const module = URLContent[2]; 
 
-  console.log("El location es:", location);
-  console.log("El URLContent es:", URLContent);
-  console.log("El módulo es:", module);
+  //console.log("El location es:", location);
+  //console.log("El URLContent es:", URLContent);
+  //console.log("El módulo es:", module);
 
   const active = routeToIndex[module] ?? 0; //Si lo encuentra, lo asigna. Si no encuentra el modulo, el valor predeterminado será 0
 

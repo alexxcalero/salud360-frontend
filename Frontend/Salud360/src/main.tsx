@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { BrowserRouter, Routes, Route } from "react-router";
+import { BrowserRouter, Routes, Route, useParams } from "react-router";
 import "@/index.css";
 
 // La manera de utilizar esto es importando los componentes que sean páginas y las referencian en el elemento de abajo
@@ -22,14 +22,18 @@ import LogsPage from "./pages/admin/logs/LogsPage";
 import AuditoriasPage from "./pages/admin/auditoria/AuditoriasPage";
 import ReportesPage from "./pages/admin/reportes/ReportesPage";
 import ConfiguracionGeneralPage from "./pages/admin/configuracionGeneral/ConfiguracionGeneralPage";
+import DetalleUsuario from "./pages/admin/usuarios/DetalleUsuario";
+import EditarUsuario from "./pages/admin/usuarios/EditarUsuario";
 
 createRoot(document.getElementById("root")!).render(
+
   <StrictMode>
     <BrowserRouter>
       <Routes>
         {/* // A este nivel tienen que insertar nuevas rutas. Especificando la ruta "/usuarios/register" y el elemento que será la página */}
         <Route path="/" element={<App />} />
         <Route path="/example" element={<Example />} />
+
         <Route path="/admin" element={<AdminLayout/>}> {/* ESTO ES PARA LA PANTALLAS DE ROLES Y PERMISOS*/} 
           {/* Ejemplo de ruta anidada con un layout */}
           <Route path="example" element={<Test />} />
@@ -71,6 +75,8 @@ createRoot(document.getElementById("root")!).render(
           <Route path="usuarios">
             <Route index element={<UsuariosPage />} />
             <Route path="crear" element={<CrearUsuario />} />
+            <Route path="detalle/:id" element={<DetalleUsuario />} />
+            <Route path="editar/:id" element={<EditarUsuario />} />
           </Route>
 
           <Route path="personalMedico">
@@ -102,6 +108,9 @@ createRoot(document.getElementById("root")!).render(
 
         </Route>
         
+        <Route>
+
+        </Route>
         
       </Routes>
     </BrowserRouter>
