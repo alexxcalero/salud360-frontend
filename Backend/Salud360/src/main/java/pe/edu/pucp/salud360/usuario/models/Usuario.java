@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -38,11 +39,17 @@ public class Usuario {
     @Column(name = "contrasenha", unique = false, nullable = false, updatable = true)
     protected String contrasenha;
 
+    @Column(name = "telefono", unique = true, nullable = false, updatable = true)
+    protected String telefono;
+
     @Column(name = "sexo", unique = false, nullable = false, updatable = true)
     protected String sexo;
 
     @Column(name = "fotoPerfil", unique = false, nullable = true, updatable = true)
     protected String fotoPerfil;
+
+    @Column(name = "fechaNacimiento", unique = false, nullable = false, updatable = true)
+    protected LocalDate fechaNacimiento;
 
     @Column(name = "activo", unique = false, nullable = false, updatable = true)
     protected Boolean activo;
