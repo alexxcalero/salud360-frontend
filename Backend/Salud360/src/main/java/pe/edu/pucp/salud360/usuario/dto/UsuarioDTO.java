@@ -18,6 +18,7 @@ public class UsuarioDTO {
     protected String numeroDocumento;
     protected String correo;
     protected String contrasenha;
+    protected String sexo;
     protected String fotoPefil;
     protected Boolean activo;
     protected TipoDocumentoDTO tipoDocumento;

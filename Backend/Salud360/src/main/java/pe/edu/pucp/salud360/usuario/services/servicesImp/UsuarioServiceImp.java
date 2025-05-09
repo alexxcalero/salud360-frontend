@@ -48,6 +48,7 @@ public class UsuarioServiceImp implements UsuarioService {
             usuario.setNombres(usuarioDTO.getNombres());
             usuario.setApellidos(usuarioDTO.getApellidos());
             usuario.setCorreo(usuarioDTO.getCorreo());
+            usuario.setSexo(usuarioDTO.getSexo());
             Usuario usuarioActualizado = usuarioRepository.save(usuario);
             return UsuarioMapper.mapToDTO(usuarioActualizado);
         } else {

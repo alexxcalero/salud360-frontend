@@ -38,6 +38,9 @@ public class Usuario {
     @Column(name = "contrasenha", unique = false, nullable = false, updatable = true)
     protected String contrasenha;
 
+    @Column(name = "sexo", unique = false, nullable = false, updatable = true)
+    protected String sexo;
+
     @Column(name = "fotoPerfil", unique = false, nullable = true, updatable = true)
     protected String fotoPerfil;
 
