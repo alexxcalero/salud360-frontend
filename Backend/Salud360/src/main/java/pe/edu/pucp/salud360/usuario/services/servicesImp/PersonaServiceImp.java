@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pe.edu.pucp.salud360.usuario.dto.PersonaDTO;
 import pe.edu.pucp.salud360.usuario.mappers.PersonaMapper;
+import pe.edu.pucp.salud360.usuario.mappers.RolMapper;
+import pe.edu.pucp.salud360.usuario.mappers.TipoDocumentoMapper;
 import pe.edu.pucp.salud360.usuario.models.Persona;
 import pe.edu.pucp.salud360.usuario.repositories.PersonaRepository;
 import pe.edu.pucp.salud360.usuario.services.PersonaService;
@@ -22,6 +24,7 @@ public class PersonaServiceImp implements PersonaService {
         Persona persona = PersonaMapper.mapToModel(personaDTO);
         persona.setActivo(true);
         persona.setFechaCreacion(LocalDateTime.now());
+        persona.setFechaDesactivacion(null);
         Persona personaCreada = personaRepository.save(persona);
         return PersonaMapper.mapToDTO(personaCreada);
     }
@@ -35,9 +38,9 @@ public class PersonaServiceImp implements PersonaService {
             persona.setNumeroDocumento(personaDTO.getNumeroDocumento());
             persona.setTelefono(personaDTO.getTelefono());
             persona.setFechaNacimiento(personaDTO.getFechaNacimiento());
-            persona.setTipoDocumento(personaDTO.getTipoDocumento());
-            persona.setRol(personaDTO.getRol());
-            persona.setFotoPerfil(personaDTO.getFotoPerfil());
+            persona.setTipoDocumento(TipoDocumentoMapper.mapToModel(personaDTO.getTipoDocumento()));
+            persona.setRol(RolMapper.mapToModel(personaDTO.getRol()));
+            persona.setFotoPerfil(personaDTO.getFotoPefil());
             Persona personaModificada = personaRepository.save(persona);
             return PersonaMapper.mapToDTO(personaModificada);
         } else {

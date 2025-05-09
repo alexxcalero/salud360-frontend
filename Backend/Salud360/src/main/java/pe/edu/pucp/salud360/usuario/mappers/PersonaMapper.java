@@ -9,23 +9,59 @@ public class PersonaMapper {
         if(persona == null)
             return null;
 
-        return new PersonaDTO(persona.getIdUsuario(), persona.getNombres(), persona.getApellidos(), persona.getNumeroDocumento(),
-                              persona.getCorreo(), persona.getContrasenha(), persona.getTelefono(), persona.getFechaNacimiento(),
-                              persona.getActivo(), persona.getTipoDocumento(), persona.getRol(), persona.getFotoPerfil(),
-                              persona.getComunidades(), persona.getAfiliaciones(), persona.getMediosDePago(), persona.getPublicaciones(),
-                              persona.getComentarios(), persona.getTestimonios(), persona.getClases(), persona.getNotificaciones(),
-                              persona.getReservas(), persona.getCitasMedicas());
+        return PersonaDTO.builder()
+                .idUsuario(persona.getIdUsuario())
+                .nombres(persona.getNombres())
+                .apellidos(persona.getApellidos())
+                .numeroDocumento(persona.getNumeroDocumento())
+                .correo(persona.getCorreo())
+                .contrasenha(persona.getContrasenha())
+                .telefono(persona.getTelefono())
+                .fechaNacimiento(persona.getFechaNacimiento())
+                .activo(persona.getActivo())
+                .tipoDocumento(TipoDocumentoMapper.mapToDTO(persona.getTipoDocumento()))
+                .rol(RolMapper.mapToDTO(persona.getRol()))
+                .fotoPefil(persona.getFotoPerfil())
+                .comunidades(persona.getComunidades())
+                .afiliaciones(persona.getAfiliaciones())
+                .mediosDePago(persona.getMediosDePago())
+                .publicaciones(persona.getPublicaciones())
+                .comentarios(persona.getComentarios())
+                .testimonios(persona.getTestimonios())
+                .clases(persona.getClases())
+                .notificaciones(persona.getNotificaciones())
+                .reservas(persona.getReservas())
+                .citasMedicas(persona.getCitasMedicas())
+                .build();
     }
 
     public static Persona mapToModel(PersonaDTO personaDTO) {
         if(personaDTO == null)
             return null;
 
-        return new Persona(personaDTO.getIdUsuario(), personaDTO.getNombres(), personaDTO.getApellidos(), personaDTO.getNumeroDocumento(),
-                           personaDTO.getCorreo(), personaDTO.getContrasenha(), personaDTO.getTelefono(), personaDTO.getFechaNacimiento(),
-                           personaDTO.getActivo(), personaDTO.getTipoDocumento(), personaDTO.getRol(), personaDTO.getFotoPerfil(),
-                           personaDTO.getComunidades(), personaDTO.getAfiliaciones(), personaDTO.getMediosDePago(), personaDTO.getPublicaciones(),
-                           personaDTO.getComentarios(), personaDTO.getTestimonios(), personaDTO.getClases(), personaDTO.getNotificaciones(),
-                           personaDTO.getReservas(), personaDTO.getCitasMedicas());
+        return Persona.builder()
+                .idUsuario(personaDTO.getIdUsuario())
+                .nombres(personaDTO.getNombres())
+                .apellidos(personaDTO.getApellidos())
+                .numeroDocumento(personaDTO.getNumeroDocumento())
+                .correo(personaDTO.getCorreo())
+                .contrasenha(personaDTO.getContrasenha())
+                .telefono(personaDTO.getTelefono())
+                .fechaNacimiento(personaDTO.getFechaNacimiento())
+                .activo(personaDTO.getActivo())
+                .tipoDocumento(TipoDocumentoMapper.mapToModel(personaDTO.getTipoDocumento()))
+                .rol(RolMapper.mapToModel(personaDTO.getRol()))
+                .fotoPerfil(personaDTO.getFotoPefil())
+                .comunidades(personaDTO.getComunidades())
+                .afiliaciones(personaDTO.getAfiliaciones())
+                .mediosDePago(personaDTO.getMediosDePago())
+                .publicaciones(personaDTO.getPublicaciones())
+                .comentarios(personaDTO.getComentarios())
+                .testimonios(personaDTO.getTestimonios())
+                .clases(personaDTO.getClases())
+                .notificaciones(personaDTO.getNotificaciones())
+                .reservas(personaDTO.getReservas())
+                .citasMedicas(personaDTO.getCitasMedicas())
+                .build();
     }
 }

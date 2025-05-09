@@ -12,6 +12,7 @@ import pe.edu.pucp.salud360.usuario.repositories.UsuarioRepository;
 import pe.edu.pucp.salud360.usuario.services.UsuarioService;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -70,7 +71,7 @@ public class UsuarioServiceImp implements UsuarioService {
         if(!(usuarios.isEmpty())) {
             return usuarios.stream().map(UsuarioMapper::mapToDTO).toList();
         } else {
-            return null;
+            return new ArrayList<>();
         }
     }
 

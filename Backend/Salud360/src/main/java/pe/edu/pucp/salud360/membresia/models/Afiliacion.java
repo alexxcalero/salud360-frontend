@@ -19,8 +19,10 @@ import java.util.List;
 @Entity
 @Table(name = "afiliacion")
 @PrimaryKeyJoinColumn(name = "idMembresia")
-public class Afiliacion extends Membresia{
+public class Afiliacion extends Membresia {
+    private static int contador = 1;
 
+    private Integer idAfiliacion;
 
     @Column(name = "estado", unique = false, nullable = false, updatable = true)
     private String estado;  // Activado, Cancelado, Suspendido

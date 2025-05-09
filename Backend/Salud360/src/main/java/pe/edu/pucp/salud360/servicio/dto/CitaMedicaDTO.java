@@ -1,15 +1,15 @@
 package pe.edu.pucp.salud360.servicio.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import pe.edu.pucp.salud360.usuario.dto.MedicoDTO;
+import pe.edu.pucp.salud360.usuario.dto.PersonaDTO;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class CitaMedicaDTO {
@@ -18,9 +18,7 @@ public class CitaMedicaDTO {
     private LocalTime horaInicio;
     private String estado;
     private Boolean activo;
-
-    private Integer idServicio;
-    private Integer idUsuario;
-    private Integer idMedico;
+    private ServicioDTO servicio;
+    private PersonaDTO persona;
+    private MedicoDTO medico;
 }
-
