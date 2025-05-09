@@ -1,10 +1,12 @@
 package pe.edu.pucp.salud360.usuario.models;
 
 import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import pe.edu.pucp.salud360.comunidad.models.Comentario;
 import pe.edu.pucp.salud360.comunidad.models.Comunidad;
 import pe.edu.pucp.salud360.comunidad.models.Publicacion;
@@ -16,19 +18,22 @@ import pe.edu.pucp.salud360.servicio.models.Clase;
 import pe.edu.pucp.salud360.servicio.models.Reserva;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
 @Setter
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "persona")
 @PrimaryKeyJoinColumn(name = "idUsuario")
 public class Persona extends Usuario {
-    @Column(name = "fotoPerfil", unique = false, nullable = false, updatable = true)
-    private String fotoPerfil;
+    @Column(name = "telefono", unique = true, nullable = false, updatable = true)
+    protected String telefono;
+
+    @Column(name = "fechaNacimiento", unique = false, nullable = false, updatable = false)
+    protected LocalDate fechaNacimiento;  // Va a tener que contactar con el admin si quiere cambiar su fecha de nacimiento
 
     @ManyToMany(mappedBy = "persona")
     private List<Comunidad> comunidades;
@@ -59,24 +64,4 @@ public class Persona extends Usuario {
 
     @OneToMany(mappedBy = "persona")
     private List<CitaMedica> citasMedicas;
-
-    public Persona(Integer idUsuario, String nombres, String apellidos, String numeroDocumento, String correo, String contrasenha, String telefono, LocalDate fechaNacimiento, Boolean activo, TipoDocumento tipoDocumento, Rol rol, String fotoPerfil) {
-        super(idUsuario, nombres, apellidos, numeroDocumento, correo, contrasenha, telefono, fechaNacimiento, activo, tipoDocumento, rol);
-        this.fotoPerfil = fotoPerfil;
-    }
-
-    public Persona(Integer idUsuario, String nombres, String apellidos, String numeroDocumento, String correo, String contrasenha, String telefono, LocalDate fechaNacimiento, Boolean activo, TipoDocumento tipoDocumento, Rol rol, String fotoPerfil, List<Comunidad> comunidades, List<Afiliacion> afiliaciones, List<MedioDePago> mediosDePago, List<Publicacion> publicaciones, List<Comentario> comentarios, List<Testimonio> testimonios, List<Clase> clases, List<Notificacion> notificaciones, List<Reserva> reservas, List<CitaMedica> citasMedicas) {
-        super(idUsuario, nombres, apellidos, numeroDocumento, correo, contrasenha, telefono, fechaNacimiento, activo, tipoDocumento, rol);
-        this.fotoPerfil = fotoPerfil;
-        this.comunidades = comunidades;
-        this.afiliaciones = afiliaciones;
-        this.mediosDePago = mediosDePago;
-        this.publicaciones = publicaciones;
-        this.comentarios = comentarios;
-        this.testimonios = testimonios;
-        this.clases = clases;
-        this.notificaciones = notificaciones;
-        this.reservas = reservas;
-        this.citasMedicas = citasMedicas;
-    }
 }

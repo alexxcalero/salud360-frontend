@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { BrowserRouter, Routes, Route, useParams } from "react-router";
+import { BrowserRouter, Routes, Route } from "react-router";
 import "@/index.css";
 
 // La manera de utilizar esto es importando los componentes que sean páginas y las referencian en el elemento de abajo
@@ -18,7 +18,7 @@ import MembresiasPage from "./pages/admin/membresias/MembresiasPage";
 import LocalesPage from "./pages/admin/locales/LocalesPage";
 import PersonalMedicoPage from "./pages/admin/personalMedico/PersonalMedicoPage";
 import CalificacionesPage from "./pages/admin/calificaciones/CalificacionesPage";
-import LogsPage from "./pages/admin/logs/LogsPage";
+//import LogsPage from "./pages/admin/logs/LogsPage";
 import AuditoriasPage from "./pages/admin/auditoria/AuditoriasPage";
 import ReportesPage from "./pages/admin/reportes/ReportesPage";
 import ConfiguracionGeneralPage from "./pages/admin/configuracionGeneral/ConfiguracionGeneralPage";
@@ -88,9 +88,9 @@ createRoot(document.getElementById("root")!).render(
             <Route index element={<CalificacionesPage />} />
             <Route path="crear" element={<CrearUsuario />} />
           </Route>
-
+          
           <Route path="logs">
-            <Route index element={<LogsPage />} />
+            <Route index element={<UsuariosPage  />} />
             <Route path="crear" element={<CrearUsuario />} />
           </Route>
 

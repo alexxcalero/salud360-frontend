@@ -5,14 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import pe.edu.pucp.salud360.servicio.models.CitaMedica;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
 @Setter
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -27,11 +27,4 @@ public class Medico extends Usuario {
 
     @OneToMany(mappedBy = "medico")
     private List<CitaMedica> citasMedicas;
-
-    public Medico(Integer idUsuario, String nombres, String apellidos, String numeroDocumento, String correo, String contrasenha, String telefono, LocalDate fechaNacimiento, Boolean activo, TipoDocumento tipoDocumento, Rol rol, String especialidad, String descripcion, List<CitaMedica> citasMedicas) {
-        super(idUsuario, nombres, apellidos, numeroDocumento, correo, contrasenha, telefono, fechaNacimiento, activo, tipoDocumento, rol);
-        this.especialidad = especialidad;
-        this.descripcion = descripcion;
-        this.citasMedicas = citasMedicas;
-    }
 }

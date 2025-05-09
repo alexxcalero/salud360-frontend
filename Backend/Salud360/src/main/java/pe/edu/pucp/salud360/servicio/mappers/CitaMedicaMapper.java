@@ -11,30 +11,27 @@ public class CitaMedicaMapper {
     public static CitaMedicaDTO mapToDTO(CitaMedica c) {
         if (c == null) return null;
 
-        return new CitaMedicaDTO(
-                c.getIdCitaMedica(),
-                c.getFecha(),
-                c.getHoraInicio(),
-                c.getEstado(),
-                c.getActivo(),
-                c.getServicio() != null ? c.getServicio().getIdServicio() : null,
-                c.getPersona() != null ? c.getPersona().getIdUsuario() : null,
-                c.getMedico() != null ? c.getMedico().getIdUsuario() : null
-        );
+        return CitaMedicaDTO.builder()
+                .idCitaMedica(c.getIdCitaMedica())
+                .fecha(c.getFecha())
+                .horaInicio(c.getHoraInicio())
+                .estado(c.getEstado())
+                .activo(c.getActivo())
+                .build();
     }
 
     public static CitaMedica mapToModel(CitaMedicaDTO dto, Servicio servicio, Persona usuario, Medico medico) {
         if (dto == null) return null;
 
-        CitaMedica cita = new CitaMedica();
-        cita.setIdCitaMedica(dto.getIdCitaMedica());
-        cita.setFecha(dto.getFecha());
-        cita.setHoraInicio(dto.getHoraInicio());
-        cita.setEstado(dto.getEstado());
-        cita.setActivo(dto.getActivo());
-        cita.setServicio(servicio);
-        cita.setPersona(usuario);
-        cita.setMedico(medico);
-        return cita;
+        return CitaMedica.builder()
+                .idCitaMedica(dto.getIdCitaMedica())
+                .fecha(dto.getFecha())
+                .horaInicio(dto.getHoraInicio())
+                .estado(dto.getEstado())
+                .activo(dto.getActivo())
+                .servicio(servicio)
+                .persona(usuario)
+                .medico(medico)
+                .build();
     }
 }

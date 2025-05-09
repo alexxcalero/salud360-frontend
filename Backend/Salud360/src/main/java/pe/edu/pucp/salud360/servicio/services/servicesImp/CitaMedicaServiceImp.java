@@ -37,9 +37,9 @@ public class CitaMedicaServiceImp implements CitaMedicaService {
 
     @Override
     public CitaMedicaDTO crearCitaMedica(CitaMedicaDTO dto) {
-        Servicio servicio = servicioRepository.findById(dto.getIdServicio()).orElse(null);
-        Persona usuario = personaRepository.findById(dto.getIdUsuario()).orElse(null);
-        Medico medico = medicoRepository.findById(dto.getIdMedico()).orElse(null);
+        Servicio servicio = servicioRepository.findById(dto.getServicio().getIdServicio()).orElse(null);
+        Persona usuario = personaRepository.findById(dto.getPersona().getIdUsuario()).orElse(null);
+        Medico medico = medicoRepository.findById(dto.getMedico().getIdUsuario()).orElse(null);
 
         CitaMedica cita = CitaMedicaMapper.mapToModel(dto, servicio, usuario, medico);
         cita.setFechaCreacion(LocalDateTime.now());
@@ -59,16 +59,6 @@ public class CitaMedicaServiceImp implements CitaMedicaService {
         cita.setHoraInicio(dto.getHoraInicio());
         cita.setEstado(dto.getEstado());
         cita.setActivo(dto.getActivo());
-
-        if (dto.getIdServicio() != null) {
-            servicioRepository.findById(dto.getIdServicio()).ifPresent(cita::setServicio);
-        }
-        if (dto.getIdUsuario() != null) {
-            personaRepository.findById(dto.getIdUsuario()).ifPresent(cita::setPersona);
-        }
-        if (dto.getIdMedico() != null) {
-            medicoRepository.findById(dto.getIdMedico()).ifPresent(cita::setMedico);
-        }
 
         return CitaMedicaMapper.mapToDTO(citaMedicaRepository.save(cita));
     }

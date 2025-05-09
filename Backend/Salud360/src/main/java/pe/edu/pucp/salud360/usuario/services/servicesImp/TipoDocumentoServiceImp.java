@@ -9,8 +9,8 @@ import pe.edu.pucp.salud360.usuario.repositories.TipoDocumentoRepository;
 import pe.edu.pucp.salud360.usuario.services.TipoDocumentoService;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TipoDocumentoServiceImp implements TipoDocumentoService {
@@ -22,6 +22,7 @@ public class TipoDocumentoServiceImp implements TipoDocumentoService {
         TipoDocumento tipoDocumento = TipoDocumentoMapper.mapToModel(tipoDocumentoDTO);
         tipoDocumento.setActivo(true);
         tipoDocumento.setFechaCreacion(LocalDateTime.now());
+        tipoDocumento.setFechaDesactivacion(null);
         TipoDocumento tipoDocumentoCreado = tipoDocumentoRepository.save(tipoDocumento);
         return TipoDocumentoMapper.mapToDTO(tipoDocumentoCreado);
     }
@@ -31,7 +32,6 @@ public class TipoDocumentoServiceImp implements TipoDocumentoService {
         if(tipoDocumentoRepository.findById(idTipoDocumento).isPresent()) {
             TipoDocumento tipoDocumento = tipoDocumentoRepository.findById(idTipoDocumento).get();
             tipoDocumento.setNombre(tipoDocumentoDTO.getNombre());
-            tipoDocumento.setUsuarios(tipoDocumentoDTO.getUsuarios());
             TipoDocumento tipoDocumentoActualizado = tipoDocumentoRepository.save(tipoDocumento);
             return TipoDocumentoMapper.mapToDTO(tipoDocumentoActualizado);
         } else {
@@ -41,9 +41,8 @@ public class TipoDocumentoServiceImp implements TipoDocumentoService {
 
     @Override
     public void eliminarTipoDocumento(Integer idTipoDocumento) {
-        Optional<TipoDocumento> tipoDocumento = tipoDocumentoRepository.findById(idTipoDocumento);
-        if(tipoDocumento.isPresent()) {
-            TipoDocumento tipoDocumentoEliminar = tipoDocumento.get();
+        if(tipoDocumentoRepository.findById(idTipoDocumento).isPresent()) {
+            TipoDocumento tipoDocumentoEliminar = tipoDocumentoRepository.findById(idTipoDocumento).get();
             tipoDocumentoEliminar.setActivo(false);
             tipoDocumentoEliminar.setFechaDesactivacion(LocalDateTime.now());
             tipoDocumentoRepository.save(tipoDocumentoEliminar);
@@ -53,10 +52,10 @@ public class TipoDocumentoServiceImp implements TipoDocumentoService {
     @Override
     public List<TipoDocumentoDTO> listarTiposDocumentosTodos() {
         List<TipoDocumento> tiposDocumentos = tipoDocumentoRepository.findAll();
-        if(tiposDocumentos.isEmpty()) {
-            return null;
-        } else {
+        if(!(tiposDocumentos.isEmpty())) {
             return tiposDocumentos.stream().map(TipoDocumentoMapper::mapToDTO).toList();
+        } else {
+            return new ArrayList<>();
         }
     }
 

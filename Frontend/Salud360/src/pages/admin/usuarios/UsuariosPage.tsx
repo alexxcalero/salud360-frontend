@@ -1,6 +1,6 @@
 import  { useState, useEffect } from "react";
 import axios from "axios";
-import { Search, Info, Trash2, Pencil, Filter, UserPlus } from "lucide-react";
+import { Search, Info, Trash2, Pencil, Filter, UserPlus, RotateCcw } from "lucide-react";
 import { useNavigate } from "react-router";
 
 import TableHeader from "@/components/admin/TableHeader";
@@ -94,10 +94,17 @@ function UsuariosPage() {
         <div className="flex justify-center gap-2">
           <Info className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => navigate(`/admin/usuarios/detalle/${usuario.idUsuario}`)}/>
           <Pencil className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => navigate(`/admin/usuarios/editar/${usuario.idUsuario}`)}/>
-          <Trash2 className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => {
-            setUsuarioSeleccionado(usuario);
-            setShowModalError(true);
-          }}/>
+          {usuario.activo ? 
+            <Trash2 className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => {
+              setUsuarioSeleccionado(usuario);
+              setShowModalError(true);
+            }}/>
+            :
+            <RotateCcw className= "w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => {
+              setUsuarioSeleccionado(usuario);
+              
+            }}/>
+        }
         </div>
       ),
       className: "w-24 text-center",

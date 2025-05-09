@@ -8,13 +8,21 @@ public class TipoDocumentoMapper {
         if(tipoDocumento == null)
             return null;
 
-        return new TipoDocumentoDTO(tipoDocumento.getIdTipoDocumento(), tipoDocumento.getNombre(), tipoDocumento.getActivo(), tipoDocumento.getUsuarios());
+        return TipoDocumentoDTO.builder()
+                .idTipoDocumento(tipoDocumento.getIdTipoDocumento())
+                .nombre(tipoDocumento.getNombre())
+                .activo(tipoDocumento.getActivo())
+                .build();
     }
 
     public static TipoDocumento mapToModel(TipoDocumentoDTO tipoDocumentoDTO) {
         if(tipoDocumentoDTO == null)
             return null;
 
-        return new TipoDocumento(tipoDocumentoDTO.getIdTipoDocumento(), tipoDocumentoDTO.getNombre(), tipoDocumentoDTO.getActivo(), tipoDocumentoDTO.getUsuarios());
+        return TipoDocumento.builder()
+                .idTipoDocumento(tipoDocumentoDTO.getIdTipoDocumento())
+                .nombre(tipoDocumentoDTO.getNombre())
+                .activo(tipoDocumentoDTO.getActivo())
+                .build();
     }
 }

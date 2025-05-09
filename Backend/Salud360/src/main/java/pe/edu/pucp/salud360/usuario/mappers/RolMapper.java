@@ -8,13 +8,25 @@ public class RolMapper {
         if(rol == null)
             return null;
 
-        return new RolDTO(rol.getIdRol(), rol.getNombre(), rol.getDescripcion(), rol.getActivo(), rol.getUsuarios(), rol.getPermisos());
+        return RolDTO.builder()
+                .idRol(rol.getIdRol())
+                .nombre(rol.getNombre())
+                .descripcion(rol.getDescripcion())
+                .activo(rol.getActivo())
+                .permisos(PermisoMapper.mapToDTOList(rol.getPermisos()))
+                .build();
     }
 
     public static Rol mapToModel(RolDTO rolDTO) {
         if(rolDTO == null)
             return null;
 
-        return new Rol(rolDTO.getIdRol(), rolDTO.getNombre(), rolDTO.getDescripcion(), rolDTO.getActivo(), rolDTO.getUsuarios(), rolDTO.getPermisos());
+        return Rol.builder()
+                .idRol(rolDTO.getIdRol())
+                .nombre(rolDTO.getNombre())
+                .descripcion(rolDTO.getDescripcion())
+                .activo(rolDTO.getActivo())
+                .permisos(PermisoMapper.mapToModelList(rolDTO.getPermisos()))
+                .build();
     }
 }

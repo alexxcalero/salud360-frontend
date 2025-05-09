@@ -1,16 +1,12 @@
-import {Phone, Mail} from "lucide-react";
-import { useState } from "react";
 import axios from "axios";
-
-import FormContainer from "@/components/FormContainer"
-import InputIconLabel from "@/components/InputIconLabel"
-import InputLabel from "@/components/InputLabel"
-import SelectLabel from "@/components/SelectLabel";
-import Button from "@/components/Button";
 import UsuariosForms from "@/components/admin/usuarios/UsuariosForms";
 import useUsuarioForm from "@/hooks/useUsuarioForm";
 
+import { useNavigate } from "react-router";
+
 function CrearUsuario(){
+
+    const navigate = useNavigate();
 
     const {
         nombres, setNombres,
@@ -24,14 +20,14 @@ function CrearUsuario(){
         contrasenha, setContrasenha
     } = useUsuarioForm();
 
-    const optionsSelect = [
-        { value: "Hombre", content: "Hombre" },
-        { value: "Mujer", content: "Mujer" },
-        { value: "Rodrigo Roller", content: "Rodrigo Roller" }]
-
     const handleCrearUsuario = async() => {
         try{
             const numeroDocumento = DNI;
+            const sexo = genero;
+
+            console.log("Nombres:", nombres, " Apellidos:", apellidos, " numeroDocumento:", numeroDocumento, " Telefono:", telefono,
+                 " correo:", correo, " sexo:", sexo, " contraseña:", contrasenha, " fechaNacimiento:", fechaNacimiento);
+
             const response = await axios.post("http://localhost:8080/api/usuarios", 
                 {
                     nombres,
@@ -39,14 +35,14 @@ function CrearUsuario(){
                     numeroDocumento,
                     telefono,
                     correo,
-                    genero,
+                    sexo,
                     fechaNacimiento,
                     contrasenha,
                     tipoDocumento: {
                         idTipoDocumento: 1
                     },
                     rol: {
-                        idRol: 1
+                        idRol: 2
                     },
                 },
                 {  
@@ -62,6 +58,8 @@ function CrearUsuario(){
 
             console.log("Usuario creado:", response.data);
             alert("Usuario creado exitosamente");
+            navigate("/admin/usuarios");
+
         }
         catch (err){
             console.error("Error al crear usuario:", err);
@@ -72,7 +70,7 @@ function CrearUsuario(){
     }
 
     return(
-        <div className="mx-128 my-auto">
+        <div className="mx-auto p-16 my-auto max">
             
             <UsuariosForms
                 title="Registrar Usuario"
@@ -100,19 +98,6 @@ function CrearUsuario(){
                 readOnly={false}
             />
 
-
-            <div>
-                <p className="mt-2 text-sm text-gray-600">Valor actual: {nombres}</p>
-                <p className="mt-2 text-sm text-gray-600">Valor actual: {apellidos}</p>
-                <p className="mt-2 text-sm text-gray-600">Valor actual: {DNI}</p>
-                <p className="mt-2 text-sm text-gray-600">Valor actual: {telefono}</p>
-                <p className="mt-2 text-sm text-gray-600">Valor actual: {rol}</p>
-                <p className="mt-2 text-sm text-gray-600">Valor actual: {correo}</p>
-                <p className="mt-2 text-sm text-gray-600">Valor actual: {genero}</p>
-                <p className="mt-2 text-sm text-gray-600">Valor actual: {fechaNacimiento}</p>
-                <p className="mt-2 text-sm text-gray-600">Valor actual: {contrasenha}</p>
-            </div>
-
         </div>
     );
     
@@ -134,3 +119,18 @@ export default CrearUsuario;
                 <InputLabel type="password" placeholder="" htmlFor="password" label="Contraseña" value={contrasenha} onChange={(e) => setContrasenha(e.target.value)}/>
                 <Button variant="primary"size="md" className="my-4" onClick={handleCrearUsuario}>Crear Usuario</Button>
             </FormContainer> */
+
+/*
+<div>
+                <p className="mt-2 text-sm text-gray-600">Valor actual: {nombres}</p>
+                <p className="mt-2 text-sm text-gray-600">Valor actual: {apellidos}</p>
+                <p className="mt-2 text-sm text-gray-600">Valor actual: {DNI}</p>
+                <p className="mt-2 text-sm text-gray-600">Valor actual: {telefono}</p>
+                <p className="mt-2 text-sm text-gray-600">Valor actual: {rol}</p>
+                <p className="mt-2 text-sm text-gray-600">Valor actual: {correo}</p>
+                <p className="mt-2 text-sm text-gray-600">Valor actual: {genero}</p>
+                <p className="mt-2 text-sm text-gray-600">Valor actual: {fechaNacimiento}</p>
+                <p className="mt-2 text-sm text-gray-600">Valor actual: {contrasenha}</p>
+            </div>
+
+*/
