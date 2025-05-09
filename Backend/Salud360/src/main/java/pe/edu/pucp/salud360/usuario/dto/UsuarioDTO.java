@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @SuperBuilder
@@ -18,7 +20,10 @@ public class UsuarioDTO {
     protected String numeroDocumento;
     protected String correo;
     protected String contrasenha;
+    protected String telefono;
+    protected String sexo;
     protected String fotoPefil;
+    protected LocalDate fechaNacimiento;
     protected Boolean activo;
     protected TipoDocumentoDTO tipoDocumento;
     protected RolDTO rol;
