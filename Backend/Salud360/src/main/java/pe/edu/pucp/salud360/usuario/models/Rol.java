@@ -1,23 +1,22 @@
 package pe.edu.pucp.salud360.usuario.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "rol")
 public class Rol {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy     = GenerationType.IDENTITY)
+    @Column(name = "idRol", unique = true, nullable = false, updatable = false)
     private Integer idRol;
 
     @Column(name = "nombre", unique = false, nullable = false, updatable = true)
@@ -35,23 +34,11 @@ public class Rol {
     @Column(name = "fechaDesactivacion", unique = false, nullable = true, updatable = true)
     private LocalDateTime fechaDesactivacion;
 
-    @OneToMany(mappedBy = "rol")
-    private List<Usuario> usuarios;
-
     @ManyToMany
     @JoinTable(
-            name = "rolXpermiso",
+            name = "rol_permiso",
             joinColumns = @JoinColumn(name = "idRol"),
             inverseJoinColumns = @JoinColumn(name = "idPermiso")
     )
     private List<Permiso> permisos;
-
-    public Rol(Integer idRol, String nombre, String descripcion, Boolean activo, List<Usuario> usuarios, List<Permiso> permisos) {
-        this.idRol = idRol;
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.activo = activo;
-        this.usuarios = usuarios;
-        this.permisos = permisos;
-    }
 }

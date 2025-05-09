@@ -1,18 +1,13 @@
 package pe.edu.pucp.salud360.usuario.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -20,6 +15,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 public class TipoDocumento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idTipoDocumento", unique = true, nullable = false, updatable = false)
     private Integer idTipoDocumento;
 
     @Column(name = "nombre", unique = false, nullable = false, updatable = true)
@@ -33,15 +29,4 @@ public class TipoDocumento {
 
     @Column(name = "fechaDesactivacion", unique = false, nullable = true, updatable = true)
     private LocalDateTime fechaDesactivacion;
-
-    @OneToMany(mappedBy = "tipoDocumento")
-    @JsonManagedReference
-    private List<Usuario> usuarios;
-
-    public TipoDocumento(Integer idTipoDocumento, String nombre, Boolean activo, List<Usuario> usuarios) {
-        this.idTipoDocumento = idTipoDocumento;
-        this.nombre = nombre;
-        this.activo = activo;
-        this.usuarios = usuarios;
-    }
 }

@@ -10,4 +10,9 @@ public interface UsuarioService {
     void eliminarUsuario(Integer idUsuario);
     List<UsuarioDTO> listarUsuariosTodos();
     UsuarioDTO buscarUsuarioPorId(Integer idUsuario);
+
+    UsuarioDTO actualizarNumeroDocumento(Integer idUsuario, Integer idTipoDocumento, String numeroDocumento);
+    UsuarioDTO actualizarFotoPerfil(Integer idUsuario, String fotoPerfil);
+    UsuarioDTO actualizarContrasenha(Integer idUsuario, String contrasenhaNueva);
+    UsuarioDTO buscarUsuarioPorCorreo(String correo);
 }

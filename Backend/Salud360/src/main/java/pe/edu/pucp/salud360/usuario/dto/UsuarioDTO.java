@@ -1,16 +1,10 @@
 package pe.edu.pucp.salud360.usuario.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import pe.edu.pucp.salud360.usuario.models.Rol;
-import pe.edu.pucp.salud360.usuario.models.TipoDocumento;
-
-import java.time.LocalDate;
+import lombok.*;
 
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class UsuarioDTO {
@@ -20,9 +14,8 @@ public class UsuarioDTO {
     protected String numeroDocumento;
     protected String correo;
     protected String contrasenha;
-    protected String telefono;
-    protected LocalDate fechaNacimiento;
+    protected String fotoPefil;
     protected Boolean activo;
-    protected TipoDocumento tipoDocumento;
-    protected Rol rol;
+    protected TipoDocumentoDTO tipoDocumento;
+    protected RolDTO rol;
 }

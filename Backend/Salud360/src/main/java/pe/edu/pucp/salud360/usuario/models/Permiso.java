@@ -1,16 +1,13 @@
 package pe.edu.pucp.salud360.usuario.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -18,6 +15,7 @@ import java.util.List;
 public class Permiso {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idPermiso", unique = true, nullable = false, updatable = false)
     private Integer idPermiso;
 
     @Column(name = "nombre", unique = false, nullable = false, updatable = true)
@@ -34,15 +32,4 @@ public class Permiso {
 
     @Column(name = "fechaDesactivacion", unique = false, nullable = true, updatable = true)
     private LocalDateTime fechaDesactivacion;
-
-    @ManyToMany(mappedBy = "permisos")
-    private List<Rol> roles;
-
-    public Permiso(Integer idPermiso, String nombre, String descripcion, Boolean activo, List<Rol> roles) {
-        this.idPermiso = idPermiso;
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.activo = activo;
-        this.roles = roles;
-    }
 }
