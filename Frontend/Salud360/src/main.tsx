@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router";
 import "@/index.css";
 
 // La manera de utilizar esto es importando los componentes que sean páginas y las referencian en el elemento de abajo
-import App from "@/App.tsx";
+//import App from "@/App.tsx";
 import Example from "@/pages/Example";
 import ComunidadPage from "./pages/admin/comunidad/ComunidadPage";
 import Test from "@/pages/admin/test";
@@ -18,12 +18,16 @@ import MembresiasPage from "./pages/admin/membresias/MembresiasPage";
 import LocalesPage from "./pages/admin/locales/LocalesPage";
 import PersonalMedicoPage from "./pages/admin/personalMedico/PersonalMedicoPage";
 import CalificacionesPage from "./pages/admin/calificaciones/CalificacionesPage";
-//import LogsPage from "./pages/admin/logs/LogsPage";
+import LogsPage from "./pages/admin/logs/LogsPage";
 import AuditoriasPage from "./pages/admin/auditoria/AuditoriasPage";
 import ReportesPage from "./pages/admin/reportes/ReportesPage";
 import ConfiguracionGeneralPage from "./pages/admin/configuracionGeneral/ConfiguracionGeneralPage";
 import DetalleUsuario from "./pages/admin/usuarios/DetalleUsuario";
 import EditarUsuario from "./pages/admin/usuarios/EditarUsuario";
+import LandingLayout from "./layouts/LandingLayout";
+import UsuarioLayout from "./layouts/UsuarioLayout";
+import Home from "./pages/landing/Home";
+import Inicio from "./pages/usuario/Inicio";
 
 createRoot(document.getElementById("root")!).render(
 
@@ -31,9 +35,24 @@ createRoot(document.getElementById("root")!).render(
     <BrowserRouter>
       <Routes>
         {/* // A este nivel tienen que insertar nuevas rutas. Especificando la ruta "/usuarios/register" y el elemento que será la página */}
-        <Route path="/" element={<App />} />
-        <Route path="/example" element={<Example />} />
 
+
+        {/*1. Sección del Landing Page */}
+        <Route path="/" element={<LandingLayout />}>
+          <Route index element={<Home/>}/>
+        </Route>
+
+        
+
+        {/*2. Sección de Usuario */}
+        <Route path="/usuario" element={<UsuarioLayout />}>
+          <Route index element={<Inicio/>}/>
+        </Route>
+
+
+
+
+        {/*3. Sección de Admin */}
         <Route path="/admin" element={<AdminLayout/>}> {/* ESTO ES PARA LA PANTALLAS DE ROLES Y PERMISOS*/} 
           {/* Ejemplo de ruta anidada con un layout */}
           <Route path="example" element={<Test />} />
@@ -90,7 +109,7 @@ createRoot(document.getElementById("root")!).render(
           </Route>
           
           <Route path="logs">
-            <Route index element={<UsuariosPage  />} />
+            <Route index element={<LogsPage  />} />
             <Route path="crear" element={<CrearUsuario />} />
           </Route>
 
@@ -108,6 +127,12 @@ createRoot(document.getElementById("root")!).render(
 
         </Route>
         
+
+        
+        <Route path="/example" element={<Example />} />
+
+
+
         <Route>
 
         </Route>

@@ -137,10 +137,12 @@ function App() {
         </h1>
 
         <div className="mt-4">
-          <ModalError />
+          <ModalError modulo="Usuario" detalle={"hola amigos"} onConfirm={() => {              
+            }} onCancel={() => {}} />
         </div>
         <div className="mt-4">
-          <ModalExito />
+          <ModalExito modulo="Usuario" detalle="El usuario fue eliminado correctamente" onConfirm={() => {
+            }}/>
         </div>
       </div>
     </>
