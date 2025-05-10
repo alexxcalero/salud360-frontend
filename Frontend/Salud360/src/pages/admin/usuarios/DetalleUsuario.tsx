@@ -69,7 +69,7 @@ function DetalleUsuario(){
     }
 
     return(
-        <div className="mx-128 my-auto">
+        <div className="max-w-3xl w-full mx-auto p-8 my-10">
             <UsuariosForms
                 title="Detalles del usuario"
                 nombres={nombres}
