@@ -70,7 +70,7 @@ function CrearUsuario(){
     }
 
     return(
-        <div className="mx-auto p-16 my-auto max">
+        <div className="max-w-3xl w-full mx-auto p-8 my-10">
             
             <UsuariosForms
                 title="Registrar Usuario"
