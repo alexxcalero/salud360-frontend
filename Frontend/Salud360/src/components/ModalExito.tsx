@@ -24,7 +24,7 @@ function ModalExito({modulo="", detalle="", onConfirm}: Props) {
 
         {/* Botón */}
         <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-2 rounded" onClick={onConfirm}>
-          Volver
+          Aceptar
         </button>
       </div>
   );
