@@ -1,33 +1,33 @@
-import {Phone, Mail} from "lucide-react";
-import { useState } from "react";
 import axios from "axios";
+import UsuariosForms from "@/components/admin/usuarios/UsuariosForms";
+import useUsuarioForm from "@/hooks/useUsuarioForm";
 
-import FormContainer from "@/components/FormContainer"
-import InputIconLabel from "@/components/InputIconLabel"
-import InputLabel from "@/components/InputLabel"
-import SelectLabel from "@/components/SelectLabel";
-import Button from "@/components/Button";
+import { useNavigate } from "react-router";
 
 function CrearUsuario(){
 
-    const [nombres, setNombres] = useState("");
-    const [apellidos, setApellidos] = useState("");
-    const [DNI, setDNI] = useState("");
-    const [telefono, setTelefono] = useState("");
-    const [rol, setRol] = useState("");
-    const [correo, setCorreo] = useState("");
-    const [genero, setGenero] = useState("");
-    const [fechaNacimiento, setFechaNacimiento] = useState("");
-    const [contrasenha, setContrasenha] = useState("");
+    const navigate = useNavigate();
 
-    const optionsSelect = [
-        { value: "Hombre", content: "Hombre" },
-        { value: "Mujer", content: "Mujer" },
-        { value: "Rodrigo Roller", content: "Rodrigo Roller" }]
+    const {
+        nombres, setNombres,
+        apellidos, setApellidos,
+        DNI, setDNI,
+        telefono, setTelefono,
+        rol, setRol,
+        correo, setCorreo,
+        genero, setGenero,
+        fechaNacimiento, setFechaNacimiento,
+        contrasenha, setContrasenha
+    } = useUsuarioForm();
 
     const handleCrearUsuario = async() => {
         try{
             const numeroDocumento = DNI;
+            const sexo = genero;
+
+            console.log("Nombres:", nombres, " Apellidos:", apellidos, " numeroDocumento:", numeroDocumento, " Telefono:", telefono,
+                 " correo:", correo, " sexo:", sexo, " contraseña:", contrasenha, " fechaNacimiento:", fechaNacimiento);
+
             const response = await axios.post("http://localhost:8080/api/usuarios", 
                 {
                     nombres,
@@ -35,14 +35,14 @@ function CrearUsuario(){
                     numeroDocumento,
                     telefono,
                     correo,
-                    genero,
+                    sexo,
                     fechaNacimiento,
                     contrasenha,
                     tipoDocumento: {
                         idTipoDocumento: 1
                     },
                     rol: {
-                        idRol: 1
+                        idRol: 2
                     },
                 },
                 {  
@@ -58,6 +58,8 @@ function CrearUsuario(){
 
             console.log("Usuario creado:", response.data);
             alert("Usuario creado exitosamente");
+            navigate("/admin/usuarios");
+
         }
         catch (err){
             console.error("Error al crear usuario:", err);
@@ -68,8 +70,42 @@ function CrearUsuario(){
     }
 
     return(
-        <div className="mx-128 my-auto">
-            <FormContainer>
+        <div className="max-w-3xl w-full mx-auto p-8 my-10">
+            
+            <UsuariosForms
+                title="Registrar Usuario"
+                subtitle="Rellene los siguientes campos para completar el registro del usuario."
+                nombres={nombres}
+                setNombres={setNombres}
+                apellidos={apellidos}
+                setApellidos={setApellidos}
+                DNI={DNI}
+                setDNI={setDNI}
+                telefono={telefono}
+                setTelefono={setTelefono}
+                correo={correo}
+                setCorreo={setCorreo}
+                rol={rol}
+                setRol={setRol}
+                genero={genero}
+                setGenero={setGenero}
+                fechaNacimiento={fechaNacimiento}
+                setFechaNacimiento={setFechaNacimiento}
+                contrasenha={contrasenha}
+                setContrasenha={setContrasenha}
+                onSubmit={handleCrearUsuario}
+                buttonText="Crear Usuario"
+                readOnly={false}
+            />
+
+        </div>
+    );
+    
+}
+
+export default CrearUsuario;
+
+/*<FormContainer>
                 <h1>Registrar Usuario</h1>
                 <h2>Rellene los siguientes campos para completar el registro del usuario.</h2>
                 <InputLabel type="email" placeholder="Ingrese los nombres" htmlFor="email" label="Nombres" value={nombres} onChange={(e) => setNombres(e.target.value)}/>
@@ -82,9 +118,10 @@ function CrearUsuario(){
                 <InputLabel type="date" placeholder="Ingrese la fecha de nacimiento" htmlFor="date" label="Fecha de nacimiento" value={fechaNacimiento} onChange={(e) => setFechaNacimiento(e.target.value)}/>
                 <InputLabel type="password" placeholder="" htmlFor="password" label="Contraseña" value={contrasenha} onChange={(e) => setContrasenha(e.target.value)}/>
                 <Button variant="primary"size="md" className="my-4" onClick={handleCrearUsuario}>Crear Usuario</Button>
-            </FormContainer>
+            </FormContainer> */
 
-            <div>
+/*
+<div>
                 <p className="mt-2 text-sm text-gray-600">Valor actual: {nombres}</p>
                 <p className="mt-2 text-sm text-gray-600">Valor actual: {apellidos}</p>
                 <p className="mt-2 text-sm text-gray-600">Valor actual: {DNI}</p>
@@ -96,9 +133,4 @@ function CrearUsuario(){
                 <p className="mt-2 text-sm text-gray-600">Valor actual: {contrasenha}</p>
             </div>
 
-        </div>
-    );
-    
-}
-
-export default CrearUsuario;
+*/

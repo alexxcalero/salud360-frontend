@@ -1,8 +1,15 @@
 import React from "react";
+import Button from "./Button";
 
-function ModalError() {
+interface Props{
+  modulo?: string;
+  detalle?: string;
+  onConfirm: () => void;
+  onCancel: () => void;
+}
+
+function ModalError({modulo="", detalle="", onConfirm, onCancel}: Props) {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-2xl shadow-md max-w-md w-full text-center">
         {/* Icono de advertencia */}
         <div className="flex justify-center mb-4">
@@ -15,19 +22,18 @@ function ModalError() {
         <h2 className="text-2xl font-bold mb-2">¿Estás seguro de que quieres eliminarlo?</h2>
 
         {/* Detalle del elemento */}
-        <p className="mb-6">Rol: Messi</p>
+        <p className="mb-6">{modulo}: {detalle}</p>
 
         {/* Botones */}
         <div className="flex flex-col space-y-3">
-          <button className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 rounded">
+          <button className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 rounded" onClick={onConfirm}>
             Eliminar
           </button>
-          <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded">
+          <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded" onClick={onCancel}>
             Volver
           </button>
         </div>
       </div>
-    </div>
   );
 }
 
