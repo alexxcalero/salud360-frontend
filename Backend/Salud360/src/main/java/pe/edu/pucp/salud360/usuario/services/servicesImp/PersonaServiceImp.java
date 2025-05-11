@@ -2,7 +2,7 @@ package pe.edu.pucp.salud360.usuario.services.servicesImp;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pe.edu.pucp.salud360.usuario.dto.PersonaDTO;
+import pe.edu.pucp.salud360.usuario.dtos.PersonaDTO;
 import pe.edu.pucp.salud360.usuario.mappers.PersonaMapper;
 import pe.edu.pucp.salud360.usuario.mappers.RolMapper;
 import pe.edu.pucp.salud360.usuario.mappers.TipoDocumentoMapper;

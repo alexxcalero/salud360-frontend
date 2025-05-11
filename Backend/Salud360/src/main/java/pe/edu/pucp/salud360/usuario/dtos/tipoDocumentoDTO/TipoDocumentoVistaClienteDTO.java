@@ -1,4 +1,4 @@
-package pe.edu.pucp.salud360.usuario.dto;
+package pe.edu.pucp.salud360.usuario.dtos.tipoDocumentoDTO;
 
 import lombok.*;
 
@@ -7,8 +7,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TipoDocumentoDTO {
+public class TipoDocumentoVistaClienteDTO {
     private Integer idTipoDocumento;
     private String nombre;
-    private Boolean activo;
 }

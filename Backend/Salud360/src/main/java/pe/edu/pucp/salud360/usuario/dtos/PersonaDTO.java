@@ -1,4 +1,4 @@
-package pe.edu.pucp.salud360.usuario.dto;
+package pe.edu.pucp.salud360.usuario.dtos;
 
 
 import lombok.AllArgsConstructor;
@@ -15,6 +15,7 @@ import pe.edu.pucp.salud360.membresia.models.MedioDePago;
 import pe.edu.pucp.salud360.servicio.models.CitaMedica;
 import pe.edu.pucp.salud360.servicio.models.Clase;
 import pe.edu.pucp.salud360.servicio.models.Reserva;
+import pe.edu.pucp.salud360.usuario.dtos.usuarioDTO.UsuarioDTO;
 import pe.edu.pucp.salud360.usuario.models.Notificacion;
 
 import java.time.LocalDate;

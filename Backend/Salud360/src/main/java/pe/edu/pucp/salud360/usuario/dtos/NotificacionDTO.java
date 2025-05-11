@@ -1,4 +1,4 @@
-package pe.edu.pucp.salud360.usuario.dto;
+package pe.edu.pucp.salud360.usuario.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

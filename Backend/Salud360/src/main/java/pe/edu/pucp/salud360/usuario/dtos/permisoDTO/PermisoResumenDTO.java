@@ -1,4 +1,4 @@
-package pe.edu.pucp.salud360.usuario.dto;
+package pe.edu.pucp.salud360.usuario.dtos.permisoDTO;
 
 import lombok.*;
 
@@ -7,9 +7,8 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PermisoDTO {
+public class PermisoResumenDTO {
     private Integer idPermiso;
     private String nombre;
     private String descripcion;
-    private Boolean activo;
 }

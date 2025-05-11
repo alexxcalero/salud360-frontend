@@ -1,8 +1,8 @@
 package pe.edu.pucp.salud360.servicio.dto;
 
 import lombok.*;
-import pe.edu.pucp.salud360.usuario.dto.MedicoDTO;
-import pe.edu.pucp.salud360.usuario.dto.PersonaDTO;
+import pe.edu.pucp.salud360.usuario.dtos.MedicoDTO;
+import pe.edu.pucp.salud360.usuario.dtos.PersonaDTO;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

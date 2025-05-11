@@ -1,6 +1,6 @@
 package pe.edu.pucp.salud360.usuario.mappers;
 
-import pe.edu.pucp.salud360.usuario.dto.MedicoDTO;
+import pe.edu.pucp.salud360.usuario.dtos.MedicoDTO;
 import pe.edu.pucp.salud360.usuario.models.Medico;
 
 public class MedicoMapper {
@@ -16,8 +16,8 @@ public class MedicoMapper {
                 .correo(medico.getCorreo())
                 .contrasenha(medico.getContrasenha())
                 .activo(medico.getActivo())
-                .tipoDocumento(TipoDocumentoMapper.mapToDTO(medico.getTipoDocumento()))
-                .rol(RolMapper.mapToDTO(medico.getRol()))
+                //.tipoDocumento(TipoDocumentoMapper.mapToDTO(medico.getTipoDocumento()))
+                //.rol(RolMapper.mapToDTO(medico.getRol()))
                 .especialidad(medico.getEspecialidad())
                 .descripcion(medico.getDescripcion())
                 .citasMedicas(medico.getCitasMedicas())
@@ -36,8 +36,8 @@ public class MedicoMapper {
                 .correo(medicoDTO.getCorreo())
                 .contrasenha(medicoDTO.getContrasenha())
                 .activo(medicoDTO.getActivo())
-                .tipoDocumento(TipoDocumentoMapper.mapToModel(medicoDTO.getTipoDocumento()))
-                .rol(RolMapper.mapToModel(medicoDTO.getRol()))
+                //.tipoDocumento(TipoDocumentoMapper.mapToModel(medicoDTO.getTipoDocumento()))
+                //.rol(RolMapper.mapToModel(medicoDTO.getRol()))
                 .especialidad(medicoDTO.getEspecialidad())
                 .descripcion(medicoDTO.getDescripcion())
                 .citasMedicas(medicoDTO.getCitasMedicas())

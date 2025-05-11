@@ -1,32 +1,19 @@
 package pe.edu.pucp.salud360.usuario.mappers;
 
-import pe.edu.pucp.salud360.usuario.dto.RolDTO;
+import org.mapstruct.Mapper;
+import pe.edu.pucp.salud360.usuario.dtos.rolDTO.RolResumenDTO;
+import pe.edu.pucp.salud360.usuario.dtos.rolDTO.RolVistaAdminDTO;
 import pe.edu.pucp.salud360.usuario.models.Rol;
 
-public class RolMapper {
-    public static RolDTO mapToDTO(Rol rol) {
-        if(rol == null)
-            return null;
+import java.util.List;
 
-        return RolDTO.builder()
-                .idRol(rol.getIdRol())
-                .nombre(rol.getNombre())
-                .descripcion(rol.getDescripcion())
-                .activo(rol.getActivo())
-                .permisos(PermisoMapper.mapToDTOList(rol.getPermisos()))
-                .build();
-    }
+@Mapper(componentModel = "spring", uses = {PermisoMapper.class, UsuarioMapper.class})
+public interface RolMapper {
+    RolResumenDTO mapToRolDTO(Rol rol);
+    Rol mapToModel(RolResumenDTO rolDTO);
 
-    public static Rol mapToModel(RolDTO rolDTO) {
-        if(rolDTO == null)
-            return null;
+    RolVistaAdminDTO mapToVistaAdminDTO(Rol rol);
+    Rol mapToModel(RolVistaAdminDTO rolDTO);
 
-        return Rol.builder()
-                .idRol(rolDTO.getIdRol())
-                .nombre(rolDTO.getNombre())
-                .descripcion(rolDTO.getDescripcion())
-                .activo(rolDTO.getActivo())
-                .permisos(PermisoMapper.mapToModelList(rolDTO.getPermisos()))
-                .build();
-    }
+    List<Rol> mapToModelList(List<RolResumenDTO> rolesDTO);
 }

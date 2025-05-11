@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import pe.edu.pucp.salud360.usuario.dto.UsuarioDTO;
+import pe.edu.pucp.salud360.usuario.dtos.usuarioDTO.UsuarioDTO;
 import pe.edu.pucp.salud360.usuario.services.UsuarioService;
 
 import java.util.List;

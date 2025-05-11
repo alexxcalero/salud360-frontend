@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -18,7 +19,7 @@ public class Permiso {
     @Column(name = "idPermiso", unique = true, nullable = false, updatable = false)
     private Integer idPermiso;
 
-    @Column(name = "nombre", unique = false, nullable = false, updatable = true)
+    @Column(name = "nombre", unique = true, nullable = false, updatable = true)
     private String nombre;
 
     @Column(name = "descripcion", unique = false, nullable = false, updatable = true)
@@ -32,4 +33,7 @@ public class Permiso {
 
     @Column(name = "fechaDesactivacion", unique = false, nullable = true, updatable = true)
     private LocalDateTime fechaDesactivacion;
+
+    @ManyToMany(mappedBy = "permisos")
+    private List<Rol> roles;
 }

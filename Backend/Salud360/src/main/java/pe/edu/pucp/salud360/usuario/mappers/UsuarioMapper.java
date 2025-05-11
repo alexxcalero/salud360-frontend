@@ -1,6 +1,6 @@
 package pe.edu.pucp.salud360.usuario.mappers;
 
-import pe.edu.pucp.salud360.usuario.dto.UsuarioDTO;
+import pe.edu.pucp.salud360.usuario.dtos.usuarioDTO.UsuarioDTO;
 import pe.edu.pucp.salud360.usuario.models.Usuario;
 
 public class UsuarioMapper {
@@ -20,8 +20,8 @@ public class UsuarioMapper {
                 .fotoPefil(usuario.getFotoPerfil())
                 .fechaNacimiento(usuario.getFechaNacimiento())
                 .activo(usuario.getActivo())
-                .tipoDocumento(TipoDocumentoMapper.mapToDTO(usuario.getTipoDocumento()))
-                .rol(RolMapper.mapToDTO(usuario.getRol()))
+                //.tipoDocumento(TipoDocumentoMapper.mapToDTO(usuario.getTipoDocumento()))
+                //.rol(RolMapper.mapToDTO(usuario.getRol()))
                 .build();
     }
 
@@ -41,8 +41,8 @@ public class UsuarioMapper {
                 .fotoPerfil(usuarioDTO.getFotoPefil())
                 .fechaNacimiento(usuarioDTO.getFechaNacimiento())
                 .activo(usuarioDTO.getActivo())
-                .tipoDocumento(TipoDocumentoMapper.mapToModel(usuarioDTO.getTipoDocumento()))
-                .rol(RolMapper.mapToModel(usuarioDTO.getRol()))
+                //.tipoDocumento(TipoDocumentoMapper.mapToModel(usuarioDTO.getTipoDocumento()))
+                //.rol(RolMapper.mapToModel(usuarioDTO.getRol()))
                 .build();
     }
 }

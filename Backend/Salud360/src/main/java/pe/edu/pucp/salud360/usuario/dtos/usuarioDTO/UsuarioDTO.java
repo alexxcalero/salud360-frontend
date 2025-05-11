@@ -1,10 +1,12 @@
-package pe.edu.pucp.salud360.usuario.dto;
+package pe.edu.pucp.salud360.usuario.dtos.usuarioDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import pe.edu.pucp.salud360.usuario.dtos.rolDTO.RolVistaClienteDTO;
+import pe.edu.pucp.salud360.usuario.dtos.tipoDocumentoDTO.TipoDocumentoVistaClienteDTO;
 
 import java.time.LocalDate;
 
@@ -25,6 +27,6 @@ public class UsuarioDTO {
     protected String fotoPefil;
     protected LocalDate fechaNacimiento;
     protected Boolean activo;
-    protected TipoDocumentoDTO tipoDocumento;
-    protected RolDTO rol;
+    protected TipoDocumentoVistaClienteDTO tipoDocumento;
+    protected RolVistaClienteDTO rol;
 }

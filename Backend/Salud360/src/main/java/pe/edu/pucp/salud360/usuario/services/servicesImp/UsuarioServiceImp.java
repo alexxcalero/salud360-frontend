@@ -3,7 +3,7 @@ package pe.edu.pucp.salud360.usuario.services.servicesImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import pe.edu.pucp.salud360.usuario.dto.UsuarioDTO;
+import pe.edu.pucp.salud360.usuario.dtos.usuarioDTO.UsuarioDTO;
 import pe.edu.pucp.salud360.usuario.mappers.UsuarioMapper;
 import pe.edu.pucp.salud360.usuario.models.TipoDocumento;
 import pe.edu.pucp.salud360.usuario.models.Usuario;

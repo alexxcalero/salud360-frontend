@@ -1,6 +1,6 @@
 package pe.edu.pucp.salud360.usuario.services;
 
-import pe.edu.pucp.salud360.usuario.dto.MedicoDTO;
+import pe.edu.pucp.salud360.usuario.dtos.MedicoDTO;
 
 import java.util.List;
 

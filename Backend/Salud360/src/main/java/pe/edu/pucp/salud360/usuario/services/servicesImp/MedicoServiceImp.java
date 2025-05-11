@@ -2,7 +2,7 @@ package pe.edu.pucp.salud360.usuario.services.servicesImp;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pe.edu.pucp.salud360.usuario.dto.MedicoDTO;
+import pe.edu.pucp.salud360.usuario.dtos.MedicoDTO;
 import pe.edu.pucp.salud360.usuario.mappers.MedicoMapper;
 import pe.edu.pucp.salud360.usuario.mappers.RolMapper;
 import pe.edu.pucp.salud360.usuario.mappers.TipoDocumentoMapper;
@@ -36,8 +36,8 @@ public class MedicoServiceImp implements MedicoService {
             medico.setNombres(medicoDTO.getNombres());
             medico.setApellidos(medicoDTO.getApellidos());
             medico.setNumeroDocumento(medicoDTO.getNumeroDocumento());
-            medico.setTipoDocumento(TipoDocumentoMapper.mapToModel(medicoDTO.getTipoDocumento()));
-            medico.setRol(RolMapper.mapToModel(medicoDTO.getRol()));
+            //medico.setTipoDocumento(TipoDocumentoMapper.mapToModel(medicoDTO.getTipoDocumento()));
+            //medico.setRol(RolMapper.mapToModel(medicoDTO.getRol()));
             medico.setEspecialidad(medicoDTO.getEspecialidad());
             medico.setDescripcion(medicoDTO.getDescripcion());
             Medico medicoActualizado = medicoRepository.save(medico);

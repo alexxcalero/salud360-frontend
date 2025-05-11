@@ -19,7 +19,7 @@ public class Rol {
     @Column(name = "idRol", unique = true, nullable = false, updatable = false)
     private Integer idRol;
 
-    @Column(name = "nombre", unique = false, nullable = false, updatable = true)
+    @Column(name = "nombre", unique = true, nullable = false, updatable = true)
     private String nombre;
 
     @Column(name = "descripcion", unique = false, nullable = false, updatable = true)
@@ -33,6 +33,9 @@ public class Rol {
 
     @Column(name = "fechaDesactivacion", unique = false, nullable = true, updatable = true)
     private LocalDateTime fechaDesactivacion;
+
+    @OneToMany(mappedBy = "rol")
+    private List<Usuario> usuarios;
 
     @ManyToMany
     @JoinTable(

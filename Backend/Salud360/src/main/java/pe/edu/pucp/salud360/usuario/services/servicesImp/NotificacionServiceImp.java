@@ -2,14 +2,13 @@ package pe.edu.pucp.salud360.usuario.services.servicesImp;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pe.edu.pucp.salud360.usuario.dto.NotificacionDTO;
+import pe.edu.pucp.salud360.usuario.dtos.NotificacionDTO;
 import pe.edu.pucp.salud360.usuario.mappers.NotificacionMapper;
 import pe.edu.pucp.salud360.usuario.models.Notificacion;
 import pe.edu.pucp.salud360.usuario.repositories.NotificacionRepository;
 import pe.edu.pucp.salud360.usuario.services.NotificacionService;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class NotificacionServiceImp implements NotificacionService {

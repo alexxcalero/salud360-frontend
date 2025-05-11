@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pe.edu.pucp.salud360.usuario.dto.PermisoDTO;
+import pe.edu.pucp.salud360.usuario.dtos.permisoDTO.PermisoVistaAdminDTO;
 import pe.edu.pucp.salud360.usuario.services.PermisoService;
 
 import java.util.List;
@@ -16,16 +16,16 @@ public class PermisoController {
     private PermisoService permisoService;
 
     @PostMapping
-    public ResponseEntity<PermisoDTO> crearPermiso(@RequestBody PermisoDTO permisoDTO) {
-        PermisoDTO permisoCreado = permisoService.crearPermiso(permisoDTO);
-        return new ResponseEntity<>(permisoCreado, HttpStatus.CREATED);
+    public ResponseEntity<PermisoVistaAdminDTO> crearPermiso(@RequestBody PermisoVistaAdminDTO permisoDTO) {
+        PermisoVistaAdminDTO permisoCreado = permisoService.crearPermiso(permisoDTO);
+        return new ResponseEntity<>(permisoService.buscarPermisoPorId(permisoCreado.getIdPermiso()), HttpStatus.CREATED);
     }
 
     @PutMapping("{idPermiso}")
-    public ResponseEntity<PermisoDTO> actualizarPermiso(@PathVariable("idPermiso") Integer idPermiso, @RequestBody PermisoDTO permisoDTO) {
-        PermisoDTO permisoBuscado = permisoService.buscarPermisoPorId(idPermiso);
+    public ResponseEntity<PermisoVistaAdminDTO> actualizarPermiso(@PathVariable("idPermiso") Integer idPermiso, @RequestBody PermisoVistaAdminDTO permisoDTO) {
+        PermisoVistaAdminDTO permisoBuscado = permisoService.buscarPermisoPorId(idPermiso);
         if (permisoBuscado != null) {
-            PermisoDTO permisoActualizado = permisoService.actualizarPermiso(idPermiso, permisoDTO);
+            PermisoVistaAdminDTO permisoActualizado = permisoService.actualizarPermiso(idPermiso, permisoDTO);
             return new ResponseEntity<>(permisoActualizado, HttpStatus.OK);
         }
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -33,7 +33,7 @@ public class PermisoController {
 
     @DeleteMapping("{idPermiso}")
     public ResponseEntity<String> eliminarPermiso(@PathVariable("idPermiso") Integer idPermiso) {
-        PermisoDTO permisoBuscado = permisoService.buscarPermisoPorId(idPermiso);
+        PermisoVistaAdminDTO permisoBuscado = permisoService.buscarPermisoPorId(idPermiso);
         if (permisoBuscado != null) {
             permisoService.eliminarPermiso(idPermiso);
             return new ResponseEntity<>("Permiso eliminado satisfactoriamente", HttpStatus.OK);
@@ -42,14 +42,14 @@ public class PermisoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PermisoDTO>> listarPermisosTodos() {
-        List<PermisoDTO> permisos = permisoService.listarPermisosTodos();
+    public ResponseEntity<List<PermisoVistaAdminDTO>> listarPermisosTodos() {
+        List<PermisoVistaAdminDTO> permisos = permisoService.listarPermisosTodos();
         return new ResponseEntity<>(permisos, HttpStatus.OK);
     }
 
     @GetMapping("{idPermiso}")
-    public ResponseEntity<PermisoDTO> buscarPermisoPorId(@PathVariable("idPermiso") Integer idPermiso) {
-        PermisoDTO permisoBuscado = permisoService.buscarPermisoPorId(idPermiso);
+    public ResponseEntity<PermisoVistaAdminDTO> buscarPermisoPorId(@PathVariable("idPermiso") Integer idPermiso) {
+        PermisoVistaAdminDTO permisoBuscado = permisoService.buscarPermisoPorId(idPermiso);
         if (permisoBuscado != null)
             return new ResponseEntity<>(permisoBuscado, HttpStatus.OK);
         else

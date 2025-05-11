@@ -1,6 +1,6 @@
 package pe.edu.pucp.salud360.usuario.mappers;
 
-import pe.edu.pucp.salud360.usuario.dto.NotificacionDTO;
+import pe.edu.pucp.salud360.usuario.dtos.NotificacionDTO;
 import pe.edu.pucp.salud360.usuario.models.Notificacion;
 
 public class NotificacionMapper {
