@@ -1,13 +1,13 @@
 package pe.edu.pucp.salud360.usuario.services;
 
-import pe.edu.pucp.salud360.usuario.dto.TipoDocumentoDTO;
+import pe.edu.pucp.salud360.usuario.dtos.tipoDocumentoDTO.TipoDocumentoVistaAdminDTO;
 
 import java.util.List;
 
 public interface TipoDocumentoService {
-    TipoDocumentoDTO crearTipoDocumento(TipoDocumentoDTO tipoDocumentoDTO);
-    TipoDocumentoDTO actualizarTipoDocumento(Integer idTipoDocumento, TipoDocumentoDTO tipoDocumentoDTO);
+    TipoDocumentoVistaAdminDTO crearTipoDocumento(TipoDocumentoVistaAdminDTO tipoDocumentoDTO);
+    TipoDocumentoVistaAdminDTO actualizarTipoDocumento(Integer idTipoDocumento, TipoDocumentoVistaAdminDTO tipoDocumentoDTO);
     void eliminarTipoDocumento(Integer idTipoDocumento);
-    List<TipoDocumentoDTO> listarTiposDocumentosTodos();
-    TipoDocumentoDTO buscarTipoDocumentoPorId(Integer idTipoDocumento);
+    List<TipoDocumentoVistaAdminDTO> listarTiposDocumentosTodos();
+    TipoDocumentoVistaAdminDTO buscarTipoDocumentoPorId(Integer idTipoDocumento);
 }

@@ -30,8 +30,8 @@ public class Usuario {
     @Column(name = "apellidos", unique = false, nullable = false, updatable = true)
     protected String apellidos;
 
-    @Column(name = "numeroDocumento", unique = true, nullable = false, updatable = false)
-    protected String numeroDocumento;  // Va a tener que contactar con el admin si quiere cambiar su numero de documento
+    @Column(name = "numeroDocumento", unique = true, nullable = false, updatable = true)
+    protected String numeroDocumento;
 
     @Column(name = "correo", unique = true, nullable = false, updatable = true)
     protected String correo;

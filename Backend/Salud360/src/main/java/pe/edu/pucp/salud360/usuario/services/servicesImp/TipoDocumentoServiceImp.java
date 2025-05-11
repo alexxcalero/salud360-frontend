@@ -2,7 +2,7 @@ package pe.edu.pucp.salud360.usuario.services.servicesImp;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pe.edu.pucp.salud360.usuario.dto.TipoDocumentoDTO;
+import pe.edu.pucp.salud360.usuario.dtos.tipoDocumentoDTO.TipoDocumentoVistaAdminDTO;
 import pe.edu.pucp.salud360.usuario.mappers.TipoDocumentoMapper;
 import pe.edu.pucp.salud360.usuario.models.TipoDocumento;
 import pe.edu.pucp.salud360.usuario.repositories.TipoDocumentoRepository;
@@ -17,23 +17,26 @@ public class TipoDocumentoServiceImp implements TipoDocumentoService {
     @Autowired
     private TipoDocumentoRepository tipoDocumentoRepository;
 
+    @Autowired
+    private TipoDocumentoMapper tipoDocumentoMapper;
+
     @Override
-    public TipoDocumentoDTO crearTipoDocumento(TipoDocumentoDTO tipoDocumentoDTO) {
-        TipoDocumento tipoDocumento = TipoDocumentoMapper.mapToModel(tipoDocumentoDTO);
+    public TipoDocumentoVistaAdminDTO crearTipoDocumento(TipoDocumentoVistaAdminDTO tipoDocumentoDTO) {
+        TipoDocumento tipoDocumento = tipoDocumentoMapper.mapToModel(tipoDocumentoDTO);
         tipoDocumento.setActivo(true);
         tipoDocumento.setFechaCreacion(LocalDateTime.now());
         tipoDocumento.setFechaDesactivacion(null);
         TipoDocumento tipoDocumentoCreado = tipoDocumentoRepository.save(tipoDocumento);
-        return TipoDocumentoMapper.mapToDTO(tipoDocumentoCreado);
+        return tipoDocumentoMapper.mapToVistaAdminDTO(tipoDocumentoCreado);
     }
 
     @Override
-    public TipoDocumentoDTO actualizarTipoDocumento(Integer idTipoDocumento, TipoDocumentoDTO tipoDocumentoDTO) {
+    public TipoDocumentoVistaAdminDTO actualizarTipoDocumento(Integer idTipoDocumento, TipoDocumentoVistaAdminDTO tipoDocumentoDTO) {
         if(tipoDocumentoRepository.findById(idTipoDocumento).isPresent()) {
             TipoDocumento tipoDocumento = tipoDocumentoRepository.findById(idTipoDocumento).get();
             tipoDocumento.setNombre(tipoDocumentoDTO.getNombre());
             TipoDocumento tipoDocumentoActualizado = tipoDocumentoRepository.save(tipoDocumento);
-            return TipoDocumentoMapper.mapToDTO(tipoDocumentoActualizado);
+            return tipoDocumentoMapper.mapToVistaAdminDTO(tipoDocumentoActualizado);
         } else {
             return null;
         }
@@ -50,20 +53,20 @@ public class TipoDocumentoServiceImp implements TipoDocumentoService {
     }
 
     @Override
-    public List<TipoDocumentoDTO> listarTiposDocumentosTodos() {
+    public List<TipoDocumentoVistaAdminDTO> listarTiposDocumentosTodos() {
         List<TipoDocumento> tiposDocumentos = tipoDocumentoRepository.findAll();
         if(!(tiposDocumentos.isEmpty())) {
-            return tiposDocumentos.stream().map(TipoDocumentoMapper::mapToDTO).toList();
+            return tiposDocumentos.stream().map(tipoDocumentoMapper::mapToVistaAdminDTO).toList();
         } else {
             return new ArrayList<>();
         }
     }
 
     @Override
-    public TipoDocumentoDTO buscarTipoDocumentoPorId(Integer idTipoDocumento) {
+    public TipoDocumentoVistaAdminDTO buscarTipoDocumentoPorId(Integer idTipoDocumento) {
         if(tipoDocumentoRepository.findById(idTipoDocumento).isPresent()) {
             TipoDocumento tipoDocumentoBuscado = tipoDocumentoRepository.findById(idTipoDocumento).get();
-            return TipoDocumentoMapper.mapToDTO(tipoDocumentoBuscado);
+            return tipoDocumentoMapper.mapToVistaAdminDTO(tipoDocumentoBuscado);
         } else {
             return null;
         }

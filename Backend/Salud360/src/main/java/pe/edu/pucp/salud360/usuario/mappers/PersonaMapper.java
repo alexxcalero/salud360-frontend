@@ -1,6 +1,6 @@
 package pe.edu.pucp.salud360.usuario.mappers;
 
-import pe.edu.pucp.salud360.usuario.dto.PersonaDTO;
+import pe.edu.pucp.salud360.usuario.dtos.PersonaDTO;
 import pe.edu.pucp.salud360.usuario.models.Persona;
 
 // idUsuario, nombres, apellidos, numeroDocumento, correo, contrasenha, telefono, fechaNacimiento, activo, tipoDocumento, rol
@@ -19,8 +19,8 @@ public class PersonaMapper {
                 .telefono(persona.getTelefono())
                 .fechaNacimiento(persona.getFechaNacimiento())
                 .activo(persona.getActivo())
-                .tipoDocumento(TipoDocumentoMapper.mapToDTO(persona.getTipoDocumento()))
-                .rol(RolMapper.mapToDTO(persona.getRol()))
+                //.tipoDocumento(TipoDocumentoMapper.mapToDTO(persona.getTipoDocumento()))
+                //.rol(RolMapper.mapToDTO(persona.getRol()))
                 .fotoPefil(persona.getFotoPerfil())
                 .comunidades(persona.getComunidades())
                 .afiliaciones(persona.getAfiliaciones())
@@ -49,8 +49,8 @@ public class PersonaMapper {
                 .telefono(personaDTO.getTelefono())
                 .fechaNacimiento(personaDTO.getFechaNacimiento())
                 .activo(personaDTO.getActivo())
-                .tipoDocumento(TipoDocumentoMapper.mapToModel(personaDTO.getTipoDocumento()))
-                .rol(RolMapper.mapToModel(personaDTO.getRol()))
+                //.tipoDocumento(TipoDocumentoMapper.mapToModel(personaDTO.getTipoDocumento()))
+                //.rol(RolMapper.mapToModel(personaDTO.getRol()))
                 .fotoPerfil(personaDTO.getFotoPefil())
                 .comunidades(personaDTO.getComunidades())
                 .afiliaciones(personaDTO.getAfiliaciones())

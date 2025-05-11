@@ -18,7 +18,7 @@ public class TipoDocumento {
     @Column(name = "idTipoDocumento", unique = true, nullable = false, updatable = false)
     private Integer idTipoDocumento;
 
-    @Column(name = "nombre", unique = false, nullable = false, updatable = true)
+    @Column(name = "nombre", unique = true, nullable = false, updatable = true)
     private String nombre;
 
     @Column(name = "activo", unique = false, nullable = false, updatable = true)

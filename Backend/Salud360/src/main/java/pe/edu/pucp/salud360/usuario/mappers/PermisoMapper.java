@@ -1,46 +1,19 @@
 package pe.edu.pucp.salud360.usuario.mappers;
 
-import pe.edu.pucp.salud360.usuario.dto.PermisoDTO;
+import org.mapstruct.Mapper;
+import pe.edu.pucp.salud360.usuario.dtos.permisoDTO.PermisoResumenDTO;
+import pe.edu.pucp.salud360.usuario.dtos.permisoDTO.PermisoVistaAdminDTO;
 import pe.edu.pucp.salud360.usuario.models.Permiso;
 
 import java.util.List;
 
-public class PermisoMapper {
-    public static PermisoDTO mapToDTO(Permiso permiso) {
-        if(permiso == null)
-            return null;
+@Mapper(componentModel = "spring", uses = RolMapper.class)
+public interface PermisoMapper {
+    PermisoResumenDTO mapToResumenDTO(Permiso permiso);
+    Permiso mapToModel(PermisoResumenDTO permisoDTO);
 
-        return PermisoDTO.builder()
-                .idPermiso(permiso.getIdPermiso())
-                .nombre(permiso.getNombre())
-                .descripcion(permiso.getDescripcion())
-                .activo(permiso.getActivo())
-                .build();
-    }
+    PermisoVistaAdminDTO mapToVistaAdminDTO(Permiso permiso);
+    Permiso mapToModel(PermisoVistaAdminDTO permisoDTO);
 
-    public static List<PermisoDTO> mapToDTOList(List<Permiso> permisos) {
-        if (permisos == null)
-            return null;
-
-        return permisos.stream().map(PermisoMapper::mapToDTO).toList();
-    }
-
-    public static Permiso mapToModel(PermisoDTO permisoDTO) {
-        if(permisoDTO == null)
-            return null;
-
-        return Permiso.builder()
-                .idPermiso(permisoDTO.getIdPermiso())
-                .nombre(permisoDTO.getNombre())
-                .descripcion(permisoDTO.getDescripcion())
-                .activo(permisoDTO.getActivo())
-                .build();
-    }
-
-    public static List<Permiso> mapToModelList(List<PermisoDTO> permisos) {
-        if (permisos == null)
-            return null;
-
-        return permisos.stream().map(PermisoMapper::mapToModel).toList();
-    }
+    List<Permiso> mapToModelList(List<PermisoResumenDTO> permisosDTO);
 }
