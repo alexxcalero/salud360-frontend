@@ -19,6 +19,7 @@ public class UsuarioController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+    //easter egg
 
     @PostMapping
     public ResponseEntity<UsuarioDTO> crearUsuario(@RequestBody UsuarioDTO usuarioDTO) {
