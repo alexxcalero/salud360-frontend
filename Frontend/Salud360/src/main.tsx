@@ -28,6 +28,8 @@ import LandingLayout from "./layouts/LandingLayout";
 import UsuarioLayout from "./layouts/UsuarioLayout";
 import Home from "./pages/landing/Home";
 import Inicio from "./pages/usuario/Inicio";
+import CrearMedico from "./pages/admin/personalMedico/CrearMedico";
+import App from "./App";
 
 createRoot(document.getElementById("root")!).render(
 
@@ -100,7 +102,7 @@ createRoot(document.getElementById("root")!).render(
 
           <Route path="personalMedico">
             <Route index element={<PersonalMedicoPage />} />
-            <Route path="crear" element={<CrearUsuario />} />
+            <Route path="crear" element={<CrearMedico />} />
           </Route>
 
           <Route path="calificaciones">
@@ -131,6 +133,7 @@ createRoot(document.getElementById("root")!).render(
         
         <Route path="/example" element={<Example />} />
 
+        <Route path="/trash" element={<App />} />
 
 
         <Route>
