@@ -50,14 +50,14 @@ function Sidebar({ active = 0 }: { active: number }) {
       <ul className="text-left flex gap-[10px] flex-col ml-[20px] after:content-['']">
         {[
           [LayoutDashboard, "Dashboard"],
-          [Settings, "Configuración general"],
-          [LayoutDashboard, "Roles y permisos"],
+          [Settings, "Configuración General"],
+          [LayoutDashboard, "Roles y Permisos"],
           [IdCard, "Membresías"],
           [PersonStanding, "Comunidades"],
           [Puzzle, "Servicios"],
           [MapPin, "Locales"],
           [UsersRound, "Usuarios"],
-          [BriefcaseMedical, "Personal médico"],
+          [BriefcaseMedical, "Personal Médico"],
           [MessageSquare, "Calificaciones"],
           [LayoutDashboard, "Logs"],
           [ShieldUser, "Auditorías"],
