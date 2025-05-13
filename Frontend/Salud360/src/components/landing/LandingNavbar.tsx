@@ -5,7 +5,7 @@ import Button from "../Button";
 
 function LandingNavbar(){
     return(
-        <header className="fixed top-0 left-0 w-full bg-[#2A86FF] py-5 z-10"> {/*El z-10 es para que nada le pase por encima. Puede ser cualquier número alto.*/}
+        <header className="fixed top-0 left-0 w-full bg-[#2A86FF] py-5 z-100"> {/*El z-10 es para que nada le pase por encima. Puede ser cualquier número alto.*/}
             <nav>
                 <div className="grid grid-cols-12 gap-6 items-center">
                     <div className="col-span-3 px-8">
@@ -14,8 +14,8 @@ function LandingNavbar(){
                     <div className="flex justify-center text-white font-semibold align-center col-span-6">
                         <ul className="flex gap-24">
                             <li><Link to="/">Inicio</Link></li>
-                            <li><Link to="/">Comunidades</Link></li>
-                            <li><Link to="/">Sobre Nosotros</Link></li>
+                            <li><Link to="/comunidades">Comunidades</Link></li>
+                            <li><Link to="/sobreNosotros">Sobre Nosotros</Link></li>
                         </ul>
                     </div>
                     <div className="flex justify-end col-span-3 px-8 gap-6">
