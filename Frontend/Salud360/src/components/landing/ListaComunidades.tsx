@@ -1,5 +1,6 @@
 import  { useEffect, useState} from "react";
 import axios from "axios";
+import CardLanding from "./CardLanding";
 
 function ListaComunidades(){
     
@@ -28,9 +29,14 @@ function ListaComunidades(){
 
     return (
 
+        
     
-        <div>
-            {comunidades}
+        <div className="flex flex-row gap-8">
+            {comunidades.map((comunidad: any, i) => (
+                <CardLanding key={i} 
+                image="https://png.pngtree.com/png-clipart/20201224/ourmid/pngtree-panda-bamboo-bamboo-shoots-simple-strokes-cartoon-with-pictures-small-fresh-png-image_2625172.jpg" 
+                title={comunidad.nombre} subtitle={comunidad.descripcion} />
+            ))}
         </div>
 
     );
