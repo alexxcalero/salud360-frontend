@@ -1,6 +1,7 @@
 import Button from "@/components/Button";
 import HeroComunidades from "@/components/landing/HeroComunidades";
 import ComunidadesImage1 from "@/assets/comunidades1.png";
+import ListaComunidades from "@/components/landing/ListaComunidades";
 
 function Comunidades(){
     return (
@@ -39,7 +40,11 @@ function Comunidades(){
                             <hr />
                             <br />
                         </div>
+
+                        <ListaComunidades></ListaComunidades>
+
                     </div>
+
                 </section>
 
             </section>
