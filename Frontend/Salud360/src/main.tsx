@@ -30,6 +30,7 @@ import Home from "./pages/landing/Home";
 import Inicio from "./pages/usuario/Inicio";
 import CrearMedico from "./pages/admin/personalMedico/CrearMedico";
 import App from "./App";
+import SobreNosotros from "./pages/landing/SobreNosotros";
 
 createRoot(document.getElementById("root")!).render(
 
@@ -42,6 +43,8 @@ createRoot(document.getElementById("root")!).render(
         {/*1. Sección del Landing Page */}
         <Route path="/" element={<LandingLayout />}>
           <Route index element={<Home/>}/>
+          <Route path="comunidades" element={<Home/>} />
+          <Route path="sobreNosotros" element={<SobreNosotros />} />
         </Route>
 
         
