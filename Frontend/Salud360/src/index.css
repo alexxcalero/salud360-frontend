@@ -161,10 +161,12 @@
   .use-display-small {
     @apply font-bold text-display-small/tight;
   }
-  h1,
-  .use-title-large {
-    @apply font-semibold text-title-large/tight;
-  }
+  h1 {
+    font-family: var(--font-inter); /* o la que corresponda */
+    font-size: var(--text-title-large);
+    font-weight: 600;
+    line-height: 1.1;
+  } 
   h2,
   .use-title-medium {
     @apply font-medium text-title-medium/tight;
