@@ -24,8 +24,15 @@ function ListaComunidades(){
         fetchComunidades();
     }, []);
 
+    //xd
+
     return (
-        <div>{comunidades}</div>
+
+    
+        <div>
+            {comunidades}
+        </div>
+
     );
 }
 
