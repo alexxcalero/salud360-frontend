@@ -5,7 +5,7 @@ function ListaComunidades(){
     
     const [comunidades, setComunidades] = useState([]);
 
-    const fetchComunidades = () => {
+    const fetchComunidadess = () => {
     axios.get("http://localhost:8080/api/comunidades", {
       auth: {
         username: "admin",
