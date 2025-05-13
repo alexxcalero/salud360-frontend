@@ -41,7 +41,7 @@ function Comunidades(){
                             <br />
                         </div>
 
-                        <ListaComunidades></ListaComunidades>
+                        <ListaComunidades/>
 
                     </div>
 

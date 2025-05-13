@@ -1,11 +1,11 @@
-import  { useState} from "react";
+import  { useEffect, useState} from "react";
 import axios from "axios";
 
 function ListaComunidades(){
     
     const [comunidades, setComunidades] = useState([]);
 
-    const fetchComunidadess = () => {
+    const fetchComunidades = () => {
     axios.get("http://localhost:8080/api/comunidades", {
       auth: {
         username: "admin",
@@ -19,6 +19,10 @@ function ListaComunidades(){
       })
       .catch(err => console.error("Error cargando comunidades", err));
     }
+
+    useEffect(() => {
+        fetchComunidades();
+    }, []);
 
     return (
         <div>{comunidades}</div>
