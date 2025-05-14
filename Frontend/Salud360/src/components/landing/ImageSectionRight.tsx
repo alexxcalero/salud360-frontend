@@ -10,7 +10,7 @@ function ImageSectionRight({image, h1, h3}: Props){
             <div className="grid grid-cols-2 items-center my-4 mx-32">
                 
                 <div className="col-span-1 flex justify-start">
-                    <div className="flex flex-col gap-8 py-8 4xl:py-32 pr-16 bg-[#2A86FF] text-white text-right rounded-2xl -mr-4 ">
+                    <div className="flex flex-col gap-8 py-8 xl:py-32 pr-16 bg-[#2A86FF] text-white text-right rounded-2xl -mr-4 ">
                         <h1>{h1}</h1>
                         <h3>{h3}</h3>
                     </div>

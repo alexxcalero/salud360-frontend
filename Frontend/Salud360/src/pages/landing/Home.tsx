@@ -15,7 +15,9 @@ function Home(){
                         <h1>COMUNIDADES</h1>
                         <h2>¡Descubre y forma parte de nuestras comunidades!</h2>
                         <hr className="border border-black"/>
-                        <ListaComunidades/>
+                        <div className="flex justify-center">
+                            <ListaComunidades/>
+                        </div>
                     </div>
                 </section>
 
