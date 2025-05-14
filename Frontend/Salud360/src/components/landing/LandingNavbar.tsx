@@ -9,7 +9,7 @@ function LandingNavbar(){
             <nav>
                 <div className="grid grid-cols-12 gap-6 items-center">
                     <div className="col-span-3 px-8">
-                        <img src={logo} alt="Logo" className="cursor-pointer"/>
+                        <Link to="/"><img src={logo} alt="Logo" className="cursor-pointer"/></Link>
                     </div>
                     <div className="flex justify-center text-white font-semibold align-center col-span-6">
                         <ul className="flex gap-24">

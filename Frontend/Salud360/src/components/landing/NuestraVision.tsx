@@ -1,12 +1,12 @@
-import sobreNosotrosImage2 from "@/assets/sobreNosotros2.png"
-import ImageSectionRight from "@/components/landing/ImageSectionRight";
+import sobreNosotrosImage3 from "@/assets/sobreNosotros3.png"
+import ImageSectionLeft from "@/components/landing/ImageSectionLeft";
 
 function NuestraVision(){
     return (
-        <ImageSectionRight 
-            image={sobreNosotrosImage2} 
+        <ImageSectionLeft
+            image={sobreNosotrosImage3} 
             h1={"Nuestra visión"} 
-            h3={"Somos una plataforma dedicada a temas de salud y fitness. Buscamos que nuestros usuarios puedan crecer gracias a nuestros planes. "} />
+            h3={"Queremos ser una plataforma líder en el área del bienestar. Mejorando nuestros servicios a favor y con los usuarios. Creciendo como empresa al lado de nuestros usuarios."} />
     );
 }
 

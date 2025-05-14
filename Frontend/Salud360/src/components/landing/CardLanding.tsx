@@ -1,23 +1,28 @@
 import { ReactNode } from "react";
 import Button from "../Button";
+import { useNavigate } from "react-router";
 
 interface Props{
+    id: string;
     image: string;
     title: string;
     subtitle: string;
 }
 
-function CardLanding({image, title, subtitle}: Props){
+function CardLanding({id, image, title, subtitle}: Props){
+
+    const navigate = useNavigate();
+
     return(
-        <div className="grid grid-rows-2 auto-cols-max rounded-sm border border-rose-600">
+        <div className="w-[330px] h-[460px] grid grid-rows-2 rounded-sm border shadow-xl">
             <div className="row-span-1">
-                <img src={image} alt="imagen" />
+                <img src={image} alt="imagen" className="w-full h-full object-cover" />
             </div>
-            <div className="row-span-1 flex flex-col items-center gap-8">
-                <h3>{title}</h3>
+            <div className="row-span-1 flex flex-col gap-8 text-left p-4">
+                <p className="font-bold">{title}</p>
                 <p>{subtitle}</p>
                 <div className="inline-block w-32">
-                    <Button size="lg" className="w-full">Explorar más</Button>
+                    <Button size="lg" className="w-full" onClick={() => navigate(`/comunidades/detalle/${id}`)}>Explorar más</Button>
                 </div>
             </div>
             

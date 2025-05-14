@@ -32,7 +32,9 @@ import CrearMedico from "./pages/admin/personalMedico/CrearMedico";
 import App from "./App";
 import SobreNosotros from "./pages/landing/SobreNosotros";
 import Comunidades from "./pages/landing/Comunidades";
+import DetalleComunidad from "./pages/landing/DetalleComunidad";
 import EditarConfiguracionGeneralPage from "./pages/admin/configuracionGeneral/EditarConfiguracionGeneralPage";
+
 createRoot(document.getElementById("root")!).render(
 
   <StrictMode>
@@ -44,7 +46,10 @@ createRoot(document.getElementById("root")!).render(
         {/*1. Sección del Landing Page */}
         <Route path="/" element={<LandingLayout />}>
           <Route index element={<Home/>}/>
-          <Route path="comunidades" element={<Comunidades/>} />
+          <Route path="comunidades">
+            <Route index element={<Comunidades/>}/>
+            <Route path="detalle/:id" element={<DetalleComunidad/>}/>
+          </Route>
           <Route path="sobreNosotros" element={<SobreNosotros />} />
         </Route>
 
