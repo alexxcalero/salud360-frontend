@@ -7,8 +7,8 @@ function Comunidades(){
     return (
         <div>
             <HeroComunidades/>
-            <section className="flex flex-col gap-32">
-                <section className="bg-white mt-32">
+            <section className="flex flex-col gap-32 my-32">
+                <section className="bg-white">
                     <div className="grid grid-cols-2 items-center my-4 mx-32">
                         <div className="col-span-1 h-full flex flex-col justify-center gap-8 text-left px-8">
                             <h1>Sobre las comunidades</h1>
@@ -50,8 +50,6 @@ function Comunidades(){
                     </div>
 
                 </section>
-
-                <div className="h-[430px] bg-amber-600"></div>
 
             </section>
 

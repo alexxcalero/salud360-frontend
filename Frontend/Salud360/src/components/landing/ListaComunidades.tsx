@@ -6,7 +6,9 @@ function ListaComunidades(){
     
     const [currentIndex, setCurrentIndex] = useState(0);
     const [comunidades, setComunidades] = useState([]);
-    const pageSize = 3;
+    const cardWidth = 330;
+    const xMargin = 32;
+    const visibleCount = 3;
 
     const fetchComunidades = () => {
     axios.get("http://localhost:8080/api/comunidades", {
@@ -31,19 +33,15 @@ function ListaComunidades(){
 
     const handleNext = () => {
 
-      console.log(currentIndex, comunidades.slice(currentIndex, currentIndex + pageSize));
-
-      if (currentIndex + pageSize < comunidades.length){
-        setCurrentIndex(currentIndex + pageSize);
+      if (currentIndex + visibleCount < comunidades.length){
+        setCurrentIndex(currentIndex + 1);
       }
-
-      console.log(currentIndex, comunidades.slice(currentIndex, currentIndex + pageSize));
 
     };
 
     const handlePrev = () => {
-      if (currentIndex - pageSize >= 0){
-        setCurrentIndex(currentIndex - pageSize);
+      if (currentIndex > 0){
+        setCurrentIndex(currentIndex - 1);
       }
     };
 
@@ -51,29 +49,40 @@ function ListaComunidades(){
 
     return (
 
-      <section className="flex flex-row gap-4">
+      <section className="flex flex-row gap-4 justify-center items-center">
           
           <button
             onClick={handlePrev}
             disabled={currentIndex === 0}
-            className="p-2 text-white bg-blue-500 rounded-full disabled:opacity-50"
+            className={`w-10 h-10 p-2 text-white bg-blue-500 rounded-full disabled:opacity-50 ${!(currentIndex === 0) && 'cursor-pointer'}`}
           >
             ←
           </button>
 
+          <div className="relative w-[1088px] overflow-hidden">
+            <div className="flex transition-transform duration-500 ease-in-out" style={{
+              transform: `translateX(-${currentIndex * (cardWidth + xMargin)}px)`,
+              width: `${comunidades.length * (cardWidth + xMargin)}px`
+            }}>
+              {comunidades.map((comunidad: any, i) => (
+                <div key={i}
+                  className="w-[320px] shrink-0 mx-4 py-8"
+                  style={{ width: `${cardWidth}px` }}>
 
-          <div className="grid grid-cols-3 gap-8">
-            {comunidades.slice(currentIndex, currentIndex + pageSize).map((comunidad: any, i) => (
-              <CardLanding key={i}
-                image="https://png.pngtree.com/png-clipart/20201224/ourmid/pngtree-panda-bamboo-bamboo-shoots-simple-strokes-cartoon-with-pictures-small-fresh-png-image_2625172.jpg"
-                title={comunidad.nombre} subtitle={comunidad.descripcion} />
-            ))}
+                  <CardLanding key={comunidad.idComunidad}
+                    id={comunidad.idComunidad}
+                    image="https://png.pngtree.com/png-clipart/20201224/ourmid/pngtree-panda-bamboo-bamboo-shoots-simple-strokes-cartoon-with-pictures-small-fresh-png-image_2625172.jpg"
+                    title={comunidad.nombre} subtitle={comunidad.descripcion} />
+
+                </div>
+              ))}
+            </div>
           </div>
 
           <button
             onClick={handleNext}
-            disabled={currentIndex + pageSize >= comunidades.length}
-            className="p-2 text-white bg-blue-500 rounded-full disabled:opacity-50"
+            disabled={currentIndex + visibleCount  >= comunidades.length}
+            className={`w-10 h-10 p-2 text-white bg-blue-500 rounded-full disabled:opacity-50 ${!(currentIndex + visibleCount  >= comunidades.length) && 'cursor-pointer'}`}
           >
             →
           </button>
@@ -86,3 +95,26 @@ function ListaComunidades(){
 }
 
 export default ListaComunidades;
+
+{/*
+          <CardLanding key={1}
+                    image="https://png.pngtree.com/png-clipart/20201224/ourmid/pngtree-panda-bamboo-bamboo-shoots-simple-strokes-cartoon-with-pictures-small-fresh-png-image_2625172.jpg"
+                    title="hola" subtitle="hola pobres" /> */}
+
+
+{/*
+  <div className="flex flex-row gap-8 border border-rose-500 px-4">
+            <CardLanding key={1}
+                    image="https://png.pngtree.com/png-clipart/20201224/ourmid/pngtree-panda-bamboo-bamboo-shoots-simple-strokes-cartoon-with-pictures-small-fresh-png-image_2625172.jpg"
+                    title="hola" subtitle="hola pobres" />
+              <CardLanding key={1}
+              image="https://png.pngtree.com/png-clipart/20201224/ourmid/pngtree-panda-bamboo-bamboo-shoots-simple-strokes-cartoon-with-pictures-small-fresh-png-image_2625172.jpg"
+              title="hola" subtitle="hola pobres" />
+              <CardLanding key={1}
+              image="https://png.pngtree.com/png-clipart/20201224/ourmid/pngtree-panda-bamboo-bamboo-shoots-simple-strokes-cartoon-with-pictures-small-fresh-png-image_2625172.jpg"
+              title="hola" subtitle="hola pobres" />
+          </div>
+
+          <br />
+  
+  */}
