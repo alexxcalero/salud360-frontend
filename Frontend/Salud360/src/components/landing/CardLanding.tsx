@@ -18,7 +18,7 @@ function CardLanding({id, image, title, subtitle}: Props){
             <div className="row-span-1">
                 <img src={image} alt="imagen" className="w-full h-full object-cover" />
             </div>
-            <div className="row-span-1 flex flex-col gap-8 text-left p-4">
+            <div className="row-span-1 flex flex-col gap-8 text-left p-4 bg-white text-black">
                 <p className="font-bold">{title}</p>
                 <p>{subtitle}</p>
                 <div className="inline-block w-32">

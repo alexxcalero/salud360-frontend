@@ -6,7 +6,6 @@ import ListaLocales from "@/components/landing/ListaLocales";
 function Home(){
     return (
         <div>
-
             <Hero/>
 
             <section className="flex flex-col gap-8">
@@ -26,7 +25,6 @@ function Home(){
                         <h1>LOCALES</h1>
                         <h2>¡Descubre y visita uno de nuestros locales en todo el Perú!</h2>
                         <hr className="border border-white"/>
-                        <p>mbappe</p>
                         <ListaLocales/>
                     </div>
                 </section>

@@ -5,6 +5,8 @@ import detalleComunidadImage1 from "@/assets/detalleComunidad1.png"
 import HeroDetalleComunidad from "@/components/landing/HeroDetalleComunidad";
 import { useParams } from "react-router";
 import Button from "@/components/Button";
+import ImageSectionRight from "@/components/landing/ImageSectionRight";
+import ImageSectionLeft from "@/components/landing/ImageSectionLeft";
 
 function DetalleComunidad(){
 
@@ -29,6 +31,29 @@ function DetalleComunidad(){
     useEffect(() => {
         fetchComunidad();
     }, []);
+
+
+    const [servicios, setServicios] = useState([]);
+    const fetchServicios = () => {
+    axios.get(`http://localhost:8080/api/servicios`, {
+      auth: {
+        username: "admin",
+        password: "admin123"
+      }
+    })
+      .then(res => {
+        console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
+        setServicios(res.data);
+        console.log("Servicios:", res.data);
+      })
+      .catch(err => console.error("Error cargando servicios", err));
+    }    
+    
+    useEffect(() => {
+        fetchServicios();
+    }, []);
+
+
 
 
     useEffect(() => {
@@ -65,7 +90,20 @@ function DetalleComunidad(){
                 <section className="bg-white">
                     <div className="flex flex-col gap-8">
                         <h1>NUESTROS SERVICIOS</h1>
-                        <p>Messi</p>
+                        {servicios.map((servicio: any, i: number) => (
+                            (i % 2 == 0 ? 
+                                <ImageSectionLeft
+                                    image="https://png.pngtree.com/png-clipart/20201224/ourmid/pngtree-panda-bamboo-bamboo-shoots-simple-strokes-cartoon-with-pictures-small-fresh-png-image_2625172.jpg"
+                                    h1={servicio.nombre} 
+                                    h3={servicio.descripcion} /> 
+                            :
+                                <ImageSectionRight
+                                    image="https://png.pngtree.com/png-clipart/20201224/ourmid/pngtree-panda-bamboo-bamboo-shoots-simple-strokes-cartoon-with-pictures-small-fresh-png-image_2625172.jpg"
+                                    h1={servicio.nombre} 
+                                    h3={servicio.descripcion} />
+                        
+                            )
+                        ))}
                     </div>
                 </section>
 
