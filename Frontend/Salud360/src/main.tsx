@@ -33,6 +33,7 @@ import App from "./App";
 import SobreNosotros from "./pages/landing/SobreNosotros";
 import Comunidades from "./pages/landing/Comunidades";
 import DetalleComunidad from "./pages/landing/DetalleComunidad";
+import EditarConfiguracionGeneralPage from "./pages/admin/configuracionGeneral/EditarConfiguracionGeneralPage";
 
 createRoot(document.getElementById("root")!).render(
 
@@ -72,9 +73,9 @@ createRoot(document.getElementById("root")!).render(
           </Route>
 
           <Route path="configuracion">
-            <Route index element={<ConfiguracionGeneralPage />} />
-            <Route path="crear" element={<CrearUsuario />} />
-          </Route>
+              <Route index element={<ConfiguracionGeneralPage />} />
+              <Route path="editar" element={<EditarConfiguracionGeneralPage />} />
+            </Route>
 
           <Route path="roles">
             <Route index element={<RolesPage />} />
