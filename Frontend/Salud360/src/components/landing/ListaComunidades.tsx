@@ -54,7 +54,7 @@ function ListaComunidades(){
           <button
             onClick={handlePrev}
             disabled={currentIndex === 0}
-            className={`w-10 h-10 p-2 text-white bg-blue-500 rounded-full disabled:opacity-50 ${!(currentIndex === 0) && 'cursor-pointer'}`}
+            className={`w-10 h-10 p-2 text-white bg-[#2A86FF] rounded-full disabled:opacity-50 ${!(currentIndex === 0) && 'cursor-pointer'}`}
           >
             ←
           </button>
@@ -82,7 +82,7 @@ function ListaComunidades(){
           <button
             onClick={handleNext}
             disabled={currentIndex + visibleCount  >= comunidades.length}
-            className={`w-10 h-10 p-2 text-white bg-blue-500 rounded-full disabled:opacity-50 ${!(currentIndex + visibleCount  >= comunidades.length) && 'cursor-pointer'}`}
+            className={`w-10 h-10 p-2 text-white bg-[#2A86FF] rounded-full disabled:opacity-50 ${!(currentIndex + visibleCount  >= comunidades.length) && 'cursor-pointer'}`}
           >
             →
           </button>
