@@ -32,8 +32,9 @@ function AdminLayout() {
 
   const active = routeToIndex[module] ?? 0; //Si lo encuentra, lo asigna. Si no encuentra el modulo, el valor predeterminado será 0
 
+  //REALICÉ UN CAMBIO PARA EL QUE FONDO ESTÉ MEJOR
   return (
-    <div className="min-w-[100dvw] min-h-[100dvh] grid grid-cols-[350px_1fr] bg-gray-200">
+    <div className="min-w-[100dvw] min-h-[100dvh] grid grid-cols-[350px_1fr] bg-white"> 
       <Sidebar active={active} />
       <Outlet />
     </div>
