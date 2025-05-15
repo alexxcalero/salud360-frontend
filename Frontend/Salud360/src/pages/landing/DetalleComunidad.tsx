@@ -8,6 +8,8 @@ import Button from "@/components/Button";
 import ImageSectionRight from "@/components/landing/ImageSectionRight";
 import ImageSectionLeft from "@/components/landing/ImageSectionLeft";
 
+import Imagen from "@/assets/detalleComunidadX.png"
+
 function DetalleComunidad(){
 
     const [comunidad, setComunidad] = useState<any>({});
@@ -93,12 +95,12 @@ function DetalleComunidad(){
                         {servicios.map((servicio: any, i: number) => (
                             (i % 2 == 0 ? 
                                 <ImageSectionLeft
-                                    image="https://png.pngtree.com/png-clipart/20201224/ourmid/pngtree-panda-bamboo-bamboo-shoots-simple-strokes-cartoon-with-pictures-small-fresh-png-image_2625172.jpg"
+                                    image={Imagen}
                                     h1={servicio.nombre} 
                                     h3={servicio.descripcion} /> 
                             :
                                 <ImageSectionRight
-                                    image="https://png.pngtree.com/png-clipart/20201224/ourmid/pngtree-panda-bamboo-bamboo-shoots-simple-strokes-cartoon-with-pictures-small-fresh-png-image_2625172.jpg"
+                                    image={Imagen}
                                     h1={servicio.nombre} 
                                     h3={servicio.descripcion} />
                         

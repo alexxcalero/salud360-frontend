@@ -71,7 +71,7 @@ function ListaComunidades(){
 
                   <CardLanding key={comunidad.idComunidad}
                     id={comunidad.idComunidad}
-                    image="https://png.pngtree.com/png-clipart/20201224/ourmid/pngtree-panda-bamboo-bamboo-shoots-simple-strokes-cartoon-with-pictures-small-fresh-png-image_2625172.jpg"
+                    image={"https://png.pngtree.com/png-clipart/20201224/ourmid/pngtree-panda-bamboo-bamboo-shoots-simple-strokes-cartoon-with-pictures-small-fresh-png-image_2625172.jpg"}
                     title={comunidad.nombre} subtitle={comunidad.descripcion} />
 
                 </div>
