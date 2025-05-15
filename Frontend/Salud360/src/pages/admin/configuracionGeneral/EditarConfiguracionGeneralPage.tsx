@@ -7,106 +7,175 @@ function ConfiguracionGeneralPage(){
 export default ConfiguracionGeneralPage;
 */
 
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
+import axios from "axios";
 import InfoCard from "@/components/Infocard";
 import BlueBullet from "@/components/BlueBullet";
 import Button from "@/components/Button";
-import { useNavigate } from "react-router";
+import ModalError from "@/components/ModalAlert"; // Asegúrate que el path sea correcto
 
 function EditarConfiguracionGeneralPage() {
   const navigate = useNavigate();
+  const [reglas, setReglas] = useState<any>(null);
+
+  const [showModalError, setShowModalError] = useState(false);
+  const [mensajeError, setMensajeError] = useState("");
+
+  useEffect(() => {
+    axios.get("http://localhost:8080/api/reglas", {
+      auth: {
+        username: "admin",
+        password: "admin123",
+      },
+    })
+      .then((res) => setReglas(res.data[0])) // Asumiendo solo una fila
+      .catch((err) => console.error("Error al cargar reglas:", err));
+  }, []);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setReglas((prev: any) => ({
+      ...prev,
+      [name]: parseInt(value),
+    }));
+  };
+
+  /*PARA VALIDAR LOS CAMPOS MAYORES A CERO */
+  const validarCampos = () => {
+    if (
+      reglas.maxTiempoCancelacion <= 0 ||
+      reglas.maxDiasSuspension <= 0 ||
+      reglas.maxReservas <= 0 ||
+      reglas.maxCapacidad <= 0
+    ) {
+      setMensajeError("Todos los valores deben ser mayores a cero.");
+      setShowModalError(true);
+      return false;
+    }
+    return true;
+  };
+
+  /* */
+  const minutosAHoraString = (minutos: number) => {
+    const horas = String(Math.floor(minutos / 60)).padStart(2, "0");
+    const mins = String(minutos % 60).padStart(2, "0");
+    return `${horas}:${mins}`;
+  };
+  
+  
+  const handleChangeHora = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const [horas, minutos] = e.target.value.split(":").map(Number);
+    const totalMinutos = horas * 60 + minutos;
+    setReglas((prev: any) => ({
+      ...prev,
+      maxTiempoCancelacion: totalMinutos
+    }));
+  };
+
+  const handleActualizar = () => {
+    if (!validarCampos()) return;
+
+    axios
+      .put(`http://localhost:8080/api/reglas/${reglas.idRegla}`, reglas, {
+        auth: {
+          username: "admin",
+          password: "admin123",
+        },
+      })
+      .then(() => navigate("/admin/configuracion"))
+      .catch((err) => console.error("Error al actualizar reglas:", err));
+  };
 
   return (
     <div className="w-full px-6 py-4">
       <h1 className="use-title-large mb-4">Editar información de la empresa</h1>
 
-      <div className="space-y-5">
-        <InfoCard
-          title="Intervalo de notificación de sistema a usuarios"
-          text={
-            <div className="space-y-2">
+      {reglas && (
+        <div className="space-y-5">
+          <InfoCard
+            title="Plazo de tolerancia para cancelar"
+            text={
               <BlueBullet>
-                <div className="flex gap-2">
-                  <input type="number" defaultValue={1} className="p-2 border rounded w-20" />
-                  <select className="p-2 border rounded">
-                    <option>Días</option>
-                    <option>Meses</option>
-                  </select>
-                </div>
+                <input
+                  type="time"
+                  value={minutosAHoraString(reglas.maxTiempoCancelacion)}
+                  onChange={handleChangeHora}
+                  className="p-2 border rounded w-24"
+                /> minutos
               </BlueBullet>
-            </div>
-          }
-        />
+            }
+          />
+          <InfoCard
+            title="Plazo de tolerancia para suspender"
+            text={
+              <BlueBullet>
+                <input
+                  type="number"
+                  name="maxDiasSuspension"
+                  value={reglas.maxDiasSuspension}
+                  onChange={handleChange}
+                  className="p-2 border rounded w-24"
+                />{" "}
+                días
+              </BlueBullet>
+            }
+          />
+          <InfoCard
+            title="Máximas cantidad de reservas posibles por usuario"
+            text={
+              <BlueBullet>
+                <input
+                  type="number"
+                  name="maxReservas"
+                  value={reglas.maxReservas}
+                  onChange={handleChange}
+                  className="p-2 border rounded w-24"
+                />{" "}
+                reservas
+              </BlueBullet>
+            }
+          />
+          <InfoCard
+            title="Máxima capacidad de alumnos"
+            text={
+              <BlueBullet>
+                <input
+                  type="number"
+                  name="maxCapacidad"
+                  value={reglas.maxCapacidad}
+                  onChange={handleChange}
+                  className="p-2 border rounded w-24"
+                />{" "}
+                alumnos
+              </BlueBullet>
+            }
+          />
+        </div>
+      )}
 
-        <InfoCard
-          title="Plazo de tolerancia para cancelar"
-          text={
-            <BlueBullet>
-              <div className="flex gap-2">
-                <input type="number" defaultValue={2} className="p-2 border rounded w-20" />
-                <select className="p-2 border rounded">
-                  <option>Días</option>
-                </select>
-              </div>
-            </BlueBullet>
-          }
-        />
-
-        <InfoCard
-          title="Plazo de tolerancia para suspender"
-          text={
-            <BlueBullet>
-              <div className="flex gap-2">
-                <input type="number" defaultValue={10} className="p-2 border rounded w-20" />
-                <select className="p-2 border rounded">
-                  <option>Días</option>
-                </select>
-              </div>
-            </BlueBullet>
-          }
-        />
-
-        <InfoCard
-          title="Máximas cantidad de reservas posibles por usuario"
-          text={
-            <BlueBullet>
-              <input type="number" defaultValue={10} className="p-2 border rounded w-24" />
-            </BlueBullet>
-          }
-        />
-
-        <InfoCard
-          title="Máxima capacidad de alumnos"
-          text={
-            <BlueBullet>
-              <input type="number" defaultValue={30} className="p-2 border rounded w-24" />
-            </BlueBullet>
-          }
-        />
-
-        <InfoCard
-          title="Tiempo de tolerancia de ingreso"
-          text={
-            <BlueBullet>
-              <div className="flex gap-2">
-                <input type="number" defaultValue={30} className="p-2 border rounded w-20" />
-                <select className="p-2 border rounded">
-                  <option>minuto(s)</option>
-                </select>
-              </div>
-            </BlueBullet>
-          }
-        />
+      <div className="flex justify-end gap-4 pt-6">
+        <Button variant="outline" size="lg" onClick={() => navigate("/admin/configuracion")}>
+          Cancelar
+        </Button>
+        <Button variant="primary" size="lg" onClick={handleActualizar}>
+          Actualizar
+        </Button>
       </div>
 
-      {/* Botones de acción */}
-    <div className="flex justify-end gap-4 pt-6">
-      <Button variant="outline" size="lg" onClick={() => navigate("/admin/configuracion")}>
-        Cancelar
-      </Button>
-      <Button variant="primary" size="lg">
-        Actualizar
-      </Button>
-    </div>
+      {/* Modal de error */}
+      {showModalError && (
+        <>
+          <div className="fixed inset-0 bg-black/50 z-40" />
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <ModalError
+              detalle={mensajeError}
+              onConfirm={() => setShowModalError(false)}
+              onCancel={() => setShowModalError(false)}
+            />
+          </div>
+        </>
+      )}
     </div>
   );
 }
