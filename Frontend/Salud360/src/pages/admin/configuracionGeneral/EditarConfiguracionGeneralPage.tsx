@@ -48,7 +48,7 @@ function EditarConfiguracionGeneralPage() {
     return true;
   };
 
-  /* */
+  /*PARA SETEAR BONITO EL TIEMPO DE CANCELACIÓN DE CLASES*/
   const minutosAHoraString = (minutos: number) => {
     const horas = String(Math.floor(minutos / 60)).padStart(2, "0");
     const mins = String(minutos % 60).padStart(2, "0");
