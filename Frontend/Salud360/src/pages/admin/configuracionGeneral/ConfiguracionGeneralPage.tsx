@@ -1,11 +1,3 @@
-/*import UnderConstruction from "@/pages/UnderConstruction";
-
-function ConfiguracionGeneralPage(){
-    return <UnderConstruction/>;
-}
-
-export default ConfiguracionGeneralPage;
-*/
 
 import { useNavigate } from "react-router";
 import { useState, useEffect } from "react";
@@ -23,12 +15,16 @@ function ConfiguracionGeneralPage() {
 
   /* PARA PRESENTACIÓN DEL TIEMPO DE CANCELACIÓN */
   const minutosAHoraLegible = (minutos: number) => {
-  const horas = Math.floor(minutos / 60);
-  const mins = minutos % 60;
+    const horas = Math.floor(minutos / 60);
+    const mins = minutos % 60;
 
-  if (horas === 0) return `${mins} minutos`;
-  if (mins === 0) return `${horas} ${horas === 1 ? "hora" : "horas"}`;
-  return `${horas} ${horas === 1 ? "hora" : "horas"} y ${mins} ${mins === 1 ? "minuto" : "minutos"}`;
+    if (horas === 0) return `${mins} ${mins === 1 ? "minuto" : "minutos"}`;
+    if (mins === 0) return `${horas} ${horas === 1 ? "hora" : "horas"}`;
+    return `${horas} ${horas === 1 ? "hora" : "horas"} y ${mins} ${mins === 1 ? "minuto" : "minutos"}`;
+  };
+
+  const estandar = (cantidad: number, singular: string, plural: string) => {
+    return `${cantidad} ${cantidad === 1 ? singular : plural}`;
   };
 
 
@@ -62,15 +58,15 @@ function ConfiguracionGeneralPage() {
         />
         <InfoCard
           title="Plazo de tolerancia para suspender"
-          text={<BlueBullet>{reglas ? `${reglas.maxDiasSuspension} dias` : "Cargando..."}</BlueBullet>}
+          text={<BlueBullet>{reglas ? estandar(reglas.maxDiasSuspension, "día", "días") : "Cargando..."}</BlueBullet>}
         />
         <InfoCard
           title="Máximas cantidad de reservas posibles por usuario"
-          text={<BlueBullet>{reglas ? `${reglas.maxReservas} reservas`: "Cargando..."}</BlueBullet>}
+          text={<BlueBullet>{reglas ? estandar(reglas.maxReservas, "reserva", "reservas") : "Cargando..."}</BlueBullet>}
         />
         <InfoCard
           title="Máxima capacidad de alumnos"
-          text={<BlueBullet>{reglas ? `${reglas.maxCapacidad} alumnos`: "Cargando..."}</BlueBullet>}
+          text={<BlueBullet>{reglas ? estandar(reglas.maxCapacidad, "alumno", "alumnos") : "Cargando..."}</BlueBullet>}
         />
       </div>
     </div>
