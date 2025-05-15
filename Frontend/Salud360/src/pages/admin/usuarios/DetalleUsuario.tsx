@@ -34,6 +34,7 @@ function DetalleUsuario(){
     const {
         nombres, setNombres,
         apellidos, setApellidos,
+        tipoDoc, setTipoDoc,
         DNI, setDNI,
         telefono, setTelefono,
         rol, setRol,
@@ -69,11 +70,11 @@ function DetalleUsuario(){
     }
 
     return(
-        <div className="max-w-3xl w-full mx-auto p-8 my-10">
             <UsuariosForms
                 title="Detalles del usuario"
                 nombres={nombres}
                 apellidos={apellidos}
+                tipoDoc={tipoDoc}
                 DNI={DNI}
                 telefono={telefono}
                 correo={correo}
@@ -84,8 +85,9 @@ function DetalleUsuario(){
                 buttonText="Crear Usuario"
                 readOnly={true}
             />
-        </div>
     );
 }
 
 export default DetalleUsuario;
+
+//Ver CrearUsuario
