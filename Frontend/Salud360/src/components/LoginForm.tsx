@@ -1,11 +1,17 @@
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
 import { useState } from "react"
+import { Mail, Lock, ShieldCheck} from "lucide-react"
+import { Button } from "@/components/ui/button"
+import InputIconLabelEdit from "@/components/InputIconLabelEdit"
+import { useGoogleLogin } from "@react-oauth/google"
+import { Link } from "react-router"
+import { jwtDecode } from "jwt-decode"
+import { useNavigate } from "react-router-dom"
+import { login } from "@/services/authService"
 
 export default function LoginForm() {
   const [formData, setFormData] = useState({
     correo: "",
-    contraseña: "",
+    contraseña: ""
   })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -13,33 +19,77 @@ export default function LoginForm() {
     setFormData(prev => ({ ...prev, [name]: value }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     console.log("Datos enviados:", formData)
     // Aquí puedes hacer una petición con Axios al backend
+
+    try {
+      const response = await login(formData.correo, formData.contraseña);
+
+      // Guardar resultado si es token
+      localStorage.setItem("authToken", response);
+
+      // Redirigir al perfil del usuario
+      navigate("/usuario"); //pagina de inicio del usuario
+    } catch (error: any) {
+      if (error.response && error.response.status === 401) {
+        alert("Correo o contraseña incorrectos.");
+      } else {
+        console.error("Error al iniciar sesión:", error);
+        alert("Ocurrió un error inesperado.");
+      }
+    }
+
   }
 
+  //Uso de Google OAuth
+  const loginGoogle = useGoogleLogin({
+    onSuccess: (tokenResponse) => {
+      console.log("Login con Google OK:", tokenResponse)
+      // Aquí debemos jwtDecode para extraer el token que envia google     
+    },
+    onError: () => {
+      console.error("Error al iniciar sesión con Google")
+    }
+  })
+  
+  const navigate = useNavigate()
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <Input
-        name="correo"
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <InputIconLabelEdit
+        icon={<Mail className="w-5 h-5" />}
         type="email"
-        placeholder="Correo electrónico"
+        placeholder="fabian@pucp.edu.pe"
+        htmlFor="correo"
+        label="Correo electrónico *"
         value={formData.correo}
         onChange={handleChange}
-        required
       />
-      <Input
-        name="contraseña"
+      <InputIconLabelEdit
+        icon={<Lock className="w-5 h-5" />}
         type="password"
-        placeholder="Contraseña"
+        placeholder="********"
+        htmlFor="contraseña"
+        label="Contraseña *"
         value={formData.contraseña}
         onChange={handleChange}
-        required
       />
-      <Button type="submit" className="w-full">
+      <Button type="submit" className="w-full mt-4" onClick={() => navigate("/")}>
         Iniciar Sesión
       </Button>
+      <div className="text-center mt-4">
+        <p className="text-sm text-gray-500">¿Prefieres usar tu cuenta de Google?</p>
+        <button
+          type="button"
+          onClick={() => loginGoogle()}
+          className="w-full mt-2 flex items-center justify-center gap-2 border border-gray-300 rounded-md py-2 hover:bg-gray-100 transition"
+        >
+          <ShieldCheck className="w-5 h-5 text-blue-500" />
+          <span className="text-sm font-medium text-gray-700">Iniciar Sesión con Google</span>
+        </button>
+      </div>
     </form>
   )
 }
