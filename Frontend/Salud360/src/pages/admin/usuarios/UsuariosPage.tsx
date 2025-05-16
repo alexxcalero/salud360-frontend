@@ -153,7 +153,7 @@ function UsuariosPage() {
         <>
           <div className="fixed inset-0 bg-black/60 z-40" />
           <div className="fixed inset-0 z-50 flex items-center justify-center">
-            <ModalExito modulo="Usuario" detalle="El usuario fue eliminado correctamente" onConfirm={() => {
+            <ModalExito modulo="¡Usuario eliminado correctamente!" detalle="El usuario fue eliminado correctamente" onConfirm={() => {
               setShowModalExito(false);
               fetchUsuarios();
             }}/>

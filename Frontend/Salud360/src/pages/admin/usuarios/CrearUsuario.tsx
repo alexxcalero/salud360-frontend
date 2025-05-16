@@ -63,8 +63,13 @@ function CrearUsuario(){
             );
 
             console.log("Usuario creado:", response.data);
-            alert("Usuario creado exitosamente");
-            navigate("/admin/usuarios");
+            //alert("Usuario creado exitosamente");
+            console.log("A punto de navegar a successCrear")
+            navigate("/admin/usuarios/successCrear", {
+                state: { created: true }
+            });
+
+            //console.log("DESDE USUARIO SUCCESS, EL VALOR DE state.created ES:", state.created)
 
         }
         catch (err){

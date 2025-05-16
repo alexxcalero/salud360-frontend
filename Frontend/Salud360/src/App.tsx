@@ -15,6 +15,8 @@ import ButtonIcon from "./components/ButtonIcon";
 import ModalError from "./components/ModalError";
 import ModalExito from "./components/ModalExito";
 
+import { Input as ShadInput} from "@/components/ui/input"
+
 function App() {
   const optionsSelect = [
     { value: "Hombre", content: "Hombre" },
@@ -30,6 +32,11 @@ function App() {
           Proyecto React.js (o .ts XD) + TailwindCSS + Shadcn configurado!!!
           Cortesía de Fabián(U)
         </h1>
+
+        <p>disabled:</p>
+        <ShadInput disabled={true}></ShadInput>
+        <p>readOnly:</p>
+        <ShadInput readOnly={true}></ShadInput>
 
         <div className="space-y-10">
           <div>

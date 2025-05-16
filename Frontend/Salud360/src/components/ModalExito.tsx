@@ -17,7 +17,7 @@ function ModalExito({modulo="", detalle="", onConfirm}: Props) {
         </div>
 
         {/* Título */}
-        <h2 className="text-2xl font-bold mb-2">¡{modulo} eliminado correctamente!</h2>
+        <h2 className="text-2xl font-bold mb-2">{modulo}</h2>
 
         {/* Subtítulo */}
         <p className="mb-6">{detalle}</p>
