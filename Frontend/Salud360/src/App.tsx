@@ -1,11 +1,6 @@
 import "./App.css";
 import { NavLink } from "react-router-dom"
 import { Search, Phone, Mail } from "lucide-react"
-import { useState } from "react"
-
-//Registro y Login
-import LandingNavbar from "./components/landing/LandingNavbar";
-import RegisterForm from "./components/RegisterForm";
 
 import Button from "./components/Button";
 import Input from "./components/Input";
@@ -21,7 +16,6 @@ import ModalError from "./components/ModalError";
 import ModalExito from "./components/ModalExito";
 
 function App() {
-  const [mostrarRegistro, setMostrarRegistro] = useState(false)
   const optionsSelect = [
     { value: "Hombre", content: "Hombre" },
     { value: "Mujer", content: "Mujer" },
@@ -151,29 +145,6 @@ function App() {
           <ModalExito modulo="Usuario" detalle="El usuario fue eliminado correctamente" onConfirm={() => {
             }}/>
         </div>
-      </div> 
-      <LandingNavbar onRegisterClick={() => setMostrarRegistro(true)} />
-
-      <div className="pt-32">
-        {mostrarRegistro ? (
-          <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-            <div className="max-w-2xl w-full bg-white shadow-md rounded-lg p-8">
-              <h1 className="text-3xl font-bold mb-6 text-center">REGISTRO DE USUARIO</h1>
-              <RegisterForm />
-              <div className="text-center mt-4">
-                <Button variant="outline" onClick={() => setMostrarRegistro(false)}>
-                  Volver al inicio
-                </Button>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div className="text-center mt-16">
-            {/* Página de inicio: imagen, contenido, etc */}
-            <img src="https://universitario.pe/media/images/banners/PORTDA_WEB.jpg" alt="Portada" />
-            <img src="https://i.imgur.com/fNEViVT.png" alt="En construcción" className="mx-auto mt-8" />
-          </div>
-        )}
       </div>         
     </>
   );

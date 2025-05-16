@@ -30,6 +30,8 @@ import Home from "./pages/landing/Home";
 import Inicio from "./pages/usuario/Inicio";
 import CrearMedico from "./pages/admin/personalMedico/CrearMedico";
 import App from "./App";
+import RegisterPage from "./pages/usuario/Registro/RegisterPage";
+import LoginPage from "./pages/usuario/Login/LoginPage";
 
 createRoot(document.getElementById("root")!).render(
 
@@ -42,6 +44,9 @@ createRoot(document.getElementById("root")!).render(
         {/*1. Sección del Landing Page */}
         <Route path="/" element={<LandingLayout />}>
           <Route index element={<Home/>}/>
+
+          <Route path="RegistroUsuario" element={<RegisterPage/>}></Route>
+          <Route path="IniciarSesionUsuario" element={<LoginPage/>}></Route>
         </Route>
 
         
