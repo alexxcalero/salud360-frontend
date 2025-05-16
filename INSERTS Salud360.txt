@@ -142,7 +142,84 @@ INSERT INTO ingesoft.servicio (
     NULL,
     'Consulta Médica General',
     'Medicina'
+),
+(
+    true,
+    'Sesiones guiadas de entrenamiento físico con equipos y pesas.',
+    CURRENT_TIMESTAMP,
+    NULL,
+    'Gimnasio Funcional',
+    'Gimnasio'
+),
+(
+    true,
+    'Clases dirigidas de yoga enfocadas en flexibilidad, equilibrio y respiración.',
+    CURRENT_TIMESTAMP,
+    NULL,
+    'Yoga Integral',
+    'Yoga'
+),
+(
+    true,
+    'Rutinas de estiramiento y movilidad para prevenir lesiones y mejorar postura.',
+    CURRENT_TIMESTAMP,
+    NULL,
+    'Estiramiento y Movilidad',
+    'Entrenamiento'
+),
+(
+    true,
+    'Sesiones de meditación y mindfulness para manejo del estrés y bienestar emocional.',
+    CURRENT_TIMESTAMP,
+    NULL,
+    'Meditación Guiada',
+    'Bienestar'
 );
+
+-- Comunidad 1: Psicología
+INSERT INTO ingesoft.servicio_comunidad (servicios_id_servicio, comunidad_id_comunidad) VALUES
+(2, 1), -- Terapia Psicológica
+(3, 1), -- Consulta Médica General
+(4, 1), -- Gimnasio Funcional
+(7, 1), -- Meditación Guiada
+
+-- Comunidad 2: Programación
+(1, 2), -- Consulta Nutricional
+(3, 2), -- Consulta Médica General
+(4, 2), -- Gimnasio Funcional
+(6, 2), -- Estiramiento y Movilidad
+(7, 2), -- Meditación Guiada
+
+-- Comunidad 3: Medicina
+(1, 3), -- Consulta Nutricional
+(3, 3), -- Consulta Médica General
+(2, 3), -- Terapia Psicológica
+(6, 3), -- Estiramiento y Movilidad
+(5, 3), -- Yoga Integral
+
+-- Comunidad 4: Derecho
+(2, 4),
+(4, 4),
+(5, 4),
+(7, 4);
+
+-- Comunidad 5: Emprendimiento
+INSERT INTO ingesoft.servicio_comunidad (servicios_id_servicio, comunidad_id_comunidad) VALUES
+(1, 5),
+(2, 5),
+(3, 5),
+(5, 5),
+(6, 5);
+
+-- Comunidad 6: Inteligencia Artificial
+INSERT INTO ingesoft.servicio_comunidad (servicios_id_servicio, comunidad_id_comunidad) VALUES
+(3, 6),
+(4, 6),
+(5, 6),
+(6, 6),
+(7, 6);
+
+
 
 INSERT INTO ingesoft.local (
     activo, apellidos_contacto, direccion, fecha_creacion,

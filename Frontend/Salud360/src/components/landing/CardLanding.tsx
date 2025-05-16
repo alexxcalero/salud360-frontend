@@ -7,9 +7,10 @@ interface Props{
     image: string;
     title: string;
     subtitle: string;
+    showButton?: boolean;
 }
 
-function CardLanding({id, image, title, subtitle}: Props){
+function CardLanding({id, image, title, subtitle, showButton=true}: Props){
 
     const navigate = useNavigate();
 
@@ -22,7 +23,7 @@ function CardLanding({id, image, title, subtitle}: Props){
                 <p className="font-bold">{title}</p>
                 <p>{subtitle}</p>
                 <div className="inline-block w-32">
-                    <Button size="lg" className="w-full" onClick={() => navigate(`/comunidades/detalle/${id}`)}>Explorar más</Button>
+                    {showButton && <Button size="lg" className="w-full" onClick={() => navigate(`/comunidades/detalle/${id}`)}>Explorar más</Button>}
                 </div>
             </div>
             
