@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Search, Filter, UserPlus, Info, Pencil, Trash2 } from "lucide-react";
 
 import InputIcon from "@/components/InputIcon";
@@ -37,8 +37,8 @@ function ServiciosPage() {
   const columns = [
     { label: <input type="checkbox" checked={selectAll} onChange={handleSelectAll} />, className: "w-10" },
     { label: "ID", className: "w-16" },
-    { label: "Nombre", className: "w-1/6" },
-    { label: "Descripción", className: "w-1/3" },
+    { label: "Nombre", className: "w-1/6 text-left" },
+    { label: "Descripción", className: "w-1/3 text-left" },
     { label: "Tipo", className: "w-1/6" },
     { label: "Status", className: "w-1/6" },
     { label: "Acciones", className: "w-24 text-center" },
@@ -49,9 +49,9 @@ function ServiciosPage() {
       content: <input type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
       className: "w-10",
     },
-    { content: servicio.id, className: "w-16" },
-    { content: servicio.nombre, className: "w-1/6" },
-    { content: servicio.descripcion, className: "w-1/3" },
+    { content: servicio.id, className: "w-16 " },
+    { content: servicio.nombre, className: "w-1/6 text-left" },
+    { content: servicio.descripcion, className: "w-1/3 text-left" },
     {
       content: (
         <span className="text-xs font-medium text-blue-500">{servicio.tipo}</span>
@@ -60,7 +60,11 @@ function ServiciosPage() {
     },
     {
       content: (
-        <span className="px-2 py-1 rounded text-xs font-medium bg-green-100 text-green-800">
+        <span
+          className={`px-2 py-1 rounded text-xs font-medium 
+            ${servicio.estado === "Activo" 
+              ? "bg-green-600 text-green-50" : "bg-red-600 text-red-50"}`}
+        >
           {servicio.estado}
         </span>
       ),
@@ -85,7 +89,7 @@ function ServiciosPage() {
         <div className="col-span-4">
           <InputIcon
             icon={<Search className="w-5 h-5" />}
-            placeholder="Buscar monos"
+            placeholder="Buscar Servicio"
             type="search"
           />
         </div>
@@ -97,9 +101,6 @@ function ServiciosPage() {
           <ButtonIcon icon={<Filter className="w-6 h-6" />} size="lg" variant="primary">
             Aplicar filtros
           </ButtonIcon>
-          <span className="text-sm text-muted-foreground whitespace-nowrap">
-            Aplicando 5 filtro(s)
-          </span>
         </div>
 
         <div className="col-span-2 flex justify-end">

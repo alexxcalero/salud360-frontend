@@ -82,7 +82,7 @@ function UsuariosPage() {
     {
       content: (
         <span className={`px-2 py-1 rounded text-xs font-medium ${
-          usuario.activo ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+          usuario.activo ? "bg-green-600 text-green-50" : "bg-red-600 text-red-50"
         }`}>
           {usuario.activo ? "Activo" : "Inactivo"}
         </span>
@@ -117,7 +117,7 @@ function UsuariosPage() {
     <div className="w-full px-6 py-4 overflow-auto">
       <div className="grid grid-cols-12 gap-4 items-center mb-4">
         <div className="col-span-4">
-          <InputIcon icon={<Search className="w-5 h-5" />} placeholder="Buscar médicos" type="search" />
+          <InputIcon icon={<Search className="w-5 h-5" />} placeholder="Buscar usuarios" type="search" />
         </div>
         <div className="col-span-6 flex gap-2">
           <ButtonIcon icon={<Search className="w-6 h-6" />} size="lg" variant="primary">Buscar</ButtonIcon>

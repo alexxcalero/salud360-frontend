@@ -9,8 +9,14 @@ import Example from "@/pages/Example";
 import ComunidadPage from "./pages/admin/comunidad/ComunidadPage";
 import Test from "@/pages/admin/test";
 import AdminLayout from "@/layouts/AdminLayout";
+//USUARIOS
 import UsuariosPage from "./pages/admin/usuarios/UsuariosPage";
 import CrearUsuario from "./pages/admin/usuarios/CrearUsuario";
+//COMUNIDADES
+import CrearComunidad from "./pages/admin/comunidad/CrearComunidad"
+import EditarComunidad from "./pages/admin/comunidad/EditarComunidad"
+import DetalleComunidad from "./pages/admin/comunidad/DetalleComunidad"
+//SERVICIOS
 import ServiciosPage from "./pages/admin/servicios/ServiciosPage";
 import DashboardPage from "./pages/admin/dashboard/DashboardPage";
 import RolesPage from "./pages/admin/roles/RolesPage";
@@ -30,8 +36,14 @@ import Home from "./pages/landing/Home";
 import Inicio from "./pages/usuario/Inicio";
 import CrearMedico from "./pages/admin/personalMedico/CrearMedico";
 import App from "./App";
+
 import RegisterPage from "./pages/usuario/Registro/RegisterPage";
 import LoginPage from "./pages/usuario/Login/LoginPage";
+import SobreNosotros from "./pages/landing/SobreNosotros";
+import Comunidades from "./pages/landing/Comunidades";
+import DetalleComunidadLanding from "./pages/landing/DetalleComunidad";
+import EditarConfiguracionGeneralPage from "./pages/admin/configuracionGeneral/EditarConfiguracionGeneralPage";
+
 
 createRoot(document.getElementById("root")!).render(
 
@@ -45,8 +57,16 @@ createRoot(document.getElementById("root")!).render(
         <Route path="/" element={<LandingLayout />}>
           <Route index element={<Home/>}/>
 
+
           <Route path="RegistroUsuario" element={<RegisterPage/>}></Route>
           <Route path="IniciarSesionUsuario" element={<LoginPage/>}></Route>
+
+          <Route path="comunidades">
+            <Route index element={<Comunidades/>}/>
+            <Route path="detalle/:id" element={<DetalleComunidadLanding/>}/>
+          </Route>
+          <Route path="sobreNosotros" element={<SobreNosotros />} />
+
         </Route>
 
         
@@ -69,9 +89,9 @@ createRoot(document.getElementById("root")!).render(
           </Route>
 
           <Route path="configuracion">
-            <Route index element={<ConfiguracionGeneralPage />} />
-            <Route path="crear" element={<CrearUsuario />} />
-          </Route>
+              <Route index element={<ConfiguracionGeneralPage />} />
+              <Route path="editar" element={<EditarConfiguracionGeneralPage />} />
+            </Route>
 
           <Route path="roles">
             <Route index element={<RolesPage />} />
@@ -81,11 +101,15 @@ createRoot(document.getElementById("root")!).render(
           <Route path="membresias">
             <Route index element={<MembresiasPage />} />
             <Route path="crear" element={<CrearUsuario />} />
+            <Route path="detalle/:id" element={<DetalleComunidadLanding />} />
+            <Route path="editar/:id" element={<EditarComunidad />} />
           </Route>
 
           <Route path="comunidades">
             <Route index element={<ComunidadPage />} />
-            <Route path="crear" element={<CrearUsuario />} />
+            <Route path="crear" element={<CrearComunidad />} />
+            <Route path="editar/:id" element={<EditarComunidad />} />
+            <Route path="detalle/:id" element={<DetalleComunidad />} />
           </Route>
 
           <Route path="servicios">

@@ -11,6 +11,7 @@ function EditarUsuario(){
     const {
         nombres, setNombres,
         apellidos, setApellidos,
+        tipoDoc, setTipoDoc,
         DNI, setDNI,
         telefono, setTelefono,
         rol, setRol,
@@ -89,13 +90,14 @@ function EditarUsuario(){
     
 
     return(
-        <div className="max-w-3xl w-full mx-auto p-8 my-10">
             <UsuariosForms
                 title="Editar usuario"
                 nombres={nombres}
                 setNombres={setNombres}
                 apellidos={apellidos}
                 setApellidos={setApellidos}
+                tipoDoc={tipoDoc}
+                setTipoDoc={setTipoDoc}
                 DNI={DNI}
                 setDNI={setDNI}
                 telefono={telefono}
@@ -114,8 +116,9 @@ function EditarUsuario(){
                 buttonText="Guardar"
                 readOnly={false}
             />
-        </div>
     );
 }
 
 export default EditarUsuario;
+
+//Ver CrearUsuario

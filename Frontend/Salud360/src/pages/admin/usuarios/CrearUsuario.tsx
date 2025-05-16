@@ -11,6 +11,7 @@ function CrearUsuario(){
     const {
         nombres, setNombres,
         apellidos, setApellidos,
+        tipoDoc, setTipoDoc,
         DNI, setDNI,
         telefono, setTelefono,
         rol, setRol,
@@ -25,6 +26,8 @@ function CrearUsuario(){
             const numeroDocumento = DNI;
             const sexo = genero;
 
+            console.log("Rol: ", rol, "Genero: ", genero, "TipoDoc:", tipoDoc)
+
             console.log("Nombres:", nombres, " Apellidos:", apellidos, " numeroDocumento:", numeroDocumento, " Telefono:", telefono,
                  " correo:", correo, " sexo:", sexo, " contraseña:", contrasenha, " fechaNacimiento:", fechaNacimiento);
 
@@ -32,17 +35,20 @@ function CrearUsuario(){
                 {
                     nombres,
                     apellidos,
-                    numeroDocumento,
-                    telefono,
+                    numeroDocumento: DNI,
                     correo,
+                    contrasenha,
+                    telefono,
                     sexo,
                     fechaNacimiento,
-                    contrasenha,
+                    notiCorreo: true,
+                    notiSMS: true,
+                    notiWhatsApp: true,
                     tipoDocumento: {
-                        idTipoDocumento: 1
+                        idTipoDocumento: tipoDoc
                     },
                     rol: {
-                        idRol: 2
+                        idRol: rol
                     },
                 },
                 {  
@@ -70,7 +76,6 @@ function CrearUsuario(){
     }
 
     return(
-        <div className="max-w-3xl w-full mx-auto p-8 my-10">
             
             <UsuariosForms
                 title="Registrar Usuario"
@@ -79,6 +84,8 @@ function CrearUsuario(){
                 setNombres={setNombres}
                 apellidos={apellidos}
                 setApellidos={setApellidos}
+                tipoDoc={tipoDoc}
+                setTipoDoc={setTipoDoc}
                 DNI={DNI}
                 setDNI={setDNI}
                 telefono={telefono}
@@ -97,8 +104,6 @@ function CrearUsuario(){
                 buttonText="Crear Usuario"
                 readOnly={false}
             />
-
-        </div>
     );
     
 }
@@ -134,3 +139,7 @@ export default CrearUsuario;
             </div>
 
 */
+
+
+//Esto es lo que envuelve a lo que está arriba
+//<div className="max-w-3xl w-full mx-auto p-8 my-10"></div>
