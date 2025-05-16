@@ -331,21 +331,25 @@ CURRENT_TIMESTAMP, NULL, 'icono-vip-anual.png',
 INSERT INTO ingesoft.local (
     activo, apellidos_contacto, direccion, fecha_creacion,
     fecha_desactivacion, nombre, nombres_contacto, telefono,
-    telefono_contacto, tipo_servicio, id_servicio
+    telefono_contacto, tipo_servicio, id_servicio, descripcion
 ) VALUES 
 (
     true, 'Cáceres Mejía', 'Av. La Marina 785, San Miguel',
     CURRENT_TIMESTAMP, NULL, 'Local Nutrición La Marina',
-    'Lucía Fernanda', '917111222', '912222333', 'Nutrición', 1
+    'Lucía Fernanda', '917111222', '912222333', 'Nutrición', 1,
+    'Centro especializado en planes de alimentación y evaluación nutricional para todas las edades.'
 ),
 (
     true, 'Rojas Villanueva', 'Calle Los Álamos 234, Miraflores',
     CURRENT_TIMESTAMP, NULL, 'Centro Psicológico Miraflores',
-    'Juan Andrés', '918333444', '913444555', 'Psicología', 2
+    'Juan Andrés', '918333444', '913444555', 'Psicología', 2,
+    'Atención psicológica individual, de pareja y talleres de salud mental en un ambiente cálido y confidencial.'
 ),
 (
     true, 'Montoya Salas', 'Av. Túpac Amaru 998, Comas',
     CURRENT_TIMESTAMP, NULL, 'Policlínico Popular Comas',
-    'Daniela Paola', '919555666', '914666777', 'Medicina', 3
+    'Daniela Paola', '919555666', '914666777', 'Medicina', 3,
+    'Policlínico accesible con servicios médicos generales, laboratorio y atención primaria de calidad.'
 );
+
 
