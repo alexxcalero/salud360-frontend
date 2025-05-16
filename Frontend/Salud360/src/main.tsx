@@ -36,12 +36,16 @@ import Home from "./pages/landing/Home";
 import Inicio from "./pages/usuario/Inicio";
 import CrearMedico from "./pages/admin/personalMedico/CrearMedico";
 import App from "./App";
+
+import RegisterPage from "./pages/usuario/Registro/RegisterPage";
+import LoginPage from "./pages/usuario/Login/LoginPage";
 import SobreNosotros from "./pages/landing/SobreNosotros";
 import Comunidades from "./pages/landing/Comunidades";
 import DetalleComunidadLanding from "./pages/landing/DetalleComunidad";
 import EditarConfiguracionGeneralPage from "./pages/admin/configuracionGeneral/EditarConfiguracionGeneralPage";
 import EditarMedico from "./pages/admin/personalMedico/EditarMedico";
 import DetalleMedico from "./pages/admin/personalMedico/DetalleMedico";
+
 
 createRoot(document.getElementById("root")!).render(
 
@@ -54,11 +58,17 @@ createRoot(document.getElementById("root")!).render(
         {/*1. Sección del Landing Page */}
         <Route path="/" element={<LandingLayout />}>
           <Route index element={<Home/>}/>
+
+
+          <Route path="RegistroUsuario" element={<RegisterPage/>}></Route>
+          <Route path="IniciarSesionUsuario" element={<LoginPage/>}></Route>
+
           <Route path="comunidades">
             <Route index element={<Comunidades/>}/>
             <Route path="detalle/:id" element={<DetalleComunidadLanding/>}/>
           </Route>
           <Route path="sobreNosotros" element={<SobreNosotros />} />
+
         </Route>
 
         

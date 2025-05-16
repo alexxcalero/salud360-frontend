@@ -1,6 +1,6 @@
 import UnderConstruction from "@/pages/UnderConstruction";
 import logo from "@/assets/logo.png";
-import { Link } from "react-router";
+import { Link, NavLink } from "react-router";
 import Button from "../Button";
 
 function LandingNavbar(){
@@ -19,8 +19,9 @@ function LandingNavbar(){
                         </ul>
                     </div>
                     <div className="flex justify-end col-span-3 px-8 gap-6">
-                        <Button variant="white">Registrate</Button>
-                        <Button variant="white">Iniciar Sesion</Button>
+                        <NavLink to="/RegistroUsuario"> <Button variant="white">Registrate</Button> </NavLink>
+                        <NavLink to="/IniciarSesionUsuario"> <Button variant="white">Iniciar Sesion</Button> </NavLink>
+
                     </div>
                 </div>            
             </nav>
