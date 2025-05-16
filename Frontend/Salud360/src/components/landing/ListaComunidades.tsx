@@ -1,6 +1,8 @@
 import  { useEffect, useState} from "react";
 import axios from "axios";
 import CardLanding from "./CardLanding";
+import { Carrot, ChartArea } from "lucide-react";
+import CarrouselLanding from "./CarrouselLanding";
 
 function ListaComunidades(){
     
@@ -29,11 +31,9 @@ function ListaComunidades(){
         fetchComunidades();
     }, []);
 
-    //xd
-
     const handleNext = () => {
 
-      if (currentIndex + visibleCount < comunidades.length){
+      if (currentIndex + visibleCount < totalSize){
         setCurrentIndex(currentIndex + 1);
       }
 
@@ -45,52 +45,20 @@ function ListaComunidades(){
       }
     };
 
-
+    const totalSize = comunidades.length
+    console.log("TOTAL SIZE:", totalSize);
 
     return (
-
-      <section className="flex flex-row gap-4 justify-center items-center">
-          
-          <button
-            onClick={handlePrev}
-            disabled={currentIndex === 0}
-            className={`w-10 h-10 p-2 text-white bg-[#2A86FF] rounded-full disabled:opacity-50 ${!(currentIndex === 0) && 'cursor-pointer'}`}
-          >
-            ←
-          </button>
-
-          <div className="relative w-[1088px] overflow-hidden">
-            <div className="flex transition-transform duration-500 ease-in-out" style={{
-              transform: `translateX(-${currentIndex * (cardWidth + xMargin)}px)`,
-              width: `${comunidades.length * (cardWidth + xMargin)}px`
-            }}>
-              {comunidades.map((comunidad: any, i) => (
-                <div key={i}
-                  className="w-[320px] shrink-0 mx-4 py-8"
-                  style={{ width: `${cardWidth}px` }}>
-
-                  <CardLanding key={comunidad.idComunidad}
-                    id={comunidad.idComunidad}
-                    image="https://png.pngtree.com/png-clipart/20201224/ourmid/pngtree-panda-bamboo-bamboo-shoots-simple-strokes-cartoon-with-pictures-small-fresh-png-image_2625172.jpg"
-                    title={comunidad.nombre} subtitle={comunidad.descripcion} />
-
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <button
-            onClick={handleNext}
-            disabled={currentIndex + visibleCount  >= comunidades.length}
-            className={`w-10 h-10 p-2 text-white bg-[#2A86FF] rounded-full disabled:opacity-50 ${!(currentIndex + visibleCount  >= comunidades.length) && 'cursor-pointer'}`}
-          >
-            →
-          </button>
-              
-
-
-      </section>
-        
+        <CarrouselLanding 
+          module={comunidades} 
+          currentIndex={currentIndex}
+          cardWidth={cardWidth}
+          xMargin={xMargin}
+          visibleCount={visibleCount}
+          totalSize={totalSize}
+          handleNext={handleNext}
+          handlePrev={handlePrev}
+          />
     );
 }
 
@@ -118,3 +86,46 @@ export default ListaComunidades;
           <br />
   
   */}
+
+
+  {/*<section className="flex flex-row gap-4 justify-center items-center">
+          
+          <button
+            onClick={handlePrev}
+            disabled={currentIndex === 0}
+            className={`w-10 h-10 p-2 text-white bg-[#2A86FF] rounded-full disabled:opacity-50 ${!(currentIndex === 0) && 'cursor-pointer'}`}
+          >
+            ←
+          </button>
+
+          <div className="relative w-[1088px] overflow-hidden">
+            <div className="flex transition-transform duration-500 ease-in-out" style={{
+              transform: `translateX(-${currentIndex * (cardWidth + xMargin)}px)`,
+              width: `${totalSize * (cardWidth + xMargin)}px`
+            }}>
+              {comunidades.map((comunidad: any, i) => (
+                <div key={i}
+                  className="w-[320px] shrink-0 mx-4 py-8"
+                  style={{ width: `${cardWidth}px` }}>
+
+                  <CardLanding key={comunidad.idComunidad}
+                    id={comunidad.idComunidad}
+                    image={"https://png.pngtree.com/png-clipart/20201224/ourmid/pngtree-panda-bamboo-bamboo-shoots-simple-strokes-cartoon-with-pictures-small-fresh-png-image_2625172.jpg"}
+                    title={comunidad.nombre} subtitle={comunidad.descripcion} />
+
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <button
+            onClick={handleNext}
+            disabled={currentIndex + visibleCount  >= comunidades.length}
+            className={`w-10 h-10 p-2 text-white bg-[#2A86FF] rounded-full disabled:opacity-50 ${!(currentIndex + visibleCount  >= comunidades.length) && 'cursor-pointer'}`}
+          >
+            →
+          </button>
+              
+
+
+      </section> */}

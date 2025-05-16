@@ -1,6 +1,6 @@
 import "./App.css";
-import { NavLink } from "react-router";
-import { Search, Phone, Mail } from "lucide-react";
+import { NavLink } from "react-router-dom"
+import { Search, Phone, Mail } from "lucide-react"
 
 import Button from "./components/Button";
 import Input from "./components/Input";
@@ -12,15 +12,18 @@ import InputIcon from "./components/InputIcon";
 import FormContainer from "./components/FormContainer";
 import InputIconLabel from "./components/InputIconLabel";
 import ButtonIcon from "./components/ButtonIcon";
-
 import ModalError from "./components/ModalError";
 import ModalExito from "./components/ModalExito";
+
+import { Input as ShadInput} from "@/components/ui/input"
+
 function App() {
   const optionsSelect = [
     { value: "Hombre", content: "Hombre" },
     { value: "Mujer", content: "Mujer" },
     { value: "Rodrigo Roller", content: "Rodrigo Roller" },
   ];
+  
 
   return (
     <>
@@ -29,6 +32,11 @@ function App() {
           Proyecto React.js (o .ts XD) + TailwindCSS + Shadcn configurado!!!
           Cortesía de Fabián(U)
         </h1>
+
+        <p>disabled:</p>
+        <ShadInput disabled={true}></ShadInput>
+        <p>readOnly:</p>
+        <ShadInput readOnly={true}></ShadInput>
 
         <div className="space-y-10">
           <div>
@@ -144,7 +152,7 @@ function App() {
           <ModalExito modulo="Usuario" detalle="El usuario fue eliminado correctamente" onConfirm={() => {
             }}/>
         </div>
-      </div>
+      </div>         
     </>
   );
 }

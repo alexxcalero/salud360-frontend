@@ -12,14 +12,15 @@ interface Props{
     htmlFor: string;
     label: React.ReactNode;
     value?: string;
+    disabled?: boolean;
     onChange?: (value: string) => void;
 }
 
-function SelectLabel({options, placeholder="", htmlFor, label, value, onChange}: Props){
+function SelectLabel({options, placeholder="", htmlFor, label, value, disabled, onChange}: Props){
     return(
         <div>
             <Label htmlFor={htmlFor}> {label} </Label>
-            <Select options={options} placeholder={placeholder} value={value} onChange={onChange}></Select>
+            <Select options={options} placeholder={placeholder} value={value} disabled={disabled} onChange={onChange}></Select>
         </div>
     );
 }

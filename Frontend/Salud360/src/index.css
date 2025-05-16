@@ -11,7 +11,6 @@
  * Roboto condensed
 */
 
-
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -74,6 +73,7 @@
   --text-display-small: 2.986rem;
   --text-display-medium: 3.583rem;
   --text-display-large: 4.299rem;
+  --shadow-md: 0 0 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 }
 
 :root {
@@ -166,7 +166,7 @@
     font-size: var(--text-title-large);
     font-weight: 600;
     line-height: 1.1;
-  } 
+  }
   h2,
   .use-title-medium {
     @apply font-medium text-title-medium/tight;
@@ -193,5 +193,9 @@
   }
   .use-label-small {
     @apply font-light text-label-small/tight;
+  }
+
+  input {
+    @apply border-0 bg-neutral-100 h-[44px] rounded-[8px] px-[10px] text-neutral-800;
   }
 }

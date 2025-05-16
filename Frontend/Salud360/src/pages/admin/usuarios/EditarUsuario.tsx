@@ -3,14 +3,18 @@ import axios from "axios";
 import { useParams } from "react-router";
 import UsuariosForms from "@/components/admin/usuarios/UsuariosForms";
 import useUsuarioForm from "@/hooks/useUsuarioForm";
+import { useNavigate } from "react-router";
 
 function EditarUsuario(){
     const [loading, setLoading] = useState(true);
     const {id} = useParams();
 
+    const navigate = useNavigate();
+
     const {
         nombres, setNombres,
         apellidos, setApellidos,
+        tipoDoc, setTipoDoc,
         DNI, setDNI,
         telefono, setTelefono,
         rol, setRol,
@@ -46,22 +50,26 @@ function EditarUsuario(){
 
     const handleEditarUsuario = async() => {
         try{
-            const numeroDocumento = DNI;
-            const response = await axios.patch(`http://localhost:8080/api/usuarios/${id}`, 
+            const sexo = genero;
+
+            const response = await axios.put(`http://localhost:8080/api/usuarios/${id}`, 
                 {
                     nombres,
                     apellidos,
-                    numeroDocumento,
-                    telefono,
+                    numeroDocumento: DNI,
                     correo,
-                    genero,
+                    contrasenha: (contrasenha == "xxxxxxxx" ) && contrasenha,
+                    telefono,
+                    sexo,
                     fechaNacimiento,
-                    contrasenha,
+                    notiCorreo: true,
+                    notiSMS: true,
+                    notiWhatsApp: true,
                     tipoDocumento: {
-                        idTipoDocumento: 1
+                        idTipoDocumento: tipoDoc
                     },
                     rol: {
-                        idRol: 1
+                        idRol: rol
                     },
                 },
                 {  
@@ -75,27 +83,28 @@ function EditarUsuario(){
                 }
             );
 
-            console.log("Usuario creado:", response.data);
-            alert("Usuario creado exitosamente");
+            console.log("Usuario editado:", response.data);
+            //alert("Usuario editado exitosamente");
+            navigate("/admin/usuarios/successEditar", {
+                state: { created: true }
+            });
         }
         catch (err){
-            console.error("Error al crear usuario:", err);
-            alert("Hubo un error al crear el usuario");
+            console.error("Error al editar usuario:", err);
+            alert("Hubo un error al editar el usuario");
         }
-
-
     }
 
     
-
     return(
-        <div className="max-w-3xl w-full mx-auto p-8 my-10">
             <UsuariosForms
                 title="Editar usuario"
                 nombres={nombres}
                 setNombres={setNombres}
                 apellidos={apellidos}
                 setApellidos={setApellidos}
+                tipoDoc={tipoDoc}
+                setTipoDoc={setTipoDoc}
                 DNI={DNI}
                 setDNI={setDNI}
                 telefono={telefono}
@@ -114,8 +123,9 @@ function EditarUsuario(){
                 buttonText="Guardar"
                 readOnly={false}
             />
-        </div>
     );
 }
 
 export default EditarUsuario;
+
+//Ver CrearUsuario

@@ -3,6 +3,7 @@ import { useState } from "react";
 function useUsuarioForm(){
     const [nombres, setNombres] = useState("");
     const [apellidos, setApellidos] = useState("");
+    const [tipoDoc, setTipoDoc] = useState("");
     const [DNI, setDNI] = useState("");
     const [telefono, setTelefono] = useState("");
     const [rol, setRol] = useState("");
@@ -12,20 +13,24 @@ function useUsuarioForm(){
     const [contrasenha, setContrasenha] = useState("");
     
     const setUsuarioAPI = (usuario: any) => {
+
         setNombres(usuario.nombres || "");
         setApellidos(usuario.apellidos || "");
+        setTipoDoc(usuario.tipoDocumento.idTipoDocumento || "");
         setDNI(usuario.numeroDocumento || "");
         setTelefono(usuario.telefono || "");
         setRol(usuario.rol?.idRol || "");
         setCorreo(usuario.correo || "");
-        setGenero(usuario.genero || "");
+        setGenero(usuario.sexo || "");
         setFechaNacimiento(usuario.fechaNacimiento || "");
-        setContrasenha(usuario.contrasenha || "");
+        console.log("LA CONTRASEñA ES:", usuario.contrasenha)
+        setContrasenha("xxxxxxxx");
     }
 
     return{
         nombres, setNombres,
         apellidos, setApellidos,
+        tipoDoc, setTipoDoc,
         DNI, setDNI,
         telefono, setTelefono,
         rol, setRol,

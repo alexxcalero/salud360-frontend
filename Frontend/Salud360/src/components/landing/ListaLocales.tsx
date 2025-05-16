@@ -1,6 +1,7 @@
 import  { useEffect, useState} from "react";
 import axios from "axios";
 import CardLanding from "./CardLanding";
+import CarrouselLanding from "./CarrouselLanding";
 
 function ListaLocales(){
     
@@ -33,7 +34,7 @@ function ListaLocales(){
 
     const handleNext = () => {
 
-      if (currentIndex + visibleCount < locales.length){
+      if (currentIndex + visibleCount < totalSize){
         setCurrentIndex(currentIndex + 1);
       }
 
@@ -45,11 +46,28 @@ function ListaLocales(){
       }
     };
 
-
+    const totalSize = locales.length
+    console.log("TOTAL SIZE:", totalSize);
 
     return (
+      <CarrouselLanding 
+          module={locales} 
+          currentIndex={currentIndex}
+          cardWidth={cardWidth}
+          xMargin={xMargin}
+          visibleCount={visibleCount}
+          totalSize={totalSize}
+          handleNext={handleNext}
+          handlePrev={handlePrev}
+          showButton={false}
+          />
+        
+    );
+}
 
-      <section className="flex flex-row gap-4 justify-center items-center">
+export default ListaLocales;
+
+{/*<section className="flex flex-row gap-4 justify-center items-center">
           
           <button
             onClick={handlePrev}
@@ -89,9 +107,4 @@ function ListaLocales(){
               
 
 
-      </section>
-        
-    );
-}
-
-export default ListaLocales;
+      </section> */}
