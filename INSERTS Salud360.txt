@@ -219,6 +219,113 @@ INSERT INTO ingesoft.servicio_comunidad (servicios_id_servicio, comunidad_id_com
 (6, 6),
 (7, 6);
 
+INSERT INTO ingesoft.membresia (
+    activo, cant_usuarios, con_tope, descripcion,
+    fecha_creacion, fecha_desactivacion, icono,
+    max_reservas, nombre, precio, tipo, id_comunidad
+) VALUES 
+-- Comunidad 1: Psicología
+(true, 0, true,
+'Acceso limitado a servicios y recursos de la comunidad de Psicología. Incluye 20 usos al mes.',
+CURRENT_TIMESTAMP, NULL, 'icono-mensual.png',
+20, 'Membresía Mensual Psicología',
+200.0, 'Mensual', 1),
+(true, 0, false,
+'Acceso ilimitado durante el mes a los servicios premium de Psicología.',
+CURRENT_TIMESTAMP, NULL, 'icono-vip-mensual.png',
+-1, 'Membresía Mensual VIP Psicología',
+400.0, 'Mensual VIP', 1),
+(true, 0, false,
+'Acceso sin restricciones durante todo el año a todos los beneficios y servicios de Psicología.',
+CURRENT_TIMESTAMP, NULL, 'icono-vip-anual.png',
+-1, 'Membresía Anual VIP Psicología',
+1800.0, 'Anual VIP', 1),
+
+-- Comunidad 2: Programación
+(true, 0, true,
+'Acceso limitado a servicios y recursos de la comunidad de Programación. Incluye 20 usos al mes.',
+CURRENT_TIMESTAMP, NULL, 'icono-mensual.png',
+20, 'Membresía Mensual Programación',
+200.0, 'Mensual', 2),
+(true, 0, false,
+'Acceso ilimitado durante el mes a los servicios premium de Programación.',
+CURRENT_TIMESTAMP, NULL, 'icono-vip-mensual.png',
+-1, 'Membresía Mensual VIP Programación',
+400.0, 'Mensual VIP', 2),
+(true, 0, false,
+'Acceso sin restricciones durante todo el año a todos los beneficios y servicios de Programación.',
+CURRENT_TIMESTAMP, NULL, 'icono-vip-anual.png',
+-1, 'Membresía Anual VIP Programación',
+1800.0, 'Anual VIP', 2),
+
+-- Comunidad 3: Medicina
+(true, 0, true,
+'Acceso limitado a servicios y recursos de la comunidad de Medicina. Incluye 20 usos al mes.',
+CURRENT_TIMESTAMP, NULL, 'icono-mensual.png',
+20, 'Membresía Mensual Medicina',
+200.0, 'Mensual', 3),
+(true, 0, false,
+'Acceso ilimitado durante el mes a los servicios premium de Medicina.',
+CURRENT_TIMESTAMP, NULL, 'icono-vip-mensual.png',
+-1, 'Membresía Mensual VIP Medicina',
+400.0, 'Mensual VIP', 3),
+(true, 0, false,
+'Acceso sin restricciones durante todo el año a todos los beneficios y servicios de Medicina.',
+CURRENT_TIMESTAMP, NULL, 'icono-vip-anual.png',
+-1, 'Membresía Anual VIP Medicina',
+1800.0, 'Anual VIP', 3),
+
+-- Comunidad 4: Derecho
+(true, 0, true,
+'Acceso limitado a servicios y recursos de la comunidad de Derecho. Incluye 20 usos al mes.',
+CURRENT_TIMESTAMP, NULL, 'icono-mensual.png',
+20, 'Membresía Mensual Derecho',
+200.0, 'Mensual', 4),
+(true, 0, false,
+'Acceso ilimitado durante el mes a los servicios premium de Derecho.',
+CURRENT_TIMESTAMP, NULL, 'icono-vip-mensual.png',
+-1, 'Membresía Mensual VIP Derecho',
+400.0, 'Mensual VIP', 4),
+(true, 0, false,
+'Acceso sin restricciones durante todo el año a todos los beneficios y servicios de Derecho.',
+CURRENT_TIMESTAMP, NULL, 'icono-vip-anual.png',
+-1, 'Membresía Anual VIP Derecho',
+1800.0, 'Anual VIP', 4),
+
+-- Comunidad 5: Emprendimiento
+(true, 0, true,
+'Acceso limitado a servicios y recursos de la comunidad de Emprendimiento. Incluye 20 usos al mes.',
+CURRENT_TIMESTAMP, NULL, 'icono-mensual.png',
+20, 'Membresía Mensual Emprendimiento',
+200.0, 'Mensual', 5),
+(true, 0, false,
+'Acceso ilimitado durante el mes a los servicios premium de Emprendimiento.',
+CURRENT_TIMESTAMP, NULL, 'icono-vip-mensual.png',
+-1, 'Membresía Mensual VIP Emprendimiento',
+400.0, 'Mensual VIP', 5),
+(true, 0, false,
+'Acceso sin restricciones durante todo el año a todos los beneficios y servicios de Emprendimiento.',
+CURRENT_TIMESTAMP, NULL, 'icono-vip-anual.png',
+-1, 'Membresía Anual VIP Emprendimiento',
+1800.0, 'Anual VIP', 5),
+
+-- Comunidad 6: Inteligencia Artificial
+(true, 0, true,
+'Acceso limitado a servicios y recursos de la comunidad de Inteligencia Artificial. Incluye 20 usos al mes.',
+CURRENT_TIMESTAMP, NULL, 'icono-mensual.png',
+20, 'Membresía Mensual Inteligencia Artificial',
+200.0, 'Mensual', 6),
+(true, 0, false,
+'Acceso ilimitado durante el mes a los servicios premium de Inteligencia Artificial.',
+CURRENT_TIMESTAMP, NULL, 'icono-vip-mensual.png',
+-1, 'Membresía Mensual VIP Inteligencia Artificial',
+400.0, 'Mensual VIP', 6),
+(true, 0, false,
+'Acceso sin restricciones durante todo el año a todos los beneficios y servicios de Inteligencia Artificial.',
+CURRENT_TIMESTAMP, NULL, 'icono-vip-anual.png',
+-1, 'Membresía Anual VIP Inteligencia Artificial',
+1800.0, 'Anual VIP', 6);
+
 
 
 INSERT INTO ingesoft.local (
