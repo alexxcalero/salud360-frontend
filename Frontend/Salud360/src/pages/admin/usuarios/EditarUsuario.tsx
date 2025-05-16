@@ -47,22 +47,23 @@ function EditarUsuario(){
 
     const handleEditarUsuario = async() => {
         try{
-            const numeroDocumento = DNI;
+            const sexo = genero;
+
             const response = await axios.patch(`http://localhost:8080/api/usuarios/${id}`, 
                 {
                     nombres,
                     apellidos,
-                    numeroDocumento,
-                    telefono,
+                    numeroDocumento: DNI,
                     correo,
-                    genero,
+                    contrasenha: (contrasenha == "xxxxxxxx" ) && contrasenha,
+                    telefono,
+                    sexo,
                     fechaNacimiento,
-                    contrasenha,
                     tipoDocumento: {
-                        idTipoDocumento: 1
+                        idTipoDocumento: tipoDoc
                     },
                     rol: {
-                        idRol: 1
+                        idRol: rol
                     },
                 },
                 {  
@@ -76,19 +77,16 @@ function EditarUsuario(){
                 }
             );
 
-            console.log("Usuario creado:", response.data);
-            alert("Usuario creado exitosamente");
+            console.log("Usuario editado:", response.data);
+            alert("Usuario editado exitosamente");
         }
         catch (err){
-            console.error("Error al crear usuario:", err);
-            alert("Hubo un error al crear el usuario");
+            console.error("Error al editar usuario:", err);
+            alert("Hubo un error al editar el usuario");
         }
-
-
     }
 
     
-
     return(
             <UsuariosForms
                 title="Editar usuario"

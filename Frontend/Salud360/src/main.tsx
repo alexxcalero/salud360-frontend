@@ -43,6 +43,8 @@ import SobreNosotros from "./pages/landing/SobreNosotros";
 import Comunidades from "./pages/landing/Comunidades";
 import DetalleComunidadLanding from "./pages/landing/DetalleComunidad";
 import EditarConfiguracionGeneralPage from "./pages/admin/configuracionGeneral/EditarConfiguracionGeneralPage";
+import EditarMedico from "./pages/admin/personalMedico/EditarMedico";
+import DetalleMedico from "./pages/admin/personalMedico/DetalleMedico";
 
 
 createRoot(document.getElementById("root")!).render(
@@ -132,6 +134,8 @@ createRoot(document.getElementById("root")!).render(
           <Route path="personalMedico">
             <Route index element={<PersonalMedicoPage />} />
             <Route path="crear" element={<CrearMedico />} />
+            <Route path="detalle/:id" element={<DetalleMedico />} />
+            <Route path="editar/:id" element={<EditarMedico />} />
           </Route>
 
           <Route path="calificaciones">
