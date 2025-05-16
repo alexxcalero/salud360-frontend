@@ -9,13 +9,9 @@ import {
 
 import colors from "tailwindcss/colors";
 
-const ConfigUsuarioSideBar = ({
-  activeElement = 0,
-}: {
-  activeElement?: number;
-}) => {
+const ConfigUsuarioSideBar = () => {
   const paths = [
-    ["perfil", "Mi perfil", UserRoundPen],
+    ["/", "Mi perfil", UserRoundPen],
     ["sistema", "Sistema", Settings],
     ["membresias", "Membresías", CreditCard],
     ["historial-pagos", "Historial de pago", History],
@@ -26,22 +22,20 @@ const ConfigUsuarioSideBar = ({
       <ul className="flex flex-col gap-[10px] min-h-[100dvh] items-start">
         {paths.map(([path, name, Icon], index) => (
           <li key={index}>
-            <NavLink to={`/usuario/configuracion/${path}`} className="nav-link">
-              <Icon
-                color={
-                  index === activeElement
-                    ? colors.blue["500"]
-                    : colors.neutral["900"]
-                }
-                className="inline"
-              />{" "}
-              <span
-                className={
-                  index === activeElement ? "text-blue-500" : "text-neutral-900"
-                }
-              >
-                {name as string}
-              </span>
+            <NavLink to={`/usuario/configuracion/${path}`}>
+              {({ isActive }) =>
+                isActive ? (
+                  <>
+                    <Icon color={colors.blue["500"]} className="inline" />{" "}
+                    <span className="text-blue-500">{name as string}</span>
+                  </>
+                ) : (
+                  <>
+                    <Icon color={colors.neutral["900"]} className="inline" />{" "}
+                    <span className="text-neutral-900">{name as string}</span>
+                  </>
+                )
+              }
             </NavLink>
           </li>
         ))}

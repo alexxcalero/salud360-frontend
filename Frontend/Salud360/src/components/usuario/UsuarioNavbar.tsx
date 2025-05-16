@@ -2,14 +2,14 @@ import { NavLink } from "react-router";
 import NotificationIcon from "./NotificationIcon";
 import ProfileIcon from "./ProfileIcon";
 
-function UsuarioNavbar({ activeElement = 0 }: { activeElement?: number }) {
+function UsuarioNavbar() {
   const paths = [
-    ["/usuario", "Inicio"],
-    ["/usuario/perfil", "perfil"],
-    ["/usuario/comunidades", "Comunidades"],
-    ["/usuario/calendario", "Calendario y reservas"],
-    ["/usuario/citas", "Citas médicas"],
-    ["/usuario/historial", "Historial médico"],
+    ["/", "Inicio"],
+    ["configuracion", "perfil"],
+    ["comunidades", "Comunidades"],
+    ["calendario", "Calendario y reservas"],
+    ["citas", "Citas médicas"],
+    ["historial", "Historial médico"],
   ];
   return (
     <header className="flex justify-between items-center bg-blue-500 shadow-md px-[40px] py-[10px] text-white">
@@ -27,10 +27,12 @@ function UsuarioNavbar({ activeElement = 0 }: { activeElement?: number }) {
         {paths.map(([path, name], index) => (
           <NavLink
             key={index}
-            to={path}
-            className={`text-white hover:text-blue-200 mx-[10px] text-[18px] ${
-              activeElement === index ? "font-bold" : ""
-            }`}
+            to={`/usuario/${path}`}
+            className={({ isActive }) =>
+              `text-white hover:text-blue-200 mx-[10px] text-[18px] ${
+                isActive && "font-bold"
+              }`
+            }
           >
             {name}
           </NavLink>
