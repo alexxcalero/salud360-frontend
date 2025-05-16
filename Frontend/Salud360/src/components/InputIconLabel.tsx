@@ -7,15 +7,16 @@ interface Props{
     placeholder?: string;
     htmlFor: string;
     label: React.ReactNode;
-    value?: string,
+    value?: string;
+    disabled?: boolean;
     onChange?: React.ChangeEventHandler<HTMLInputElement>
 }
 
-function InputIconLabel({icon, type= "text", placeholder="", htmlFor, label, value, onChange}: Props){
+function InputIconLabel({icon, type= "text", placeholder="", htmlFor, label, value, disabled, onChange}: Props){
     return(
         <div>
             <Label htmlFor={htmlFor}> {label} </Label>
-            <InputIcon icon={icon} placeholder={placeholder} type={type} value={value} onChange={onChange}></InputIcon>
+            <InputIcon icon={icon} placeholder={placeholder} type={type} value={value} disabled={disabled} onChange={onChange}></InputIcon>
         </div>
     );
 }

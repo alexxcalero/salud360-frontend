@@ -3,10 +3,13 @@ import axios from "axios";
 import { useParams } from "react-router";
 import UsuariosForms from "@/components/admin/usuarios/UsuariosForms";
 import useUsuarioForm from "@/hooks/useUsuarioForm";
+import { useNavigate } from "react-router";
 
 function EditarUsuario(){
     const [loading, setLoading] = useState(true);
     const {id} = useParams();
+
+    const navigate = useNavigate();
 
     const {
         nombres, setNombres,
@@ -49,7 +52,7 @@ function EditarUsuario(){
         try{
             const sexo = genero;
 
-            const response = await axios.patch(`http://localhost:8080/api/usuarios/${id}`, 
+            const response = await axios.put(`http://localhost:8080/api/usuarios/${id}`, 
                 {
                     nombres,
                     apellidos,
@@ -59,6 +62,9 @@ function EditarUsuario(){
                     telefono,
                     sexo,
                     fechaNacimiento,
+                    notiCorreo: true,
+                    notiSMS: true,
+                    notiWhatsApp: true,
                     tipoDocumento: {
                         idTipoDocumento: tipoDoc
                     },
@@ -78,7 +84,10 @@ function EditarUsuario(){
             );
 
             console.log("Usuario editado:", response.data);
-            alert("Usuario editado exitosamente");
+            //alert("Usuario editado exitosamente");
+            navigate("/admin/usuarios/successEditar", {
+                state: { created: true }
+            });
         }
         catch (err){
             console.error("Error al editar usuario:", err);

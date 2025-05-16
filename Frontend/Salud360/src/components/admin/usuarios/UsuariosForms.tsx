@@ -45,7 +45,7 @@ interface Props{
     contrasenha: string;
     setContrasenha?: (val: string) => void;
 
-    readOnly?: Boolean;
+    readOnly?: boolean;
     onSubmit?: () => void;
     buttonText?: string;
 }
@@ -128,18 +128,18 @@ function UsuariosForms({title="", subtitle="", nombres, setNombres = () =>{}, ap
 
                 <div className="grid grid-cols-2 gap-8 items-center w-full my-6">
                     <div className="col-span-1 flex flex-col gap-6">
-                        <InputLabel type="email" placeholder="Ingrese los nombres" htmlFor="email" label="Nombres" value={nombres} onChange={(e) => setNombres(e.target.value)}/>
-                        <InputLabel type="email" placeholder="Ingrese los apellidos" htmlFor="email" label="Apellidos" value={apellidos} onChange={(e) => setApellidos(e.target.value)}/>
-                        <SelectLabel options={tipoDocumentos} placeholder="Seleccione el tipo de documento" htmlFor="email" label="Tipo de Documento" value={tipoDoc} onChange={(value) => setTipoDoc(value)}/>
-                        <InputIconLabel icon={<Phone className="w-5 h-5" />} placeholder="Teléfono" type="tel" htmlFor="tel" label="Teléfono" value={telefono} onChange={(e) => setTelefono(e.target.value)} ></InputIconLabel>
-                        <InputLabel type="password" placeholder="" htmlFor="password" label="Contraseña" value={contrasenha} onChange={(e) => setContrasenha(e.target.value)}/>
+                        <InputLabel type="email" placeholder="Ingrese los nombres" htmlFor="email" label="Nombres" value={nombres} disabled={readOnly} onChange={(e) => setNombres(e.target.value)}/>
+                        <InputLabel type="email" placeholder="Ingrese los apellidos" htmlFor="email" label="Apellidos" value={apellidos} disabled={readOnly} onChange={(e) => setApellidos(e.target.value)}/>
+                        <SelectLabel options={tipoDocumentos} placeholder="Seleccione el tipo de documento" htmlFor="email" label="Tipo de Documento" value={tipoDoc} disabled={readOnly} onChange={(value) => setTipoDoc(value)}/>
+                        <InputIconLabel icon={<Phone className="w-5 h-5" />} placeholder="Teléfono" type="tel" htmlFor="tel" label="Teléfono" value={telefono} disabled={readOnly} onChange={(e) => setTelefono(e.target.value)} ></InputIconLabel>
+                        <InputLabel type="password" placeholder="" htmlFor="password" label="Contraseña" value={contrasenha} disabled={readOnly} onChange={(e) => setContrasenha(e.target.value)}/>
                     </div>
                     <div className="col-span-1 flex flex-col gap-6">
-                        <InputIconLabel icon={<Mail className="w-5 h-5" />} placeholder="Mail" type="email" htmlFor="email" label="Email" value={correo} onChange={(e) => setCorreo(e.target.value)}></InputIconLabel>
-                        <SelectLabel options={sexo} placeholder="Seleccione su genero" htmlFor="email" label="Género" value={genero} onChange={(content) => setGenero(content)}/>
-                        <InputLabel type="email" placeholder="Ingrese el número de documento de identidad" htmlFor="email" label="DNI" value={DNI} onChange={(e) => setDNI(e.target.value)}/>
-                        <InputLabel type="date" placeholder="Ingrese la fecha de nacimiento" htmlFor="date" label="Fecha de nacimiento" value={fechaNacimiento} onChange={(e) => setFechaNacimiento(e.target.value)}/>
-                        <SelectLabel options={roles} placeholder="Seleccione el rol" htmlFor="email" label="Rol" value={rol} onChange={(value) => setRol(value)}/>
+                        <InputIconLabel icon={<Mail className="w-5 h-5" />} placeholder="Mail" type="email" htmlFor="email" label="Email" value={correo} disabled={readOnly} onChange={(e) => setCorreo(e.target.value)}></InputIconLabel>
+                        <SelectLabel options={sexo} placeholder="Seleccione su genero" htmlFor="email" label="Género" value={genero} disabled={readOnly} onChange={(content) => setGenero(content)}/>
+                        <InputLabel type="email" placeholder="Ingrese el número de documento de identidad" htmlFor="email" label="DNI" value={DNI} disabled={readOnly} onChange={(e) => setDNI(e.target.value)}/>
+                        <InputLabel type="date" placeholder="Ingrese la fecha de nacimiento" htmlFor="date" label="Fecha de nacimiento" value={fechaNacimiento} disabled={readOnly} onChange={(e) => setFechaNacimiento(e.target.value)}/>
+                        <SelectLabel options={roles} placeholder="Seleccione el rol" htmlFor="email" label="Rol" value={rol} disabled={readOnly} onChange={(value) => setRol(value)}/>
                     </div>
                 </div>
 
@@ -147,11 +147,11 @@ function UsuariosForms({title="", subtitle="", nombres, setNombres = () =>{}, ap
 
                 <div className="flex flex-row justify-between">
                     <div className="">
-                        <Button variant="primary"size="md" className="my-4" onClick={() => navigate(-1)}>Volver</Button>
+                        <Button variant="primary" size="lg" className="my-4" onClick={() => navigate(-1)}>Volver</Button>
                     </div>
 
                     <div className="">
-                        {!readOnly && (<Button variant="primary"size="md" className="my-4" onClick={onSubmit}>{buttonText}</Button>)}
+                        {!readOnly && (<Button variant="primary" size="lg" className="my-4" onClick={onSubmit}>{buttonText}</Button>)}
                     </div>
                 </div>
 

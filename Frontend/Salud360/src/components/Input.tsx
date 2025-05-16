@@ -6,12 +6,13 @@ interface Props{
     leftPadding?: string;
     value?: string;
     className?: string;
+    disabled?: boolean;
     onChange?: React.ChangeEventHandler<HTMLInputElement>;
 }
 
-function Input({type= "text", placeholder="", leftPadding="", value="", className="", onChange = () => {}}: Props){
+function Input({type= "text", placeholder="", leftPadding="", value="", className="", disabled=false, onChange = () => {}}: Props){
     return(
-        <ShadInput type={type} placeholder={placeholder} className={`border-[#6A6262] border-2 rounded-[5px] py-5 px-4 ${leftPadding} ${className}`} value={value} onChange={onChange}/>
+        <ShadInput type={type} placeholder={placeholder} className={`border-[#6A6262] border-2 rounded-[5px] py-5 px-4 ${leftPadding} ${className}`} value={value} disabled={disabled} onChange={onChange}/>
     );
 }
 
