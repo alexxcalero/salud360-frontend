@@ -164,7 +164,6 @@ function PersonalMedicoPage(){
                 </>
             )}
 
-            <UnderConstruction/>
         </div>
         
     );

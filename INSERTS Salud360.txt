@@ -142,26 +142,214 @@ INSERT INTO ingesoft.servicio (
     NULL,
     'Consulta Médica General',
     'Medicina'
+),
+(
+    true,
+    'Sesiones guiadas de entrenamiento físico con equipos y pesas.',
+    CURRENT_TIMESTAMP,
+    NULL,
+    'Gimnasio Funcional',
+    'Gimnasio'
+),
+(
+    true,
+    'Clases dirigidas de yoga enfocadas en flexibilidad, equilibrio y respiración.',
+    CURRENT_TIMESTAMP,
+    NULL,
+    'Yoga Integral',
+    'Yoga'
+),
+(
+    true,
+    'Rutinas de estiramiento y movilidad para prevenir lesiones y mejorar postura.',
+    CURRENT_TIMESTAMP,
+    NULL,
+    'Estiramiento y Movilidad',
+    'Entrenamiento'
+),
+(
+    true,
+    'Sesiones de meditación y mindfulness para manejo del estrés y bienestar emocional.',
+    CURRENT_TIMESTAMP,
+    NULL,
+    'Meditación Guiada',
+    'Bienestar'
 );
+
+-- Comunidad 1: Psicología
+INSERT INTO ingesoft.servicio_comunidad (servicios_id_servicio, comunidad_id_comunidad) VALUES
+(2, 1), -- Terapia Psicológica
+(3, 1), -- Consulta Médica General
+(4, 1), -- Gimnasio Funcional
+(7, 1), -- Meditación Guiada
+
+-- Comunidad 2: Programación
+(1, 2), -- Consulta Nutricional
+(3, 2), -- Consulta Médica General
+(4, 2), -- Gimnasio Funcional
+(6, 2), -- Estiramiento y Movilidad
+(7, 2), -- Meditación Guiada
+
+-- Comunidad 3: Medicina
+(1, 3), -- Consulta Nutricional
+(3, 3), -- Consulta Médica General
+(2, 3), -- Terapia Psicológica
+(6, 3), -- Estiramiento y Movilidad
+(5, 3), -- Yoga Integral
+
+-- Comunidad 4: Derecho
+(2, 4),
+(4, 4),
+(5, 4),
+(7, 4);
+
+-- Comunidad 5: Emprendimiento
+INSERT INTO ingesoft.servicio_comunidad (servicios_id_servicio, comunidad_id_comunidad) VALUES
+(1, 5),
+(2, 5),
+(3, 5),
+(5, 5),
+(6, 5);
+
+-- Comunidad 6: Inteligencia Artificial
+INSERT INTO ingesoft.servicio_comunidad (servicios_id_servicio, comunidad_id_comunidad) VALUES
+(3, 6),
+(4, 6),
+(5, 6),
+(6, 6),
+(7, 6);
+
+INSERT INTO ingesoft.membresia (
+    activo, cant_usuarios, con_tope, descripcion,
+    fecha_creacion, fecha_desactivacion, icono,
+    max_reservas, nombre, precio, tipo, id_comunidad
+) VALUES 
+-- Comunidad 1: Psicología
+(true, 0, true,
+'Acceso limitado a servicios y recursos de la comunidad de Psicología. Incluye 20 usos al mes.',
+CURRENT_TIMESTAMP, NULL, 'icono-mensual.png',
+20, 'Membresía Mensual Psicología',
+200.0, 'Mensual', 1),
+(true, 0, false,
+'Acceso ilimitado durante el mes a los servicios premium de Psicología.',
+CURRENT_TIMESTAMP, NULL, 'icono-vip-mensual.png',
+-1, 'Membresía Mensual VIP Psicología',
+400.0, 'Mensual VIP', 1),
+(true, 0, false,
+'Acceso sin restricciones durante todo el año a todos los beneficios y servicios de Psicología.',
+CURRENT_TIMESTAMP, NULL, 'icono-vip-anual.png',
+-1, 'Membresía Anual VIP Psicología',
+1800.0, 'Anual VIP', 1),
+
+-- Comunidad 2: Programación
+(true, 0, true,
+'Acceso limitado a servicios y recursos de la comunidad de Programación. Incluye 20 usos al mes.',
+CURRENT_TIMESTAMP, NULL, 'icono-mensual.png',
+20, 'Membresía Mensual Programación',
+200.0, 'Mensual', 2),
+(true, 0, false,
+'Acceso ilimitado durante el mes a los servicios premium de Programación.',
+CURRENT_TIMESTAMP, NULL, 'icono-vip-mensual.png',
+-1, 'Membresía Mensual VIP Programación',
+400.0, 'Mensual VIP', 2),
+(true, 0, false,
+'Acceso sin restricciones durante todo el año a todos los beneficios y servicios de Programación.',
+CURRENT_TIMESTAMP, NULL, 'icono-vip-anual.png',
+-1, 'Membresía Anual VIP Programación',
+1800.0, 'Anual VIP', 2),
+
+-- Comunidad 3: Medicina
+(true, 0, true,
+'Acceso limitado a servicios y recursos de la comunidad de Medicina. Incluye 20 usos al mes.',
+CURRENT_TIMESTAMP, NULL, 'icono-mensual.png',
+20, 'Membresía Mensual Medicina',
+200.0, 'Mensual', 3),
+(true, 0, false,
+'Acceso ilimitado durante el mes a los servicios premium de Medicina.',
+CURRENT_TIMESTAMP, NULL, 'icono-vip-mensual.png',
+-1, 'Membresía Mensual VIP Medicina',
+400.0, 'Mensual VIP', 3),
+(true, 0, false,
+'Acceso sin restricciones durante todo el año a todos los beneficios y servicios de Medicina.',
+CURRENT_TIMESTAMP, NULL, 'icono-vip-anual.png',
+-1, 'Membresía Anual VIP Medicina',
+1800.0, 'Anual VIP', 3),
+
+-- Comunidad 4: Derecho
+(true, 0, true,
+'Acceso limitado a servicios y recursos de la comunidad de Derecho. Incluye 20 usos al mes.',
+CURRENT_TIMESTAMP, NULL, 'icono-mensual.png',
+20, 'Membresía Mensual Derecho',
+200.0, 'Mensual', 4),
+(true, 0, false,
+'Acceso ilimitado durante el mes a los servicios premium de Derecho.',
+CURRENT_TIMESTAMP, NULL, 'icono-vip-mensual.png',
+-1, 'Membresía Mensual VIP Derecho',
+400.0, 'Mensual VIP', 4),
+(true, 0, false,
+'Acceso sin restricciones durante todo el año a todos los beneficios y servicios de Derecho.',
+CURRENT_TIMESTAMP, NULL, 'icono-vip-anual.png',
+-1, 'Membresía Anual VIP Derecho',
+1800.0, 'Anual VIP', 4),
+
+-- Comunidad 5: Emprendimiento
+(true, 0, true,
+'Acceso limitado a servicios y recursos de la comunidad de Emprendimiento. Incluye 20 usos al mes.',
+CURRENT_TIMESTAMP, NULL, 'icono-mensual.png',
+20, 'Membresía Mensual Emprendimiento',
+200.0, 'Mensual', 5),
+(true, 0, false,
+'Acceso ilimitado durante el mes a los servicios premium de Emprendimiento.',
+CURRENT_TIMESTAMP, NULL, 'icono-vip-mensual.png',
+-1, 'Membresía Mensual VIP Emprendimiento',
+400.0, 'Mensual VIP', 5),
+(true, 0, false,
+'Acceso sin restricciones durante todo el año a todos los beneficios y servicios de Emprendimiento.',
+CURRENT_TIMESTAMP, NULL, 'icono-vip-anual.png',
+-1, 'Membresía Anual VIP Emprendimiento',
+1800.0, 'Anual VIP', 5),
+
+-- Comunidad 6: Inteligencia Artificial
+(true, 0, true,
+'Acceso limitado a servicios y recursos de la comunidad de Inteligencia Artificial. Incluye 20 usos al mes.',
+CURRENT_TIMESTAMP, NULL, 'icono-mensual.png',
+20, 'Membresía Mensual Inteligencia Artificial',
+200.0, 'Mensual', 6),
+(true, 0, false,
+'Acceso ilimitado durante el mes a los servicios premium de Inteligencia Artificial.',
+CURRENT_TIMESTAMP, NULL, 'icono-vip-mensual.png',
+-1, 'Membresía Mensual VIP Inteligencia Artificial',
+400.0, 'Mensual VIP', 6),
+(true, 0, false,
+'Acceso sin restricciones durante todo el año a todos los beneficios y servicios de Inteligencia Artificial.',
+CURRENT_TIMESTAMP, NULL, 'icono-vip-anual.png',
+-1, 'Membresía Anual VIP Inteligencia Artificial',
+1800.0, 'Anual VIP', 6);
+
+
 
 INSERT INTO ingesoft.local (
     activo, apellidos_contacto, direccion, fecha_creacion,
     fecha_desactivacion, nombre, nombres_contacto, telefono,
-    telefono_contacto, tipo_servicio, id_servicio
+    telefono_contacto, tipo_servicio, id_servicio, descripcion
 ) VALUES 
 (
     true, 'Cáceres Mejía', 'Av. La Marina 785, San Miguel',
     CURRENT_TIMESTAMP, NULL, 'Local Nutrición La Marina',
-    'Lucía Fernanda', '917111222', '912222333', 'Nutrición', 1
+    'Lucía Fernanda', '917111222', '912222333', 'Nutrición', 1,
+    'Centro especializado en planes de alimentación y evaluación nutricional para todas las edades.'
 ),
 (
     true, 'Rojas Villanueva', 'Calle Los Álamos 234, Miraflores',
     CURRENT_TIMESTAMP, NULL, 'Centro Psicológico Miraflores',
-    'Juan Andrés', '918333444', '913444555', 'Psicología', 2
+    'Juan Andrés', '918333444', '913444555', 'Psicología', 2,
+    'Atención psicológica individual, de pareja y talleres de salud mental en un ambiente cálido y confidencial.'
 ),
 (
     true, 'Montoya Salas', 'Av. Túpac Amaru 998, Comas',
     CURRENT_TIMESTAMP, NULL, 'Policlínico Popular Comas',
-    'Daniela Paola', '919555666', '914666777', 'Medicina', 3
+    'Daniela Paola', '919555666', '914666777', 'Medicina', 3,
+    'Policlínico accesible con servicios médicos generales, laboratorio y atención primaria de calidad.'
 );
+
 

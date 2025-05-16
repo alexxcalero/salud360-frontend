@@ -3,11 +3,14 @@ import HeroComunidades from "@/components/landing/HeroComunidades";
 import ComunidadesImage1 from "@/assets/comunidades1.png";
 import ListaComunidades from "@/components/landing/ListaComunidades";
 import { useEffect } from "react";
+import { useNavigate } from "react-router";
 
 function Comunidades(){
     useEffect(() => {
             window.scrollTo(0, 0); //Para que apenas cargue aparezca en el tope de la página.
-        }, []);
+    }, []);
+
+    const navigate = useNavigate();
 
     return (
         <div>
@@ -28,7 +31,7 @@ function Comunidades(){
                             </div>
 
                             <div className="inline-block w-48">
-                                <Button size="lg" className="w-full">Suscríbete</Button>
+                                <Button size="lg" className="w-full" onClick={() => navigate("/RegistroUsuario")}>Suscríbete</Button>
                             </div>  
 
                         </div>

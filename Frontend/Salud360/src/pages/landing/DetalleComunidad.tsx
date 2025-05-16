@@ -3,17 +3,22 @@ import axios from "axios";
 import heroImage from "@/assets/heroComunidades.png"
 import detalleComunidadImage1 from "@/assets/detalleComunidad1.png"
 import HeroDetalleComunidad from "@/components/landing/HeroDetalleComunidad";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import Button from "@/components/Button";
 import ImageSectionRight from "@/components/landing/ImageSectionRight";
 import ImageSectionLeft from "@/components/landing/ImageSectionLeft";
+import abstractImage from "@/assets/abstractMembresías.jpg"
 
 import Imagen from "@/assets/detalleComunidadX.png"
+import CardMembresia from "@/components/landing/CardMembresía";
 
 function DetalleComunidad(){
 
     const [comunidad, setComunidad] = useState<any>({});
+    const [servicios, setServicios] = useState([]);
+    //const [membresias, setMembresias] = useState([]);
     const {id} = useParams();
+    
 
     const fetchComunidad = () => {
     axios.get(`http://localhost:8080/api/comunidades/${id}`, {
@@ -25,7 +30,11 @@ function DetalleComunidad(){
       .then(res => {
         console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
         setComunidad(res.data);
-        console.log("Comunidad:", res.data);
+        //console.log("Comunidad:", res.data);
+        setServicios(res.data.servicios);
+        //console.log("Servicios de la comunidad 1:", res.data.servicios);
+        //console.log("Servicios de la comunidad 2:", servicios);
+        //setMembresias(res.data.membresia);
       })
       .catch(err => console.error("Error cargando comunidad", err));
     }
@@ -34,10 +43,14 @@ function DetalleComunidad(){
         fetchComunidad();
     }, []);
 
+    console.log("Comunidad:", comunidad);
+    console.log("Servicios de la comunidad 2:", servicios);
 
-    const [servicios, setServicios] = useState([]);
-    const fetchServicios = () => {
-    axios.get(`http://localhost:8080/api/servicios`, {
+    
+    {/*MEMBRESÍAS ELIMINAR CUANDO FUNCIONE LO DE ARRIBA */}
+    const [membresias, setMembresias] = useState([]);
+    const fetchMembresias = () => {
+    axios.get(`http://localhost:8080/api/membresias/5`, {
       auth: {
         username: "admin",
         password: "admin123"
@@ -45,23 +58,24 @@ function DetalleComunidad(){
     })
       .then(res => {
         console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
-        setServicios(res.data);
-        console.log("Servicios:", res.data);
+        setMembresias(res.data);
+        console.log("Membresía:", res.data);
       })
-      .catch(err => console.error("Error cargando servicios", err));
+      .catch(err => console.error("Error cargando membresía", err));
     }    
     
     useEffect(() => {
-        fetchServicios();
+        fetchMembresias();
     }, []);
 
-
+    console.log("Membresía 2:", membresias);
 
 
     useEffect(() => {
         window.scrollTo(0, 0); //Para que apenas cargue aparezca en el tope de la página.
     }, []);
 
+    const navigate = useNavigate();
 
     return(
         <div>
@@ -79,7 +93,7 @@ function DetalleComunidad(){
                             </div>
 
                             <div className="inline-block w-48">
-                                <Button size="lg" className="w-full">Suscríbete</Button>
+                                <Button size="lg" className="w-full" onClick={() => navigate("/RegistroUsuario")}>Suscríbete</Button>
                             </div>  
 
                         </div>
@@ -93,21 +107,44 @@ function DetalleComunidad(){
                     <div className="flex flex-col gap-8">
                         <h1>NUESTROS SERVICIOS</h1>
                         {servicios.map((servicio: any, i: number) => (
-                            (i % 2 == 0 ? 
+                            <div key={servicio.idServicio}>
+                                {i % 2 === 0 ? (
                                 <ImageSectionLeft
                                     image={Imagen}
-                                    h1={servicio.nombre} 
-                                    h3={servicio.descripcion} /> 
-                            :
+                                    h1={servicio.nombre}
+                                    h3={servicio.descripcion}
+                                />
+                                ) : (
                                 <ImageSectionRight
                                     image={Imagen}
-                                    h1={servicio.nombre} 
-                                    h3={servicio.descripcion} />
-                        
-                            )
+                                    h1={servicio.nombre}
+                                    h3={servicio.descripcion}
+                                />
+                                )}
+                            </div>
                         ))}
                     </div>
                 </section>
+
+                <section className="relative bg-[#2A86FF] overflow-visible mb-20">
+                    <img src={abstractImage} alt="abstraction" className="inset-0 w-full h-[650px] object-cover opacity-5" />
+                    <div className="absolute inset-0 flex flex-col items-center py-8">
+                        <h1 className="text-white">PAQUETES DE MEMBRESÍA</h1>
+
+                        <div className="flex flex-col m-8">
+                            {/*CUANDO FUNCIONE REEMPLAZAR POR EL CODIGO DE ABAJO */}
+                            <CardMembresia membresia={membresias} servicios={servicios}/>
+                        </div>
+
+                    </div>
+                    
+                </section>
+
+                <section className="">
+
+                </section>
+
+
 
             </section>
         </div>
@@ -115,3 +152,9 @@ function DetalleComunidad(){
 }
 
 export default DetalleComunidad;
+
+{/**{membresias.map((membresia: any, i: number) => (
+                                <div key={i}>
+                                    <CardMembresia membresia={membresia}/>
+                                </div>
+                            ))} */}

@@ -51,6 +51,7 @@ import Membresias from "./pages/usuario/configuracion/Membresias";
 import HistorialPagos from "./pages/usuario/configuracion/HistorialPagos";
 import EditarMedico from "./pages/admin/personalMedico/EditarMedico";
 import DetalleMedico from "./pages/admin/personalMedico/DetalleMedico";
+import UsuarioSuccess from "./pages/admin/usuarios/UsuarioSuccess";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -128,12 +129,16 @@ createRoot(document.getElementById("root")!).render(
             <Route path="crear" element={<CrearUsuario />} />
             <Route path="detalle/:id" element={<DetalleUsuario />} />
             <Route path="editar/:id" element={<EditarUsuario />} />
+            <Route path="successCrear" element={<UsuarioSuccess modulo="¡Usuario creado correctamente!" detalle="El usuario fue creado correctamente" />} />
+            <Route path="successEditar" element={<UsuarioSuccess modulo="¡Usuario modificado correctamente!" detalle="El usuario fue modificado correctamente" />} />
           </Route>
           <Route path="personalMedico">
             <Route index element={<PersonalMedicoPage />} />
             <Route path="crear" element={<CrearMedico />} />
             <Route path="detalle/:id" element={<DetalleMedico />} />
             <Route path="editar/:id" element={<EditarMedico />} />
+            <Route path="successCrear" element={<UsuarioSuccess modulo="¡Médico creado correctamente!" detalle="El médico fue creado correctamente" />} />
+            <Route path="successEditar" element={<UsuarioSuccess modulo="¡Médico modificado correctamente!" detalle="El médico fue modificado correctamente" />} />
           </Route>
           <Route path="calificaciones">
             <Route index element={<CalificacionesPage />} />
