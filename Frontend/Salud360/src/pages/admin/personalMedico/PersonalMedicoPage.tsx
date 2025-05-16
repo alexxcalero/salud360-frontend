@@ -97,8 +97,8 @@ function PersonalMedicoPage(){
         {
             content: (
                 <div className="flex justify-center gap-2">
-                    <Info className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => navigate(`/admin/medicos/detalle/${medico.idUsuario}`)} />
-                    <Pencil className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => navigate(`/admin/medicos/editar/${medico.idUsuario}`)} />
+                    <Info className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => navigate(`/admin/personalMedico/detalle/${medico.idUsuario}`)} />
+                    <Pencil className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => navigate(`/admin/personalMedico/editar/${medico.idUsuario}`)} />
                     {medico.activo ?
                         <Trash2 className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => {
                             setMedicoSeleccionado(medico);

@@ -69,6 +69,7 @@ function DetalleUsuario(){
       return <p>Cargando usuario...</p>; // o un spinner
     }
 
+
     return(
             <UsuariosForms
                 title="Detalles del usuario"

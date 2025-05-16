@@ -54,6 +54,7 @@ function UsuariosForms({title="", subtitle="", nombres, setNombres = () =>{}, ap
     rol, setRol  = () =>{}, genero, setGenero  = () =>{}, fechaNacimiento, setFechaNacimiento  = () =>{}, contrasenha, setContrasenha  = () =>{}, readOnly = false, onSubmit = () =>{}, buttonText}: Props){
     
     const [roles, setRoles] = useState([]);
+    const [tipoDocumentos, setTipoDocumentos] = useState([]);
     //const [tipoDocumentos, setTipoDocumentos] = useState([]);
     const navigate = useNavigate();
     
@@ -82,13 +83,31 @@ function UsuariosForms({title="", subtitle="", nombres, setNombres = () =>{}, ap
         fetchRoles();
     }, []);
 
-    
+    //Llamada TipoDocumentos
+    const fetchTipoDocumentos = () => {
+    axios.get("http://localhost:8080/api/tiposDocumentos", {
+      auth: {
+        username: "admin",
+        password: "admin123"
+      }
+    })
+      .then(res => {
+        console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
+        
+        const opciones = res.data.map((tipoDocX: any) => ({
+            value: tipoDocX.idTipoDocumento,
+            content: tipoDocX.nombre
+        }))
 
-    const tipoDocumentos = [
-        { value: "1", content: "DNI" },
-        { value: "2", content: "Carnet de Extranjería" },
-        { value: "3", content: "Pasaporte" }
-    ]
+        setTipoDocumentos(opciones)
+        console.log("Tipo Documentos:", opciones);
+      })
+      .catch(err => console.error("Error cargando tipo documentos", err));
+    }
+    useEffect(() => {
+        fetchTipoDocumentos();
+    }, []);
+
         
     const sexo = [
         { value: "Masculino", content: "Masculino" },

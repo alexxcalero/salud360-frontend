@@ -8,7 +8,7 @@ interface Props{
     onChange?: React.ChangeEventHandler<HTMLInputElement>
 }
 
-function InputIcon({icon, type="text", placeholder="", value, onChange}: Props){
+function InputIcon({icon, type="text", placeholder="", value="", onChange}: Props){
     return(
         <div className='relative w-full'>
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">

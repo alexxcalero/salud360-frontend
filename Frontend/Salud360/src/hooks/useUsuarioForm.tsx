@@ -13,16 +13,18 @@ function useUsuarioForm(){
     const [contrasenha, setContrasenha] = useState("");
     
     const setUsuarioAPI = (usuario: any) => {
+
         setNombres(usuario.nombres || "");
         setApellidos(usuario.apellidos || "");
-        setTipoDoc(usuario.tipoDocumento?.idTipoDocumento || "");
+        setTipoDoc(usuario.tipoDocumento.idTipoDocumento || "");
         setDNI(usuario.numeroDocumento || "");
         setTelefono(usuario.telefono || "");
         setRol(usuario.rol?.idRol || "");
         setCorreo(usuario.correo || "");
         setGenero(usuario.sexo || "");
         setFechaNacimiento(usuario.fechaNacimiento || "");
-        setContrasenha(usuario.contrasenha || "");
+        console.log("LA CONTRASEñA ES:", usuario.contrasenha)
+        setContrasenha("xxxxxxxx");
     }
 
     return{

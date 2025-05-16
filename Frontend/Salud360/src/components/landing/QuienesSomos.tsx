@@ -3,7 +3,8 @@ import ImageSectionRight from "@/components/landing/ImageSectionRight";
 
 function QuienesSomos(){
     return (
-        <ImageSectionRight 
+        <ImageSectionRight
+            id="quienesSomos" 
             image={sobreNosotrosImage1} 
             h1={"¿Quiénes somos?"} 
             h3={"Somos una plataforma dedicada a temas de salud y fitness. Buscamos que nuestros usuarios puedan crecer gracias a nuestros planes. "} />

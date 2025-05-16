@@ -1,12 +1,13 @@
 interface Props{
+    id?: string,
     image: string,
     h1: string;
     h3: string;
 }
 
-function ImageSectionRight({image, h1, h3}: Props){
+function ImageSectionRight({id="", image, h1, h3}: Props){
     return(
-        <section className="bg-white relative w-full"> {/*NOTA: USAR RELATIVE W-FULL Y LUEGO OBJECT-COVER EN EL IMG SOLO FUNCIONA PORQUE LAS IMAGENES TIENEN EL MISMO TAMAñO  */}
+        <section id={id} className="bg-white relative w-full"> {/*NOTA: USAR RELATIVE W-FULL Y LUEGO OBJECT-COVER EN EL IMG SOLO FUNCIONA PORQUE LAS IMAGENES TIENEN EL MISMO TAMAñO  */}
             <div className="grid grid-cols-2 items-center my-4 mx-32 h-[768px]"> {/*Lo correcto seria forzar una altura fija, pero pueden tener problemas con la responsiveness */}
                 <div className="col-span-1 flex justify-end z-20 h-full overflow-hidden rounded-4xl">
                     <img src={image} alt="" className="w-full h-full object-cover"/>

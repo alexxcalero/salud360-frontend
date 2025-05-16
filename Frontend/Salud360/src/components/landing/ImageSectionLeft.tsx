@@ -1,12 +1,13 @@
 interface Props{
+    id?: string,
     image: string,
     h1: string;
     h3: string;
 }
 
-function ImageSectionLeft({image, h1, h3}: Props){
+function ImageSectionLeft({id="", image, h1, h3}: Props){
     return(
-        <section className="bg-white relative w-full"> {/*NOTA: USAR RELATIVE W-FULL Y LUEGO OBJECT-COVER EN EL IMG SOLO FUNCIONA PORQUE LAS IMAGENES TIENEN EL MISMO TAMAñO  */}
+        <section id={id} className="bg-white relative w-full"> {/*NOTA: USAR RELATIVE W-FULL Y LUEGO OBJECT-COVER EN EL IMG SOLO FUNCIONA PORQUE LAS IMAGENES TIENEN EL MISMO TAMAñO  */}
             <div className="grid grid-cols-2 items-center my-4 mx-32 h-[768px]">
                 <div className="col-span-1 flex justify-start z-20">
                     <div className="flex flex-col gap-8 py-8 xl:py-32 pr-16 w-full bg-[#2A86FF] text-white text-right rounded-2xl">
