@@ -9,6 +9,8 @@ import { Mail, Phone } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
+import { Input as ShadInput} from "@/components/ui/input";
+import { Label as ShadLabel} from "@/components/ui/label";
 
 interface Props{
 
@@ -33,8 +35,8 @@ interface Props{
     correo: string;
     setCorreo?: (val: string) => void;
 
-    rol: string;
-    setRol?: (val: string) => void;
+    especialidad: string;
+    setEspecialidad?: (val: string) => void;
 
     genero: string;
     setGenero?: (val: string) => void;
@@ -45,43 +47,21 @@ interface Props{
     contrasenha: string;
     setContrasenha?: (val: string) => void;
 
+    descripcion: string;
+    setDescripcion?: (val: string) => void;
+
     readOnly?: Boolean;
     onSubmit?: () => void;
     buttonText?: string;
 }
 
-function UsuariosForms({title="", subtitle="", nombres, setNombres = () =>{}, apellidos, setApellidos = () =>{}, tipoDoc, setTipoDoc = () =>{}, DNI, setDNI  = () =>{}, telefono, setTelefono  = () =>{}, correo, setCorreo  = () =>{}, 
-    rol, setRol  = () =>{}, genero, setGenero  = () =>{}, fechaNacimiento, setFechaNacimiento  = () =>{}, contrasenha, setContrasenha  = () =>{}, readOnly = false, onSubmit = () =>{}, buttonText}: Props){
+function PersonalMedicoForms({title="", subtitle="", nombres, setNombres = () =>{}, apellidos, setApellidos = () =>{}, tipoDoc, setTipoDoc = () =>{}, DNI, setDNI  = () =>{}, telefono, setTelefono  = () =>{}, correo, setCorreo  = () =>{}, 
+    especialidad, setEspecialidad  = () =>{}, genero, setGenero  = () =>{}, fechaNacimiento, setFechaNacimiento  = () =>{}, contrasenha, setContrasenha  = () =>{}, descripcion, setDescripcion = () =>{}, 
+    readOnly = false, onSubmit = () =>{}, buttonText}: Props){
     
-    const [roles, setRoles] = useState([]);
     const [tipoDocumentos, setTipoDocumentos] = useState([]);
     //const [tipoDocumentos, setTipoDocumentos] = useState([]);
     const navigate = useNavigate();
-    
-    //Llamada Roles
-    const fetchRoles = () => {
-    axios.get("http://localhost:8080/api/roles", {
-      auth: {
-        username: "admin",
-        password: "admin123"
-      }
-    })
-      .then(res => {
-        console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
-        
-        const opciones = res.data.map((rolX: any) => ({
-            value: rolX.idRol,
-            content: rolX.nombre
-        }))
-
-        setRoles(opciones)
-        console.log("Roles:", opciones);
-      })
-      .catch(err => console.error("Error cargando roles", err));
-    }
-    useEffect(() => {
-        fetchRoles();
-    }, []);
 
     //Llamada TipoDocumentos
     const fetchTipoDocumentos = () => {
@@ -119,7 +99,7 @@ function UsuariosForms({title="", subtitle="", nombres, setNombres = () =>{}, ap
     /*const optionsSelect = [
         { value: "Homb", content: "Hombre" },
         { value: "Muj", content: "Mujer" },
-        { value: "Rodrigo Rol", content: "Rodrigo Roller" }]*/
+        { value: "Rodrigo especialidad", content: "Rodrigo especialidadler" }]*/
 
     return(
             <section className="w-full px-20 py-14 text-left">
@@ -139,11 +119,16 @@ function UsuariosForms({title="", subtitle="", nombres, setNombres = () =>{}, ap
                         <SelectLabel options={sexo} placeholder="Seleccione su genero" htmlFor="email" label="Género" value={genero} onChange={(content) => setGenero(content)}/>
                         <InputLabel type="email" placeholder="Ingrese el número de documento de identidad" htmlFor="email" label="DNI" value={DNI} onChange={(e) => setDNI(e.target.value)}/>
                         <InputLabel type="date" placeholder="Ingrese la fecha de nacimiento" htmlFor="date" label="Fecha de nacimiento" value={fechaNacimiento} onChange={(e) => setFechaNacimiento(e.target.value)}/>
-                        <SelectLabel options={roles} placeholder="Seleccione el rol" htmlFor="email" label="Rol" value={rol} onChange={(value) => setRol(value)}/>
+                        <InputLabel type="text" placeholder="Ingrese la especialidad" htmlFor="text" label="Especialidad" value={especialidad} onChange={(e) => setEspecialidad(e.target.value)}/>
                     </div>
                 </div>
 
-                {!readOnly && <DropImage/>}
+                <div className="flex flex-col gap-16">
+                    <div className="w-full h-48 rounded-md flex flex-col items-center justify-center cursor-pointer">
+                        <InputLabel type="text" placeholder="Ingrese la descripción" htmlFor="text" label="Descripción" value={descripcion} className="w-full h-full" onChange={(e) => setDescripcion(e.target.value)}/>
+                    </div>
+                    {!readOnly && <DropImage/>}
+                </div>
 
                 <div className="flex flex-row justify-between">
                     <div className="">
@@ -162,23 +147,4 @@ function UsuariosForms({title="", subtitle="", nombres, setNombres = () =>{}, ap
     );
 }
 
-export default UsuariosForms;
-
-
-{/*
-    <div>
-                    <h1>{title}</h1>
-                    <h2>{subtitle}</h2>
-                    <InputLabel type="email" placeholder="Ingrese los nombres" htmlFor="email" label="Nombres" value={nombres} onChange={(e) => setNombres(e.target.value)}/>
-                    <InputLabel type="email" placeholder="Ingrese los apellidos" htmlFor="email" label="Apellidos" value={apellidos} onChange={(e) => setApellidos(e.target.value)}/>
-                    <InputLabel type="email" placeholder="Ingrese el número de documento de identidad" htmlFor="email" label="DNI" value={DNI} onChange={(e) => setDNI(e.target.value)}/>
-                    <InputIconLabel icon={<Phone className="w-5 h-5" />} placeholder="Teléfono" type="tel" htmlFor="tel" label="Teléfono" value={telefono} onChange={(e) => setTelefono(e.target.value)} ></InputIconLabel>
-                    <SelectLabel options={optionsSelect} placeholder="Seleccione el rol" htmlFor="email" label="Rol" value={rol} onChange={(value) => setRol(value)}/>
-                    <InputIconLabel icon={<Mail className="w-5 h-5" />} placeholder="Mail" type="email" htmlFor="email" label="Email" value={correo} onChange={(e) => setCorreo(e.target.value)}></InputIconLabel>
-                    <SelectLabel options={optionsSelect} placeholder="Seleccione su genero" htmlFor="email" label="Género" value={genero} onChange={(value) => setGenero(value)}/>
-                    <InputLabel type="date" placeholder="Ingrese la fecha de nacimiento" htmlFor="date" label="Fecha de nacimiento" value={fechaNacimiento} onChange={(e) => setFechaNacimiento(e.target.value)}/>
-                    <InputLabel type="password" placeholder="" htmlFor="password" label="Contraseña" value={contrasenha} onChange={(e) => setContrasenha(e.target.value)}/>
-                    {!readOnly && (<Button variant="primary"size="md" className="my-4" onClick={onSubmit}>{buttonText}</Button>)} {/* Utilizar && es común en JS. Si readOnly es true, se renderiza. Si no, no
-                </div>
-    
-    */}
+export default PersonalMedicoForms;

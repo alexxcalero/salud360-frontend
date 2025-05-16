@@ -16,6 +16,7 @@ function UsuariosPage() {
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState<any>();
   const [showModalExito, setShowModalExito] = useState(false);
   const [showModalError, setShowModalError] = useState(false);
+  const [search, setSearch] = useState("");
 
   const fetchUsuarios = () => {
     axios.get("http://localhost:8080/api/usuarios", {
@@ -48,6 +49,7 @@ function UsuariosPage() {
     })
     .catch(() => console.log("Error"));
   }
+
 
   const columns = [
     { label: <input type="checkbox" checked={selectAll} onChange={handleSelectAll} />, className: "w-10" },
@@ -117,7 +119,7 @@ function UsuariosPage() {
     <div className="w-full px-6 py-4 overflow-auto">
       <div className="grid grid-cols-12 gap-4 items-center mb-4">
         <div className="col-span-4">
-          <InputIcon icon={<Search className="w-5 h-5" />} placeholder="Buscar usuarios" type="search" />
+          <InputIcon icon={<Search className="w-5 h-5" />} value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Buscar usuarios" type="search" />
         </div>
         <div className="col-span-6 flex gap-2">
           <ButtonIcon icon={<Search className="w-6 h-6" />} size="lg" variant="primary">Buscar</ButtonIcon>

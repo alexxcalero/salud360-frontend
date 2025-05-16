@@ -1,29 +1,30 @@
 import { useState } from "react";
 
-function useUsuarioForm(){
+function usePersonalMedicoForm(){
     const [nombres, setNombres] = useState("");
     const [apellidos, setApellidos] = useState("");
     const [tipoDoc, setTipoDoc] = useState("");
     const [DNI, setDNI] = useState("");
     const [telefono, setTelefono] = useState("");
-    const [rol, setRol] = useState("");
+    const [especialidad, setEspecialidad] = useState("");
     const [correo, setCorreo] = useState("");
     const [genero, setGenero] = useState("");
     const [fechaNacimiento, setFechaNacimiento] = useState("");
     const [contrasenha, setContrasenha] = useState("");
+    const [descripcion, setDescripcion] = useState("");
     
-    const setUsuarioAPI = (usuario: any) => {
+    const setMedicoAPI = (medico: any) => {
 
-        setNombres(usuario.nombres || "");
-        setApellidos(usuario.apellidos || "");
-        setTipoDoc(usuario.tipoDocumento.idTipoDocumento || "");
-        setDNI(usuario.numeroDocumento || "");
-        setTelefono(usuario.telefono || "");
-        setRol(usuario.rol?.idRol || "");
-        setCorreo(usuario.correo || "");
-        setGenero(usuario.sexo || "");
-        setFechaNacimiento(usuario.fechaNacimiento || "");
-        console.log("LA CONTRASEñA ES:", usuario.contrasenha)
+        setNombres(medico.nombres || "");
+        setApellidos(medico.apellidos || "");
+        setTipoDoc(medico.tipoDocumento.idTipoDocumento || "");
+        setDNI(medico.numeroDocumento || "");
+        setTelefono(medico.telefono || "");
+        setEspecialidad(medico.especialidad || "");
+        setCorreo(medico.correo || "");
+        setGenero(medico.sexo || "");
+        setFechaNacimiento(medico.fechaNacimiento || "");
+        setDescripcion(medico.descripcion || "");
         setContrasenha("xxxxxxxx");
     }
 
@@ -33,13 +34,14 @@ function useUsuarioForm(){
         tipoDoc, setTipoDoc,
         DNI, setDNI,
         telefono, setTelefono,
-        rol, setRol,
+        especialidad, setEspecialidad,
         correo, setCorreo,
         genero, setGenero,
         fechaNacimiento, setFechaNacimiento,
         contrasenha, setContrasenha,
-        setUsuarioAPI
+        descripcion, setDescripcion,
+        setMedicoAPI
   };
 }
 
-export default useUsuarioForm;
+export default usePersonalMedicoForm;

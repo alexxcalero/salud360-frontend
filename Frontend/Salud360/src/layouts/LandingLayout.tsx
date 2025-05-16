@@ -1,14 +1,43 @@
 
+import LandingFooter from "@/components/landing/LandingFooter";
 import LandingNavbar from "@/components/landing/LandingNavbar";
+import { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router";
 import { Outlet } from "react-router";
 
 function LandingLayout(){
+
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+    if (location.hash) {
+      // Esperamos un poco para asegurarnos que el DOM está montado
+      setTimeout(() => {
+        const element = document.getElementById(location.hash.slice(1));
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        } else {
+          // Si el elemento no existe, limpiamos el hash pero no forzamos scroll
+          navigate(location.pathname, { replace: true });
+        }
+      }, 100); // 100ms es suficiente en la mayoría de casos
+    }}, [location]);
+
+    useEffect(() => {
+    if (location.hash) {
+        // Reemplaza la URL actual sin el hash
+        window.history.replaceState(null, "", location.pathname);
+    }
+    }, []);
+
+
     return (
         <div className="min-w-[100dvw] min-h-[100dvh]">
             <LandingNavbar/>
             <div className="mt-18"></div> {/*Estamos colocando el navbar como fijo, y siempre que hacemos eso tapa el contenido de debajo. Para revertirlo colocamos este div (para que "empuje" hacia arriba el navbar) */}
             <Outlet/>
-            <div className="h-[430px] bg-[#2A86FF]"></div>
+            <LandingFooter/>
         </div>
     )
 }

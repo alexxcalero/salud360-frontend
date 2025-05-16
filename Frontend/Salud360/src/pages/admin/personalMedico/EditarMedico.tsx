@@ -1,12 +1,12 @@
-import PersonalMedicoForms from "@/components/admin/personalMedico/personalMedicoForms";
-import usePersonalMedicoForm from "@/hooks/usePersonalMedicoForm";
-import UnderConstruction from "@/pages/UnderConstruction";
+import  { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router";
+import { useParams } from "react-router";
+import usePersonalMedicoForm from "@/hooks/usePersonalMedicoForm";
+import PersonalMedicoForms from "@/components/admin/personalMedico/personalMedicoForms";
 
-function CrearMedico(){
-
-    const navigate = useNavigate();
+function EditarMedico(){
+    const [loading, setLoading] = useState(true);
+    const {id} = useParams();
 
     const {
         nombres, setNombres,
@@ -20,13 +20,37 @@ function CrearMedico(){
         fechaNacimiento, setFechaNacimiento,
         contrasenha, setContrasenha,
         descripcion, setDescripcion,
+        setMedicoAPI,
     } = usePersonalMedicoForm();
 
-    const handleCrearMedico = async() => {
+    useEffect(() => {
+        axios.get(`http://localhost:8080/api/medicos/${id}`, {
+          auth: {
+            username: "admin",
+            password: "admin123"
+          }
+        })
+          .then(res => {
+            console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
+            setMedicoAPI(res.data);
+            console.log("Medico:", res.data);
+            setLoading(false);
+          })
+          .catch(err => {
+            console.error("Error cargando el medico", err);
+            setLoading(false);
+          });
+      }, []);
+    
+    if (loading) {
+      return <p>Cargando médico...</p>; // o un spinner
+    }
+
+    const handleEditarMedico = async() => {
         try{
             const sexo = genero;
 
-            const response = await axios.post("http://localhost:8080/api/medicos", 
+            const response = await axios.patch(`http://localhost:8080/api/medicos/${id}`, 
                 {
                     nombres,
                     apellidos,
@@ -36,14 +60,8 @@ function CrearMedico(){
                     sexo,
                     contrasenha,
                     fechaNacimiento,
-                    notiCorreo: true,
-                    notiSMS: true,
-                    notiWhatsApp: true,
                     tipoDocumento: {
                         idTipoDocumento: tipoDoc
-                    },
-                    rol: {
-                        idTipoRol: 2 //El rol del médico es 2
                     },
                     especialidad,
                     descripcion
@@ -59,24 +77,22 @@ function CrearMedico(){
                 }
             );
 
-            console.log("Medico creado:", response.data);
-            alert("Medio creado exitosamente");
-            navigate("/admin/personalMedico");
-
+            console.log("Médico editado:", response.data);
+            alert("Médico editado exitosamente");
         }
         catch (err){
-            console.error("Error al crear medio:", err);
-            alert("Hubo un error al crear el medico");
+            console.error("Error al crear usuario:", err);
+            alert("Hubo un error al crear el usuario");
         }
 
 
     }
 
-    return (
-        <div>
+    
+
+    return(
             <PersonalMedicoForms
-                title="Registrar Medico"
-                subtitle="Rellene los siguientes campos para completar el registro del medico."
+                title="Editar médico"
                 nombres={nombres}
                 setNombres={setNombres}
                 apellidos={apellidos}
@@ -99,12 +115,11 @@ function CrearMedico(){
                 setContrasenha={setContrasenha}
                 descripcion={descripcion}
                 setDescripcion={setDescripcion}
-                onSubmit={handleCrearMedico}
-                buttonText="Crear Medico"
+                onSubmit={handleEditarMedico}
+                buttonText="Guardar"
                 readOnly={false}
             />
-        </div>
-    )
+    );
 }
 
-export default CrearMedico;
+export default EditarMedico;

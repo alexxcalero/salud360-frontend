@@ -2,13 +2,18 @@ import Button from "@/components/Button";
 import HeroComunidades from "@/components/landing/HeroComunidades";
 import ComunidadesImage1 from "@/assets/comunidades1.png";
 import ListaComunidades from "@/components/landing/ListaComunidades";
+import { useEffect } from "react";
 
 function Comunidades(){
+    useEffect(() => {
+            window.scrollTo(0, 0); //Para que apenas cargue aparezca en el tope de la página.
+        }, []);
+
     return (
         <div>
             <HeroComunidades/>
             <section className="flex flex-col gap-32 my-32">
-                <section className="bg-white">
+                <section id="sobreLasComunidades" className="bg-white scroll-mt-18">
                     <div className="grid grid-cols-2 items-center my-4 mx-32">
                         <div className="col-span-1 h-full flex flex-col justify-center gap-8 text-left px-8">
                             <h1>Sobre las comunidades</h1>
@@ -33,9 +38,9 @@ function Comunidades(){
                     </div>
                 </section>
 
-                <section className="bg-white">
+                <section id="localesComunidades" className="bg-white scroll-mt-18 p-8">
                     <div className="flex flex-col gap-8 mx-32">
-                        <div className="flex flex-col text-left px-8 gap-8">
+                        <div className="flex flex-col text-left gap-8">
                             <h1>Explorar Comunidades</h1>
                             <hr />
                             <br />

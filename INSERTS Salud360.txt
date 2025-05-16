@@ -30,22 +30,22 @@ INSERT INTO ingesoft.usuario (
 ) VALUES
 
 -- Usuario 1 (Admin)
-(true, '1990-03-15', 1, 1, true, false, true, NOW(), NULL, 'Rojas Fernández', 'admin123', 'rojasf@correo.com', NULL, 'Lucía', '47123456', 'F', '987111222'),
+(true, '1990-03-15', 1, 1, true, false, true, NOW(), NULL, 'Rojas Fernández', 'admin123', 'rojasf@correo.com', NULL, 'Lucía', '47123456', 'Femenino', '987111222'),
 
 -- Usuario 2 (Médico)
-(true, '1985-11-02', 2, 2, true, true, false, NOW(), NULL, 'Valverde Ríos', 'medico2024', 'valr@hospital.com', NULL, 'Carlos', 'CE123456', 'M', '988888777'),
+(true, '1985-11-02', 2, 2, true, true, false, NOW(), NULL, 'Valverde Ríos', 'medico2024', 'valr@hospital.com', NULL, 'Carlos', 'CE123456', 'Masculino', '988888777'),
 
 -- Usuario 3 (Médico)
-(true, '1992-06-20', 2, 1, false, true, true, NOW(), NULL, 'Navarro Salas', 'drnavarro', 'navarro@med.com', NULL, 'Andrea', '48234567', 'F', '987654321'),
+(true, '1992-06-20', 2, 1, false, true, true, NOW(), NULL, 'Navarro Salas', 'drnavarro', 'navarro@med.com', NULL, 'Andrea', '48234567', 'Femenino', '987654321'),
 
 -- Usuario 4 (Admin)
-(true, '1988-07-08', 1, 3, true, false, false, NOW(), NULL, 'Ramírez Chacón', 'admin456', 'ramirez@correo.com', NULL, 'Javier', 'P3456789', 'M', '911223344'),
+(true, '1988-07-08', 1, 3, true, false, false, NOW(), NULL, 'Ramírez Chacón', 'admin456', 'ramirez@correo.com', NULL, 'Javier', 'P3456789', 'Masculino', '911223344'),
 
 -- Usuario 5 (Médico)
-(true, '1994-01-10', 2, 2, true, true, true, NOW(), NULL, 'López Díaz', 'mlop321', 'mlopez@clinic.com', NULL, 'Mariana', 'CE654321', 'F', '900123456'),
+(true, '1994-01-10', 2, 2, true, true, true, NOW(), NULL, 'López Díaz', 'mlop321', 'mlopez@clinic.com', NULL, 'Mariana', 'CE654321', 'Femenino', '900123456'),
 
 -- Usuario 6 (Admin)
-(true, '1982-05-30', 1, 1, false, false, false, NOW(), NULL, 'Delgado Ruiz', 'delruiz82', 'delgado@admin.com', NULL, 'Tomás', '40654321', 'M', '912345678');
+(true, '1982-05-30', 1, 1, false, false, false, NOW(), NULL, 'Delgado Ruiz', 'delruiz82', 'delgado@admin.com', NULL, 'Tomás', '40654321', 'Masculino', '912345678');
 
 INSERT INTO ingesoft.medico (
     id_usuario,
@@ -142,5 +142,26 @@ INSERT INTO ingesoft.servicio (
     NULL,
     'Consulta Médica General',
     'Medicina'
+);
+
+INSERT INTO ingesoft.local (
+    activo, apellidos_contacto, direccion, fecha_creacion,
+    fecha_desactivacion, nombre, nombres_contacto, telefono,
+    telefono_contacto, tipo_servicio, id_servicio
+) VALUES 
+(
+    true, 'Cáceres Mejía', 'Av. La Marina 785, San Miguel',
+    CURRENT_TIMESTAMP, NULL, 'Local Nutrición La Marina',
+    'Lucía Fernanda', '917111222', '912222333', 'Nutrición', 1
+),
+(
+    true, 'Rojas Villanueva', 'Calle Los Álamos 234, Miraflores',
+    CURRENT_TIMESTAMP, NULL, 'Centro Psicológico Miraflores',
+    'Juan Andrés', '918333444', '913444555', 'Psicología', 2
+),
+(
+    true, 'Montoya Salas', 'Av. Túpac Amaru 998, Comas',
+    CURRENT_TIMESTAMP, NULL, 'Policlínico Popular Comas',
+    'Daniela Paola', '919555666', '914666777', 'Medicina', 3
 );
 
