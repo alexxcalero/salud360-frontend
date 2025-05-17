@@ -4,9 +4,9 @@ import { Button } from "@/components/ui/button"
 import InputIconLabelEdit from "@/components/InputIconLabelEdit"
 import { useGoogleLogin } from "@react-oauth/google"
 import { Link } from "react-router"
-import { jwtDecode } from "jwt-decode"
 import { useNavigate } from "react-router-dom"
 import { login } from "@/services/authService"
+import { authGoogleService } from "@/services/authGoogleService"
 
 export default function LoginForm() {
   const [formData, setFormData] = useState({
@@ -35,9 +35,11 @@ export default function LoginForm() {
     } catch (error: any) {
       if (error.response && error.response.status === 401) {
         alert("Correo o contraseña incorrectos.");
+        setFormData({ correo: "", contraseña: "" })
       } else {
         console.error("Error al iniciar sesión:", error);
         alert("Ocurrió un error inesperado.");
+        setFormData({ correo: "", contraseña: "" })
       }
     }
 
@@ -45,12 +47,31 @@ export default function LoginForm() {
 
   //Uso de Google OAuth
   const loginGoogle = useGoogleLogin({
-    onSuccess: (tokenResponse) => {
+    onSuccess: async (tokenResponse) => {
       console.log("Login con Google OK:", tokenResponse)
-      // Aquí debemos jwtDecode para extraer el token que envia google     
-    },
-    onError: () => {
-      console.error("Error al iniciar sesión con Google")
+      try {
+        const res = await fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
+          headers: {
+            Authorization: `Bearer ${tokenResponse.access_token}`,
+          },
+        });
+
+        const profile = await res.json();
+        console.log("Perfil de Google:", profile);
+        const correo = profile.email;
+
+        const result = await authGoogleService(correo);
+        // Validación de cuenta opcional
+        if (!result.verificado) {
+          alert("Tu cuenta aún no ha sido verificada.");
+          return;
+        }
+        localStorage.setItem("authToken", tokenResponse.access_token);
+        navigate("/");
+      } catch (error) {
+        console.error("Error procesando login con Google:", error);
+        alert("No pudimos completar el inicio de sesión con Google.");
+      } 
     }
   })
   
@@ -76,9 +97,17 @@ export default function LoginForm() {
         value={formData.contraseña}
         onChange={handleChange}
       />
-      <Button type="submit" className="w-full mt-4" onClick={() => navigate("/")}>
+      <div className="text-sm">
+        ¿No tienes una cuenta?{" "}
+        <Link to="/RegistroUsuario" className="text-[#1E88E5] hover:underline">
+          Regístrate aquí
+        </Link>
+      </div>
+
+      <Button type="submit" className="w-full mt-4">
         Iniciar Sesión
       </Button>
+
       <div className="text-center mt-4">
         <p className="text-sm text-gray-500">¿Prefieres usar tu cuenta de Google?</p>
         <button

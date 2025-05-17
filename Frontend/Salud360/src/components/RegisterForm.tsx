@@ -4,8 +4,9 @@ import { Button } from "@/components/ui/button"
 import { useGoogleLogin } from "@react-oauth/google"
 import SelectIconLabel from "@/components/SelectIconLabel"
 import InputIconLabelEdit from "./InputIconLabelEdit"
-import { jwtDecode } from "jwt-decode"
 import { useNavigate } from "react-router-dom"
+import { register } from "@/services/registerService";
+
 
 export default function RegisterForm() {
   const [formData, setFormData] = useState({
@@ -27,20 +28,50 @@ export default function RegisterForm() {
     setFormData(prev => ({ ...prev, [name]: value }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     console.log("Formulario enviado:", formData)
-    // Aquí puedes hacer una petición con Axios al backend
-  }
+
+    if (formData.correo !== formData.confirmarCorreo) {
+      alert("Los correos no coinciden.");
+      return;
+    }
+
+    if (formData.contraseña !== formData.confirmarContraseña) {
+      alert("Las contraseñas no coinciden.");
+      return;
+    }
+    // conexio a axios
+    try {
+      const datosEnvio = {
+        nombres: formData.nombres,
+        apellidos: formData.apellidos,
+        tipoDocumento: formData.tipoDocumento,
+        numeroDocumento: formData.numeroDocumento,
+        fechaNacimiento: formData.fechaNacimiento,
+        lugarResidencia: formData.lugarResidencia,
+        correo: formData.correo,
+        contraseña: formData.contraseña,
+        telefono: formData.telefono,
+      };
+
+      await register(datosEnvio);
+
+      navigate("/RegistroExitoso");
+    } catch (error) {
+      console.error("Error al registrar:", error);
+      alert("Ocurrió un error al registrar. Inténtalo nuevamente.");
+    }
+  };
 
   //Uso de Google OAuth
-  const loginGoogle = useGoogleLogin({
+  const registerGoogle = useGoogleLogin({
     onSuccess: (tokenResponse) => {
-      console.log("Login con Google OK:", tokenResponse)
+      console.log("Registro con Google OK:", tokenResponse)
       // Aquí debemos jwtDecode para extraer el token que envia google
     },
     onError: () => {
-      console.error("Error al iniciar sesión con Google")
+      console.error("Error al registrarse con Google")
     }
   })
 
@@ -164,7 +195,7 @@ export default function RegisterForm() {
         <p className="text-sm text-gray-500">¿Prefieres usar tu cuenta de Google?</p>
         <button
           type="button"
-          onClick={() => loginGoogle()}
+          onClick={() => registerGoogle()}
           className="w-full mt-2 flex items-center justify-center gap-2 border border-gray-300 rounded-md py-2 hover:bg-gray-100 transition"
         >
           <ShieldCheck className="w-5 h-5 text-blue-500" />
