@@ -49,6 +49,8 @@ function ListaLocales(){
     const totalSize = locales.length
     console.log("TOTAL SIZE:", totalSize);
 
+    console.log("LOCALES ANTES DE ENTRA AL CARROUSEL:", locales);
+
     return (
       <CarrouselLanding 
           module={locales} 

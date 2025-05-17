@@ -71,7 +71,6 @@ function EditarMedico() {
           correo,
           telefono,
           sexo,
-          contrasenha,
           fechaNacimiento,
           tipoDocumento: {
             idTipoDocumento: tipoDoc,
