@@ -45,7 +45,6 @@ function CrearMedico() {
           correo,
           telefono,
           sexo,
-          contrasenha,
           fechaNacimiento,
           notiCorreo: true,
           notiSMS: true,

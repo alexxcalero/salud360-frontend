@@ -26,11 +26,15 @@ export default function LoginForm() {
 
     try {
       const response = await login(formData.correo, formData.contraseña);
-
+      console.log("El response es:", response)
       // Guardar resultado si es token
-      localStorage.setItem("authToken", response);
+      localStorage.setItem("authToken", response.token);
 
       // Redirigir al perfil del usuario
+
+      
+
+
       navigate("/usuario"); //pagina de inicio del usuario
     } catch (error: any) {
       if (error.response && error.response.status === 401) {

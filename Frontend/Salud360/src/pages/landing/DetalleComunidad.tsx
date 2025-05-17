@@ -16,7 +16,7 @@ function DetalleComunidad(){
 
     const [comunidad, setComunidad] = useState<any>({});
     const [servicios, setServicios] = useState([]);
-    //const [membresias, setMembresias] = useState([]);
+    const [membresias, setMembresias] = useState([]);
     const {id} = useParams();
     
 
@@ -34,7 +34,7 @@ function DetalleComunidad(){
         setServicios(res.data.servicios);
         //console.log("Servicios de la comunidad 1:", res.data.servicios);
         //console.log("Servicios de la comunidad 2:", servicios);
-        //setMembresias(res.data.membresia);
+        setMembresias(res.data.membresias);
       })
       .catch(err => console.error("Error cargando comunidad", err));
     }
@@ -46,29 +46,15 @@ function DetalleComunidad(){
     console.log("Comunidad:", comunidad);
     console.log("Servicios de la comunidad 2:", servicios);
 
-    
-    {/*MEMBRESÍAS ELIMINAR CUANDO FUNCIONE LO DE ARRIBA */}
-    const [membresias, setMembresias] = useState([]);
-    const fetchMembresias = () => {
-    axios.get(`http://localhost:8080/api/membresias/5`, {
-      auth: {
-        username: "admin",
-        password: "admin123"
-      }
-    })
-      .then(res => {
-        console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
-        setMembresias(res.data);
-        console.log("Membresía:", res.data);
-      })
-      .catch(err => console.error("Error cargando membresía", err));
-    }    
-    
-    useEffect(() => {
-        fetchMembresias();
-    }, []);
 
     console.log("Membresía 2:", membresias);
+
+    servicios.map((servicio: any, i: number) => (
+        console.log("LA DESCRIPCIÓN es:", servicio.descripcion)
+    ))
+
+    
+    
 
 
     useEffect(() => {
@@ -131,9 +117,13 @@ function DetalleComunidad(){
                     <div className="absolute inset-0 flex flex-col items-center py-8">
                         <h1 className="text-white">PAQUETES DE MEMBRESÍA</h1>
 
-                        <div className="flex flex-col m-8">
+                        <div className="flex flex-row m-8 gap-12">
                             {/*CUANDO FUNCIONE REEMPLAZAR POR EL CODIGO DE ABAJO */}
-                            <CardMembresia membresia={membresias} servicios={servicios}/>
+                            {membresias.map((membresia: any, i: number) => (
+                                <div key={i}>
+                                    <CardMembresia membresia={membresia} servicios={servicios}/>
+                                </div>
+                            ))}
                         </div>
 
                     </div>
@@ -153,8 +143,4 @@ function DetalleComunidad(){
 
 export default DetalleComunidad;
 
-{/**{membresias.map((membresia: any, i: number) => (
-                                <div key={i}>
-                                    <CardMembresia membresia={membresia}/>
-                                </div>
-                            ))} */}
+{/** */}
