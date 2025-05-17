@@ -13,7 +13,7 @@ import ModalRestauracion from "@/components/ModalRestauracion";
 
 function ComunidadPage() {
   const [selectAll, setSelectAll] = useState(false);
-  const [comunidades, setComunidades] = useState([]);
+  const [comunidades, setComunidades] = useState<any[]>([]);
   const [comunidadSeleccionada, setComunidadSeleccionada] = useState<any>();
   const [showModalExito, setShowModalExito] = useState(false);
   const [showModalError, setShowModalError] = useState(false);
@@ -64,12 +64,15 @@ function ComunidadPage() {
     { label: "Acciones", className: "w-24 text-center" },
   ];
 
-  const rows = comunidades.map((comunidad: any) => [
+  const rows = comunidades
+  .slice() // para no mutar el estado original
+  .sort((a: any, b: any) => a.idComunidad - b.idComunidad)
+  .map((comunidad: any) => [
     {
       content: <input type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
       className: "w-10",
     },
-    { content: comunidad.idComunidad , className: "w-16" },
+    { content: comunidad.idComunidad, className: "w-16" },
     { content: comunidad.nombre, className: "w-1/6 text-left" },
     { content: comunidad.descripcion, className: "w-1/4 text-left" },
     { content: comunidad.proposito, className: "w-1/4 text-left" },
@@ -108,11 +111,11 @@ function ComunidadPage() {
               setShowModalError(true);
             }}/>
             :
-            <RotateCcw className= "w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => {
+            <RotateCcw className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => {
               setComunidadSeleccionada(comunidad);
-              handleRestaurarComunidad(); // Aquí haces la restauración efectiva
+              handleRestaurarComunidad();
             }}/>
-        }
+          }
         </div>
       ),
       className: "w-24 text-center",
