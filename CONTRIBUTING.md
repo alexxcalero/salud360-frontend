@@ -12,15 +12,13 @@
    npm run dev
    ```
 
-## Back-end
+# Storybook
 
-### Base de datos
+Sirve para ver los componentes, testearlos individualmente o ver documentación sobre ellos
 
-...
-
-### IntelliJ
-
-...
+```bash
+npm run storybook
+```
 
 # Estilos (Front-end)
 

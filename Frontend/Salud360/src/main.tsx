@@ -54,12 +54,14 @@ import EditarMedico from "./pages/admin/personalMedico/EditarMedico";
 import DetalleMedico from "./pages/admin/personalMedico/DetalleMedico";
 import UsuarioSuccess from "./pages/admin/usuarios/UsuarioSuccess";
 import SuccessRegisterPage from "./pages/usuario/Registro/SuccessRegisterPage";
+import { UsuarioProvider } from "./hooks/useUsuario";
 
 const CLIENT_ID = "442103352631-urj3v36db8bhki2cg4vu6c2q404dkko7.apps.googleusercontent.com"
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <GoogleOAuthProvider clientId={CLIENT_ID}>
+      <UsuarioProvider>
       <BrowserRouter>
         <Routes>
           {/* // A este nivel tienen que insertar nuevas rutas. Especificando la ruta "/usuarios/register" y el elemento que será la página */}
@@ -171,6 +173,7 @@ createRoot(document.getElementById("root")!).render(
           <Route path="*" element={<Page404 />} />
         </Routes>
       </BrowserRouter>
+      </UsuarioProvider>
     </GoogleOAuthProvider>
   </StrictMode>
 );
