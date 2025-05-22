@@ -3,9 +3,10 @@ import Input from "@/components/input/Input";
 import PasswordInput from "@/components/input/PasswordInput";
 import { useUsuario } from "@/hooks/useUsuario";
 import { Calendar, ChevronDown, Mail, MapPin, Pen, Phone } from "lucide-react";
-import { useNavigate } from "react-router";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Asegúrate de tener esto bien configurado
 
-function Inicio() {
+function InicioPerfi() {
   const {
     datos: {
       nombres,
@@ -19,6 +20,7 @@ function Inicio() {
       fechaCreacion,
     },
   } = useUsuario();
+  const [showModalLogout, setShowModalLogout] = useState(false);
   const navigate = useNavigate();
   return (
     <div className="p-8">
@@ -164,8 +166,53 @@ function Inicio() {
           <Button type="submit">Aplicar cambios</Button>
         </section>
       </form>
+
+      {/* Botón cerrar sesión */}
+      <button
+        className="mt-8 bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded w-max self-end"
+        onClick={() => setShowModalLogout(true)}
+      >
+        Cerrar sesión
+      </button>
+
+      {/* Modal de confirmación */}
+      {showModalLogout && (
+        <>
+          <div className="fixed inset-0 bg-black/60 z-40" />
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <div className="bg-white p-8 rounded-2xl shadow-md max-w-md w-full text-center">
+              <div className="flex justify-center mb-4">
+                <div className="bg-yellow-300 rounded-full w-16 h-16 flex items-center justify-center">
+                  <span className="text-white text-3xl font-bold">!</span>
+                </div>
+              </div>
+              <h2 className="text-2xl font-bold mb-2">
+                ¿Deseas cerrar sesión?
+              </h2>
+              <p className="mb-6">Serás redirigido a la pantalla de inicio</p>
+              <div className="flex justify-center gap-4">
+                <button
+                  className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded"
+                  onClick={() => setShowModalLogout(false)}
+                >
+                  Cancelar
+                </button>
+                <Button
+                  variant="danger"
+                  onClick={() => {
+                    setShowModalLogout(false);
+                    navigate("/"); // Reemplaza "/" con la ruta que corresponda a tu login o inicio
+                  }}
+                >
+                  Confirmar
+                </Button>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
 
-export default Inicio;
+export default InicioPerfi;

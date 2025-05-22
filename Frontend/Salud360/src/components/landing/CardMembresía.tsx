@@ -11,7 +11,7 @@ function CardMembresia({membresia, servicios}: Props){
     const navigate = useNavigate();
 
     return(
-        <div className="flex flex-col py-4 px-4 w-[400px] bg-white border-2 border-black rounded-xl gap-2">
+        <div className="flex flex-col py-4 px-4 w-[400px] h-full bg-white border-2 border-black rounded-xl gap-2">
             <div className="flex flex-col gap-4">
                 <h1 className="font-extrabold">{membresia.nombre}</h1>
                 <p className="font-bold">{membresia.maxReservas == "-1" ? 

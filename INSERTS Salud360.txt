@@ -352,4 +352,6 @@ INSERT INTO ingesoft.local (
     'Policlínico accesible con servicios médicos generales, laboratorio y atención primaria de calidad.'
 );
 
+ALTER TABLE ingesoft.usuario ALTER COLUMN contrasenha DROP NOT NULL;
+
 
