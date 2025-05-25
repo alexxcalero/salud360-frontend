@@ -1,4 +1,4 @@
-import axios from "axios";
+import { baseAPI } from "./baseAPI";
 
 export const login = async (correo: string, contrasenha: string) => {
   const response = await axios.post("http://localhost:8080/api/usuarios/login", {
@@ -6,5 +6,5 @@ export const login = async (correo: string, contrasenha: string) => {
       contrasenha,
   });
 
-  return response.data; // Devuelve la respuesta del servidor
+  return response.data; // asumo que aquí llega un string de respuesta
 };
