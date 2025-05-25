@@ -1,18 +1,21 @@
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { Mail, Lock, ShieldCheck} from "lucide-react"
 import { Button } from "@/components/ui/button"
 import InputIconLabelEdit from "@/components/InputIconLabelEdit"
 import { useGoogleLogin } from "@react-oauth/google"
 import { Link } from "react-router"
 import { useNavigate } from "react-router-dom"
-import { login } from "@/services/authService"
+import { login as loginRequest } from "@/services/authService"
 import { authGoogleService } from "@/services/authGoogleService"
+import { AuthContext } from "@/hooks/AuthContext"
 
 export default function LoginForm() {
   const [formData, setFormData] = useState({
     correo: "",
     contraseña: ""
   })
+
+  const { login: loginContext } = useContext(AuthContext);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -24,25 +27,46 @@ export default function LoginForm() {
     console.log("Datos enviados:", formData)
     // Aquí puedes hacer una petición con Axios al backend
 
+
     try {
-      const response = await login(formData.correo, formData.contraseña);
+      const response = await loginRequest(formData.correo, formData.contraseña);
       console.log("El response es:", response)
-      // Guardar resultado si es token
-      localStorage.setItem("authToken", response.token);
-
-      // Redirigir al perfil del usuario
-
-      
+      console.log("El token de response es:", response.token)
 
 
-      navigate("/usuario"); //pagina de inicio del usuario
+      var activeUser = response.usuario;
+      var token = response.token;
+      var idRol = activeUser.rol?.idRol;
+
+      loginContext(activeUser, token)
+
+      console.log("el idRol es:", idRol)
+
+      switch(idRol){
+        case 1: //Admin
+          navigate("/admin");
+          console.log("HOLA");
+          break;
+        case 2:
+          alert("MEDICO")
+          break;
+        case 3:
+          navigate("/usuario")
+          break;
+        case 4:
+          navigate("/usuario")
+          break;
+        default:
+          navigate("/")
+      }
+
     } catch (error: any) {
       if (error.response && error.response.status === 401) {
         alert("Correo o contraseña incorrectos.");
         setFormData({ correo: "", contraseña: "" })
       } else {
         console.error("Error al iniciar sesión:", error);
-        alert("Ocurrió un error inesperado.");
+        alert("Error al iniciar sesión.");
         setFormData({ correo: "", contraseña: "" })
       }
     }

@@ -19,9 +19,9 @@ function ListaLocales(){
       }
     })
       .then(res => {
-        console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
+        //console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
         setLocales(res.data);
-        console.log("Locales:", res.data);
+        //console.log("Locales:", res.data);
       })
       .catch(err => console.error("Error cargando locales", err));
     }
@@ -47,9 +47,6 @@ function ListaLocales(){
     };
 
     const totalSize = locales.length
-    console.log("TOTAL SIZE:", totalSize);
-
-    console.log("LOCALES ANTES DE ENTRA AL CARROUSEL:", locales);
 
     return (
       <CarrouselLanding 
