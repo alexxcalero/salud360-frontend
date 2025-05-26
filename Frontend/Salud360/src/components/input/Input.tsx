@@ -51,7 +51,6 @@ const UnifiedInput = ({
           type={type}
           placeholder={placeholder}
           className="px-0 border-0 outline-none focus:ring-0 focus:border-0 active:border-0 focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none focus-visible:ring-0"
-          defaultValue={defaultValue}
           value={value}
           required={required}
           disabled={disabled}
