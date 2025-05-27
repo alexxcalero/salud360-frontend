@@ -5,9 +5,10 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useUsuario } from "@/hooks/useUsuario";
+import { useState } from "react";
 
 const NotificationIcon = () => {
-  const { newNotifications, setNewNotifications } = useUsuario();
+  const [newNotifications, setNewNotifications] = useState(true);
   const _dataExample = [
     { message: "Notificación 1", date: "2023-10-01", time: "10:00 AM" },
     { message: "Notificación 2", date: "2023-10-02", time: "11:00 AM" },
@@ -33,7 +34,10 @@ const NotificationIcon = () => {
         </PopoverTrigger>
 
         <PopoverContent className="max-h-[400px] overflow-y-auto w-80">
-          <h3>Notificaciones</h3>
+          <div className="pt-4 flex flex-col gap-2">
+            <h3>Notificaciones</h3>
+            <hr className="border border-black"/>
+          </div>
           {_dataExample.map((notification, index) => (
             <div
               key={index}
