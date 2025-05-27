@@ -11,11 +11,14 @@ import { useContext } from "react";
 
 const ProfileIcon = () => {
   
-  const {usuario, logout} = useContext(AuthContext)
+  const {usuario, logout, loading} = useContext(AuthContext)
   
+  if (loading || !usuario) return null;
+
   const nombres = usuario.nombres;
   const apellidos = usuario.apellidos; 
   const fotoPerfil = usuario.fotoPerfil;
+  const idRol = usuario.rol.idRol;
 
 
   /*const {
@@ -25,7 +28,9 @@ const ProfileIcon = () => {
     <>
       <Popover>
         <PopoverTrigger>
-          <User color="white" />
+          <div className="cursor-pointer">
+            <User color="white" />
+          </div>
         </PopoverTrigger>
         <PopoverContent>
           <div className="flex gap-2 border-b-2 border-neutral-200 py-2 items-center">
@@ -44,12 +49,29 @@ const ProfileIcon = () => {
             <span>
               {nombres} {apellidos}
               <br />
-              <NavLink
-                to="/usuario/configuracion/"
-                className="use-label-large text-blue-500"
-              >
-                Ver perfil
-              </NavLink>
+
+              {idRol == 1 ? (
+                <>
+                <NavLink
+                  to="/admin/"
+                  className="use-label-large text-blue-500"
+                >
+                  Ver panel de Admin
+                </NavLink>
+                </>
+              ) : (
+                <>
+                <NavLink
+                  to="/usuario/"
+                  className="use-label-large text-blue-500"
+                >
+                  Ver perfil
+                </NavLink>
+                </>
+              )}
+
+              <br />
+              
             </span>
           </div>
           <div className="pt-2 cursor-pointer" onClick={logout}>
