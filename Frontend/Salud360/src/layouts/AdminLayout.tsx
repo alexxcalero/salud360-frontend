@@ -1,4 +1,6 @@
 import Sidebar from "@/components/admin/Sidebar";
+import { AuthContext } from "@/hooks/AuthContext";
+import { useContext } from "react";
 import { Outlet, useLocation } from "react-router";
 
 const routeToIndex: Record<string, number> = {
@@ -31,6 +33,9 @@ function AdminLayout() {
   //console.log("El módulo es:", module);
 
   const active = routeToIndex[module] ?? 0; //Si lo encuentra, lo asigna. Si no encuentra el modulo, el valor predeterminado será 0
+
+  const {usuario, logout} = useContext(AuthContext)
+  console.log("En admin, el usuario es:", usuario);
 
   //REALICÉ UN CAMBIO PARA EL QUE FONDO ESTÉ MEJOR
   return (

@@ -20,9 +20,9 @@ function ListaComunidades(){
       }
     })
       .then(res => {
-        console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
+        //console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
         setComunidades(res.data);
-        console.log("Comunidades:", res.data);
+        //console.log("Comunidades:", res.data);
       })
       .catch(err => console.error("Error cargando comunidades", err));
     }
@@ -46,7 +46,6 @@ function ListaComunidades(){
     };
 
     const totalSize = comunidades.length
-    console.log("TOTAL SIZE:", totalSize);
 
     return (
         <CarrouselLanding 

@@ -2,8 +2,17 @@ import UnderConstruction from "@/pages/UnderConstruction";
 import logo from "@/assets/logo.png";
 import { Link, NavLink } from "react-router";
 import Button from "../Button";
+import { AuthContext } from "@/hooks/AuthContext";
+import { useContext } from "react";
+import NotificationIcon from "../usuario/NotificationIcon";
+import ProfileIcon from "../usuario/ProfileIcon";
 
 function LandingNavbar(){
+
+    const {usuario, logout} = useContext(AuthContext)
+
+    console.log("En el landing, usuario es:", usuario)
+
     return(
         <header className="fixed top-0 left-0 w-full bg-[#2A86FF] py-5 z-100"> {/*El z-10 es para que nada le pase por encima. Puede ser cualquier número alto.*/}
             <nav>
@@ -19,9 +28,20 @@ function LandingNavbar(){
                         </ul>
                     </div>
                     <div className="flex justify-end col-span-3 px-8 gap-6">
-                        <NavLink to="/RegistroUsuario"> <Button variant="white">Registrate</Button> </NavLink>
-                        <NavLink to="/IniciarSesionUsuario"> <Button variant="white">Iniciar Sesion</Button> </NavLink>
 
+                        {usuario ? (
+                            <>
+                            <NotificationIcon/>
+                            <ProfileIcon/>
+                            </>
+                        ):(
+                            
+                            <>
+                            <NavLink to="/RegistroUsuario"> <Button variant="white">Registrate</Button> </NavLink>
+                            <NavLink to="/IniciarSesionUsuario"> <Button variant="white">Iniciar Sesion</Button> </NavLink>
+                            </>
+                        )
+                        }
                     </div>
                 </div>            
             </nav>

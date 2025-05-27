@@ -13,8 +13,9 @@ import {
 
 import Edge from "@/assets/edge.svg";
 import colors from "tailwindcss/colors";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 //useNavigate para poder darle click al modulo del sidebar y que vaya. Lo estoy colocando dentro del map del ul
+import logo from "@/assets/logo.png";
 
 const routes = [
   "dashboard",
@@ -39,11 +40,12 @@ function Sidebar({ active = 0 }: { active: number }) {
   return (
     <div className="bg-brand-primary">
       <section className="mb-[20px] border-b-1 border-blue-900  p-[20px] flex items-center gap-[10px]">
-        <img
+        {/*<img
           src="/img/mono/medico.png"
           alt=""
           className="aspect-1/1 h-[36px]"
-        />{" "}
+        />{" "}*/}
+        <Link to="/"><img src={logo} alt="Logo" className="cursor-pointer"/></Link>
         <h2 className="font-semibold text-white">Administración</h2>
       </section>
 
