@@ -8,9 +8,9 @@ function UsuarioNavbar() {
     [" ", "Inicio"],
     ["configuracion", "Perfil"],
     ["comunidades", "Comunidades"],
-    ["calendario", "Calendario y Reservas"],
-    ["citas", "Citas Médicas"],
-    ["historial", "Historial Médico"],
+    ["calendarioYReservas", "Calendario y Reservas"],
+    ["citasMedicas", "Citas Médicas"],
+    ["historialMedico", "Historial Médico"],
   ];
   
   return (
