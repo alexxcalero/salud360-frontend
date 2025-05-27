@@ -19,7 +19,7 @@ const meta: Meta<typeof UnifiedInput> = {
     rightIcon: {
       description: "Ícono a mostrarse en la derecha",
     },
-    idName: {
+    name: {
       description:
         "Identificador del input; además que también funciona como nombre de form-data. *Servirá para el label también*",
     },
@@ -55,7 +55,7 @@ export const Default: Story = {
     placeholder: "Ingrese su texto aquí",
     leftIcon: <Mail />,
     rightIcon: <ChevronDown />,
-    idName: "unified-input",
+    name: "unified-input",
     label: "Texto de ejemplo",
     defaultValue: "Valor por defecto",
     className: "",

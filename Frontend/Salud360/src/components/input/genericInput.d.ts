@@ -1,5 +1,5 @@
 export interface GenericInputProps {
-  idName: string;
+  name: string;
   defaultValue?: string;
   label?: string;
   placeholder?: string;
