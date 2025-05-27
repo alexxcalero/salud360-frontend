@@ -57,6 +57,16 @@ import DetalleMedico from "./pages/admin/personalMedico/DetalleMedico";
 import UsuarioSuccess from "./pages/admin/usuarios/UsuarioSuccess";
 import SuccessRegisterPage from "./pages/usuario/Registro/SuccessRegisterPage";
 import { AuthProvider } from "./hooks/AuthContext";
+import ExplorarComunidades from "./pages/usuario/ExplorarComunidades";
+import DetalleComunidadLayout from "./layouts/DetalleComunidadLayout";
+import { ComunidadProvider } from "./hooks/ComunidadContext";
+import DetalleComunidadHorario from "./pages/usuario/DetalleComunidadHorarios";
+import DetalleComunidadReservas from "./pages/usuario/DetalleComunidadReservas";
+import DetalleComunidadMembresia from "./pages/usuario/DetalleComunidadMembresia";
+import DetalleComunidadIntegrantes from "./pages/usuario/DetalleComunidadIntegrantes";
+import CalendarioYReservas from "./pages/usuario/CalendarioYReservas";
+import CitasMedicas from "./pages/usuario/CitasMedicas";
+import HistorialMedico from "./pages/usuario/HistorialMedico";
 
 const CLIENT_ID = "442103352631-urj3v36db8bhki2cg4vu6c2q404dkko7.apps.googleusercontent.com"
 
@@ -92,9 +102,19 @@ createRoot(document.getElementById("root")!).render(
                 <Route path="membresias" element={<Membresias />} />
                 <Route path="historial-pagos" element={<HistorialPagos />} />
               </Route>
+              <Route path="calendarioYReservas" element={<CalendarioYReservas/>}></Route>
+              <Route path="citasMedicas" element={<CitasMedicas/>}></Route>
+              <Route path="historialMedico" element={<HistorialMedico/>}></Route>
               <Route path="comunidades">
                   <Route index element={<ComunidadesUsuario />} />
-                  <Route path="detalle/:id" element={<DetalleComunidadUsuario />} />
+                  <Route path="explorarComunidades" element={<ExplorarComunidades />} />
+                    <Route path="detalle/:id" element={<ComunidadProvider> <DetalleComunidadLayout /> </ComunidadProvider>}>
+                      <Route index element={<DetalleComunidadUsuario />}></Route>
+                      <Route path="horarios" element={<DetalleComunidadHorario/>}></Route>
+                      <Route path="reservas" element={<DetalleComunidadReservas/>}></Route>
+                      <Route path="membresia" element={<DetalleComunidadMembresia/>}></Route>
+                      <Route path="integrantes" element={<DetalleComunidadIntegrantes/>}></Route>
+                    </Route>
                 </Route>
             </Route>
 

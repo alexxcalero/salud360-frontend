@@ -2,9 +2,10 @@ import Button from "@/components/Button";
 import { AuthContext } from "@/hooks/AuthContext";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
+import { NavLink } from "react-router";
 
 function Comunidades(){
-
+    /*
     const [comunidades, setComunidades] = useState([]);
     const {usuario, logout, loading} = useContext(AuthContext)
       
@@ -28,7 +29,7 @@ function Comunidades(){
 
     useEffect(() => {
         fetchComunidad();
-    }, []);
+    }, []);*/
 
     return(
         <section>
@@ -38,7 +39,7 @@ function Comunidades(){
                     <p>Activas</p>
                     {/*Tengo que instalar el switch de shadcn pero el p$%@ npm no me deja. Será para luego */}
                 </div>
-                <Button size="lg" className="w-64">Explorar Más</Button>
+                <NavLink to="/usuario/comunidades/explorarComunidades"><Button size="lg" className="w-64">Explorar Más</Button></NavLink>
             </div>
 
 
