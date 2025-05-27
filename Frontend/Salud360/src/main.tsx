@@ -44,8 +44,10 @@ import App from "./App";
 import RegisterPage from "./pages/usuario/Registro/RegisterPage";
 import LoginPage from "./pages/usuario/Login/LoginPage";
 import SobreNosotros from "./pages/landing/SobreNosotros";
-import Comunidades from "./pages/landing/Comunidades";
+import ComunidadesLanding from "./pages/landing/Comunidades";
+import ComunidadesUsuario from "./pages/usuario/Comunidades";
 import DetalleComunidadLanding from "./pages/landing/DetalleComunidad";
+import DetalleComunidadUsuario from "./pages/usuario/DetalleComunidad";
 import EditarConfiguracionGeneralPage from "./pages/admin/configuracionGeneral/EditarConfiguracionGeneralPage";
 import Page404 from "./pages/404";
 import Membresias from "./pages/usuario/configuracion/Membresias";
@@ -72,24 +74,34 @@ createRoot(document.getElementById("root")!).render(
               <Route path="IniciarSesionUsuario" element={<LoginPage/>}></Route>
               <Route path="RegistroExitoso" element={<SuccessRegisterPage/>}></Route>
               <Route path="comunidades">
-                <Route index element={<Comunidades />} />
+                <Route index element={<ComunidadesLanding />} />
                 <Route path="detalle/:id" element={<DetalleComunidadLanding />} />
               </Route>
               <Route path="sobreNosotros" element={<SobreNosotros />} />
             </Route>
+
+
+
+
             {/*2. Sección de Usuario */}
             <Route path="/usuario" element={<UsuarioLayout />}>
               <Route index element={<Inicio />} />
-              <Route
-                path="/usuario/configuracion"
-                element={<UsuarioConfigLayout />}
-              >
+              <Route path="configuracion" element={<UsuarioConfigLayout />}>
                 <Route index element={<ConfigPerfil />} />
                 <Route path="sistema" element={<ConfigSistema />} />
                 <Route path="membresias" element={<Membresias />} />
                 <Route path="historial-pagos" element={<HistorialPagos />} />
               </Route>
+              <Route path="comunidades">
+                  <Route index element={<ComunidadesUsuario />} />
+                  <Route path="detalle/:id" element={<DetalleComunidadUsuario />} />
+                </Route>
             </Route>
+
+
+
+
+
             {/*3. Sección de Admin */}
             <Route path="/admin" element={<AdminLayout />}>
               {" "}
