@@ -7,7 +7,6 @@ function DetalleComunidadNavbar(){
         ["horarios", "Horarios"],
         ["reservas", "Reservas"],
         ["membresia", "Membresía"],
-        ["integrantes", "Integrantes"]
     ];
 
     return(

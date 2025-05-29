@@ -1,7 +1,7 @@
 import { AuthContext } from "@/hooks/AuthContext";
 import UnderConstruction from "../UnderConstruction";
 import { useContext } from "react";
-import { User } from "lucide-react";
+import { User, Pencil } from "lucide-react";
 
 function Inicio(){
 
@@ -9,10 +9,31 @@ function Inicio(){
       
     if (loading || !usuario) return null;
 
-    const nombres = usuario.nombres;
-    const apellidos = usuario.apellidos; 
-    const fotoPerfil = usuario.fotoPerfil;
+    
+    const {
+        nombres,
+        apellidos,
+        correo,
+        telefono,
+        fechaNacimiento: rawFechaNacimiento,
+        sexo,
+        fotoPerfil,
+        numeroDocumento,
+        tipoDocumento: rawTipoDocumento,
+        fechaCreacion: rawFechaCreacion //Lo renombro así para formatearlo
+    } = usuario;
+
+    const tipoDocumento = rawTipoDocumento?.nombre;
+
+    const cantComunidades = 2;
+
     const fechaCreacion = new Date(usuario.fechaCreacion).toLocaleDateString("es-PE", {
+            day: "2-digit",
+            month: "long",
+            year: "numeric",
+    });
+
+    const fechaNacimiento = new Date(usuario.fechaCreacion).toLocaleDateString("es-PE", {
         day: "2-digit",
         month: "long",
         year: "numeric",
@@ -37,12 +58,20 @@ function Inicio(){
                             <User color="black" className="w-24 h-24 border border-[#2A86FF] rounded-full"/>
                             }
                         </div>
-                        <div className="flex flex-col gap-2 items-start">
-                            <h3>{nombres} {apellidos}</h3>
-                            <p>MONO SUPREMO</p>
-                            <p>Miembro desde: {fechaCreacion}</p>
-                            <div className="bg-[#13C296]/10 text-[#13C296] font-bold py-1 px-2  rounded-md">
-                                Activo
+                        <div className="flex flex-col gap-3 items-start">
+                            <div className="flex flex-row gap-4 items-center">
+                                <h3>{nombres} {apellidos}</h3>
+                                <Pencil className="text-[#2A86FF]"/>
+                            </div>
+                            <div className="flex flex-col gap-2 items-start">
+                                <p>MONO SUPREMO</p>
+                                <p><span className="font-bold">{tipoDocumento}:</span> {numeroDocumento}</p>
+                                <p><span className="font-bold">Fecha de Nacimiento:</span> {fechaNacimiento}</p>
+                                <p>Miembro de <span className="font-bold">{cantComunidades} comunidades</span> </p>
+                                <p><span className="font-bold">Miembro desde:</span> {fechaCreacion}</p>
+                                <div className="bg-[#13C296]/10 text-[#13C296] font-bold py-1 px-2  rounded-md">
+                                    Activo
+                                </div>
                             </div>
                         </div>
                         
