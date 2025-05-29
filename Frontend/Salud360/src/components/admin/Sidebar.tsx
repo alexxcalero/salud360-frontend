@@ -9,6 +9,10 @@ import {
   Puzzle,
   PersonStanding,
   IdCard,
+  Clock,
+  Lock,
+  ScrollText,
+  BarChart,
 } from "lucide-react";
 
 import Edge from "@/assets/edge.svg";
@@ -21,7 +25,7 @@ const routes = [
   "dashboard",
   "configuracion",
   "roles",
-  "membresias",
+  //"membresias",
   "comunidades",
   "servicios",
   "locales",
@@ -31,6 +35,8 @@ const routes = [
   "logs",
   "auditorias",
   "reportes",
+  "clases",
+  "citasMedicas"
 ];
 
 function Sidebar({ active = 0 }: { active: number }) {
@@ -53,17 +59,19 @@ function Sidebar({ active = 0 }: { active: number }) {
         {[
           [LayoutDashboard, "Dashboard"],
           [Settings, "Configuración General"],
-          [LayoutDashboard, "Roles y Permisos"],
-          [IdCard, "Membresías"],
+          [Lock, "Roles y Permisos"],
+          //[IdCard, "Membresías"],
           [PersonStanding, "Comunidades"],
           [Puzzle, "Servicios"],
           [MapPin, "Locales"],
           [UsersRound, "Usuarios"],
           [BriefcaseMedical, "Personal Médico"],
           [MessageSquare, "Calificaciones"],
-          [LayoutDashboard, "Logs"],
+          [ScrollText, "Logs"],
           [ShieldUser, "Auditorías"],
-          [LayoutDashboard, "Reportes"],
+          [BarChart, "Reportes"],
+          [Clock, "Clases"],
+          [BriefcaseMedical, "Citas Médicas"],
         ].map(([Icon, label], index) => (
 
           <li

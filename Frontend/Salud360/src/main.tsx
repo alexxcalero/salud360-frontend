@@ -67,6 +67,8 @@ import DetalleComunidadIntegrantes from "./pages/usuario/DetalleComunidadIntegra
 import CalendarioYReservas from "./pages/usuario/CalendarioYReservas";
 import CitasMedicas from "./pages/usuario/CitasMedicas";
 import HistorialMedico from "./pages/usuario/HistorialMedico";
+import ClasesPage from "./pages/admin/clases/ClasesPage";
+import CitasMedicasPage from "./pages/admin/citasMedicas/CitasMedicasPage";
 
 const CLIENT_ID = "442103352631-urj3v36db8bhki2cg4vu6c2q404dkko7.apps.googleusercontent.com"
 
@@ -103,8 +105,8 @@ createRoot(document.getElementById("root")!).render(
                 <Route path="historial-pagos" element={<HistorialPagos />} />
               </Route>
               <Route path="calendarioYReservas" element={<CalendarioYReservas/>}></Route>
-              <Route path="citasMedicas" element={<CitasMedicas/>}></Route>
-              <Route path="historialMedico" element={<HistorialMedico/>}></Route>
+              {/*<Route path="citasMedicas" element={<CitasMedicas/>}></Route>
+              <Route path="historialMedico" element={<HistorialMedico/>}></Route>*/}
               <Route path="comunidades">
                   <Route index element={<ComunidadesUsuario />} />
                   <Route path="explorarComunidades" element={<ExplorarComunidades />} />
@@ -113,7 +115,7 @@ createRoot(document.getElementById("root")!).render(
                       <Route path="horarios" element={<DetalleComunidadHorario/>}></Route>
                       <Route path="reservas" element={<DetalleComunidadReservas/>}></Route>
                       <Route path="membresia" element={<DetalleComunidadMembresia/>}></Route>
-                      <Route path="integrantes" element={<DetalleComunidadIntegrantes/>}></Route>
+                      {/*<Route path="integrantes" element={<DetalleComunidadIntegrantes/>}></Route>*/}
                     </Route>
                 </Route>
             </Route>
@@ -139,12 +141,12 @@ createRoot(document.getElementById("root")!).render(
                 <Route index element={<RolesPage />} />
                 <Route path="crear" element={<CrearUsuario />} />
               </Route>
-              <Route path="membresias">
+              {/*<Route path="membresias">
                 <Route index element={<MembresiasPage />} />
                 <Route path="crear" element={<CrearUsuario />} />
                 <Route path="detalle/:id" element={<DetalleComunidadLanding />} />
                 <Route path="editar/:id" element={<EditarComunidad />} />
-              </Route>
+              </Route>*/}
               <Route path="comunidades">
                 <Route index element={<ComunidadPage />} />
                 <Route path="crear" element={<CrearComunidad />} />
@@ -189,6 +191,14 @@ createRoot(document.getElementById("root")!).render(
               </Route>
               <Route path="reportes">
                 <Route index element={<ReportesPage />} />
+                <Route path="crear" element={<CrearUsuario />} />
+              </Route>
+              <Route path="clases">
+                <Route index element={<ClasesPage />} />
+                <Route path="crear" element={<CrearUsuario />} />
+              </Route>
+              <Route path="citasMedicas">
+                <Route index element={<CitasMedicasPage />} />
                 <Route path="crear" element={<CrearUsuario />} />
               </Route>
             </Route>
