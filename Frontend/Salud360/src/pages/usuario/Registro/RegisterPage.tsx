@@ -1,7 +1,19 @@
-import { useEffect } from "react"
+import { useContext, useEffect } from "react"
 import RegisterForm from "@/components/RegisterForm"
+import { AuthContext } from "@/hooks/AuthContext";
+import { Navigate } from "react-router";
 
 export default function RegisterPage() {
+
+  const { usuario } = useContext(AuthContext);
+
+  if (usuario) {
+    // Redirigir según el rol
+    const rol = usuario.rol?.idRol;
+    if (rol === 1) return <Navigate to="/admin" />;
+    else return <Navigate to="/usuario" />;
+  }
+
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])

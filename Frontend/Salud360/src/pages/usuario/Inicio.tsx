@@ -1,15 +1,20 @@
 import { AuthContext } from "@/hooks/AuthContext";
 import UnderConstruction from "../UnderConstruction";
-import { useContext } from "react";
-import { User, Pencil } from "lucide-react";
+import { useContext, useEffect } from "react";
+import { User, Pencil, IdCard, PersonStanding, Settings, CreditCard, Calendar  } from "lucide-react";
+import AccesoRapido from "@/components/usuario/AccesoRapido";
+import { Link } from "react-router";
 
 function Inicio(){
+
+    useEffect(() => {
+            window.scrollTo(0, 0); //Para que apenas cargue aparezca en el tope de la página.
+    }, []);
 
     const {usuario, logout, loading} = useContext(AuthContext)
       
     if (loading || !usuario) return null;
 
-    
     const {
         nombres,
         apellidos,
@@ -24,70 +29,96 @@ function Inicio(){
     } = usuario;
 
     const tipoDocumento = rawTipoDocumento?.nombre;
-
     const cantComunidades = 2;
-
-    const fechaCreacion = new Date(usuario.fechaCreacion).toLocaleDateString("es-PE", {
+    const fechaCreacion = new Date(rawFechaCreacion).toLocaleDateString("es-PE", {
             day: "2-digit",
             month: "long",
             year: "numeric",
     });
-
-    const fechaNacimiento = new Date(usuario.fechaCreacion).toLocaleDateString("es-PE", {
+    const fechaNacimiento = new Date(rawFechaNacimiento).toLocaleDateString("es-PE", {
         day: "2-digit",
         month: "long",
         year: "numeric",
     });
 
+    const accesosRapidos = [
+        [IdCard, "Mis membresías", `${cantComunidades} activas`, "configuracion/membresias"],
+        [PersonStanding, "Mis comunidades", `${cantComunidades} activas`, "comunidades"],
+        [Settings, "Mi configuración", `${cantComunidades} activas`, "configuracion"],
+        [CreditCard, "Mi historial de pago", `${cantComunidades} activas`, "configuracion/historial-pagos"],
+        [Calendar, "Mi calendario y reservas", `${cantComunidades} activas`, "calendarioYReservas"],
+    ]
+
     return (
-        <section className="flex flex-col">
-            <div className="border border-amber-700 p-8">
-                <h1>¡Bienvenido, {nombres}!</h1>
-            </div>
-            <div className="w-full grid grid-cols-2 border-b-cyan-500">
-                <div className="border border-b-fuchsia-600 p-8">
-                    <div className="w-full flex flex-row justify-start items-center gap-4 border border-gray-300 rounded-sm p-4">
-                        <div>
-                            {fotoPerfil ? (
-                            <img
-                                src={fotoPerfil}
-                                alt="Foto de perfil"
-                                className="w-24 h-24 rounded-full"
-                            />
-                            ):
-                            <User color="black" className="w-24 h-24 border border-[#2A86FF] rounded-full"/>
-                            }
+        <section className="flex flex-col gap-16">
+
+            <div>
+                <div className=" p-8">
+                    <h1>¡Bienvenido, {nombres}!</h1>
+                </div>
+                
+                <div className="w-full grid grid-cols-2 border border-gray-300">
+                    <div className=" flex flex-col gap-4 p-8">
+                        <div className="text-left">
+                            <h2>Datos personales:</h2>
                         </div>
-                        <div className="flex flex-col gap-3 items-start">
-                            <div className="flex flex-row gap-4 items-center">
-                                <h3>{nombres} {apellidos}</h3>
-                                <Pencil className="text-[#2A86FF]"/>
+                        <div className="w-full flex flex-row justify-start items-center gap-4 bg-gray-50 border border-[#2A86FF] rounded-sm p-4">
+                            <div>
+                                {fotoPerfil ? (
+                                <img
+                                    src={fotoPerfil}
+                                    alt="Foto de perfil"
+                                    className="w-24 h-24 rounded-full"
+                                />
+                                ):
+                                <User color="black" className="w-24 h-24 border border-[#2A86FF] rounded-full"/>
+                                }
                             </div>
-                            <div className="flex flex-col gap-2 items-start">
-                                <p>MONO SUPREMO</p>
-                                <p><span className="font-bold">{tipoDocumento}:</span> {numeroDocumento}</p>
-                                <p><span className="font-bold">Fecha de Nacimiento:</span> {fechaNacimiento}</p>
-                                <p>Miembro de <span className="font-bold">{cantComunidades} comunidades</span> </p>
-                                <p><span className="font-bold">Miembro desde:</span> {fechaCreacion}</p>
-                                <div className="bg-[#13C296]/10 text-[#13C296] font-bold py-1 px-2  rounded-md">
-                                    Activo
+                            <div className="flex flex-col gap-3 items-start">
+                                <div className="flex flex-row gap-4 items-center">
+                                    <h3>{nombres} {apellidos}</h3>
+                                    <Link to={"configuracion"}><Pencil className="text-[#2A86FF]"/></Link>
+                                </div>
+                                <div className="flex flex-col gap-2 items-start">
+                                    <p className="italic">MONO SUPREMO ©</p>
+                                    <p><span className="font-bold">{tipoDocumento}:</span> {numeroDocumento}</p>
+                                    <p><span className="font-bold">Correo electrónico:</span> {correo}</p>
+                                    <p><span className="font-bold">Teléfono:</span> {telefono}</p>
+                                    <p><span className="font-bold">Sexo:</span> {sexo}</p>
+                                    <p><span className="font-bold">Fecha de Nacimiento:</span> {fechaNacimiento}</p>
+                                    <p>Miembro de <span className="font-bold">{cantComunidades} comunidades</span> </p>
+                                    <p><span className="font-bold">Miembro desde:</span> {fechaCreacion}</p>
+                                    <div className="bg-[#13C296]/10 text-[#13C296] font-bold py-1 px-2  rounded-md">
+                                        Activo
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        
-
                     </div>
-                    
-
-                </div>
-
-
-
-                <div className="border border-b-teal-300">
-                    b
-
+                    <div className=" flex flex-col gap-4 p-8">
+                        <div className="text-left">
+                            <h2>Te recomendamos:</h2>
+                        </div>
+                    </div>
                 </div>
             </div>
+
+                            
+
+            <div>
+                <div className=" p-8">
+                    <h1>Accesos Rápidos</h1>
+                </div>
+                
+                <div className="w-full flex flex-row justify-between p-8 border border-gray-300">
+                    {/*<AccesoRapido icon={<Pencil className="text-black"/>} title="Mis membresías" subtitle={`${cantComunidades} activas`}/>*/}
+                    {accesosRapidos.map(([Icon, title, subtitle, route]: any) => (
+                        <AccesoRapido icon={<Icon className="w-16 h-16 text-black "/>} title={title} subtitle={subtitle} route={route}/>
+                    ))}
+                </div>
+            </div>
+
+
         </section>
     )
 }
