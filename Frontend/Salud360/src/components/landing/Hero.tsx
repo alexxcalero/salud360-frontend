@@ -1,8 +1,16 @@
 import heroImage from "@/assets/hero.png"
 import Button from "../Button";
 import { useNavigate } from "react-router";
+import { AuthContext } from "@/hooks/AuthContext";
+import { useContext } from "react";
 
 function Hero(){
+
+    const {usuario, logout, loading} = useContext(AuthContext)
+      
+    if (loading) return null;
+
+    console.log("En el hero, usuario es:", usuario)
 
     const navigate = useNavigate();
 
@@ -17,7 +25,7 @@ function Hero(){
                     <h1 className="use-title-large">Calma tu mente y transforma tu vida</h1>
                     <h3>En Monos Supremos creemos que el bienestar se construye en Comunidad. Únete, muévete y crece con nosotros.</h3>
                     <div className="inline-block w-64"> {/*Inline block para que el div se comporte como un contenedor de ancho fijo (dentro de un flex/grid puede perder dicho comportamiento) */}
-                        <Button size="lg" className="w-full" onClick={() => navigate("/RegistroUsuario")}>Únete aquí</Button>
+                        {usuario == null && <Button size="lg" className="w-full" onClick={() => navigate("/RegistroUsuario")}>Únete aquí</Button>}
                     </div>
                 </div>
             </div>

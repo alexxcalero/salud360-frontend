@@ -69,6 +69,7 @@ import CitasMedicas from "./pages/usuario/CitasMedicas";
 import HistorialMedico from "./pages/usuario/HistorialMedico";
 import ClasesPage from "./pages/admin/clases/ClasesPage";
 import CitasMedicasPage from "./pages/admin/citasMedicas/CitasMedicasPage";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const CLIENT_ID = "442103352631-urj3v36db8bhki2cg4vu6c2q404dkko7.apps.googleusercontent.com"
 
@@ -95,37 +96,38 @@ createRoot(document.getElementById("root")!).render(
 
 
 
-            {/*2. Sección de Usuario */}
-            <Route path="/usuario" element={<UsuarioLayout />}>
-              <Route index element={<Inicio />} />
-              <Route path="configuracion" element={<UsuarioConfigLayout />}>
-                <Route index element={<ConfigPerfil />} />
-                <Route path="sistema" element={<ConfigSistema />} />
-                <Route path="membresias" element={<Membresias />} />
-                <Route path="historial-pagos" element={<HistorialPagos />} />
-              </Route>
-              <Route path="calendarioYReservas" element={<CalendarioYReservas/>}></Route>
-              {/*<Route path="citasMedicas" element={<CitasMedicas/>}></Route>
-              <Route path="historialMedico" element={<HistorialMedico/>}></Route>*/}
-              <Route path="comunidades">
-                  <Route index element={<ComunidadesUsuario />} />
-                  <Route path="explorarComunidades" element={<ExplorarComunidades />} />
-                    <Route path="detalle/:id" element={<ComunidadProvider> <DetalleComunidadLayout /> </ComunidadProvider>}>
-                      <Route index element={<DetalleComunidadUsuario />}></Route>
-                      <Route path="horarios" element={<DetalleComunidadHorario/>}></Route>
-                      <Route path="reservas" element={<DetalleComunidadReservas/>}></Route>
-                      <Route path="membresia" element={<DetalleComunidadMembresia/>}></Route>
-                      {/*<Route path="integrantes" element={<DetalleComunidadIntegrantes/>}></Route>*/}
-                    </Route>
+            {/*2. Sección de Usuario */} {/*id de Roles permitidos: Usuario con y sin membresía (3 y 4) */}
+            
+              <Route path="/usuario" element={<ProtectedRoute allowedRules={[3, 4]}><UsuarioLayout /></ProtectedRoute>}>
+                <Route index element={<Inicio />} />
+                <Route path="configuracion" element={<UsuarioConfigLayout />}>
+                  <Route index element={<ConfigPerfil />} />
+                  <Route path="sistema" element={<ConfigSistema />} />
+                  <Route path="membresias" element={<Membresias />} />
+                  <Route path="historial-pagos" element={<HistorialPagos />} />
                 </Route>
-            </Route>
+                <Route path="calendarioYReservas" element={<CalendarioYReservas/>}></Route>
+                {/*<Route path="citasMedicas" element={<CitasMedicas/>}></Route>
+                <Route path="historialMedico" element={<HistorialMedico/>}></Route>*/}
+                <Route path="comunidades">
+                    <Route index element={<ComunidadesUsuario />} />
+                    <Route path="explorarComunidades" element={<ExplorarComunidades />} />
+                      <Route path="detalle/:id" element={<ComunidadProvider> <DetalleComunidadLayout /> </ComunidadProvider>}>
+                        <Route index element={<DetalleComunidadUsuario />}></Route>
+                        <Route path="horarios" element={<DetalleComunidadHorario/>}></Route>
+                        <Route path="reservas" element={<DetalleComunidadReservas/>}></Route>
+                        <Route path="membresia" element={<DetalleComunidadMembresia/>}></Route>
+                        {/*<Route path="integrantes" element={<DetalleComunidadIntegrantes/>}></Route>*/}
+                      </Route>
+                  </Route>
+              </Route>
 
 
 
 
 
-            {/*3. Sección de Admin */}
-            <Route path="/admin" element={<AdminLayout />}>
+            {/*3. Sección de Admin */} {/*id de Roles permitidos: Admin (1) */}
+            <Route path="/admin" element={<ProtectedRoute allowedRules={[1]}><AdminLayout /></ProtectedRoute>}>
               {" "}
               {/* ESTO ES PARA LA PANTALLAS DE ROLES Y PERMISOS*/}
               {/* Ejemplo de ruta anidada con un layout */}

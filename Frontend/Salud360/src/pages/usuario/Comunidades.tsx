@@ -31,6 +31,10 @@ function Comunidades(){
         fetchComunidad();
     }, []);*/
 
+    useEffect(() => {
+            window.scrollTo(0, 0); //Para que apenas cargue aparezca en el tope de la página.
+    }, []);
+
     return(
         <section>
             <div className="flex flex-row justify-between items-center py-8 px-32 ">
