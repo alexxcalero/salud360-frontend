@@ -81,6 +81,7 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <GoogleOAuthProvider clientId={CLIENT_ID}>
       <AuthProvider> {/*El AuthProvider es para la persistencia del inicio de sesión en todas las paginas */}
+        <ToastProvider><LoadingContext>
         <BrowserRouter>
           <Routes>
             {/* // A este nivel tienen que insertar nuevas rutas. Especificando la ruta "/usuarios/register" y el elemento que será la página */}
@@ -193,7 +194,7 @@ createRoot(document.getElementById("root")!).render(
               </Route>
               <Route path="auditorias">
                   <Route index element={<AuditoriasPage />} />
-                  <Route path="detalle/:id" element={<ToastProvider><LoadingContext><DetalleAuditoriaPage /></LoadingContext></ToastProvider>} />
+                  <Route path="detalle/:id" element={<DetalleAuditoriaPage />} />
               </Route>
               <Route path="reportes">
                 <Route index element={<ReportesPage />} />
@@ -213,6 +214,7 @@ createRoot(document.getElementById("root")!).render(
             <Route path="*" element={<Page404 />} />
           </Routes>
         </BrowserRouter>
+        </LoadingContext></ToastProvider>
       </AuthProvider>
     </GoogleOAuthProvider>
   </StrictMode>
