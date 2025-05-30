@@ -21,7 +21,7 @@ function ListaLocales(){
       .then(res => {
         //console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
         setLocales(res.data);
-        //console.log("Locales:", res.data);
+        console.log("Locales:", res.data);
       })
       .catch(err => console.error("Error cargando locales", err));
     }

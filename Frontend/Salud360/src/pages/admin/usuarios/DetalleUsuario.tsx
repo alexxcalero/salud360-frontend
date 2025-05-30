@@ -37,7 +37,7 @@ function DetalleUsuario(){
         tipoDoc, setTipoDoc,
         DNI, setDNI,
         telefono, setTelefono,
-        rol, setRol,
+        direccion, setDireccion,
         correo, setCorreo,
         genero, setGenero,
         fechaNacimiento, setFechaNacimiento,
@@ -46,7 +46,7 @@ function DetalleUsuario(){
     } = useUsuarioForm();
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/api/usuarios/${id}`, {
+        axios.get(`http://localhost:8080/api/admin/clientes/${id}`, {
           auth: {
             username: "admin",
             password: "admin123"
@@ -79,10 +79,9 @@ function DetalleUsuario(){
                 DNI={DNI}
                 telefono={telefono}
                 correo={correo}
-                rol={rol}
+                direccion={direccion}
                 genero={genero}
                 fechaNacimiento={fechaNacimiento}
-                contrasenha={contrasenha}
                 buttonText="Crear Usuario"
                 readOnly={true}
             />

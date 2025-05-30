@@ -19,7 +19,7 @@ function UsuariosPage() {
   const [search, setSearch] = useState("");
 
   const fetchUsuarios = () => {
-    axios.get("http://localhost:8080/api/usuarios", {
+    axios.get("http://localhost:8080/api/admin/clientes", {
       auth: {
         username: "admin",
         password: "admin123"
@@ -42,7 +42,18 @@ function UsuariosPage() {
   };
 
   const handleEliminarUsuario = (): void => {
-    axios.delete(`http://localhost:8080/api/usuarios/${usuarioSeleccionado.idUsuario}`)
+    //console.log("El id del usuario a eliminar es:", usuarioSeleccionado.idCliente)
+    axios.delete(`http://localhost:8080/api/admin/clientes/${usuarioSeleccionado.idCliente}`)
+    .then(() => {
+      setShowModalExito(true);
+      setShowModalError(false)
+    })
+    .catch(() => console.log("Error"));
+  }
+
+  const handleReactivarUsuario = (): void => {
+    console.log("El id del usuario a reactivar es:", usuarioSeleccionado.idCliente)
+    axios.put(`http://localhost:8080/api/admin/clientes/${usuarioSeleccionado.idCliente}/reactivar`)
     .then(() => {
       setShowModalExito(true);
       setShowModalError(false)
@@ -67,7 +78,7 @@ function UsuariosPage() {
       content: <input type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
       className: "w-10",
     },
-    { content: usuario.idUsuario, className: "w-16" },
+    { content: usuario.idCliente, className: "w-16" },
     {
       content: (
         <img
@@ -94,8 +105,8 @@ function UsuariosPage() {
     {
       content: (
         <div className="flex justify-center gap-2">
-          <Info className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => navigate(`/admin/usuarios/detalle/${usuario.idUsuario}`)}/>
-          <Pencil className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => navigate(`/admin/usuarios/editar/${usuario.idUsuario}`)}/>
+          <Info className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => navigate(`/admin/usuarios/detalle/${usuario.idCliente}`)}/>
+          <Pencil className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => navigate(`/admin/usuarios/editar/${usuario.idCliente}`)}/>
           {usuario.activo ? 
             <Trash2 className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => {
               setUsuarioSeleccionado(usuario);
@@ -104,7 +115,7 @@ function UsuariosPage() {
             :
             <RotateCcw className= "w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => {
               setUsuarioSeleccionado(usuario);
-              
+              setShowModalError(true);
             }}/>
         }
         </div>
@@ -137,6 +148,62 @@ function UsuariosPage() {
         </table>
       </div>
 
+      { usuarioSeleccionado && (usuarioSeleccionado.activo ?
+        <>
+          {showModalError && (
+            <>
+              <div className="fixed inset-0 bg-black/60 z-40" />
+              <div className="fixed inset-0 z-50 flex items-center justify-center">
+                <ModalError modulo="¿Estás seguro de que quieres eliminarlo?" detalle={`Usuario: ${usuarioSeleccionado?.nombres} ${usuarioSeleccionado.apellidos}`} onConfirm={() => {
+                  handleEliminarUsuario();
+
+                }} onCancel={() => setShowModalError(false)} />
+              </div>
+            </>
+          )}
+          {showModalExito && (
+            <>
+              <div className="fixed inset-0 bg-black/60 z-40" />
+              <div className="fixed inset-0 z-50 flex items-center justify-center">
+                <ModalExito modulo="¡Usuario eliminado correctamente!" detalle="El usuario fue eliminado correctamente" onConfirm={() => {
+                  setShowModalExito(false);
+                  fetchUsuarios();
+                }} />
+              </div>
+            </>
+          )}
+        </>
+        :
+        <>
+          {showModalError && (
+            <>
+              <div className="fixed inset-0 bg-black/60 z-40" />
+              <div className="fixed inset-0 z-50 flex items-center justify-center">
+                <ModalError modulo="¿Estás seguro de que quieres reactivarlo?" detalle={`Usuario: ${usuarioSeleccionado?.nombres} ${usuarioSeleccionado.apellidos}`} buttonConfirm="Reactivar" onConfirm={() => {
+                  handleReactivarUsuario();
+                }} onCancel={() => setShowModalError(false)} />
+              </div>
+            </>
+          )}
+
+          {showModalExito && (
+            <>
+              <div className="fixed inset-0 bg-black/60 z-40" />
+              <div className="fixed inset-0 z-50 flex items-center justify-center">
+                <ModalExito modulo="¡Usuario reactivado correctamente!" detalle="El usuario fue reactivado correctamente" onConfirm={() => {
+                  setShowModalExito(false);
+                  fetchUsuarios();
+                }} />
+              </div>
+            </>
+          )}
+        </>
+
+      )}
+
+
+      {/*XDDDDDD */}
+      {/** 
       {showModalError && (
         <>
           <div className="fixed inset-0 bg-black/60 z-40" />
@@ -160,6 +227,7 @@ function UsuariosPage() {
           </div>
         </>
       )}
+      */}
 
       
 

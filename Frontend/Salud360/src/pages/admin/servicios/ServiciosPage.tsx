@@ -1,56 +1,83 @@
-import { useState } from "react";
-import { Search, Filter, UserPlus, Info, Pencil, Trash2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Search, Filter, UserPlus, Info, Pencil, Trash2, RotateCcw } from "lucide-react";
+import { useNavigate } from "react-router";
 
 import InputIcon from "@/components/InputIcon";
 import ButtonIcon from "@/components/ButtonIcon";
 import TableHeader from "@/components/admin/TableHeader";
 import TableBody from "@/components/admin/TableBody";
+import axios from "axios";
 
 function ServiciosPage() {
   const [selectAll, setSelectAll] = useState(false);
-  const handleSelectAll = () => setSelectAll(!selectAll);
+  const [servicios, setServicios] = useState([]);
+  const [servicioSeleccionado, setServicioSeleccionado] = useState<any>();
+  const [showModalExito, setShowModalExito] = useState(false);
+  const [showModalError, setShowModalError] = useState(false);
+  const [search, setSearch] = useState("");
 
-  const servicios = [
-    {
-      id: "001",
-      nombre: "Gimnasio",
-      descripcion: "Rutinas con pesas y máquinas de musculación",
-      tipo: "Deporte",
-      estado: "Activo",
-    },
-    {
-      id: "002",
-      nombre: "Yoga",
-      descripcion: "Sesiones enfocadas en estiramiento y respiración consciente",
-      tipo: "Deporte",
-      estado: "Activo",
-    },
-    {
-      id: "003",
-      nombre: "Consultas médicas",
-      descripcion: "Atención médica general y especializada mediante citas virtuales",
-      tipo: "Salud",
-      estado: "Activo",
-    },
-  ];
+  const fetchServicios = () => {
+    axios.get("http://localhost:8080/api/servicios", {
+      auth: {
+        username: "admin",
+        password: "admin123"
+      }
+    })
+      .then(res => {
+        console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
+        setServicios(res.data);
+        console.log("Servicios:", res.data);
+      })
+      .catch(err => console.error("Error cargando servicios", err));
+  }
+
+  useEffect(() => {
+    fetchServicios(); //hago esto para que al eliminar un servicio y darle a "volver" se actualice todo automaticamente
+  }, []);
+
+  const navigate = useNavigate();
+
+  const handleSelectAll = () => {
+    setSelectAll(!selectAll);
+  };
+
+  const handleEliminarServicio = (): void => {
+    //console.log("El id del usuario a eliminar es:", usuarioSeleccionado.idServicio)
+    axios.delete(`http://localhost:8080/api/admin/clientes/${servicioSeleccionado.idServicio}`)
+    .then(() => {
+      setShowModalExito(true);
+      setShowModalError(false)
+    })
+    .catch(() => console.log("Error"));
+  }
+
+  const handleReactivarServicio = (): void => {
+    console.log("El id del usuario a reactivar es:", servicioSeleccionado.idServicio)
+    axios.put(`http://localhost:8080/api/admin/clientes/${servicioSeleccionado.idServicio}/reactivar`)
+    .then(() => {
+      setShowModalExito(true);
+      setShowModalError(false)
+    })
+    .catch(() => console.log("Error"));
+  }
 
   const columns = [
     { label: <input type="checkbox" checked={selectAll} onChange={handleSelectAll} />, className: "w-10" },
     { label: "ID", className: "w-16" },
-    { label: "Nombre", className: "w-1/6 text-left" },
-    { label: "Descripción", className: "w-1/3 text-left" },
+    { label: "Nombre", className: "w-1/4 text-left" },         // aumenta un poco
+    { label: "Descripción", className: "w-1/3 text-left" },    // se mantiene
     { label: "Tipo", className: "w-1/6" },
     { label: "Status", className: "w-1/6" },
-    { label: "Acciones", className: "w-24 text-center" },
+    { label: "Actions", className: "w-24" },
   ];
 
-  const rows = servicios.map((servicio) => [
+  const rows = servicios.map((servicio: any) => [
     {
       content: <input type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
       className: "w-10",
     },
-    { content: servicio.id, className: "w-16 " },
-    { content: servicio.nombre, className: "w-1/6 text-left" },
+    { content: servicio.idServicio, className: "w-16 " },
+    { content: servicio.nombre, className: "w-1/4 text-left" },
     { content: servicio.descripcion, className: "w-1/3 text-left" },
     {
       content: (
@@ -73,9 +100,19 @@ function ServiciosPage() {
     {
       content: (
         <div className="flex justify-center gap-2">
-          <Info className="w-4 h-4 text-[#2A86FF] cursor-pointer" />
-          <Pencil className="w-4 h-4 text-[#2A86FF] cursor-pointer" />
-          <Trash2 className="w-4 h-4 text-[#2A86FF] cursor-pointer" />
+          <Info className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => navigate(`/admin/usuarios/detalle/${servicio.idCliente}`)}/>
+          <Pencil className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => navigate(`/admin/usuarios/editar/${servicio.idCliente}`)}/>
+          {servicio.activo ? 
+            <Trash2 className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => {
+              //setUsuarioSeleccionado(usuario);
+              setShowModalError(true);
+            }}/>
+            :
+            <RotateCcw className= "w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => {
+              //setUsuarioSeleccionado(usuario);
+              setShowModalError(true);
+            }}/>
+        }
         </div>
       ),
       className: "w-24 text-center",

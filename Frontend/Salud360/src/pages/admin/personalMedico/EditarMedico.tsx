@@ -36,7 +36,7 @@ function EditarMedico() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/api/medicos/${id}`, {
+      .get(`http://localhost:8080/api/admin/medicos/${id}`, {
         auth: {
           username: "admin",
           password: "admin123",
@@ -62,21 +62,18 @@ function EditarMedico() {
     try {
       const sexo = genero;
 
-      const response = await axios.patch(
+      const response = await axios.put(
         `http://localhost:8080/api/medicos/${id}`,
         {
           nombres,
           apellidos,
           numeroDocumento: DNI,
-          correo,
-          telefono,
           sexo,
-          fechaNacimiento,
-          tipoDocumento: {
-            idTipoDocumento: tipoDoc,
-          },
           especialidad,
           descripcion,
+          tipoDocumento: {
+            idTipoDocumento: tipoDoc,
+          }
         },
         {
           auth: {
@@ -108,18 +105,10 @@ function EditarMedico() {
       setTipoDoc={setTipoDoc}
       DNI={DNI}
       setDNI={setDNI}
-      telefono={telefono}
-      setTelefono={setTelefono}
-      correo={correo}
-      setCorreo={setCorreo}
       especialidad={especialidad}
       setEspecialidad={setEspecialidad}
       genero={genero}
       setGenero={setGenero}
-      fechaNacimiento={fechaNacimiento}
-      setFechaNacimiento={setFechaNacimiento}
-      contrasenha={contrasenha}
-      setContrasenha={setContrasenha}
       descripcion={descripcion}
       setDescripcion={setDescripcion}
       onSubmit={handleEditarMedico}
