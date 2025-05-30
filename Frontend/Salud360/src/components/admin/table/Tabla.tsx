@@ -15,7 +15,7 @@ import {
   type Row,
   type Table as ReactTable,
 } from "@tanstack/react-table";
-import { Info, Pencil, Trash } from "lucide-react";
+import { Frown, Info, Pencil, Trash } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -25,6 +25,7 @@ import {
   DialogHeader,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import colors from "tailwindcss/colors";
 
 import {
   Table,
@@ -233,7 +234,12 @@ export default function Tabla<Data extends Record<string, any>>({
                     colSpan={headers.length}
                     className={`h-24 text-center`}
                   >
-                    No results.
+                    <div className="flex flex-col items-center">
+                      <Frown size={48} color={colors.blue[500]} />
+                      <span className="text-blue-500 text-body-medium font-semibold">
+                        No results
+                      </span>
+                    </div>
                   </TableCell>
                 </TableRow>
               )}
