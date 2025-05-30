@@ -57,7 +57,6 @@ import DetalleMedico from "./pages/admin/personalMedico/DetalleMedico";
 import UsuarioSuccess from "./pages/admin/usuarios/UsuarioSuccess";
 import SuccessRegisterPage from "./pages/usuario/Registro/SuccessRegisterPage";
 import { AuthProvider } from "./hooks/AuthContext";
-import { UsuarioProvider } from "./hooks/useUsuario";
 import DetalleAuditoriaPage from "./pages/admin/auditoria/DetalleAuditoriaPage";
 import { LoadingContext } from "./hooks/LoadingContext";
 import { ToastProvider } from "./hooks/ToastContext";
