@@ -3,7 +3,11 @@ import Input from "./Input";
 import { Check, Eye, EyeClosed, Lock, X } from "lucide-react";
 import { GenericInputProps } from "./genericInput";
 
-const PasswordInput = (props: GenericInputProps) => {
+interface Props extends GenericInputProps {
+  showRecommendations?: boolean;
+}
+
+const PasswordInput = (props: Props) => {
   const [type, setType] = useState<HTMLInputTypeAttribute>("password");
   const timeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
   const [validation, setValidation] = useState({
@@ -45,39 +49,43 @@ const PasswordInput = (props: GenericInputProps) => {
           </button>
         }
       />
-      <p
-        className="text-label-medium text-red-400 mt-1 w-max data-[validate=true]:text-green-400"
-        data-validate={validation["min-8-char"]}
-      >
-        {validation["min-8-char"] ? (
-          <Check size={16} className="inline" />
-        ) : (
-          <X size={16} className="inline" />
-        )}
-        Debe tener al menos 8 caracteres
-      </p>
-      <p
-        className="text-label-medium text-red-400 mt-1 w-max data-[validate=true]:text-green-400"
-        data-validate={validation["min-1-uppercase"]}
-      >
-        {validation["min-1-uppercase"] ? (
-          <Check size={16} className="inline" />
-        ) : (
-          <X size={16} className="inline" />
-        )}
-        Debe tener al menos una letra mayúscula
-      </p>
-      <p
-        className="text-label-medium text-red-400 mt-1 w-max data-[validate=true]:text-green-400"
-        data-validate={validation["min-1-number"]}
-      >
-        {validation["min-1-number"] ? (
-          <Check size={16} className="inline" />
-        ) : (
-          <X size={16} className="inline" />
-        )}
-        Debe tener al menos una número
-      </p>
+      {props.showRecommendations && (
+        <>
+          <p
+            className="text-label-medium text-red-400 mt-1 w-max data-[validate=true]:text-green-400"
+            data-validate={validation["min-8-char"]}
+          >
+            {validation["min-8-char"] ? (
+              <Check size={16} className="inline" />
+            ) : (
+              <X size={16} className="inline" />
+            )}
+            Debe tener al menos 8 caracteres
+          </p>
+          <p
+            className="text-label-medium text-red-400 mt-1 w-max data-[validate=true]:text-green-400"
+            data-validate={validation["min-1-uppercase"]}
+          >
+            {validation["min-1-uppercase"] ? (
+              <Check size={16} className="inline" />
+            ) : (
+              <X size={16} className="inline" />
+            )}
+            Debe tener al menos una letra mayúscula
+          </p>
+          <p
+            className="text-label-medium text-red-400 mt-1 w-max data-[validate=true]:text-green-400"
+            data-validate={validation["min-1-number"]}
+          >
+            {validation["min-1-number"] ? (
+              <Check size={16} className="inline" />
+            ) : (
+              <X size={16} className="inline" />
+            )}
+            Debe tener al menos una número
+          </p>
+        </>
+      )}
     </div>
   );
 };
