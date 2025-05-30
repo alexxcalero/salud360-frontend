@@ -56,6 +56,9 @@ import UsuarioSuccess from "./pages/admin/usuarios/UsuarioSuccess";
 import SuccessRegisterPage from "./pages/usuario/Registro/SuccessRegisterPage";
 import { AuthProvider } from "./hooks/AuthContext";
 import { UsuarioProvider } from "./hooks/useUsuario";
+import DetalleAuditoriaPage from "./pages/admin/auditoria/DetalleAuditoriaPage";
+import { LoadingContext } from "./hooks/LoadingContext";
+import { ToastProvider } from "./hooks/ToastContext";
 
 const CLIENT_ID =
   "442103352631-urj3v36db8bhki2cg4vu6c2q404dkko7.apps.googleusercontent.com";
@@ -208,7 +211,7 @@ createRoot(document.getElementById("root")!).render(
                 </Route>
                 <Route path="auditorias">
                   <Route index element={<AuditoriasPage />} />
-                  <Route path="crear" element={<CrearUsuario />} />
+                  <Route path="detalle/:id" element={<ToastProvider><LoadingContext><DetalleAuditoriaPage /></LoadingContext></ToastProvider>} />
                 </Route>
                 <Route path="reportes">
                   <Route index element={<ReportesPage />} />
