@@ -5,6 +5,7 @@ export const AuthContext = createContext<any>(null);
 export const AuthProvider = ({children}: any) => {
     const [usuario, setUsuario] = useState<any>(null);
     const [token, setToken] = useState<string | null>(null);
+    const [loading, setLoading] = useState(true); //En algunas paginas al hacer refresh recupera usuario dms pronto (cuando aún es null). Con esto lo controlamos
 
     useEffect(() => {
         const storedUser = localStorage.getItem("activeUser")
@@ -22,6 +23,8 @@ export const AuthProvider = ({children}: any) => {
             console.error("Error al parsear usuario:", error);
             localStorage.removeItem("activeUser"); // limpia lo dañado
             localStorage.removeItem("authToken");
+        } finally{
+            setLoading(false);
         }
     }, []);
 
@@ -40,7 +43,7 @@ export const AuthProvider = ({children}: any) => {
     }
 
     return(
-        <AuthContext.Provider value={{ usuario, token, login, logout }}>
+        <AuthContext.Provider value={{ usuario, token, login, logout, loading }}>
             {children}
         </AuthContext.Provider>
     )

@@ -6,6 +6,7 @@ import { AuthContext } from "@/hooks/AuthContext";
 import { useContext } from "react";
 import NotificationIcon from "../usuario/NotificationIcon";
 import ProfileIcon from "../usuario/ProfileIcon";
+import { Bell } from "lucide-react";
 
 function LandingNavbar(){
 
@@ -31,8 +32,10 @@ function LandingNavbar(){
 
                         {usuario ? (
                             <>
-                            <NotificationIcon/>
-                            <ProfileIcon/>
+                            <div className="mt-3 flex flex-row justify-between gap-6">
+                                <NotificationIcon/>
+                                <ProfileIcon/>
+                            </div>
                             </>
                         ):(
                             

@@ -7,16 +7,18 @@ const routeToIndex: Record<string, number> = {
   dashboard: 0,
   configuracion: 1,
   roles: 2,
-  membresias: 3,
-  comunidades: 4,
-  servicios: 5,
-  locales: 6,
-  usuarios: 7,
-  personalMedico: 8,
-  calificaciones: 9,
-  logs: 10,
-  auditorias: 11,
-  reportes: 12,
+  //membresias: 3,
+  comunidades: 3,
+  servicios: 4,
+  locales: 5,
+  usuarios: 6,
+  personalMedico: 7,
+  calificaciones: 8,
+  logs: 9,
+  auditorias: 10,
+  reportes: 11,
+  clases: 12,
+  citasMedicas: 13
 }
 
 // Active: Es el índice del elemento del sidebar que será activo

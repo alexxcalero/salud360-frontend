@@ -1,6 +1,6 @@
 import { NavLink } from "react-router";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import {
   CreditCard,
   LogOut,
@@ -10,10 +10,12 @@ import {
 } from "lucide-react";
 
 import colors from "tailwindcss/colors";
+import { AuthContext } from "@/hooks/AuthContext";
 
 const ConfigUsuarioSideBar = () => {
   const navigate = useNavigate();
   const [showModalLogout, setShowModalLogout] = useState(false);
+  const { logout } = useContext(AuthContext);
 
   const paths = [
     ["/", "Mi perfil", UserRoundPen],
@@ -26,7 +28,7 @@ const ConfigUsuarioSideBar = () => {
     <>
       <nav className="max-w-[300px] w-max h-full bg-white shadow-md p-[30px]">
         <ul className="flex flex-col gap-[10px] min-h-[100dvh] items-start">
-          {paths.map(([path, label, Icon], index) => (
+          {paths.map(([path, label, Icon]: any, index) => (
             <li key={index}>
               {path === "logout" ? (
                 <button
@@ -42,11 +44,13 @@ const ConfigUsuarioSideBar = () => {
                     isActive ? (
                       <>
                         <Icon color={colors.blue["500"]} className="inline" />
+                        {" "}
                         <span className="text-blue-500">{label}</span>
                       </>
                     ) : (
                       <>
                         <Icon color={colors.neutral["900"]} className="inline" />
+                        {" "}
                         <span className="text-neutral-900">{label}</span>
                       </>
                     )
@@ -81,6 +85,7 @@ const ConfigUsuarioSideBar = () => {
                 <button
                   className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded"
                   onClick={() => {
+                    logout();  
                     setShowModalLogout(false);
                     navigate("/"); // Redirige al landing
                   }}

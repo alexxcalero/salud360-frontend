@@ -44,8 +44,10 @@ import App from "./App";
 import RegisterPage from "./pages/usuario/Registro/RegisterPage";
 import LoginPage from "./pages/usuario/Login/LoginPage";
 import SobreNosotros from "./pages/landing/SobreNosotros";
-import Comunidades from "./pages/landing/Comunidades";
+import ComunidadesLanding from "./pages/landing/Comunidades";
+import ComunidadesUsuario from "./pages/usuario/Comunidades";
 import DetalleComunidadLanding from "./pages/landing/DetalleComunidad";
+import DetalleComunidadUsuario from "./pages/usuario/DetalleComunidad";
 import EditarConfiguracionGeneralPage from "./pages/admin/configuracionGeneral/EditarConfiguracionGeneralPage";
 import Page404 from "./pages/404";
 import Membresias from "./pages/usuario/configuracion/Membresias";
@@ -59,6 +61,19 @@ import { UsuarioProvider } from "./hooks/useUsuario";
 import DetalleAuditoriaPage from "./pages/admin/auditoria/DetalleAuditoriaPage";
 import { LoadingContext } from "./hooks/LoadingContext";
 import { ToastProvider } from "./hooks/ToastContext";
+import ExplorarComunidades from "./pages/usuario/ExplorarComunidades";
+import DetalleComunidadLayout from "./layouts/DetalleComunidadLayout";
+import { ComunidadProvider } from "./hooks/ComunidadContext";
+import DetalleComunidadHorario from "./pages/usuario/DetalleComunidadHorarios";
+import DetalleComunidadReservas from "./pages/usuario/DetalleComunidadReservas";
+import DetalleComunidadMembresia from "./pages/usuario/DetalleComunidadMembresia";
+import DetalleComunidadIntegrantes from "./pages/usuario/DetalleComunidadIntegrantes";
+import CalendarioYReservas from "./pages/usuario/CalendarioYReservas";
+import CitasMedicas from "./pages/usuario/CitasMedicas";
+import HistorialMedico from "./pages/usuario/HistorialMedico";
+import ClasesPage from "./pages/admin/clases/ClasesPage";
+import CitasMedicasPage from "./pages/admin/citasMedicas/CitasMedicasPage";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const CLIENT_ID =
   "442103352631-urj3v36db8bhki2cg4vu6c2q404dkko7.apps.googleusercontent.com";
@@ -66,164 +81,139 @@ const CLIENT_ID =
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <GoogleOAuthProvider clientId={CLIENT_ID}>
-      <AuthProvider>
-        {" "}
-        {/*El AuthProvider es para la persistencia del inicio de sesión en todas las paginas */}
-        <UsuarioProvider>
-          <BrowserRouter>
-            <Routes>
-              {/* // A este nivel tienen que insertar nuevas rutas. Especificando la ruta "/usuarios/register" y el elemento que será la página */}
-              {/*1. Sección del Landing Page */}
-              <Route path="/" element={<LandingLayout />}>
-                <Route index element={<Home />} />
-                <Route
-                  path="RegistroUsuario"
-                  element={<RegisterPage />}
-                ></Route>
-                <Route
-                  path="IniciarSesionUsuario"
-                  element={<LoginPage />}
-                ></Route>
-                <Route
-                  path="RegistroExitoso"
-                  element={<SuccessRegisterPage />}
-                ></Route>
-                <Route path="comunidades">
-                  <Route index element={<Comunidades />} />
-                  <Route
-                    path="detalle/:id"
-                    element={<DetalleComunidadLanding />}
-                  />
-                </Route>
-                <Route path="sobreNosotros" element={<SobreNosotros />} />
+      <AuthProvider> {/*El AuthProvider es para la persistencia del inicio de sesión en todas las paginas */}
+        <BrowserRouter>
+          <Routes>
+            {/* // A este nivel tienen que insertar nuevas rutas. Especificando la ruta "/usuarios/register" y el elemento que será la página */}
+            {/*1. Sección del Landing Page */}
+            <Route path="/" element={<LandingLayout />}>
+              <Route index element={<Home />} />
+              <Route path="RegistroUsuario" element={<RegisterPage/>}></Route>
+              <Route path="IniciarSesionUsuario" element={<LoginPage/>}></Route>
+              <Route path="RegistroExitoso" element={<SuccessRegisterPage/>}></Route>
+              <Route path="comunidades">
+                <Route index element={<ComunidadesLanding />} />
+                <Route path="detalle/:id" element={<DetalleComunidadLanding />} />
               </Route>
-              {/*2. Sección de Usuario */}
-              <Route path="/usuario" element={<UsuarioLayout />}>
+              <Route path="sobreNosotros" element={<SobreNosotros />} />
+            </Route>
+
+
+
+
+            {/*2. Sección de Usuario */} {/*id de Roles permitidos: Usuario con y sin membresía (3 y 4) */}
+            
+              <Route path="/usuario" element={<ProtectedRoute allowedRules={[3, 4]}><UsuarioLayout /></ProtectedRoute>}>
                 <Route index element={<Inicio />} />
-                <Route
-                  path="/usuario/configuracion"
-                  element={<UsuarioConfigLayout />}
-                >
+                <Route path="configuracion" element={<UsuarioConfigLayout />}>
                   <Route index element={<ConfigPerfil />} />
                   <Route path="sistema" element={<ConfigSistema />} />
                   <Route path="membresias" element={<Membresias />} />
                   <Route path="historial-pagos" element={<HistorialPagos />} />
                 </Route>
-              </Route>
-              {/*3. Sección de Admin */}
-              <Route path="/admin" element={<AdminLayout />}>
-                {" "}
-                {/* ESTO ES PARA LA PANTALLAS DE ROLES Y PERMISOS*/}
-                {/* Ejemplo de ruta anidada con un layout */}
-                <Route path="example" element={<Test />} />
-                <Route path="dashboard">
-                  <Route index element={<DashboardPage />} />
-                </Route>
-                <Route path="configuracion">
-                  <Route index element={<ConfiguracionGeneralPage />} />
-                  <Route
-                    path="editar"
-                    element={<EditarConfiguracionGeneralPage />}
-                  />
-                </Route>
-                <Route path="roles">
-                  <Route index element={<RolesPage />} />
-                  <Route path="crear" element={<CrearUsuario />} />
-                </Route>
-                <Route path="membresias">
-                  <Route index element={<MembresiasPage />} />
-                  <Route path="crear" element={<CrearUsuario />} />
-                  <Route
-                    path="detalle/:id"
-                    element={<DetalleComunidadLanding />}
-                  />
-                  <Route path="editar/:id" element={<EditarComunidad />} />
-                </Route>
+                <Route path="calendarioYReservas" element={<CalendarioYReservas/>}></Route>
+                {/*<Route path="citasMedicas" element={<CitasMedicas/>}></Route>
+                <Route path="historialMedico" element={<HistorialMedico/>}></Route>*/}
                 <Route path="comunidades">
-                  <Route index element={<ComunidadPage />} />
-                  <Route path="crear" element={<CrearComunidad />} />
-                  <Route path="editar/:id" element={<EditarComunidad />} />
-                  <Route path="detalle/:id" element={<DetalleComunidad />} />
-                </Route>
-                <Route path="servicios">
-                  <Route index element={<ServiciosPage />} />
-                  <Route path="crear" element={<CrearUsuario />} />
-                </Route>
-                <Route path="locales">
-                  <Route index element={<LocalesPage />} />
-                  <Route path="crear" element={<CrearUsuario />} />
-                </Route>
-                <Route path="usuarios">
-                  <Route index element={<UsuariosPage />} />
-                  <Route path="crear" element={<CrearUsuario />} />
-                  <Route path="detalle/:id" element={<DetalleUsuario />} />
-                  <Route path="editar/:id" element={<EditarUsuario />} />
-                  <Route
-                    path="successCrear"
-                    element={
-                      <UsuarioSuccess
-                        modulo="¡Usuario creado correctamente!"
-                        detalle="El usuario fue creado correctamente"
-                      />
-                    }
-                  />
-                  <Route
-                    path="successEditar"
-                    element={
-                      <UsuarioSuccess
-                        modulo="¡Usuario modificado correctamente!"
-                        detalle="El usuario fue modificado correctamente"
-                      />
-                    }
-                  />
-                </Route>
-                <Route path="personalMedico">
-                  <Route index element={<PersonalMedicoPage />} />
-                  <Route path="crear" element={<CrearMedico />} />
-                  <Route path="detalle/:id" element={<DetalleMedico />} />
-                  <Route path="editar/:id" element={<EditarMedico />} />
-                  <Route
-                    path="successCrear"
-                    element={
-                      <UsuarioSuccess
-                        modulo="¡Médico creado correctamente!"
-                        detalle="El médico fue creado correctamente"
-                      />
-                    }
-                  />
-                  <Route
-                    path="successEditar"
-                    element={
-                      <UsuarioSuccess
-                        modulo="¡Médico modificado correctamente!"
-                        detalle="El médico fue modificado correctamente"
-                      />
-                    }
-                  />
-                </Route>
-                <Route path="calificaciones">
-                  <Route index element={<CalificacionesPage />} />
-                  <Route path="crear" element={<CrearUsuario />} />
-                </Route>
-                <Route path="logs">
-                  <Route index element={<LogsPage />} />
-                  <Route path="crear" element={<CrearUsuario />} />
-                </Route>
-                <Route path="auditorias">
+                    <Route index element={<ComunidadesUsuario />} />
+                    <Route path="explorarComunidades" element={<ExplorarComunidades />} />
+                      <Route path="detalle/:id" element={<ComunidadProvider> <DetalleComunidadLayout /> </ComunidadProvider>}>
+                        <Route index element={<DetalleComunidadUsuario />}></Route>
+                        <Route path="horarios" element={<DetalleComunidadHorario/>}></Route>
+                        <Route path="reservas" element={<DetalleComunidadReservas/>}></Route>
+                        <Route path="membresia" element={<DetalleComunidadMembresia/>}></Route>
+                        {/*<Route path="integrantes" element={<DetalleComunidadIntegrantes/>}></Route>*/}
+                      </Route>
+                  </Route>
+              </Route>
+
+
+
+
+
+            {/*3. Sección de Admin */} {/*id de Roles permitidos: Admin (1) */}
+            <Route path="/admin" element={<ProtectedRoute allowedRules={[1]}><AdminLayout /></ProtectedRoute>}>
+              {" "}
+              {/* ESTO ES PARA LA PANTALLAS DE ROLES Y PERMISOS*/}
+              {/* Ejemplo de ruta anidada con un layout */}
+              <Route path="example" element={<Test />} />
+              <Route path="dashboard">
+                <Route index element={<DashboardPage />} />
+              </Route>
+              <Route path="configuracion">
+                <Route index element={<ConfiguracionGeneralPage />} />
+                <Route path="editar" element={<EditarConfiguracionGeneralPage />} />
+              </Route>
+              <Route path="roles">
+                <Route index element={<RolesPage />} />
+                <Route path="crear" element={<CrearUsuario />} />
+              </Route>
+              {/*<Route path="membresias">
+                <Route index element={<MembresiasPage />} />
+                <Route path="crear" element={<CrearUsuario />} />
+                <Route path="detalle/:id" element={<DetalleComunidadLanding />} />
+                <Route path="editar/:id" element={<EditarComunidad />} />
+              </Route>*/}
+              <Route path="comunidades">
+                <Route index element={<ComunidadPage />} />
+                <Route path="crear" element={<CrearComunidad />} />
+                <Route path="editar/:id" element={<EditarComunidad />} />
+                <Route path="detalle/:id" element={<DetalleComunidad />} />
+              </Route>
+              <Route path="servicios">
+                <Route index element={<ServiciosPage />} />
+                <Route path="crear" element={<CrearUsuario />} />
+              </Route>
+              <Route path="locales">
+                <Route index element={<LocalesPage />} />
+                <Route path="crear" element={<CrearUsuario />} />
+              </Route>
+              <Route path="usuarios">
+                <Route index element={<UsuariosPage />} />
+                <Route path="crear" element={<CrearUsuario />} />
+                <Route path="detalle/:id" element={<DetalleUsuario />} />
+                <Route path="editar/:id" element={<EditarUsuario />} />
+                <Route path="successCrear" element={<UsuarioSuccess modulo="¡Usuario creado correctamente!" detalle="El usuario fue creado correctamente" />} />
+                <Route path="successEditar" element={<UsuarioSuccess modulo="¡Usuario modificado correctamente!" detalle="El usuario fue modificado correctamente" />} />
+              </Route>
+              <Route path="personalMedico">
+                <Route index element={<PersonalMedicoPage />} />
+                <Route path="crear" element={<CrearMedico />} />
+                <Route path="detalle/:id" element={<DetalleMedico />} />
+                <Route path="editar/:id" element={<EditarMedico />} />
+                <Route path="successCrear" element={<UsuarioSuccess modulo="¡Médico creado correctamente!" detalle="El médico fue creado correctamente" />} />
+                <Route path="successEditar" element={<UsuarioSuccess modulo="¡Médico modificado correctamente!" detalle="El médico fue modificado correctamente" />} />
+              </Route>
+              <Route path="calificaciones">
+                <Route index element={<CalificacionesPage />} />
+                <Route path="crear" element={<CrearUsuario />} />
+              </Route>
+              <Route path="logs">
+                <Route index element={<LogsPage />} />
+                <Route path="crear" element={<CrearUsuario />} />
+              </Route>
+              <Route path="auditorias">
                   <Route index element={<AuditoriasPage />} />
                   <Route path="detalle/:id" element={<ToastProvider><LoadingContext><DetalleAuditoriaPage /></LoadingContext></ToastProvider>} />
-                </Route>
-                <Route path="reportes">
-                  <Route index element={<ReportesPage />} />
-                  <Route path="crear" element={<CrearUsuario />} />
-                </Route>
               </Route>
-              <Route path="/example" element={<Example />} />
-              <Route path="/trash" element={<App />} />
-              <Route path="*" element={<Page404 />} />
-            </Routes>
-          </BrowserRouter>
-        </UsuarioProvider>
+              <Route path="reportes">
+                <Route index element={<ReportesPage />} />
+                <Route path="crear" element={<CrearUsuario />} />
+              </Route>
+              <Route path="clases">
+                <Route index element={<ClasesPage />} />
+                <Route path="crear" element={<CrearUsuario />} />
+              </Route>
+              <Route path="citasMedicas">
+                <Route index element={<CitasMedicasPage />} />
+                <Route path="crear" element={<CrearUsuario />} />
+              </Route>
+            </Route>
+            <Route path="/example" element={<Example />} />
+            <Route path="/trash" element={<App />} />
+            <Route path="*" element={<Page404 />} />
+          </Routes>
+        </BrowserRouter>
       </AuthProvider>
     </GoogleOAuthProvider>
   </StrictMode>

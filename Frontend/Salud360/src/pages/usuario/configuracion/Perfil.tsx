@@ -1,37 +1,53 @@
 import Button from "@/components/Button";
 import Input from "@/components/input/Input";
 import PasswordInput from "@/components/input/PasswordInput";
+import { AuthContext } from "@/hooks/AuthContext";
 import { useUsuario } from "@/hooks/useUsuario";
-import { Calendar, ChevronDown, Mail, MapPin, Pen, Phone } from "lucide-react";
-import { useState } from "react";
+import { Calendar, ChevronDown, Mail, MapPin, Pen, Phone, User } from "lucide-react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom"; // Asegúrate de tener esto bien configurado
 
 function InicioPerfi() {
+  
+  const {usuario, logout, loading} = useContext(AuthContext)
+    
+  if (loading || !usuario) return null;
+
   const {
-    datos: {
-      nombres,
-      apellidos,
-      correo,
-      telefono,
-      fechaNacimiento,
-      sexo,
-      fotoPerfil,
-      numeroDocumento,
-      fechaCreacion,
-    },
-  } = useUsuario();
+    nombres,
+    apellidos,
+    correo,
+    telefono,
+    fechaNacimiento,
+    sexo,
+    fotoPerfil,
+    numeroDocumento,
+    fechaCreacion: rawFechaCreacion //Lo renombro así para formatearlo
+  } = usuario;
+
+  const fechaCreacion = new Date(usuario.fechaCreacion).toLocaleDateString("es-PE", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+    });
+
   const [showModalLogout, setShowModalLogout] = useState(false);
   const navigate = useNavigate();
+
   return (
     <div className="p-8">
       <form action="">
         <section className="flex gap-4 mb-8">
           <figure className="relative group">
-            <img
-              src={fotoPerfil}
-              alt="Foto de perfil"
-              className="h-[72px] aspect-1/1 rounded-full"
-            />
+            {fotoPerfil ? (
+                <img
+                    src={fotoPerfil}
+                    alt="Foto de perfil"
+                    className="h-[72px] aspect-1/1 rounded-full"
+                />
+                ):
+                <User color="black" className="h-[72px] aspect-1/1 border-[#2A86FF] rounded-full"/>
+                }
             <div className="opacity-0 group-hover:opacity-100 absolute top-0 left-0 w-full h-full bg-black/40 rounded-full backdrop-blur-xs flex justify-center items-center transition-all ease-out duration-100">
               <Pen color="white" />
             </div>

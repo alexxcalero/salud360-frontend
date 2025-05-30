@@ -1,12 +1,22 @@
 import Button from "@/components/Button";
 import MethodCard from "@/components/usuario/config/CardMetodoPago";
+import { AuthContext } from "@/hooks/AuthContext";
 import { useUsuario } from "@/hooks/useUsuario";
+import { useContext } from "react";
 import { useNavigate } from "react-router";
 
 const ConfigSistema = () => {
+
+  const {usuario, logout, loading} = useContext(AuthContext)
+      
+  if (loading || !usuario) return null;
+
+
   const {
-    datos: { notiCorreo, notiSMS, notiWhatsapp },
-  } = useUsuario();
+    notiCorreo,
+    notiSMS,
+    notiWhatsApp
+  } = usuario;
 
   const navigate = useNavigate();
   const _dataEjemplo = [
@@ -59,7 +69,7 @@ const ConfigSistema = () => {
                 name=""
                 id=""
                 className="h-min mr-2"
-                defaultChecked={notiWhatsapp}
+                defaultChecked={notiWhatsApp}
               />{" "}
               <label>Whatsapp</label>
             </li>
