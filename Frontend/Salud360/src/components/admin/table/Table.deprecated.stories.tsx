@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from "@storybook/react";
 
-import Comp from "./Table";
+import Comp from "./Table.deprecated";
 
 const meta: Meta<typeof Comp<Data>> = {
   title: "Table/Table",
