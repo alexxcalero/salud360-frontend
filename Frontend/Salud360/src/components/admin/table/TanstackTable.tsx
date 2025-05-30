@@ -136,7 +136,9 @@ export default function TanstackTable<Data extends Record<string, any>>({
     });
 
   return ({ rows }: { rows: Data[] }) => {
-    const [sorting, setSorting] = React.useState<SortingState>([]);
+    const [sorting, setSorting] = React.useState<SortingState>([
+      { id: idKey as string, desc: false },
+    ]);
     const [columnFilters, setColumnFilters] =
       React.useState<ColumnFiltersState>([]);
     const [columnVisibility, setColumnVisibility] =

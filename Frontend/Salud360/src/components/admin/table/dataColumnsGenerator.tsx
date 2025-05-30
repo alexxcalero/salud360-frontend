@@ -1,7 +1,7 @@
 import { Column, ColumnDef, Row, Table } from "@tanstack/react-table";
 import colors from "tailwindcss/colors";
 import { Salud360Column } from "./table";
-import { ArrowUpDown, Star } from "lucide-react";
+import { ArrowDown, ArrowUp, ArrowUpDown, Star } from "lucide-react";
 import { DateTime } from "luxon";
 import {
   FilterButtonWithDate,
@@ -16,12 +16,37 @@ function SortingButton<Data>({ column }: { column: Column<Data> }) {
   return (
     <button
       className="ring-0 outline-none focus:ring-0 focus:outline-none focus-within:ring-0 focus-within:outline-none"
-      onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      onClick={() => {
+        switch (column.getIsSorted()) {
+          case false:
+            column.toggleSorting(column.getIsSorted() === "asc");
+            break;
+          case "asc":
+            column.toggleSorting(column.getIsSorted() === "asc");
+            break;
+          case "desc":
+            column.clearSorting();
+        }
+      }}
     >
-      <ArrowUpDown
-        size={16}
-        className="hover:text-blue-200 transition-colors duration-150 ease-out"
-      />
+      {!column.getIsSorted() && (
+        <ArrowUpDown
+          size={16}
+          className="hover:text-blue-200 transition-colors duration-150 ease-out"
+        />
+      )}
+      {column.getIsSorted() === "asc" && (
+        <ArrowUp
+          size={16}
+          className="hover:text-blue-200 transition-colors duration-150 ease-out"
+        />
+      )}
+      {column.getIsSorted() === "desc" && (
+        <ArrowDown
+          size={16}
+          className="hover:text-blue-200 transition-colors duration-150 ease-out"
+        />
+      )}
     </button>
   );
 }
