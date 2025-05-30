@@ -1,19 +1,23 @@
 import { useContext, useState } from "react"
-import { Mail, Lock } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import InputIconLabelEdit from "@/components/InputIconLabelEdit"
 import { useGoogleLogin } from "@react-oauth/google"
 import { Link } from "react-router"
 import { useNavigate } from "react-router-dom"
 import { login as loginRequest } from "@/services/authService"
 import { authGoogleService } from "@/services/authGoogleService"
 import { AuthContext } from "@/hooks/AuthContext"
+import MailInput from "./input/MailInput"
+import PasswordInput from "./input/PasswordInput"
+import { useLoading } from "@/hooks/LoadingContext"
+import { useToasts } from "@/hooks/ToastContext"
 
 export default function LoginForm() {
   const [formData, setFormData] = useState({
     correo: "",
     contraseña: ""
   })
+  const {setLoading} = useLoading();
+  const {createToast} = useToasts();
 
   const { login: loginContext } = useContext(AuthContext);
 
@@ -26,7 +30,8 @@ export default function LoginForm() {
     e.preventDefault()
     console.log("Datos enviados:", formData)
     // Aquí puedes hacer una petición con Axios al backend
-
+    setLoading(true)
+    await new Promise<string>((res) => setTimeout(() => res(""), 3000))
 
     try {
       const response = await loginRequest(formData.correo, formData.contraseña);
@@ -42,6 +47,7 @@ export default function LoginForm() {
 
       console.log("el idRol es:", idRol)
 
+      setLoading(false)
       switch(idRol){
         case 1: //Admin
           navigate("/admin");
@@ -62,13 +68,25 @@ export default function LoginForm() {
 
     } catch (error: any) {
       if (error.response && error.response.status === 401) {
-        alert("Correo o contraseña incorrectos.");
+        createToast("error", {
+          id: 1,
+          title: "Correo o contraseña incorrectos",
+          description: ""
+        })
+        // alert("Correo o contraseña incorrectos.");
         setFormData({ correo: "", contraseña: "" })
       } else {
+        createToast("error", {
+          id: 1,
+          title: "Error al iniciar sesión",
+          description: ""
+        })
         console.error("Error al iniciar sesión:", error);
-        alert("Error al iniciar sesión.");
+        // alert("Error al iniciar sesión.");
         setFormData({ correo: "", contraseña: "" })
       }
+    } finally {
+      setLoading(false)
     }
 
   }
@@ -107,24 +125,8 @@ export default function LoginForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <InputIconLabelEdit
-        icon={<Mail className="w-5 h-5" />}
-        type="email"
-        placeholder="fabian@pucp.edu.pe"
-        htmlFor="correo"
-        label="Correo electrónico *"
-        value={formData.correo}
-        onChange={handleChange}
-      />
-      <InputIconLabelEdit
-        icon={<Lock className="w-5 h-5" />}
-        type="password"
-        placeholder="********"
-        htmlFor="contraseña"
-        label="Contraseña *"
-        value={formData.contraseña}
-        onChange={handleChange}
-      />
+      <MailInput name="correo" required={true} label="Correo electrónico" defaultValue={formData.correo} onChange={handleChange}/>
+      <PasswordInput name="contraseña" required={true} showRecommendations={false} defaultValue={formData.contraseña} onChange={handleChange}/>
       <div className="text-sm">
         ¿No tienes una cuenta?{" "}
         <Link to="/RegistroUsuario" className="text-[#1E88E5] hover:underline">
