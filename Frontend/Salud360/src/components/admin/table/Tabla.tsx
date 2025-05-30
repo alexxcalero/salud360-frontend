@@ -40,7 +40,7 @@ import SelecctionActions from "./SelecctionActions";
 import { TableActions } from "./TableActions";
 import Pagination from "./Pagination";
 
-export default function TanstackTable<Data extends Record<string, any>>({
+export default function Tabla<Data extends Record<string, any>>({
   idKey,
   columns,
   actions,

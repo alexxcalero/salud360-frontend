@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from "@storybook/react";
 
-import TableGenerator from "./TanstackTable";
+import TableGenerator from "./Tabla";
 
 interface Data {
   id: number;
