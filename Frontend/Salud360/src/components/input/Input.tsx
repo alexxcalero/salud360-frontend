@@ -22,6 +22,7 @@ const UnifiedInput = ({
   required,
 }: Props) => {
   const [value, setValue] = useState(defaultValue);
+  const [firstUpdate, setFirstUpdate] = useState(false);
   const id = useId();
 
   return (
@@ -38,7 +39,7 @@ const UnifiedInput = ({
       <label
         htmlFor={id}
         className={`relative flex border-[#6A6262] border-2 rounded-[5px] py-0 px-2 gap-2 items-center focus-within:border-blue-500 group ${
-          required && value === "" && "border-red-400"
+          required && value === "" && firstUpdate && "border-red-400"
         } ${disabled && "border-neutral-300 bg-neutral-50"} ${className}`}
       >
         {leftIcon && (
@@ -56,6 +57,7 @@ const UnifiedInput = ({
           required={required}
           disabled={disabled}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            setFirstUpdate(true);
             setValue(e.currentTarget.value);
             onChange(e);
           }}
@@ -66,7 +68,7 @@ const UnifiedInput = ({
           </span>
         )}
       </label>
-      {required && value === "" && (
+      {required && value === "" && firstUpdate && (
         <p className="text-label-medium text-red-400 mt-1 w-max">
           Complete este campo
         </p>
