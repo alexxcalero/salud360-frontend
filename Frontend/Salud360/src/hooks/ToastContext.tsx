@@ -31,7 +31,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   return (
     <toastContext.Provider value={{ createToast }}>
       {children}
-      <div className="fixed">
+      <div className="fixed z-[1000]">
         <Toaster />
       </div>
     </toastContext.Provider>
