@@ -1,11 +1,15 @@
 import { useState } from "react"
-import { Mail, Lock, Phone, User, MapPin, Calendar, IdCard, ShieldUser } from "lucide-react"
+import { Phone, User, MapPin, Calendar, IdCard, ShieldUser } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useGoogleLogin } from "@react-oauth/google"
 import SelectIconLabel from "@/components/SelectIconLabel"
-import InputIconLabelEdit from "./InputIconLabelEdit"
 import { useNavigate } from "react-router-dom"
 import { register } from "@/services/registerService"
+import { useToasts } from "@/hooks/ToastContext"
+import { useLoading } from "@/hooks/LoadingContext"
+import Input from "./input/Input"
+import MailInput from "./input/MailInput"
+import PasswordInput from "./input/PasswordInput"
 
 
 export default function RegisterForm() {
@@ -22,6 +26,8 @@ export default function RegisterForm() {
     confirmarContraseña: "",
     telefono: "",
   })
+  const {setLoading} = useLoading();
+  const {createToast} = useToasts();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target
@@ -30,15 +36,24 @@ export default function RegisterForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true)
     console.log("Formulario enviado:", formData)
 
     if (formData.correo !== formData.confirmarCorreo) {
-      alert("Los correos no coinciden.");
+      createToast("error", {
+        id: 1,
+        title: "Los correos no coinciden",
+        description: ""
+      })
       return;
     }
 
     if (formData.contraseña !== formData.confirmarContraseña) {
-      alert("Las contraseñas no coinciden.");
+      createToast("error", {
+        id: 1,
+        title: "Las contraseñas no coinciden",
+        description: ""
+      })
       return;
     }
     // conexio a axios
@@ -57,10 +72,17 @@ export default function RegisterForm() {
 
       await register(datosEnvio);
 
+      setLoading(false)
       navigate("/RegistroExitoso");
     } catch (error) {
       console.error("Error al registrar:", error);
-      alert("Ocurrió un error al registrar. Inténtalo nuevamente.");
+      createToast("error", {
+        id: 1,
+        title: "Ocurrió un error al registrar. Inténtalo nuevamente.",
+        description: ""
+      })
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -80,22 +102,8 @@ export default function RegisterForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <InputIconLabelEdit
-          icon={<User className="w-5 h-5" />}
-          placeholder="Nombre"
-          htmlFor="nombres"
-          label="Nombres *"
-          value={formData.nombres}
-          onChange={handleChange}
-        />
-        <InputIconLabelEdit
-          icon={<User className="w-5 h-5" />}
-          placeholder="Apellidos"
-          htmlFor="apellidos"
-          label="Apellidos *"
-          value={formData.apellidos}
-          onChange={handleChange}
-        />
+        <Input name="nombres" label="Nombres" placeholder="Nombre" leftIcon={<User />} required={true} defaultValue={formData.nombres} onChange={handleChange}/>
+        <Input name="apellidos" label="Apellidos" placeholder="Apellidos" leftIcon={<User />} required={true} defaultValue={formData.apellidos} onChange={handleChange}/>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -113,82 +121,24 @@ export default function RegisterForm() {
             ]}
           />
         </div>
-        <InputIconLabelEdit
-          icon={<ShieldUser className="w-5 h-5" />}
-          placeholder="72072230"
-          htmlFor="numeroDocumento"
-          label="Número de documento de identidad *"
-          value={formData.numeroDocumento}
-          onChange={handleChange}
-        />
+        <Input name="numeroDocumento" label="Número de documento de identidad" placeholder="72072230" leftIcon={<ShieldUser />} required={true} defaultValue={formData.numeroDocumento} onChange={handleChange}/>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <InputIconLabelEdit
-          icon={<Calendar className="w-5 h-5" />}
-          type="date"
-          htmlFor="fechaNacimiento"
-          label="Fecha de nacimiento *"
-          value={formData.fechaNacimiento}
-          onChange={handleChange}
-        />
-        <InputIconLabelEdit
-          icon={<MapPin className="w-5 h-5" />}
-          placeholder="Ubicación"
-          htmlFor="lugarResidencia"
-          label="Lugar de residencia *"
-          value={formData.lugarResidencia}
-          onChange={handleChange}
-        />
+        <Input name="fechaNacimiento" label="Fecha de nacimiento" type="date" leftIcon={<Calendar />} required={true} defaultValue={formData.fechaNacimiento} onChange={handleChange}/>
+        <Input name="lugarResidencia" label="Lugar de residencia" placeholder="Ubicación" leftIcon={<MapPin />} required={true} defaultValue={formData.lugarResidencia} onChange={handleChange}/>
       </div>
 
-      <InputIconLabelEdit
-        icon={<Mail className="w-5 h-5" />}
-        type="email"
-        placeholder="example@email.com"
-        htmlFor="correo"
-        label="Correo electrónico *"
-        value={formData.correo}
-        onChange={handleChange}
-      />
-      <InputIconLabelEdit
-        icon={<Mail className="w-5 h-5" />}
-        type="email"
-        placeholder="example@email.com"
-        htmlFor="confirmarCorreo"
-        label="Confirmar correo electrónico *"
-        value={formData.confirmarCorreo}
-        onChange={handleChange}
-      />
+      <Input name="telefono" label="Teléfono" leftIcon={<Phone />} defaultValue={formData.telefono}
+        onChange={handleChange} required={true} />
 
-      <InputIconLabelEdit
-        icon={<Lock className="w-5 h-5" />}
-        type="password"
-        placeholder="***********"
-        htmlFor="contraseña"
-        label="Contraseña *"
-        value={formData.contraseña}
-        onChange={handleChange}
-      />
-      <InputIconLabelEdit
-        icon={<Lock className="w-5 h-5" />}
-        type="password"
-        placeholder="***********"
-        htmlFor="confirmarContraseña"
-        label="Confirmar contraseña *"
-        value={formData.confirmarContraseña}
-        onChange={handleChange}
-      />
+      <MailInput name="correo" placeholder="example@gmail.com" label="Correo electrónico"  defaultValue={formData.correo} onChange={handleChange} required={true}/>
+      <MailInput name="confirmarCorreo" placeholder="example@gmail.com" label="Confirmar correo electrónico"  defaultValue={formData.confirmarCorreo} onChange={handleChange} required={true}/>
 
-      <InputIconLabelEdit
-        icon={<Phone className="w-5 h-5" />}
-        placeholder="999999999"
-        htmlFor="telefono"
-        label="Teléfono *"
-        value={formData.telefono}
-        onChange={handleChange}
-      />
-      <Button type="submit" className="w-full mt-4" onClick={() => navigate("/RegistroExitoso")}>
+      <PasswordInput name="contraseña" placeholder="***********" label="Contraseña" defaultValue={formData.contraseña} onChange={handleChange} required={true} />
+      <PasswordInput name="confirmarContraseña" placeholder="***********" label="Confirmar contraseña" defaultValue={formData.contraseña} onChange={handleChange} required={true} />
+
+      <Button type="submit" className="w-full mt-4">
         Registrarse
       </Button>
       <div className="text-center mt-4">
