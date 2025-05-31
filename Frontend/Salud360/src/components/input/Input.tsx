@@ -1,8 +1,20 @@
 import { Input } from "@/components/ui/input";
 import { HTMLInputTypeAttribute, useId, useState } from "react";
-import { GenericInputProps } from "./genericInput";
 
-interface Props extends GenericInputProps {
+export interface InputProps {
+  name: string;
+  defaultValue?: string;
+  label?: string;
+  placeholder?: string;
+  disabled?: boolean;
+  required?: boolean;
+  onChange?: (_: React.ChangeEvent<HTMLInputElement>) => void;
+  className?: string;
+  value?: string;
+  setValue?: (_: string) => void;
+}
+
+interface BaseProps extends InputProps {
   type?: HTMLInputTypeAttribute;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
@@ -20,8 +32,13 @@ const UnifiedInput = ({
   disabled,
   onChange = () => {},
   required,
-}: Props) => {
-  const [value, setValue] = useState(defaultValue);
+  value: argValue,
+  setValue: argSetValue,
+}: BaseProps) => {
+  const [value, setValue] =
+    argValue !== undefined && argSetValue !== undefined
+      ? [argValue, argSetValue]
+      : useState(defaultValue);
   const [firstUpdate, setFirstUpdate] = useState(false);
   const id = useId();
 

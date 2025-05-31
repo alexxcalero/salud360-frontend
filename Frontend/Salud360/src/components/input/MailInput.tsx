@@ -1,8 +1,8 @@
 import { Mail } from "lucide-react";
-import { GenericInputProps } from "./genericInput";
+import { type InputProps } from "./Input";
 import Input from "./Input";
 
-const MailInput = (props: GenericInputProps) => {
+const MailInput = (props: InputProps) => {
   return <Input leftIcon={<Mail />} type="email" {...props} />;
 };
 

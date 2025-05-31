@@ -1,9 +1,9 @@
 import { HTMLInputTypeAttribute, useRef, useState } from "react";
 import Input from "./Input";
 import { Check, Eye, EyeClosed, Lock, X } from "lucide-react";
-import { GenericInputProps } from "./genericInput";
+import { InputProps } from "./Input";
 
-interface Props extends GenericInputProps {
+interface Props extends InputProps {
   showRecommendations?: boolean;
 }
 

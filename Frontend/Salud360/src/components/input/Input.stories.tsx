@@ -57,7 +57,6 @@ export const Default: Story = {
     rightIcon: <ChevronDown />,
     name: "unified-input",
     label: "Texto de ejemplo",
-    defaultValue: "Valor por defecto",
     className: "",
     disabled: false,
     onChange: () => {},
