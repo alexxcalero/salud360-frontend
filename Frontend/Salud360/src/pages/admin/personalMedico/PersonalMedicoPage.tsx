@@ -43,8 +43,18 @@ function PersonalMedicoPage(){
         fetchMedicos(); //hago esto para que al eliminar un medico y darle a "volver" se actualice todo automaticamente
     }, []);
 
-    const handleEliminarMedico = (): void => {
-        axios.delete(`http://localhost:8080/api/admin/${medicoSeleccionado.idMedico}`)
+    const handleEliminarMedico = (): void => {  
+        console.log("El id del usuario a eliminar es:", medicoSeleccionado.idMedico)
+        axios.delete(`http://localhost:8080/api/admin/medicos/${medicoSeleccionado.idMedico}`)
+        .then(() => {
+            setShowModalExito(true);
+            setShowModalError(false)
+        })
+        .catch(() => console.log("Error"));
+    }
+
+    const handleReactivarMedico = (): void => {
+        axios.put(`http://localhost:8080/api/admin/medicos/${medicoSeleccionado.idMedico}/reactivar`)
         .then(() => {
             setShowModalExito(true);
             setShowModalError(false)
@@ -106,7 +116,7 @@ function PersonalMedicoPage(){
                         :
                         <RotateCcw className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => {
                             setMedicoSeleccionado(medico);
-
+                            setShowModalError(true);
                         }} />
                     }
                 </div>
@@ -139,28 +149,57 @@ function PersonalMedicoPage(){
                 </table>
             </div>
 
-            {showModalError && (
+            { medicoSeleccionado && (medicoSeleccionado.activo ?
                 <>
-                <div className="fixed inset-0 bg-black/60 z-40" />
-                <div className="fixed inset-0 z-50 flex items-center justify-center">
-                    <ModalError modulo="Usuario" detalle={`${medicoSeleccionado?.nombres} ${medicoSeleccionado.apellidos}`} onConfirm={() => {
-                    handleEliminarMedico();
-                    
-                    }} onCancel={() => setShowModalError(false)}/>
-                </div>
-                </>
-            )}
+                {showModalError && (
+                    <>
+                    <div className="fixed inset-0 bg-black/60 z-40" />
+                    <div className="fixed inset-0 z-50 flex items-center justify-center">
+                        <ModalError modulo="¿Estás seguro de que quieres eliminarlo?" detalle={`Médico: ${medicoSeleccionado?.nombres} ${medicoSeleccionado.apellidos}`} onConfirm={() => {
+                        handleEliminarMedico();
 
-            {showModalExito && (
-                <>
-                <div className="fixed inset-0 bg-black/60 z-40" />
-                <div className="fixed inset-0 z-50 flex items-center justify-center">
-                    <ModalExito modulo="Usuario" detalle="El usuario fue eliminado correctamente" onConfirm={() => {
-                    setShowModalExito(false);
-                    fetchMedicos();
-                    }}/>
-                </div>
+                        }} onCancel={() => setShowModalError(false)} />
+                    </div>
+                    </>
+                )}
+                {showModalExito && (
+                    <>
+                    <div className="fixed inset-0 bg-black/60 z-40" />
+                    <div className="fixed inset-0 z-50 flex items-center justify-center">
+                        <ModalExito modulo="¡Médico eliminado correctamente!" detalle="El médico fue eliminado correctamente" onConfirm={() => {
+                        setShowModalExito(false);
+                        fetchMedicos();
+                        }} />
+                    </div>
+                    </>
+                )}
                 </>
+                :
+                <>
+                {showModalError && (
+                    <>
+                    <div className="fixed inset-0 bg-black/60 z-40" />
+                    <div className="fixed inset-0 z-50 flex items-center justify-center">
+                        <ModalError modulo="¿Estás seguro de que quieres reactivarlo?" detalle={`Médico: ${medicoSeleccionado?.nombres} ${medicoSeleccionado.apellidos}`} buttonConfirm="Reactivar" onConfirm={() => {
+                        handleReactivarMedico();
+                        }} onCancel={() => setShowModalError(false)} />
+                    </div>
+                    </>
+                )}
+
+                {showModalExito && (
+                    <>
+                    <div className="fixed inset-0 bg-black/60 z-40" />
+                    <div className="fixed inset-0 z-50 flex items-center justify-center">
+                        <ModalExito modulo="¡Médico reactivado correctamente!" detalle="El médico fue reactivado correctamente" onConfirm={() => {
+                        setShowModalExito(false);
+                        fetchMedicos();
+                        }} />
+                    </div>
+                    </>
+                )}
+                </>
+
             )}
 
         </div>

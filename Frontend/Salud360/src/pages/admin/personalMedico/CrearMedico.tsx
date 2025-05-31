@@ -61,8 +61,11 @@ function CrearMedico() {
       );
 
       console.log("Medico creado:", response.data);
-      alert("Medio creado exitosamente");
-      navigate("/admin/personalMedico");
+      //alert("Medico creado exitosamente");
+      console.log("A punto de navegar a successCrear")
+      navigate("/admin/personalMedico/successCrear", {
+          state: { created: true }
+      });
     } catch (err) {
       console.error("Error al crear medio:", err);
       alert("Hubo un error al crear el medico");

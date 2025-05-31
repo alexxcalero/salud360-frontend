@@ -89,10 +89,10 @@ function ServiciosPage() {
       content: (
         <span
           className={`px-2 py-1 rounded text-xs font-medium 
-            ${servicio.estado === "Activo" 
+            ${servicio.activo  
               ? "bg-green-600 text-green-50" : "bg-red-600 text-red-50"}`}
         >
-          {servicio.estado}
+          {servicio.activo ? "Activo" : "Inactivo"}
         </span>
       ),
       className: "w-1/6",

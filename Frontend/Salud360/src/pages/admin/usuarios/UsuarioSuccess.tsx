@@ -5,9 +5,10 @@ import { useNavigate, useLocation } from "react-router";
 interface Props{
     modulo: string;
     detalle: string;
+    route?: string;
 }
 
-function UsuarioSuccess({modulo, detalle}: Props){
+function UsuarioSuccess({modulo, detalle, route= "/admin/usuarios"}: Props){
     
     const location = useLocation();
     const navigate = useNavigate();
@@ -23,14 +24,14 @@ function UsuarioSuccess({modulo, detalle}: Props){
         if (location.state === undefined) return;
 
         if (!location.state?.created) {
-            navigate("/admin/usuarios"); // Redirige si no vino del flujo correcto
+            navigate(route); // Redirige si no vino del flujo correcto
         }
     }, [location]);
 
     return(
         <div className="w-full flex flex-row justify-center items-center">
             <ModalExito modulo={modulo} detalle={detalle} onConfirm={() => {
-                navigate("/admin/usuarios", { replace: true });
+                navigate(route, { replace: true });
             }}/>
         </div>
         
