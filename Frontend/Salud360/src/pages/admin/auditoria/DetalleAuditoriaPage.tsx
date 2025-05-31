@@ -25,7 +25,6 @@ const DetalleAuditoriaPage = () => {
         setData(response.data);
       } catch (error) {
         createToast("error", {
-          id: 0,
           title: "Error",
           description: "Error al obtener datos del servidor",
         });

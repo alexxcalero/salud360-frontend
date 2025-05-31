@@ -41,7 +41,6 @@ export default function RegisterForm() {
 
     if (formData.correo !== formData.confirmarCorreo) {
       createToast("error", {
-        id: 1,
         title: "Los correos no coinciden",
         description: ""
       })
@@ -50,7 +49,6 @@ export default function RegisterForm() {
 
     if (formData.contraseña !== formData.confirmarContraseña) {
       createToast("error", {
-        id: 1,
         title: "Las contraseñas no coinciden",
         description: ""
       })
@@ -77,7 +75,6 @@ export default function RegisterForm() {
     } catch (error) {
       console.error("Error al registrar:", error);
       createToast("error", {
-        id: 1,
         title: "Ocurrió un error al registrar. Inténtalo nuevamente.",
         description: ""
       })

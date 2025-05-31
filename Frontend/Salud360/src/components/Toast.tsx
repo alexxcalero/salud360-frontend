@@ -1,6 +1,7 @@
 "use client";
 
-import { Check } from "lucide-react";
+import { Check, X } from "lucide-react";
+import { useId } from "react";
 import { toast as sonnerToast } from "sonner";
 
 /** I recommend abstracting the toast function
@@ -8,11 +9,10 @@ import { toast as sonnerToast } from "sonner";
 
 export const successToast = (toast: Omit<ToastProps, "id">) => {
   return sonnerToast.custom(
-    (id) => (
+    () => (
       <SuccessToast
-        id={id}
         title={toast.title}
-        description={toast.description}
+        description={toast.description ?? ""}
         button={toast.button}
       />
     ),
@@ -24,11 +24,10 @@ export const successToast = (toast: Omit<ToastProps, "id">) => {
 };
 export const errorToast = (toast: Omit<ToastProps, "id">) => {
   return sonnerToast.custom(
-    (id) => (
+    () => (
       <ErrorToast
-        id={id}
         title={toast.title}
-        description={toast.description}
+        description={toast.description ?? ""}
         button={toast.button}
       />
     ),
@@ -41,7 +40,8 @@ export const errorToast = (toast: Omit<ToastProps, "id">) => {
 
 /** A fully custom toast that still maintains the animations and interactions. */
 function SuccessToast(props: ToastProps) {
-  const { title, description, button, id } = props;
+  const { title, description, button } = props;
+  const id = useId();
 
   return (
     <div className="flex rounded-lg bg-green-200 shadow-lg ring-1 ring-black/5 w-full md:max-w-[364px] items-center p-4">
@@ -75,13 +75,14 @@ function SuccessToast(props: ToastProps) {
   );
 }
 function ErrorToast(props: ToastProps) {
-  const { title, description, button, id } = props;
+  const { title, description, button } = props;
+  const id = useId();
 
   return (
     <div className="flex rounded-lg bg-red-200 shadow-lg ring-1 ring-black/5 w-full md:max-w-[364px] items-center p-4">
       <div className="flex flex-1 items-center gap-2">
         <div className="p-1 rounded-full bg-red-700 self-start">
-          <Check size={12} strokeWidth={4} color="white" />
+          <X size={12} strokeWidth={4} color="white" />
         </div>
         <div className="w-full">
           <p className="text-sm text-red-900 font-semibold text-left">
@@ -110,9 +111,8 @@ function ErrorToast(props: ToastProps) {
 }
 
 export interface ToastProps {
-  id: string | number;
   title: string;
-  description: string;
+  description?: string;
   button?: {
     label: string;
     onClick: () => void;

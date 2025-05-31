@@ -80,19 +80,16 @@ export default function LoginForm() {
       if (axios.isAxiosError(error)) {
         if (error.code === 'ECONNABORTED') {
           createToast("error", {
-            id: 1,
             title: "Error: Conexión agotada (timeout)",
             description: ""
           })
         } else if (!error.response) {
           createToast("error", {
-            id: 1,
             title: "Error: No se pudo conectar al servidor",
             description: ""
           })
         } else {
           createToast("error", {
-            id: 1,
             title: 'Error de respuesta:' + error.response.status + error.response.data,
             description: ""
           })
@@ -100,7 +97,6 @@ export default function LoginForm() {
       }
       else if (error.response && error.response.status === 401) {
         createToast("error", {
-          id: 1,
           title: "Correo o contraseña incorrectos",
           description: ""
         })
@@ -108,7 +104,6 @@ export default function LoginForm() {
         setFormData({ correo: "", contraseña: "" })
       } else {
         createToast("error", {
-          id: 1,
           title: "Error al iniciar sesión",
           description: ""
         })
