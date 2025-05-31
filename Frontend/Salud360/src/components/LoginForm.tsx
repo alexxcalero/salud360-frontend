@@ -10,6 +10,7 @@ import MailInput from "./input/MailInput"
 import PasswordInput from "./input/PasswordInput"
 import { useLoading } from "@/hooks/LoadingContext"
 import { useToasts } from "@/hooks/ToastContext"
+import axios from "axios"
 
 export default function LoginForm() {
   const [formData, setFormData] = useState({
@@ -76,7 +77,28 @@ export default function LoginForm() {
       }
 
     } catch (error: any) {
-      if (error.response && error.response.status === 401) {
+      if (axios.isAxiosError(error)) {
+        if (error.code === 'ECONNABORTED') {
+          createToast("error", {
+            id: 1,
+            title: "Error: Conexión agotada (timeout)",
+            description: ""
+          })
+        } else if (!error.response) {
+          createToast("error", {
+            id: 1,
+            title: "Error: No se pudo conectar al servidor",
+            description: ""
+          })
+        } else {
+          createToast("error", {
+            id: 1,
+            title: 'Error de respuesta:' + error.response.status + error.response.data,
+            description: ""
+          })
+        }
+      }
+      else if (error.response && error.response.status === 401) {
         createToast("error", {
           id: 1,
           title: "Correo o contraseña incorrectos",
@@ -134,8 +156,8 @@ export default function LoginForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <MailInput name="correo" required={true} label="Correo electrónico" defaultValue={formData.correo} onChange={handleChange}/>
-      <PasswordInput name="contraseña" required={true} showRecommendations={false} defaultValue={formData.contraseña} onChange={handleChange}/>
+      <MailInput name="correo" required={true} label="Correo electrónico" value={formData.correo} onChange={handleChange}/>
+      <PasswordInput name="contraseña" required={true} showRecommendations={false} value={formData.contraseña} onChange={handleChange}/>
       <div className="text-sm">
         ¿No tienes una cuenta?{" "}
         <Link to="/RegistroUsuario" className="text-[#1E88E5] hover:underline">
