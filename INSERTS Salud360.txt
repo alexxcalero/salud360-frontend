@@ -6,9 +6,8 @@ INSERT INTO ingesoft.rol (
     nombre
 ) VALUES
 (true, NOW(), NULL, 'Rol con privilegios administrativos completos', 'Admin'),
-(true, NOW(), NULL, 'Rol para médicos con acceso a información clínica y citas', 'Médico'),
-(true, NOW(), NULL, 'Usuario registrado que aún no ha adquirido una membresía', 'Usuario sin Membresía'),
-(true, NOW(), NULL, 'Usuario registrado con una o más membresías activas', 'Usuario con Membresía');
+(true, NOW(), NULL, 'Usuario registrado que aún no ha adquirido una membresía', 'Cliente Visitante'),
+(true, NOW(), NULL, 'Usuario registrado con una o más membresías activas', 'Cliente Miembro');
 
 
 INSERT INTO ingesoft.tipo_documento (
@@ -21,44 +20,59 @@ INSERT INTO ingesoft.tipo_documento (
 (true, NOW(), NULL, 'Carnet de Extranjería'),
 (true, NOW(), NULL, 'Pasaporte');
 
+
 INSERT INTO ingesoft.usuario (
-    activo, fecha_nacimiento, id_rol, id_tipo_documento,
-    noti_correo, noti_whats_app, notisms,
-    fecha_creacion, fecha_desactivacion,
-    apellidos, contrasenha, correo, foto_perfil,
-    nombres, numero_documento, sexo, telefono
-) VALUES
+    id_rol, correo, contrasenha, activo
+) VALUES (
+    1, 'fabianmr2806@hotmail.com', '$2a$10$h8MRopzlGo4kFkVQdHlc5ez0Z3aR2m5NuSVNGWgUzgA7Rma4kqHlu', true
+);
 
--- Usuario 1 (Admin)
-(true, '1990-03-15', 1, 1, true, false, true, NOW(), NULL, 'Rojas Fernández', 'admin123', 'rojasf@correo.com', NULL, 'Lucía', '47123456', 'Femenino', '987111222'),
+INSERT INTO ingesoft.administrador (
+    id_usuario, id_tipo_documento, numero_documento, nombres, apellidos,
+    sexo, fecha_creacion, fecha_desactivacion,
+    notificacion_por_correo, notificacion_por_whats_app, notificacion_porsms,
+    telefono, foto_perfil, activo
+) VALUES (
+    1, 1, '47123131', 'Fabián', 'Montenegro',
+    'Masculino', CURRENT_TIMESTAMP, NULL,
+    true, true, true,
+    '987654321', NULL, true
+);
 
--- Usuario 2 (Médico)
-(true, '1985-11-02', 2, 2, true, true, false, NOW(), NULL, 'Valverde Ríos', 'medico2024', 'valr@hospital.com', NULL, 'Carlos', 'CE123456', 'Masculino', '988888777'),
+INSERT INTO ingesoft.usuario (
+    id_rol, correo, contrasenha, activo
+) VALUES (
+    3, 'usuario@hotmail.com', '$2a$10$xaXYAXDu.0U/cKyN4OSWZOmT70dlcalLFWYKnXEqQOO.OPWEhfgnu', true
+);
 
--- Usuario 3 (Médico)
-(true, '1992-06-20', 2, 1, false, true, true, NOW(), NULL, 'Navarro Salas', 'drnavarro', 'navarro@med.com', NULL, 'Andrea', '48234567', 'Femenino', '987654321'),
+INSERT INTO ingesoft.cliente (
+    id_usuario, id_tipo_documento, numero_documento, nombres, apellidos,
+    sexo, fecha_nacimiento, direccion, telefono, foto_perfil,
+    notificacion_por_correo, notificacion_por_whats_app, notificacion_porsms,
+    fecha_creacion, fecha_desactivacion, activo
+) VALUES (
+    2, 1, '72382921', 'Rodrigo', 'Prado',
+    'Masculino', '1998-04-08', 'Av. Universitaria 1801', '900800700', NULL,
+    true, true, true,
+    CURRENT_TIMESTAMP, NULL, true
+);
 
--- Usuario 4 (Admin)
-(true, '1988-07-08', 1, 3, true, false, false, NOW(), NULL, 'Ramírez Chacón', 'admin456', 'ramirez@correo.com', NULL, 'Javier', 'P3456789', 'Masculino', '911223344'),
-
--- Usuario 5 (Médico)
-(true, '1994-01-10', 2, 2, true, true, true, NOW(), NULL, 'López Díaz', 'mlop321', 'mlopez@clinic.com', NULL, 'Mariana', 'CE654321', 'Femenino', '900123456'),
-
--- Usuario 6 (Admin)
-(true, '1982-05-30', 1, 1, false, false, false, NOW(), NULL, 'Delgado Ruiz', 'delruiz82', 'delgado@admin.com', NULL, 'Tomás', '40654321', 'Masculino', '912345678');
-
+-- Médico 1: Carlos Valverde
 INSERT INTO ingesoft.medico (
-    id_usuario,
-    descripcion,
-    especialidad
-) VALUES
-(2, 'Médico general con amplia experiencia en medicina interna.', 'Medicina General'),
-(3, 'Especialista en medicina familiar y atención primaria.', 'Medicina Familiar'),
-(5, 'Cirujana con enfoque en salud de la mujer.', 'Ginecología');
+    id_tipo_documento, numero_documento, nombres, apellidos,
+    sexo, descripcion, especialidad, foto_perfil,
+    fecha_creacion, fecha_desactivacion, activo
+) VALUES (
+    2, 'CE123456', 'Carlos', 'Valverde Ríos',
+    'Masculino', 'Médico general con amplia experiencia en medicina interna.', 'Medicina General', NULL,
+    CURRENT_TIMESTAMP, NULL, true
+);
+
 
 INSERT INTO ingesoft.comunidad (
     nombre, descripcion, proposito,
-    activo, fecha_creacion, fecha_desactivacion, id_foro
+    activo, fecha_creacion, fecha_desactivacion,
+    cant_miembros, calificacion
 ) VALUES 
 (
     'Comunidad de Psicología',
@@ -66,8 +80,9 @@ INSERT INTO ingesoft.comunidad (
     'Intercambio de experiencias, recursos y debates sobre salud mental',
     true,
     CURRENT_TIMESTAMP,
-    CURRENT_TIMESTAMP,
-    NULL
+    NULL,
+    0,
+    0.0
 ),
 (
     'Comunidad de Programación',
@@ -75,8 +90,9 @@ INSERT INTO ingesoft.comunidad (
     'Resolver dudas técnicas, compartir proyectos y mejorar habilidades de codificación',
     true,
     CURRENT_TIMESTAMP,
-    CURRENT_TIMESTAMP,
-    NULL
+    NULL,
+    0,
+    0.0
 ),
 (
     'Comunidad de Medicina',
@@ -84,8 +100,9 @@ INSERT INTO ingesoft.comunidad (
     'Fomentar el aprendizaje colaborativo y el desarrollo profesional',
     true,
     CURRENT_TIMESTAMP,
-    CURRENT_TIMESTAMP,
-    NULL
+    NULL,
+    0,
+    0.0
 ),
 (
     'Comunidad de Derecho',
@@ -93,8 +110,9 @@ INSERT INTO ingesoft.comunidad (
     'Intercambiar conocimientos, experiencias y debates en el ámbito legal',
     true,
     CURRENT_TIMESTAMP,
-    CURRENT_TIMESTAMP,
-    NULL
+    NULL,
+    0,
+    0.0
 ),
 (
     'Comunidad de Emprendimiento',
@@ -102,8 +120,9 @@ INSERT INTO ingesoft.comunidad (
     'Fomentar el desarrollo de ideas, networking y gestión empresarial',
     true,
     CURRENT_TIMESTAMP,
-    CURRENT_TIMESTAMP,
-    NULL
+    NULL,
+    0,
+    0.0
 ),
 (
     'Comunidad de Inteligencia Artificial',
@@ -111,8 +130,9 @@ INSERT INTO ingesoft.comunidad (
     'Compartir investigaciones, herramientas y casos de uso de IA',
     true,
     CURRENT_TIMESTAMP,
-    CURRENT_TIMESTAMP,
-    NULL
+    NULL,
+    0,
+    0.0
 );
 
 INSERT INTO ingesoft.servicio (
@@ -176,48 +196,40 @@ INSERT INTO ingesoft.servicio (
     'Bienestar'
 );
 
--- Comunidad 1: Psicología
-INSERT INTO ingesoft.servicio_comunidad (servicios_id_servicio, comunidad_id_comunidad) VALUES
-(2, 1), -- Terapia Psicológica
-(3, 1), -- Consulta Médica General
-(4, 1), -- Gimnasio Funcional
-(7, 1), -- Meditación Guiada
+INSERT INTO ingesoft.comunidad_servicio (id_comunidad, id_servicio) VALUES
+(1, 2),  -- Psicología: Terapia Psicológica
+(1, 3),  -- Psicología: Consulta Médica General
+(1, 4),  -- Psicología: Gimnasio Funcional
+(1, 7),  -- Psicología: Meditación Guiada
 
--- Comunidad 2: Programación
-(1, 2), -- Consulta Nutricional
-(3, 2), -- Consulta Médica General
-(4, 2), -- Gimnasio Funcional
-(6, 2), -- Estiramiento y Movilidad
-(7, 2), -- Meditación Guiada
+(2, 1),  -- Programación: Consulta Nutricional
+(2, 3),  -- Programación: Consulta Médica General
+(2, 4),  -- Programación: Gimnasio Funcional
+(2, 6),  -- Programación: Estiramiento y Movilidad
+(2, 7),  -- Programación: Meditación Guiada
 
--- Comunidad 3: Medicina
-(1, 3), -- Consulta Nutricional
-(3, 3), -- Consulta Médica General
-(2, 3), -- Terapia Psicológica
-(6, 3), -- Estiramiento y Movilidad
-(5, 3), -- Yoga Integral
+(3, 1),  -- Medicina: Consulta Nutricional
+(3, 3),  -- Medicina: Consulta Médica General
+(3, 2),  -- Medicina: Terapia Psicológica
+(3, 6),  -- Medicina: Estiramiento y Movilidad
+(3, 5),  -- Medicina: Yoga Integral
 
--- Comunidad 4: Derecho
-(2, 4),
-(4, 4),
-(5, 4),
-(7, 4);
+(4, 2),  -- Derecho: Terapia Psicológica
+(4, 4),  -- Derecho: Gimnasio Funcional
+(4, 5),  -- Derecho: Yoga Integral
+(4, 7),  -- Derecho: Meditación Guiada
 
--- Comunidad 5: Emprendimiento
-INSERT INTO ingesoft.servicio_comunidad (servicios_id_servicio, comunidad_id_comunidad) VALUES
-(1, 5),
-(2, 5),
-(3, 5),
-(5, 5),
-(6, 5);
+(5, 1),  -- Emprendimiento: Consulta Nutricional
+(5, 2),  -- Emprendimiento: Terapia Psicológica
+(5, 3),  -- Emprendimiento: Consulta Médica General
+(5, 5),  -- Emprendimiento: Yoga Integral
+(5, 6),  -- Emprendimiento: Estiramiento y Movilidad
 
--- Comunidad 6: Inteligencia Artificial
-INSERT INTO ingesoft.servicio_comunidad (servicios_id_servicio, comunidad_id_comunidad) VALUES
-(3, 6),
-(4, 6),
-(5, 6),
-(6, 6),
-(7, 6);
+(6, 3),  -- IA: Consulta Médica General
+(6, 4),  -- IA: Gimnasio Funcional
+(6, 5),  -- IA: Yoga Integral
+(6, 6),  -- IA: Estiramiento y Movilidad
+(6, 7);  -- IA: Meditación Guiada
 
 INSERT INTO ingesoft.membresia (
     activo, cant_usuarios, con_tope, descripcion,
@@ -326,32 +338,35 @@ CURRENT_TIMESTAMP, NULL, 'icono-vip-anual.png',
 -1, 'Membresía Anual VIP Inteligencia Artificial',
 1800.0, 'Anual VIP', 6);
 
-
-
 INSERT INTO ingesoft.local (
-    activo, apellidos_contacto, direccion, fecha_creacion,
-    fecha_desactivacion, nombre, nombres_contacto, telefono,
-    telefono_contacto, tipo_servicio, id_servicio, descripcion
+    activo, direccion, fecha_creacion, fecha_desactivacion,
+    nombre, telefono, tipo_servicio, id_servicio, descripcion
 ) VALUES 
 (
-    true, 'Cáceres Mejía', 'Av. La Marina 785, San Miguel',
-    CURRENT_TIMESTAMP, NULL, 'Local Nutrición La Marina',
-    'Lucía Fernanda', '917111222', '912222333', 'Nutrición', 1,
+    true, 'Av. La Marina 785, San Miguel', CURRENT_TIMESTAMP, NULL,
+    'Local Nutrición La Marina', '912222333', 'Nutrición', 1,
     'Centro especializado en planes de alimentación y evaluación nutricional para todas las edades.'
 ),
 (
-    true, 'Rojas Villanueva', 'Calle Los Álamos 234, Miraflores',
-    CURRENT_TIMESTAMP, NULL, 'Centro Psicológico Miraflores',
-    'Juan Andrés', '918333444', '913444555', 'Psicología', 2,
+    true, 'Calle Los Álamos 234, Miraflores', CURRENT_TIMESTAMP, NULL,
+    'Centro Psicológico Miraflores', '913444555', 'Psicología', 2,
     'Atención psicológica individual, de pareja y talleres de salud mental en un ambiente cálido y confidencial.'
 ),
 (
-    true, 'Montoya Salas', 'Av. Túpac Amaru 998, Comas',
-    CURRENT_TIMESTAMP, NULL, 'Policlínico Popular Comas',
-    'Daniela Paola', '919555666', '914666777', 'Medicina', 3,
+    true, 'Av. Túpac Amaru 998, Comas', CURRENT_TIMESTAMP, NULL,
+    'Policlínico Popular Comas', '914666777', 'Medicina', 3,
     'Policlínico accesible con servicios médicos generales, laboratorio y atención primaria de calidad.'
 );
 
-ALTER TABLE ingesoft.usuario ALTER COLUMN contrasenha DROP NOT NULL;
+insert into ingesoft.reglas_de_negocio 
+(max_capacidad, max_dias_suspension, max_reservas, max_tiempo_cancelacion) 
+values 
+(10, 10, 10, 10)
+
+--ALTER TABLE ingesoft.usuario ALTER COLUMN contrasenha DROP NOT NULL;
+
+
+
+
 
 

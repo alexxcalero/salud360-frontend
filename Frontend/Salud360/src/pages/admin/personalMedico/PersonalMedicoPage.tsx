@@ -12,7 +12,6 @@ import ModalExito from "@/components/ModalExito";
 import ModalError from "@/components/ModalError";
 
 function PersonalMedicoPage(){
-    
     const [selectAll, setSelectAll] = useState(false);
     const [medicos, setMedicos] = useState([]);
     const [medicoSeleccionado, setMedicoSeleccionado] = useState<any>();
@@ -26,7 +25,7 @@ function PersonalMedicoPage(){
     const navigate = useNavigate();
 
     const fetchMedicos = () => {
-        axios.get("http://localhost:8080/api/medicos", {
+        axios.get("http://localhost:8080/api/admin/medicos", {
             auth: {
                 username: "admin",
                 password: "admin123"
@@ -45,7 +44,7 @@ function PersonalMedicoPage(){
     }, []);
 
     const handleEliminarMedico = (): void => {
-        axios.delete(`http://localhost:8080/api/usuarios/${medicoSeleccionado.idUsuario}`)
+        axios.delete(`http://localhost:8080/api/admin/${medicoSeleccionado.idMedico}`)
         .then(() => {
             setShowModalExito(true);
             setShowModalError(false)
@@ -70,7 +69,7 @@ function PersonalMedicoPage(){
             content: <input type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
             className: "w-10",
         },
-        { content: medico.idUsuario, className: "w-16" },
+        { content: medico.idMedico, className: "w-16" },
         {
             content: (
                 <img
@@ -97,8 +96,8 @@ function PersonalMedicoPage(){
         {
             content: (
                 <div className="flex justify-center gap-2">
-                    <Info className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => navigate(`/admin/personalMedico/detalle/${medico.idUsuario}`)} />
-                    <Pencil className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => navigate(`/admin/personalMedico/editar/${medico.idUsuario}`)} />
+                    <Info className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => navigate(`/admin/personalMedico/detalle/${medico.idMedico}`)} />
+                    <Pencil className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => navigate(`/admin/personalMedico/editar/${medico.idMedico}`)} />
                     {medico.activo ?
                         <Trash2 className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => {
                             setMedicoSeleccionado(medico);

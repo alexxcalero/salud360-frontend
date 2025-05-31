@@ -6,7 +6,7 @@ function useUsuarioForm(){
     const [tipoDoc, setTipoDoc] = useState("");
     const [DNI, setDNI] = useState("");
     const [telefono, setTelefono] = useState("");
-    const [rol, setRol] = useState("");
+    const [direccion, setDireccion] = useState("");
     const [correo, setCorreo] = useState("");
     const [genero, setGenero] = useState("");
     const [fechaNacimiento, setFechaNacimiento] = useState("");
@@ -19,7 +19,7 @@ function useUsuarioForm(){
         setTipoDoc(usuario.tipoDocumento.idTipoDocumento || "");
         setDNI(usuario.numeroDocumento || "");
         setTelefono(usuario.telefono || "");
-        setRol(usuario.rol?.idRol || "");
+        setDireccion(usuario.direccion || "");
         setCorreo(usuario.correo || "");
         setGenero(usuario.sexo || "");
         setFechaNacimiento(usuario.fechaNacimiento || "");
@@ -33,7 +33,7 @@ function useUsuarioForm(){
         tipoDoc, setTipoDoc,
         DNI, setDNI,
         telefono, setTelefono,
-        rol, setRol,
+        direccion, setDireccion,
         correo, setCorreo,
         genero, setGenero,
         fechaNacimiento, setFechaNacimiento,

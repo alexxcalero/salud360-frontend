@@ -37,26 +37,17 @@ function CrearMedico() {
       const sexo = genero;
 
       const response = await axios.post(
-        "http://localhost:8080/api/medicos",
+        "http://localhost:8080/api/admin/medicos",
         {
           nombres,
           apellidos,
           numeroDocumento: DNI,
-          correo,
-          telefono,
           sexo,
-          fechaNacimiento,
-          notiCorreo: true,
-          notiSMS: true,
-          notiWhatsApp: true,
-          tipoDocumento: {
-            idTipoDocumento: tipoDoc,
-          },
-          rol: {
-            idTipoRol: 2, //El rol del médico es 2
-          },
           especialidad,
           descripcion,
+          tipoDocumento: {
+            idTipoDocumento: tipoDoc,
+          }
         },
         {
           auth: {
@@ -91,18 +82,10 @@ function CrearMedico() {
         setTipoDoc={setTipoDoc}
         DNI={DNI}
         setDNI={setDNI}
-        telefono={telefono}
-        setTelefono={setTelefono}
-        correo={correo}
-        setCorreo={setCorreo}
         especialidad={especialidad}
         setEspecialidad={setEspecialidad}
         genero={genero}
         setGenero={setGenero}
-        fechaNacimiento={fechaNacimiento}
-        setFechaNacimiento={setFechaNacimiento}
-        contrasenha={contrasenha}
-        setContrasenha={setContrasenha}
         descripcion={descripcion}
         setDescripcion={setDescripcion}
         onSubmit={handleCrearMedico}

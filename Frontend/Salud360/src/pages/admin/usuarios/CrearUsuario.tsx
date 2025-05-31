@@ -14,7 +14,7 @@ function CrearUsuario(){
         tipoDoc, setTipoDoc,
         DNI, setDNI,
         telefono, setTelefono,
-        rol, setRol,
+        direccion, setDireccion,
         correo, setCorreo,
         genero, setGenero,
         fechaNacimiento, setFechaNacimiento,
@@ -26,30 +26,25 @@ function CrearUsuario(){
             const numeroDocumento = DNI;
             const sexo = genero;
 
-            console.log("Rol: ", rol, "Genero: ", genero, "TipoDoc:", tipoDoc)
+            //console.log("Rol: ", rol, "Genero: ", genero, "TipoDoc:", tipoDoc)
 
             console.log("Nombres:", nombres, " Apellidos:", apellidos, " numeroDocumento:", numeroDocumento, " Telefono:", telefono,
                  " correo:", correo, " sexo:", sexo, " contraseña:", contrasenha, " fechaNacimiento:", fechaNacimiento);
 
-            const response = await axios.post("http://localhost:8080/api/usuarios", 
+            const response = await axios.post("http://localhost:8080/api/admin/clientes", 
                 {
                     nombres,
                     apellidos,
                     numeroDocumento: DNI,
                     correo,
                     contrasenha,
-                    telefono,
                     sexo,
+                    telefono,
                     fechaNacimiento,
-                    notiCorreo: true,
-                    notiSMS: true,
-                    notiWhatsApp: true,
+                    direccion,
                     tipoDocumento: {
                         idTipoDocumento: tipoDoc
-                    },
-                    rol: {
-                        idRol: rol
-                    },
+                    }
                 },
                 {  
                     auth: {
@@ -97,8 +92,8 @@ function CrearUsuario(){
                 setTelefono={setTelefono}
                 correo={correo}
                 setCorreo={setCorreo}
-                rol={rol}
-                setRol={setRol}
+                direccion={direccion}
+                setDireccion={setDireccion}
                 genero={genero}
                 setGenero={setGenero}
                 fechaNacimiento={fechaNacimiento}

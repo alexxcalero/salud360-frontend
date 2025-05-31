@@ -17,7 +17,7 @@ function EditarUsuario(){
         tipoDoc, setTipoDoc,
         DNI, setDNI,
         telefono, setTelefono,
-        rol, setRol,
+        direccion, setDireccion,
         correo, setCorreo,
         genero, setGenero,
         fechaNacimiento, setFechaNacimiento,
@@ -26,7 +26,7 @@ function EditarUsuario(){
     } = useUsuarioForm();
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/api/usuarios/${id}`, {
+        axios.get(`http://localhost:8080/api/admin/clientes/${id}`, {
           auth: {
             username: "admin",
             password: "admin123"
@@ -52,7 +52,7 @@ function EditarUsuario(){
         try{
             const sexo = genero;
 
-            const response = await axios.put(`http://localhost:8080/api/usuarios/${id}`, 
+            const response = await axios.put(`http://localhost:8080/api/admin/clientes/${id}`, 
                 {
                     nombres,
                     apellidos,
@@ -62,14 +62,12 @@ function EditarUsuario(){
                     telefono,
                     sexo,
                     fechaNacimiento,
-                    notiCorreo: true,
-                    notiSMS: true,
-                    notiWhatsApp: true,
+                    notificacionPorCorreo: true,
+                    notificacionPorSMS: true,
+                    notificacionPorWhatsApp: true,
+                    direccion,
                     tipoDocumento: {
                         idTipoDocumento: tipoDoc
-                    },
-                    rol: {
-                        idRol: rol
                     },
                 },
                 {  
@@ -111,14 +109,12 @@ function EditarUsuario(){
                 setTelefono={setTelefono}
                 correo={correo}
                 setCorreo={setCorreo}
-                rol={rol}
-                setRol={setRol}
+                direccion={direccion}
+                setDireccion={setDireccion}
                 genero={genero}
                 setGenero={setGenero}
                 fechaNacimiento={fechaNacimiento}
                 setFechaNacimiento={setFechaNacimiento}
-                contrasenha={contrasenha}
-                setContrasenha={setContrasenha}
                 onSubmit={handleEditarUsuario}
                 buttonText="Guardar"
                 readOnly={false}

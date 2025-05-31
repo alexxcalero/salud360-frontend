@@ -4,11 +4,12 @@ import Button from "./Button";
 interface Props{
   modulo?: string;
   detalle?: string;
+  buttonConfirm?: string;
   onConfirm: () => void;
   onCancel: () => void;
 }
 
-function ModalError({modulo="", detalle="", onConfirm, onCancel}: Props) {
+function ModalError({modulo="", detalle="", buttonConfirm="Eliminar", onConfirm, onCancel}: Props) {
   return (
       <div className="bg-white p-8 rounded-2xl shadow-md max-w-md w-full text-center">
         {/* Icono de advertencia */}
@@ -19,15 +20,15 @@ function ModalError({modulo="", detalle="", onConfirm, onCancel}: Props) {
         </div>
 
         {/* Mensaje principal */}
-        <h2 className="text-2xl font-bold mb-2">¿Estás seguro de que quieres eliminarlo?</h2>
+        <h2 className="text-2xl font-bold mb-2">{modulo}</h2>
 
         {/* Detalle del elemento */}
-        <p className="mb-6">{modulo}: {detalle}</p>
+        <p className="mb-6">{detalle}</p>
 
         {/* Botones */}
         <div className="flex flex-col space-y-3">
           <button className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 rounded" onClick={onConfirm}>
-            Eliminar
+            {buttonConfirm}
           </button>
           <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded" onClick={onCancel}>
             Volver

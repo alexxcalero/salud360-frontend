@@ -101,9 +101,9 @@ createRoot(document.getElementById("root")!).render(
 
 
 
-            {/*2. Sección de Usuario */} {/*id de Roles permitidos: Usuario con y sin membresía (3 y 4) */}
+            {/*2. Sección de Usuario */} {/*id de Roles permitidos: Cliente Visitante y Cliente Miembro (2 y 3) */}
             
-              <Route path="/usuario" element={<ProtectedRoute allowedRules={[3, 4]}><UsuarioLayout /></ProtectedRoute>}>
+              <Route path="/usuario" element={<ProtectedRoute allowedRules={[2, 3]}><UsuarioLayout /></ProtectedRoute>}>
                 <Route index element={<Inicio />} />
                 <Route path="configuracion" element={<UsuarioConfigLayout />}>
                   <Route index element={<ConfigPerfil />} />

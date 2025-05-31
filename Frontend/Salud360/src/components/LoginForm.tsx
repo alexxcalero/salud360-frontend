@@ -35,11 +35,23 @@ export default function LoginForm() {
 
     try {
       const response = await loginRequest(formData.correo, formData.contraseña);
-      console.log("El response es:", response)
+      console.log("El response del inicio de sesión es:", response)
       console.log("El token de response es:", response.token)
 
+      var usuario = response.usuario;
 
-      var activeUser = response.usuario;
+      let activeUser = null
+
+      if (usuario.cliente){
+        activeUser = usuario.cliente
+      }
+      else if (usuario.administrador){
+        activeUser = usuario.administrador
+      }
+
+      console.log("******activeUser contiene:", activeUser)
+
+      //var activeUser = response.usuario;
       var token = response.token;
       var idRol = activeUser.rol?.idRol;
 
@@ -53,13 +65,10 @@ export default function LoginForm() {
           navigate("/admin");
           console.log("HOLA");
           break;
-        case 2:
-          alert("MEDICO")
-          break;
-        case 3:
+        case 2: //Cliente Visitante
           navigate("/usuario")
           break;
-        case 4:
+        case 3: //Cliente Miembro
           navigate("/usuario")
           break;
         default:
