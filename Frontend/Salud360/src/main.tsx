@@ -176,8 +176,8 @@ createRoot(document.getElementById("root")!).render(
                 <Route path="crear" element={<CrearMedico />} />
                 <Route path="detalle/:id" element={<DetalleMedico />} />
                 <Route path="editar/:id" element={<EditarMedico />} />
-                <Route path="successCrear" element={<UsuarioSuccess modulo="¡Médico creado correctamente!" detalle="El médico fue creado correctamente" />} />
-                <Route path="successEditar" element={<UsuarioSuccess modulo="¡Médico modificado correctamente!" detalle="El médico fue modificado correctamente" />} />
+                <Route path="successCrear" element={<UsuarioSuccess modulo="¡Médico creado correctamente!" detalle="El médico fue creado correctamente" route="/admin/personalMedico"/>} />
+                <Route path="successEditar" element={<UsuarioSuccess modulo="¡Médico modificado correctamente!" detalle="El médico fue modificado correctamente" route="/admin/personalMedico" />} />
               </Route>
               <Route path="calificaciones">
                 <Route index element={<CalificacionesPage />} />
