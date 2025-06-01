@@ -36,7 +36,7 @@ function DetalleMedico() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/api/medicos/${id}`, {
+      .get(`http://localhost:8080/api/admin/medicos/${id}`, {
         auth: {
           username: "admin",
           password: "admin123",
@@ -65,12 +65,8 @@ function DetalleMedico() {
       apellidos={apellidos}
       tipoDoc={tipoDoc}
       DNI={DNI}
-      telefono={telefono}
-      correo={correo}
       especialidad={especialidad}
       genero={genero}
-      fechaNacimiento={fechaNacimiento}
-      contrasenha={contrasenha}
       descripcion={descripcion}
       buttonText="Crear Usuario"
       readOnly={true}

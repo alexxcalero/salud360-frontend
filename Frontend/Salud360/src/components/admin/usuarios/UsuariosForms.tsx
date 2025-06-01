@@ -33,8 +33,8 @@ interface Props{
     correo: string;
     setCorreo?: (val: string) => void;
 
-    rol: string;
-    setRol?: (val: string) => void;
+    direccion: string;
+    setDireccion?: (val: string) => void;
 
     genero: string;
     setGenero?: (val: string) => void;
@@ -42,7 +42,7 @@ interface Props{
     fechaNacimiento: string;
     setFechaNacimiento?: (val: string) => void;
 
-    contrasenha: string;
+    contrasenha?: string;
     setContrasenha?: (val: string) => void;
 
     readOnly?: boolean;
@@ -51,7 +51,7 @@ interface Props{
 }
 
 function UsuariosForms({title="", subtitle="", nombres, setNombres = () =>{}, apellidos, setApellidos = () =>{}, tipoDoc, setTipoDoc = () =>{}, DNI, setDNI  = () =>{}, telefono, setTelefono  = () =>{}, correo, setCorreo  = () =>{}, 
-    rol, setRol  = () =>{}, genero, setGenero  = () =>{}, fechaNacimiento, setFechaNacimiento  = () =>{}, contrasenha, setContrasenha  = () =>{}, readOnly = false, onSubmit = () =>{}, buttonText}: Props){
+    direccion, setDireccion  = () =>{}, genero, setGenero  = () =>{}, fechaNacimiento, setFechaNacimiento  = () =>{}, contrasenha, setContrasenha  = () =>{}, readOnly = false, onSubmit = () =>{}, buttonText}: Props){
     
     const [roles, setRoles] = useState([]);
     const [tipoDocumentos, setTipoDocumentos] = useState([]);
@@ -60,7 +60,7 @@ function UsuariosForms({title="", subtitle="", nombres, setNombres = () =>{}, ap
     
     //Llamada Roles
     const fetchRoles = () => {
-    axios.get("http://localhost:8080/api/roles", {
+    axios.get("http://localhost:8080/api/admin/roles", {
       auth: {
         username: "admin",
         password: "admin123"
@@ -85,7 +85,7 @@ function UsuariosForms({title="", subtitle="", nombres, setNombres = () =>{}, ap
 
     //Llamada TipoDocumentos
     const fetchTipoDocumentos = () => {
-    axios.get("http://localhost:8080/api/tiposDocumentos", {
+    axios.get("http://localhost:8080/api/admin/tiposDocumentos", {
       auth: {
         username: "admin",
         password: "admin123"
@@ -114,6 +114,19 @@ function UsuariosForms({title="", subtitle="", nombres, setNombres = () =>{}, ap
         { value: "Femenino", content: "Femenino" }
     ]
 
+    var readOnlyContrasenha;
+
+
+    if (contrasenha !== undefined){
+      console.log("Estamos en el if:", contrasenha === undefined)
+      readOnlyContrasenha = false 
+    }
+    else{
+      console.log("Estamos en el else:", contrasenha === undefined)
+      readOnlyContrasenha = true;
+      contrasenha = "xxxxxxxx";
+    }
+
     
 
     /*const optionsSelect = [
@@ -132,14 +145,14 @@ function UsuariosForms({title="", subtitle="", nombres, setNombres = () =>{}, ap
                         <InputLabel type="email" placeholder="Ingrese los apellidos" htmlFor="email" label="Apellidos *" value={apellidos} disabled={readOnly} onChange={(e) => setApellidos(e.target.value)}/>
                         <SelectLabel options={tipoDocumentos} placeholder="Seleccione el tipo de documento " htmlFor="email" label="Tipo de Documento *" value={tipoDoc} disabled={readOnly} onChange={(value) => setTipoDoc(value)}/>
                         <InputIconLabel icon={<Phone className="w-5 h-5" />} placeholder="Teléfono" type="tel" htmlFor="tel" label="Teléfono *" value={telefono} disabled={readOnly} onChange={(e) => setTelefono(e.target.value)} ></InputIconLabel>
-                        <InputLabel type="password" placeholder="" htmlFor="password" label="Contraseña *" value={contrasenha} disabled={readOnly} onChange={(e) => setContrasenha(e.target.value)}/>
+                        <InputLabel type="password" placeholder="Ingrese la contraseña" htmlFor="password" label="Contraseña *" value={contrasenha} disabled={readOnlyContrasenha} onChange={(e) => setContrasenha(e.target.value)}/>
                     </div>
                     <div className="col-span-1 flex flex-col gap-6">
                         <InputIconLabel icon={<Mail className="w-5 h-5" />} placeholder="Mail" type="email" htmlFor="email" label="Email *" value={correo} disabled={readOnly} onChange={(e) => setCorreo(e.target.value)}></InputIconLabel>
                         <SelectLabel options={sexo} placeholder="Seleccione su genero" htmlFor="email" label="Género *" value={genero} disabled={readOnly} onChange={(content) => setGenero(content)}/>
                         <InputLabel type="email" placeholder="Ingrese el número de documento de identidad" htmlFor="email" label="DNI *" value={DNI} disabled={readOnly} onChange={(e) => setDNI(e.target.value)}/>
                         <InputLabel type="date" placeholder="Ingrese la fecha de nacimiento" htmlFor="date" label="Fecha de nacimiento *" value={fechaNacimiento} disabled={readOnly} onChange={(e) => setFechaNacimiento(e.target.value)}/>
-                        <SelectLabel options={roles} placeholder="Seleccione el rol" htmlFor="email" label="Rol *" value={rol} disabled={readOnly} onChange={(value) => setRol(value)}/>
+                        <InputLabel type="address" placeholder="Ingrese la dirección" htmlFor="email" label="Dirección *" value={direccion} disabled={readOnly} onChange={(e) => setDireccion(e.target.value)}/>
                     </div>
                 </div>
 

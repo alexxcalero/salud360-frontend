@@ -2,7 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router";
 import "@/index.css";
-import { GoogleOAuthProvider } from "@react-oauth/google"
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 // La manera de utilizar esto es importando los componentes que sean páginas y las referencian en el elemento de abajo
 //import App from "@/App.tsx";
@@ -57,6 +57,9 @@ import DetalleMedico from "./pages/admin/personalMedico/DetalleMedico";
 import UsuarioSuccess from "./pages/admin/usuarios/UsuarioSuccess";
 import SuccessRegisterPage from "./pages/usuario/Registro/SuccessRegisterPage";
 import { AuthProvider } from "./hooks/AuthContext";
+import DetalleAuditoriaPage from "./pages/admin/auditoria/DetalleAuditoriaPage";
+import { LoadingContext } from "./hooks/LoadingContext";
+import { ToastProvider } from "./hooks/ToastContext";
 import ExplorarComunidades from "./pages/usuario/ExplorarComunidades";
 import DetalleComunidadLayout from "./layouts/DetalleComunidadLayout";
 import { ComunidadProvider } from "./hooks/ComunidadContext";
@@ -71,12 +74,14 @@ import ClasesPage from "./pages/admin/clases/ClasesPage";
 import CitasMedicasPage from "./pages/admin/citasMedicas/CitasMedicasPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 
-const CLIENT_ID = "442103352631-urj3v36db8bhki2cg4vu6c2q404dkko7.apps.googleusercontent.com"
+const CLIENT_ID =
+  "442103352631-urj3v36db8bhki2cg4vu6c2q404dkko7.apps.googleusercontent.com";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <GoogleOAuthProvider clientId={CLIENT_ID}>
       <AuthProvider> {/*El AuthProvider es para la persistencia del inicio de sesión en todas las paginas */}
+        <ToastProvider><LoadingContext>
         <BrowserRouter>
           <Routes>
             {/* // A este nivel tienen que insertar nuevas rutas. Especificando la ruta "/usuarios/register" y el elemento que será la página */}
@@ -96,9 +101,9 @@ createRoot(document.getElementById("root")!).render(
 
 
 
-            {/*2. Sección de Usuario */} {/*id de Roles permitidos: Usuario con y sin membresía (3 y 4) */}
+            {/*2. Sección de Usuario */} {/*id de Roles permitidos: Cliente Visitante y Cliente Miembro (2 y 3) */}
             
-              <Route path="/usuario" element={<ProtectedRoute allowedRules={[3, 4]}><UsuarioLayout /></ProtectedRoute>}>
+              <Route path="/usuario" element={<ProtectedRoute allowedRules={[2, 3]}><UsuarioLayout /></ProtectedRoute>}>
                 <Route index element={<Inicio />} />
                 <Route path="configuracion" element={<UsuarioConfigLayout />}>
                   <Route index element={<ConfigPerfil />} />
@@ -176,8 +181,8 @@ createRoot(document.getElementById("root")!).render(
                 <Route path="crear" element={<CrearMedico />} />
                 <Route path="detalle/:id" element={<DetalleMedico />} />
                 <Route path="editar/:id" element={<EditarMedico />} />
-                <Route path="successCrear" element={<UsuarioSuccess modulo="¡Médico creado correctamente!" detalle="El médico fue creado correctamente" />} />
-                <Route path="successEditar" element={<UsuarioSuccess modulo="¡Médico modificado correctamente!" detalle="El médico fue modificado correctamente" />} />
+                <Route path="successCrear" element={<UsuarioSuccess modulo="¡Médico creado correctamente!" detalle="El médico fue creado correctamente" route="/admin/personalMedico"/>} />
+                <Route path="successEditar" element={<UsuarioSuccess modulo="¡Médico modificado correctamente!" detalle="El médico fue modificado correctamente" route="/admin/personalMedico" />} />
               </Route>
               <Route path="calificaciones">
                 <Route index element={<CalificacionesPage />} />
@@ -188,8 +193,8 @@ createRoot(document.getElementById("root")!).render(
                 <Route path="crear" element={<CrearUsuario />} />
               </Route>
               <Route path="auditorias">
-                <Route index element={<AuditoriasPage />} />
-                <Route path="crear" element={<CrearUsuario />} />
+                  <Route index element={<AuditoriasPage />} />
+                  <Route path="detalle/:id" element={<DetalleAuditoriaPage />} />
               </Route>
               <Route path="reportes">
                 <Route index element={<ReportesPage />} />
@@ -209,6 +214,7 @@ createRoot(document.getElementById("root")!).render(
             <Route path="*" element={<Page404 />} />
           </Routes>
         </BrowserRouter>
+        </LoadingContext></ToastProvider>
       </AuthProvider>
     </GoogleOAuthProvider>
   </StrictMode>

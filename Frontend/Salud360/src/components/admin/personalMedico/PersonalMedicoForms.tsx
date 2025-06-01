@@ -29,23 +29,11 @@ interface Props{
     DNI: string;
     setDNI?: (val: string) => void;
 
-    telefono: string;
-    setTelefono?: (val: string) => void;
-
-    correo: string;
-    setCorreo?: (val: string) => void;
-
     especialidad: string;
     setEspecialidad?: (val: string) => void;
 
     genero: string;
     setGenero?: (val: string) => void;
-
-    fechaNacimiento: string;
-    setFechaNacimiento?: (val: string) => void;
-
-    contrasenha: string;
-    setContrasenha?: (val: string) => void;
 
     descripcion: string;
     setDescripcion?: (val: string) => void;
@@ -55,8 +43,8 @@ interface Props{
     buttonText?: string;
 }
 
-function PersonalMedicoForms({title="", subtitle="", nombres, setNombres = () =>{}, apellidos, setApellidos = () =>{}, tipoDoc, setTipoDoc = () =>{}, DNI, setDNI  = () =>{}, telefono, setTelefono  = () =>{}, correo, setCorreo  = () =>{}, 
-    especialidad, setEspecialidad  = () =>{}, genero, setGenero  = () =>{}, fechaNacimiento, setFechaNacimiento  = () =>{}, contrasenha, setContrasenha  = () =>{}, descripcion, setDescripcion = () =>{}, 
+function PersonalMedicoForms({title="", subtitle="", nombres, setNombres = () =>{}, apellidos, setApellidos = () =>{}, tipoDoc, setTipoDoc = () =>{}, DNI, setDNI  = () =>{}, 
+    especialidad, setEspecialidad  = () =>{}, genero, setGenero  = () =>{}, descripcion, setDescripcion = () =>{}, 
     readOnly = false, onSubmit = () =>{}, buttonText}: Props){
     
     const [tipoDocumentos, setTipoDocumentos] = useState([]);
@@ -65,7 +53,7 @@ function PersonalMedicoForms({title="", subtitle="", nombres, setNombres = () =>
 
     //Llamada TipoDocumentos
     const fetchTipoDocumentos = () => {
-    axios.get("http://localhost:8080/api/tiposDocumentos", {
+    axios.get("http://localhost:8080/api/admin/tiposDocumentos", {
       auth: {
         username: "admin",
         password: "admin123"
@@ -111,14 +99,10 @@ function PersonalMedicoForms({title="", subtitle="", nombres, setNombres = () =>
                         <InputLabel type="email" placeholder="Ingrese los nombres" htmlFor="email" label="Nombres" value={nombres} disabled={readOnly} onChange={(e) => setNombres(e.target.value)}/>
                         <InputLabel type="email" placeholder="Ingrese los apellidos" htmlFor="email" label="Apellidos" value={apellidos} disabled={readOnly} onChange={(e) => setApellidos(e.target.value)}/>
                         <SelectLabel options={tipoDocumentos} placeholder="Seleccione el tipo de documento" htmlFor="email" label="Tipo de Documento" value={tipoDoc} disabled={readOnly} onChange={(value) => setTipoDoc(value)}/>
-                        <InputIconLabel icon={<Phone className="w-5 h-5" />} placeholder="Teléfono" type="tel" htmlFor="tel" label="Teléfono" value={telefono} disabled={readOnly} onChange={(e) => setTelefono(e.target.value)} ></InputIconLabel>
-                        <InputLabel type="password" placeholder="" htmlFor="password" label="Contraseña" value={contrasenha} disabled={readOnly} onChange={(e) => setContrasenha(e.target.value)}/>
                     </div>
                     <div className="col-span-1 flex flex-col gap-6">
-                        <InputIconLabel icon={<Mail className="w-5 h-5" />} placeholder="Mail" type="email" htmlFor="email" label="Email" value={correo} disabled={readOnly} onChange={(e) => setCorreo(e.target.value)}></InputIconLabel>
                         <SelectLabel options={sexo} placeholder="Seleccione su genero" htmlFor="email" label="Género" value={genero} disabled={readOnly} onChange={(content) => setGenero(content)}/>
                         <InputLabel type="email" placeholder="Ingrese el número de documento de identidad" htmlFor="email" label="DNI" value={DNI} disabled={readOnly} onChange={(e) => setDNI(e.target.value)}/>
-                        <InputLabel type="date" placeholder="Ingrese la fecha de nacimiento" htmlFor="date" label="Fecha de nacimiento" value={fechaNacimiento} disabled={readOnly} onChange={(e) => setFechaNacimiento(e.target.value)}/>
                         <InputLabel type="text" placeholder="Ingrese la especialidad" htmlFor="text" label="Especialidad" value={especialidad} disabled={readOnly} onChange={(e) => setEspecialidad(e.target.value)}/>
                     </div>
                 </div>

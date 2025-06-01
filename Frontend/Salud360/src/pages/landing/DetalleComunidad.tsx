@@ -28,9 +28,9 @@ function DetalleComunidad(){
       }
     })
       .then(res => {
-        console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
+        //console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
         setComunidad(res.data);
-        //console.log("Comunidad:", res.data);
+        console.log("Comunidad:", res.data);
         setServicios(res.data.servicios);
         //console.log("Servicios de la comunidad 1:", res.data.servicios);
         //console.log("Servicios de la comunidad 2:", servicios);
@@ -43,11 +43,11 @@ function DetalleComunidad(){
         fetchComunidad();
     }, []);
 
-    console.log("Comunidad:", comunidad);
-    console.log("Servicios de la comunidad 2:", servicios);
+    //console.log("Comunidad:", comunidad);
+    console.log("Servicios de la comunidad:", servicios);
 
 
-    console.log("Membresía 2:", membresias);
+    //console.log("Membresía 2:", membresias);
 
     servicios.map((servicio: any, i: number) => (
         console.log("LA DESCRIPCIÓN es:", servicio.descripcion)
