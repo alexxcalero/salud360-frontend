@@ -19,7 +19,7 @@ function LocalesPage() {
     const [search, setSearch] = useState("");
 
     const fetchLocales = () => {
-        axios.get("http://localhost:8080/api/locales", {
+        axios.get("http://localhost:8080/api/locales/admin", {
             auth: {
                 username: "admin",
                 password: "admin123"
