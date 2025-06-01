@@ -20,6 +20,7 @@ function InicioPerfi() {
     telefono,
     fechaNacimiento,
     sexo,
+    direccion,
     fotoPerfil,
     numeroDocumento,
     fechaCreacion: rawFechaCreacion //Lo renombro así para formatearlo
@@ -110,7 +111,7 @@ function InicioPerfi() {
             label="Ubicación"
             leftIcon={<MapPin />}
             required={true}
-            placeholder="Dirección"
+            defaultValue={direccion}
           />
           <Input
             idName="fecha-nacimiento"
