@@ -1,3 +1,5 @@
+import { Filter } from "lucide-react";
+
 interface Props{
     columns:{
         label: React.ReactNode;
@@ -8,10 +10,13 @@ interface Props{
 function TableHeader({columns}: Props){
     return(
         <thead>
-            <tr className="bg-[#0D6EBA] text-white">
+            <tr className="bg-blue-700 text-white h-[50px] auto-cols-max items-center">
                 {columns.map((col, i) => (
-                    <th key={i} className={`px-8 py-4 ${col.className || ""}`}>
-                        {col.label}
+                    <th key={i} className={`px-4 ${col.className || ""}`}>
+                        <div className="inline">
+                            {col.label}
+                        </div>
+                        <Filter className="inline"/>
                     </th>
                 ))}
             </tr>

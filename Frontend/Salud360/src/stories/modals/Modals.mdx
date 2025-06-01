@@ -1,0 +1,13 @@
+import { Meta, Story, Canvas, Source, ColorPalette } from '@storybook/blocks';
+import * as ModalAlert from './ModalAlert.stories';
+import * as ModalError from './ModalError.stories';
+
+<Meta title="Modals/Intro" />
+
+# Todos los modales
+
+<Story name="Modal de alerta" of={ModalAlert.Default} />
+
+<Story name="Modal de error" of={ModalError.Default} />
+
+<ColorPalette of={ModalAlert} />
