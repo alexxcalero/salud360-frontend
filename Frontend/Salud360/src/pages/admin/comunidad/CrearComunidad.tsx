@@ -24,7 +24,10 @@ function CrearComunidad() {
   const [serviciosDisponibles, setServiciosDisponibles] = useState<any[]>([]);
   const [imagen, setImagen] = useState<File | null>(null);
 
-  // Cargar datos
+  // ✅ Aquí se mantiene el estado de membresías nuevas y se pasa correctamente al form
+  const [nuevasMembresias, setNuevasMembresias] = useState<any[]>([]);
+
+  // Cargar datos iniciales
   useEffect(() => {
     axios.get("http://localhost:8080/api/servicios", {
       auth: { username: "admin", password: "admin123" }
@@ -48,23 +51,34 @@ function CrearComunidad() {
       formData.append("nombre", nombre);
       formData.append("descripcion", descripcion);
       formData.append("proposito", proposito);
+      formData.append("membresias", JSON.stringify(nuevasMembresias));
       formData.append("idServicios", JSON.stringify(servicios));
       formData.append("idMembresias", JSON.stringify(membresiasSeleccionadas));
-      formData.append("idLocales", JSON.stringify(localesSeleccionados));
+
       if (imagen) {
         formData.append("imagen", imagen);
       }
 
+      // Debug: mostrar datos en consola
+      for (let pair of formData.entries()) {
+        console.log("📦 Enviando", pair[0], "=>", pair[1]);
+      }
+
       await axios.post("http://localhost:8080/api/comunidades", formData, {
-        auth: { username: "admin", password: "admin123" },
-        headers: { "Content-Type": "multipart/form-data" }
+        auth: { username: "admin", password: "admin123" }
       });
 
       alert("Comunidad creada exitosamente");
       navigate("/admin/comunidades");
 
-    } catch (err) {
-      console.error("Error al crear comunidad:", err);
+    } catch (err: any) {
+      if (axios.isAxiosError(err)) {
+        console.error("Respuesta del servidor:", err.response?.data);
+        console.error("Código de estado:", err.response?.status);
+        console.error("Encabezados:", err.response?.headers);
+      } else {
+        console.error("Error desconocido:", err);
+      }
       alert("Hubo un error al crear la comunidad");
     }
   };
@@ -86,6 +100,8 @@ function CrearComunidad() {
         membresiasDisponibles={membresias}
         membresiasSeleccionadas={membresiasSeleccionadas}
         setMembresiasSeleccionadas={setMembresiasSeleccionadas}
+        nuevasMembresias={nuevasMembresias}
+        setNuevasMembresias={setNuevasMembresias}
         localesDisponibles={locales}
         localesSeleccionados={localesSeleccionados}
         setLocalesSeleccionados={setLocalesSeleccionados}
