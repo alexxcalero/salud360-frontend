@@ -44,7 +44,7 @@ function EditarServicio(){
     const handleCrearServicio = async() => {
         console.log("El contenido de los locales a enviar es:", locales)
         try{
-            const response = await axios.put("http://localhost:8080/api/servicios", 
+            const response = await axios.put(`http://localhost:8080/api/servicios/${id}`, 
                 {
                     nombre,
                     descripcion,
@@ -68,8 +68,8 @@ function EditarServicio(){
             });
         }
         catch(err){
-            console.error("Error al crear usuario:", err);
-            alert("Hubo un error al crear el servicio");
+            console.error("Error al editar servicio:", err);
+            alert("Hubo un error al editar el servicio");
         }
     }
 

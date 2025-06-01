@@ -6,7 +6,7 @@ import ModalError from "@/components/ModalError";
 import ModalExito from "@/components/ModalExito";
 import UnderConstruction from "@/pages/UnderConstruction";
 import axios from "axios";
-import { Filter, Info, Pencil, RotateCcw, Search, Trash2, UserPlus } from "lucide-react";
+import { Filter, FolderPlus, Info, Pencil, RotateCcw, Search, Trash2, UserPlus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
@@ -135,7 +135,7 @@ function LocalesPage() {
                 <div className="col-span-4">
                     <InputIcon
                         icon={<Search className="w-5 h-5" />}
-                        placeholder="Buscar Servicio"
+                        placeholder="Buscar locales"
                         type="search"
                     />
                 </div>
@@ -150,7 +150,7 @@ function LocalesPage() {
                 </div>
 
                 <div className="col-span-2 flex justify-end">
-                    <ButtonIcon icon={<UserPlus className="w-6 h-6" />} size="lg" variant="primary" onClick={() => navigate("/admin/locales/crear")}>Agregar local</ButtonIcon>
+                    <ButtonIcon icon={<FolderPlus className="w-6 h-6" />} size="lg" variant="primary" onClick={() => navigate("/admin/locales/crear")}>Agregar local</ButtonIcon>
                 </div>
             </div>
 

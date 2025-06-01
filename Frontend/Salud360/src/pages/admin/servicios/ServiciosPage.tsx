@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Search, Filter, UserPlus, Info, Pencil, Trash2, RotateCcw } from "lucide-react";
+import { Search, Filter, UserPlus, Info, Pencil, Trash2, RotateCcw, FolderPlus } from "lucide-react";
 import { useNavigate } from "react-router";
 
 import InputIcon from "@/components/InputIcon";
@@ -128,7 +128,7 @@ function ServiciosPage() {
         <div className="col-span-4">
           <InputIcon
             icon={<Search className="w-5 h-5" />}
-            placeholder="Buscar Servicio"
+            placeholder="Buscar servicios"
             type="search"
           />
         </div>
@@ -143,7 +143,7 @@ function ServiciosPage() {
         </div>
 
         <div className="col-span-2 flex justify-end">
-          <ButtonIcon icon={<UserPlus className="w-6 h-6" />} size="lg" variant="primary" onClick={() => navigate("/admin/servicios/crear")}>Agregar servicio</ButtonIcon>
+          <ButtonIcon icon={<FolderPlus className="w-6 h-6" />} size="lg" variant="primary" onClick={() => navigate("/admin/servicios/crear")}>Agregar servicio</ButtonIcon>
         </div>
       </div>
 

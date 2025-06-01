@@ -165,6 +165,8 @@ createRoot(document.getElementById("root")!).render(
                 <Route path="crear" element={<CrearComunidad />} />
                 <Route path="editar/:id" element={<EditarComunidad />} />
                 <Route path="detalle/:id" element={<DetalleComunidad />} />
+                <Route path="successCrear" element={<UsuarioSuccess modulo="¡Comunidad creada correctamente!" detalle="La comunidad fue creada correctamente" route="/admin/comunidades"/>} />
+                <Route path="successEditar" element={<UsuarioSuccess modulo="¡Comunidad modificada correctamente!" detalle="La comunidad fue modificada correctamente" route="/admin/comunidades"/>} />
               </Route>
               <Route path="servicios">
                 <Route index element={<ServiciosPage />} />

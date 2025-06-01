@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Filter, UserPlus, Pencil, Trash2, Info, Search, RotateCcw } from "lucide-react";
+import { Filter, UserPlus, Pencil, Trash2, Info, Search, RotateCcw, FolderPlus } from "lucide-react";
 import { useNavigate } from "react-router";
 import axios from "axios";
 
@@ -44,10 +44,10 @@ function ComunidadPage() {
       .catch(() => console.log("Error eliminando comunidad"));
   };
 
-  const handleRestaurarComunidad = (): void => {
+  const handleReactivarComunidad = (): void => {
     axios.put(`http://localhost:8080/api/comunidades/${comunidadSeleccionada.idComunidad}/restaurar`)
       .then(() => {
-        setShowModalRestauracion(true); // Mostrar modal de restauración
+        setShowModalExito(true);
         setShowModalError(false);
       })
       .catch(() => console.log("Error restaurando comunidad"));
@@ -113,7 +113,7 @@ function ComunidadPage() {
             :
             <RotateCcw className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => {
               setComunidadSeleccionada(comunidad);
-              handleRestaurarComunidad();
+              setShowModalError(true);
             }}/>
           }
         </div>
@@ -134,7 +134,7 @@ function ComunidadPage() {
           <ButtonIcon icon={<Filter className="w-6 h-6" />} size="lg" variant="primary">Aplicar filtros</ButtonIcon>
         </div>
         <div className="col-span-2 flex justify-end">
-          <ButtonIcon icon={<UserPlus className="w-6 h-6" />} size="lg" variant="primary" onClick={() => navigate("/admin/comunidades/crear")}>Agregar comunidad</ButtonIcon>
+          <ButtonIcon icon={<FolderPlus className="w-6 h-6" />} size="lg" variant="primary" onClick={() => navigate("/admin/comunidades/crear")}>Agregar comunidad</ButtonIcon>
         </div>
       </div>
 
@@ -146,50 +146,57 @@ function ComunidadPage() {
         </table>
       </div>
 
-      {/* Modales */}
-      {showModalError && (
+      {comunidadSeleccionada && (comunidadSeleccionada.activo ?
         <>
-          <div className="fixed inset-0 bg-black/60 z-40" />
-          <div className="fixed inset-0 z-50 flex items-center justify-center">
-            <ModalError 
-              modulo="Comunidad" 
-              detalle={comunidadSeleccionada?.nombre}
-              onConfirm={() => {handleEliminarComunidad();}} 
-              onCancel={() => setShowModalError(false)}/>
-          </div>
-        </>
-      )}
+          {showModalError && (
+            <>
+              <div className="fixed inset-0 bg-black/60 z-40" />
+              <div className="fixed inset-0 z-50 flex items-center justify-center">
+                <ModalError modulo="¿Estás seguro de que quieres eliminarlo?" detalle={`Comunidad: ${comunidadSeleccionada?.nombre}`} onConfirm={() => {
+                  handleEliminarComunidad();
 
-      {showModalExito && (
-        <>
-          <div className="fixed inset-0 bg-black/60 z-40" />
-          <div className="fixed inset-0 z-50 flex items-center justify-center">
-            <ModalExito 
-              modulo="Comunidad" 
-              detalle="La comunidad fue procesada correctamente"
-              onConfirm={() => {
-                setShowModalExito(false);
-                fetchComunidades();
-              }}
-            />
-          </div>
+                }} onCancel={() => setShowModalError(false)} />
+              </div>
+            </>
+          )}
+          {showModalExito && (
+            <>
+              <div className="fixed inset-0 bg-black/60 z-40" />
+              <div className="fixed inset-0 z-50 flex items-center justify-center">
+                <ModalExito modulo="¡Comunidad eliminada correctamente!" detalle="La comunidad fue eliminada correctamente" onConfirm={() => {
+                  setShowModalExito(false);
+                  fetchComunidades();
+                }} />
+              </div>
+            </>
+          )}
         </>
-      )}
+        :
+        <>
+          {showModalError && (
+            <>
+              <div className="fixed inset-0 bg-black/60 z-40" />
+              <div className="fixed inset-0 z-50 flex items-center justify-center">
+                <ModalError modulo="¿Estás seguro de que quieres reactivarla?" detalle={`Comunidad: ${comunidadSeleccionada?.nombre}`} buttonConfirm="Reactivar" onConfirm={() => {
+                  handleReactivarComunidad();
+                }} onCancel={() => setShowModalError(false)} />
+              </div>
+            </>
+          )}
 
-      {showModalRestauracion && (
-        <>
-          <div className="fixed inset-0 bg-black/60 z-40" />
-          <div className="fixed inset-0 z-50 flex items-center justify-center">
-            <ModalRestauracion
-              modulo="Comunidad"
-              detalle="La comunidad fue activada nuevamente correctamente"
-              onConfirm={() => {
-                setShowModalRestauracion(false);
-                fetchComunidades();
-              }}
-            />
-          </div>
+          {showModalExito && (
+            <>
+              <div className="fixed inset-0 bg-black/60 z-40" />
+              <div className="fixed inset-0 z-50 flex items-center justify-center">
+                <ModalExito modulo="¡Comunidad reactivado correctamente!" detalle="La comunidad fue reactivado correctamente" onConfirm={() => {
+                  setShowModalExito(false);
+                  fetchComunidades();
+                }} />
+              </div>
+            </>
+          )}
         </>
+
       )}
 
 
