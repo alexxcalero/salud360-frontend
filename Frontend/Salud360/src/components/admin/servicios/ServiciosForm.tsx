@@ -1,4 +1,10 @@
+import Button from "@/components/Button";
+import Checkbox from "@/components/Checkbox";
+import DropImage from "@/components/DropImage";
 import InputLabel from "@/components/InputLabel";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 
 interface Props{
     title?: string
@@ -12,10 +18,52 @@ interface Props{
 
     tipo: string;
     setTipo?: (val: string) => void;
+
+    locales?: number | null;//localesSeleccionados
+    setLocales?: (val: number) => void;
+
+    readOnly?: boolean;
+    onSubmit?: () => void;
+    buttonText?: string;
 }
 
 function ServiciosForm({title, subtitle, nombre, setNombre = () =>{}, descripcion, setDescripcion = () =>{},
-    tipo, setTipo = () =>{}}: Props){
+    tipo, setTipo = () =>{}, locales=null, setLocales = () => {}, readOnly = false, onSubmit = () =>{}, buttonText}: Props){
+
+    const [localesDisponibles, setLocalesDisponibles] = useState([]);
+
+    console.log("en ServiciosForms los locales del props son:", locales)
+
+    //Llamada Locales
+    const fetchLocales = () => {
+    axios.get("http://localhost:8080/api/locales", {
+      auth: {
+        username: "admin",
+        password: "admin123"
+      }
+    })
+      .then(res => {
+        console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
+
+        setLocalesDisponibles(res.data)
+        console.log("Locales:", localesDisponibles);
+      })
+      .catch(err => console.error("Error cargando roles", err));
+    }
+    useEffect(() => {
+        fetchLocales();
+    }, []);
+
+    const navigate = useNavigate();
+
+    const toggle = (id: number, selected: number[], setSelected: (val: number[]) => void) => {
+        if (readOnly) return;
+        setSelected(
+        selected.includes(id)
+            ? selected.filter(item => item !== id)
+            : [...selected, id]
+        );
+    };
         
     return (
         <div className="w-full px-10 py-6">
@@ -23,99 +71,37 @@ function ServiciosForm({title, subtitle, nombre, setNombre = () =>{}, descripcio
         <h2 className="text-lg text-gray-700 mb-6">{subtitle}</h2>
 
         <div className="grid grid-cols-1 gap-4">
-            <InputLabel label="Nombre *" htmlFor="nombre" value={nombre} onChange={(e) => setNombre(e.target.value)} readOnly={readOnly} />
-            <InputLabel label="Descripción *" htmlFor="descripcion" value={descripcion} onChange={(e) => setDescripcion(e.target.value)} readOnly={readOnly} />
-            <InputLabel label="Tipo *" htmlFor="tipo" value={tipo} onChange={(e) => setTipo(e.target.value)} readOnly={readOnly} />
+            <InputLabel placeholder="Ingrese el nombre" label="Nombre *" htmlFor="nombre" value={nombre} onChange={(e) => setNombre(e.target.value)} disabled={readOnly} />
+            <InputLabel placeholder="Ingrese la descripción" label="Descripción *" htmlFor="descripcion" value={descripcion} onChange={(e) => setDescripcion(e.target.value)} disabled={readOnly} />
+            <InputLabel placeholder="Ingrese el tipo de servicio" label="Tipo *" htmlFor="tipo" value={tipo} onChange={(e) => setTipo(e.target.value)} disabled={readOnly} />
         </div>
 
-        <div className="mt-6">
-            <p className="font-semibold mb-2">Seleccione los servicios que ofrece su comunidad:</p>
+        {locales && <div className="mt-6">
+            <p className="font-semibold mb-2">Locales asociados al servicio:</p>
             <div className="bg-gray-100 p-4 rounded-md space-y-2">
-            {serviciosDisponibles.map((servicio) => (
-                <div key={servicio.idServicio} className="flex items-center space-x-2">
+            {localesDisponibles.map((local) => (
+                <div key={local.idLocal} className="flex items-center space-x-2">
                 <Checkbox
-                    id={`servicio-${servicio.idServicio}`}
-                    checked={serviciosSeleccionados.includes(servicio.idServicio)}
-                    onChange={() => toggle(servicio.idServicio, serviciosSeleccionados, setServiciosSeleccionados)}
+                    id={`local-${local.idLocal}`}
+                    checked={locales.includes(local.idLocal)}
+                    onChange={() => toggle(local.idLocal, locales, setLocales)}
                     disabled={readOnly}
                 />
-                <label htmlFor={`servicio-${servicio.idServicio}`} className="text-sm text-gray-800">
-                    {servicio.nombre}
+                <label htmlFor={`local-${local.idLocal}`} className="text-sm text-gray-800">
+                    {local.nombre}
                 </label>
                 </div>
             ))}
             </div>
         </div>
+        }
 
-        <div className="mt-6">
-            <p className="font-medium mb-2">Seleccione las membresías asociadas a la comunidad</p>
-            <div className="border rounded-lg overflow-hidden">
-            <div className="grid grid-cols-4 bg-blue-500 text-white py-2 px-4 text-sm font-semibold">
-                <span>Nombre</span>
-                <span>Tipo</span>
-                <span>Tope</span>
-                <span>Precio</span>
-            </div>
-            {membresiasDisponibles.map((m) => (
-                <div
-                key={m.id}
-                className="grid grid-cols-4 border-t text-sm py-2 px-4 hover:bg-gray-100 cursor-pointer"
-                onClick={() => !readOnly && toggle(m.id, membresiasSeleccionadas, setMembresiasSeleccionadas)}
-                >
-                <span>{m.nombre}</span>
-                <span>{m.tipo || "-"}</span>
-                <span>{m.tope || "-"}</span>
-                <span>{m.precio || "-"}</span>
-                </div>
-            ))}
-            </div>
-        </div>
 
-        <div className="mt-6">
-            <p className="font-medium mb-2">Seleccione los locales asociados a la comunidad</p>
-            <div className="border rounded-lg overflow-hidden">
-            <div className="grid grid-cols-2 bg-blue-500 text-white py-2 px-4 text-sm font-semibold">
-                <span>Nombre</span>
-                <span>Dirección</span>
-            </div>
-            {localesDisponibles.map((l) => (
-                <div
-                key={l.id}
-                className="grid grid-cols-2 border-t text-sm py-2 px-4 hover:bg-gray-100 cursor-pointer"
-                onClick={() => !readOnly && toggle(l.id, localesSeleccionados, setLocalesSeleccionados)}
-                >
-                <span>{l.nombre}</span>
-                <span>{l.direccion || "-"}</span>
-                </div>
-            ))}
-            </div>
-        </div>
-
-        <div className="mt-6">
-            <p className="font-medium mb-2">Seleccione una imagen de perfil</p>
-            <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => setImagen(e.target.files?.[0] || null)}
-            className="border p-2"
-            disabled={readOnly}
-            />
-
-            {imagen && (
-            <div className="mt-4">
-                <p className="text-sm text-gray-600 mb-1">Vista previa:</p>
-                <img
-                src={URL.createObjectURL(imagen)}
-                alt="Vista previa"
-                className="w-32 h-32 object-cover rounded border"
-                />
-            </div>
-            )}
-        </div>
+       <div className="my-6">{!readOnly && <DropImage/>}</div>
 
         {!readOnly && (
             <div className="flex gap-4 mt-6">
-            <Button variant="primary" size="md" onClick={() => navigate("/admin/comunidades")}>Volver</Button>
+            <Button variant="primary" size="md" onClick={() => navigate(-1)}>Volver</Button>
             <div className="ml-auto">
                 <Button variant="primary" size="md" onClick={onSubmit}>
                 {buttonText}

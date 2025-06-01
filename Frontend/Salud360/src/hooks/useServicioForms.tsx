@@ -1,22 +1,23 @@
 import { useState } from "react";
 
 function useServicioForms(){
-    const [nombres, setNombres] = useState("");
+    const [nombre, setNombre] = useState("");
     const [descripcion, setDescripcion] = useState("");
     const [tipo, setTipo] = useState("");
-    const [locales, setLocales] = useState("");
+    const [locales, setLocales] = useState<number | null>(null);
     
     const setServicioAPI = (servicio: any) => {
-
-        setNombres(servicio.nombre || "");
+        setNombre(servicio.nombre || "");
         setDescripcion(servicio.descripcion || "");
         setTipo(servicio.tipo || "");
+        setLocales(servicio.locales?.idLocal || null);
     }
 
     return{
-        nombres, setNombres,
+        nombre, setNombre,
         descripcion, setDescripcion,
         tipo, setTipo,
+        locales, setLocales,
         setServicioAPI
   };
 }

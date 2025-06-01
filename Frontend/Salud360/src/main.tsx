@@ -70,6 +70,12 @@ import HistorialMedico from "./pages/usuario/HistorialMedico";
 import ClasesPage from "./pages/admin/clases/ClasesPage";
 import CitasMedicasPage from "./pages/admin/citasMedicas/CitasMedicasPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import CrearServicio from "./pages/admin/servicios/CrearServicio";
+import DetalleServicio from "./pages/admin/servicios/DetalleServicio";
+import CrearLocal from "./pages/admin/locales/CrearLocal";
+import DetalleLocal from "./pages/admin/locales/DetalleLocal";
+import EditarLocal from "./pages/admin/locales/EditarLocal";
+import EditarServicio from "./pages/admin/servicios/EditarServicio";
 
 const CLIENT_ID = "442103352631-urj3v36db8bhki2cg4vu6c2q404dkko7.apps.googleusercontent.com"
 
@@ -157,11 +163,19 @@ createRoot(document.getElementById("root")!).render(
               </Route>
               <Route path="servicios">
                 <Route index element={<ServiciosPage />} />
-                <Route path="crear" element={<CrearUsuario />} />
+                <Route path="crear" element={<CrearServicio />} />
+                <Route path="detalle/:id" element={<DetalleServicio />} />
+                <Route path="editar/:id" element={<EditarServicio />} />
+                <Route path="successCrear" element={<UsuarioSuccess modulo="¡Servicio creado correctamente!" detalle="El servicio fue creado correctamente" route="/admin/servicios"/>} />
+                <Route path="successEditar" element={<UsuarioSuccess modulo="¡Servicio modificado correctamente!" detalle="El servicio fue modificado correctamente" route="/admin/servicios"/>} />
               </Route>
               <Route path="locales">
                 <Route index element={<LocalesPage />} />
-                <Route path="crear" element={<CrearUsuario />} />
+                <Route path="crear" element={<CrearLocal />} />
+                <Route path="detalle/:id" element={<DetalleLocal />} />
+                <Route path="editar/:id" element={<EditarLocal />} />
+                <Route path="successCrear" element={<UsuarioSuccess modulo="¡Local creado correctamente!" detalle="El local fue creado correctamente" route="/admin/locales"/>} />
+                <Route path="successEditar" element={<UsuarioSuccess modulo="¡Local modificado correctamente!" detalle="El local fue modificado correctamente" route="/admin/locales"/>} />
               </Route>
               <Route path="usuarios">
                 <Route index element={<UsuariosPage />} />

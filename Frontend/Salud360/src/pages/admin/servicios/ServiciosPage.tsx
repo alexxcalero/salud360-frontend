@@ -7,6 +7,8 @@ import ButtonIcon from "@/components/ButtonIcon";
 import TableHeader from "@/components/admin/TableHeader";
 import TableBody from "@/components/admin/TableBody";
 import axios from "axios";
+import ModalError from "@/components/ModalError";
+import ModalExito from "@/components/ModalExito";
 
 function ServiciosPage() {
   const [selectAll, setSelectAll] = useState(false);
@@ -42,8 +44,8 @@ function ServiciosPage() {
   };
 
   const handleEliminarServicio = (): void => {
-    //console.log("El id del usuario a eliminar es:", usuarioSeleccionado.idServicio)
-    axios.delete(`http://localhost:8080/api/admin/clientes/${servicioSeleccionado.idServicio}`)
+    //console.log("El id del servicio a eliminar es:", servicioSeleccionado.idServicio)
+    axios.delete(`http://localhost:8080/api/servicios/${servicioSeleccionado.idServicio}`)
     .then(() => {
       setShowModalExito(true);
       setShowModalError(false)
@@ -52,8 +54,8 @@ function ServiciosPage() {
   }
 
   const handleReactivarServicio = (): void => {
-    console.log("El id del usuario a reactivar es:", servicioSeleccionado.idServicio)
-    axios.put(`http://localhost:8080/api/admin/clientes/${servicioSeleccionado.idServicio}/reactivar`)
+    console.log("El id del servicio a reactivar es:", servicioSeleccionado.idServicio)
+    axios.put(`http://localhost:8080/api/servicios/${servicioSeleccionado.idServicio}/reactivar`)
     .then(() => {
       setShowModalExito(true);
       setShowModalError(false)
@@ -100,16 +102,16 @@ function ServiciosPage() {
     {
       content: (
         <div className="flex justify-center gap-2">
-          <Info className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => navigate(`/admin/usuarios/detalle/${servicio.idCliente}`)}/>
-          <Pencil className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => navigate(`/admin/usuarios/editar/${servicio.idCliente}`)}/>
+          <Info className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => navigate(`/admin/servicios/detalle/${servicio.idServicio}`)}/>
+          <Pencil className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => navigate(`/admin/servicios/editar/${servicio.idServicio}`)}/>
           {servicio.activo ? 
             <Trash2 className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => {
-              //setUsuarioSeleccionado(usuario);
+              setServicioSeleccionado(servicio);
               setShowModalError(true);
             }}/>
             :
             <RotateCcw className= "w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => {
-              //setUsuarioSeleccionado(usuario);
+              setServicioSeleccionado(servicio);
               setShowModalError(true);
             }}/>
         }
@@ -141,9 +143,7 @@ function ServiciosPage() {
         </div>
 
         <div className="col-span-2 flex justify-end">
-          <ButtonIcon icon={<UserPlus className="w-6 h-6" />} size="lg" variant="primary">
-            Agregar servicio
-          </ButtonIcon>
+          <ButtonIcon icon={<UserPlus className="w-6 h-6" />} size="lg" variant="primary" onClick={() => navigate("/admin/servicios/crear")}>Agregar servicio</ButtonIcon>
         </div>
       </div>
 
@@ -154,6 +154,61 @@ function ServiciosPage() {
           <TableBody rows={rows} />
         </table>
       </div>
+
+      { servicioSeleccionado && (servicioSeleccionado.activo ?
+        <>
+          {showModalError && (
+            <>
+              <div className="fixed inset-0 bg-black/60 z-40" />
+              <div className="fixed inset-0 z-50 flex items-center justify-center">
+                <ModalError modulo="¿Estás seguro de que quieres eliminarlo?" detalle={`Servicio: ${servicioSeleccionado?.nombre}`} onConfirm={() => {
+                  handleEliminarServicio();
+
+                }} onCancel={() => setShowModalError(false)} />
+              </div>
+            </>
+          )}
+          {showModalExito && (
+            <>
+              <div className="fixed inset-0 bg-black/60 z-40" />
+              <div className="fixed inset-0 z-50 flex items-center justify-center">
+                <ModalExito modulo="¡Servicio eliminado correctamente!" detalle="El servicio fue eliminado correctamente" onConfirm={() => {
+                  setShowModalExito(false);
+                  fetchServicios();
+                }} />
+              </div>
+            </>
+          )}
+        </>
+        :
+        <>
+          {showModalError && (
+            <>
+              <div className="fixed inset-0 bg-black/60 z-40" />
+              <div className="fixed inset-0 z-50 flex items-center justify-center">
+                <ModalError modulo="¿Estás seguro de que quieres reactivarlo?" detalle={`Servicio: ${servicioSeleccionado?.nombre}`} buttonConfirm="Reactivar" onConfirm={() => {
+                  handleReactivarServicio();
+                }} onCancel={() => setShowModalError(false)} />
+              </div>
+            </>
+          )}
+
+          {showModalExito && (
+            <>
+              <div className="fixed inset-0 bg-black/60 z-40" />
+              <div className="fixed inset-0 z-50 flex items-center justify-center">
+                <ModalExito modulo="¡Servicio reactivado correctamente!" detalle="El servicio fue reactivado correctamente" onConfirm={() => {
+                  setShowModalExito(false);
+                  fetchServicios();
+                }} />
+              </div>
+            </>
+          )}
+        </>
+
+      )}
+
+
     </div>
   );
 }
