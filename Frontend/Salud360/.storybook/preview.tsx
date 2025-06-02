@@ -10,6 +10,8 @@ import {
 import "@/index.css";
 import type { Preview } from "@storybook/react";
 import { BrowserRouter, Routes, Route } from "react-router";
+import { LoadingContext } from "@/hooks/LoadingContext";
+import { ToastProvider } from "@/hooks/ToastContext";
 
 const preview: Preview = {
   parameters: {
@@ -36,9 +38,13 @@ const preview: Preview = {
   decorators: [
     (Story) => (
       <BrowserRouter>
-        <Routes>
-          <Route path="*" element={<Story />} />
-        </Routes>
+        <LoadingContext>
+          <ToastProvider>
+            <Routes>
+              <Route path="*" element={<Story />} />
+            </Routes>
+          </ToastProvider>
+        </LoadingContext>
       </BrowserRouter>
     ),
   ],
