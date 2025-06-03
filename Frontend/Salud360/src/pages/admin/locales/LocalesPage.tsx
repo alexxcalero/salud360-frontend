@@ -85,7 +85,7 @@ function LocalesPage() {
     const localesOrdenados = localesFiltrados.slice()
     .sort(  (a, b) => a.idLocal - b.idLocal);
 
-    const registrosPorPagina = 4;
+    const registrosPorPagina = 10;
     const totalPaginas = Math.ceil(localesOrdenados.length / registrosPorPagina);
 
     const localesPaginados = localesOrdenados.slice(

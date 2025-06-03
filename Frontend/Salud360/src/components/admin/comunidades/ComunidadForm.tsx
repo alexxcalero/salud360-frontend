@@ -10,9 +10,8 @@ interface Servicio {
 }
 
 interface Item {
-  id: number;
   nombre: string;
-  idServicio: number;
+  conTope: boolean;
   direccion?: string;
   tipo?: string;
   cantUsuarios?: number;
@@ -63,13 +62,15 @@ function ComunidadForm({
   localesDisponibles,
   localesSeleccionados,
   setLocalesSeleccionados,
+  nuevasMembresias,
+  setNuevasMembresias,
   imagen,
   setImagen,
   readOnly = false
 }: Props) {
 
   const navigate = useNavigate();
-  const [nuevasMembresias, setNuevasMembresias] = useState<Item[]>([]);
+  //const [nuevasMembresias, setNuevasMembresias] = useState<Item[]>([]);
 
   const toggle = (id: number, selected: number[], setSelected: (val: number[]) => void) => {
     if (readOnly) return;
@@ -84,15 +85,14 @@ function ComunidadForm({
     setNuevasMembresias([
       ...nuevasMembresias,
       {
-        id: Date.now(),
         nombre: "",
+        conTope: true,
         tipo: "",
         cantUsuarios: 0,
         maxReservas: 0,
         precio: 0,
         descripcion: "",
         icono: "",
-        idServicio: 0 // ← Agregado para cumplir con la interfaz
       }
     ]);
   };
@@ -101,6 +101,7 @@ function ComunidadForm({
   const handleChangeMembresia = (index: number, field: string, value: any) => {
     const updated = [...nuevasMembresias];
     updated[index][field] = value;
+    console.log("El nuevo objeto membresía es:", updated)
     setNuevasMembresias(updated);
   };
 
@@ -120,9 +121,9 @@ function ComunidadForm({
       <h2 className="text-lg text-gray-700 mb-6">{subtitle}</h2>
 
       <div className="grid grid-cols-1 gap-4">
-        <InputLabel label="Nombre *" htmlFor="nombre" value={nombre} onChange={(e) => setNombre(e.target.value)} readOnly={readOnly} />
-        <InputLabel label="Descripción *" htmlFor="descripcion" value={descripcion} onChange={(e) => setDescripcion(e.target.value)} readOnly={readOnly} />
-        <InputLabel label="Propósito *" htmlFor="proposito" value={proposito} onChange={(e) => setProposito(e.target.value)} readOnly={readOnly} />
+        <InputLabel label="Nombre *" htmlFor="nombre" value={nombre} onChange={(e) => setNombre(e.target.value)} disabled={readOnly} />
+        <InputLabel label="Descripción *" htmlFor="descripcion" value={descripcion} onChange={(e) => setDescripcion(e.target.value)} disabled={readOnly} />
+        <InputLabel label="Propósito *" htmlFor="proposito" value={proposito} onChange={(e) => setProposito(e.target.value)} disabled={readOnly} />
       </div>
 
       <div className="mt-6">
@@ -159,10 +160,11 @@ function ComunidadForm({
         </div>
 
         <div className="border rounded-lg overflow-auto">
-          <div className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_2fr_1fr_auto] bg-blue-500 text-white py-2 px-4 text-sm font-semibold min-w-[1000px]">
+          <div className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr_2fr_1fr_auto] bg-blue-500 text-white py-2 px-4 text-sm font-semibold min-w-[1000px]">
             <span>Nombre</span>
             <span>Tipo</span>
             <span>Tope</span>
+            <span>Cant. Usuarios</span>
             <span>Max. Reservas</span>
             <span>Precio</span>
             <span>Descripción</span>
@@ -171,7 +173,7 @@ function ComunidadForm({
           </div>
 
           {nuevasMembresias.map((m, index) => (
-            <div key={m.id} className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_2fr_1fr_auto] border-t text-sm py-2 px-4 gap-2 min-w-[1000px]">
+            <div key={m.id} className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr_2fr_1fr_auto] border-t text-sm py-2 px-4 gap-2 min-w-[1000px]">
               <input
                 type="text"
                 placeholder="Nombre"
@@ -188,11 +190,23 @@ function ComunidadForm({
                 className="border p-1 rounded"
                 disabled={readOnly}
               />
+              <select
+                value={m.conTope ? "true" : "false"}
+                onChange={(e) => handleChangeMembresia(index, "conTope", e.target.value === "true")}
+                className="border p-1 rounded"
+                disabled={readOnly}
+              >
+                <option value="true">Sí</option>
+                <option value="false">No</option>
+              </select>
               <input
                 type="number"
-                placeholder="Tope"
+                placeholder="Cant. Usuarios"
                 value={m.cantUsuarios}
-                onChange={(e) => handleChangeMembresia(index, "cantUsuarios", parseInt(e.target.value))}
+                min={0}
+                onChange={(e) =>
+                  handleChangeMembresia(index, "cantUsuarios", Math.max(0, parseInt(e.target.value)))
+                }
                 className="border p-1 rounded"
                 disabled={readOnly}
               />
@@ -200,7 +214,10 @@ function ComunidadForm({
                 type="number"
                 placeholder="Máx. Reservas"
                 value={m.maxReservas}
-                onChange={(e) => handleChangeMembresia(index, "maxReservas", parseInt(e.target.value))}
+                min={0}
+                onChange={(e) =>
+                  handleChangeMembresia(index, "maxReservas", Math.max(0, parseInt(e.target.value)))
+                }
                 className="border p-1 rounded"
                 disabled={readOnly}
               />
@@ -208,7 +225,10 @@ function ComunidadForm({
                 type="number"
                 placeholder="Precio"
                 value={m.precio}
-                onChange={(e) => handleChangeMembresia(index, "precio", parseFloat(e.target.value))}
+                min={0}
+                onChange={(e) =>
+                  handleChangeMembresia(index, "precio", Math.max(0, parseFloat(e.target.value)))
+                }
                 className="border p-1 rounded"
                 disabled={readOnly}
               />
@@ -282,16 +302,16 @@ function ComunidadForm({
         )}
       </div>
 
-      {!readOnly && (
-        <div className="flex gap-4 mt-6">
-          <Button variant="primary" size="md" onClick={() => navigate("/admin/comunidades")}>Volver</Button>
-          <div className="ml-auto">
-            <Button variant="primary" size="md" onClick={onSubmit}>
-              {buttonText}
-            </Button>
+
+      <div className="flex flex-row justify-between">
+          <div className="">
+              <Button variant="primary" size="lg" className="my-4" onClick={() => navigate(-1)}>Volver</Button>
           </div>
-        </div>
-      )}
+
+          <div className="">
+              {!readOnly && (<Button variant="primary" size="lg" className="my-4" onClick={onSubmit}>{buttonText}</Button>)}
+          </div>
+      </div>
     </div>
   );
 }

@@ -49,7 +49,7 @@ function ComunidadPage() {
   };
 
   const handleReactivarComunidad = (): void => {
-    axios.put(`http://localhost:8080/api/comunidades/${comunidadSeleccionada.idComunidad}/restaurar`)
+    axios.post(`http://localhost:8080/api/comunidades/${comunidadSeleccionada.idComunidad}/restaurar`)
       .then(() => {
         setShowModalExito(true);
         setShowModalError(false);
@@ -75,7 +75,7 @@ function ComunidadPage() {
   const comunidadesOrdenadas = comunidadesFiltradas.slice()
   .sort(  (a, b) => a.idComunidad - b.idComunidad);
 
-  const registrosPorPagina = 4;
+  const registrosPorPagina = 5;
   const totalPaginas = Math.ceil(comunidadesOrdenadas.length / registrosPorPagina);
 
   const comunidadesPaginadas = comunidadesOrdenadas.slice(
@@ -120,7 +120,7 @@ function ComunidadPage() {
         <div className="flex justify-center gap-2">
           <Info className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => navigate(`/admin/comunidades/detalle/${comunidad.idComunidad}`)} />
           <Pencil className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => navigate(`/admin/comunidades/editar/${comunidad.idComunidad}`)} />
-          {comunidad.activo ? 
+          {comunidad.activo ?
             <Trash2 className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => {
               setComunidadSeleccionada(comunidad);
               setShowModalError(true);
