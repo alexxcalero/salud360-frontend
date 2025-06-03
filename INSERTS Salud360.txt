@@ -417,13 +417,24 @@ values
 
 
 INSERT INTO ingesoft.cita_medica (
-  id_cliente, id_medico, id_servicio, fecha, hora, activo, estado, fecha_creacion, fecha_desactivacion
+  id_cliente, id_medico, id_servicio, fecha, hora_inicio, hora_fin, activo, estado, fecha_creacion, fecha_desactivacion
 )
 VALUES
-  (1, 1, 1, '2025-06-05', '09:00:00', true, 'Pendiente', now(), NULL),
-  (1, 1, 2, '2025-06-06', '10:30:00', true, 'Pendiente', now(), NULL),
-  (1, 1, 3, '2025-06-07', '12:00:00', true, 'Pendiente', now(), NULL),
-  (1, 2, 1, '2025-06-08', '09:30:00', true, 'Pendiente', now(), NULL),
-  (1, 3, 1, '2025-06-09', '10:00:00', true, 'Pendiente', now(), NULL),
-  (1, 4, 1, '2025-06-10', '11:00:00', true, 'Pendiente', now(), NULL),
-  (1, 5, 1, '2025-06-11', '12:30:00', true, 'Pendiente', now(), NULL);
+  (1, 1, 1, '2025-06-05', '09:00:00', '10:00:00', true, 'Pendiente', now(), NULL),
+  (1, 1, 2, '2025-06-06', '10:30:00', '11:30:00', true, 'Pendiente', now(), NULL),
+  (1, 1, 3, '2025-06-07', '12:00:00', '13:00:00', true, 'Pendiente', now(), NULL),
+  (1, 2, 1, '2025-06-08', '09:30:00', '10:30:00', true, 'Pendiente', now(), NULL),
+  (1, 3, 1, '2025-06-09', '10:00:00', '11:00:00', true, 'Pendiente', now(), NULL),
+  (1, 4, 1, '2025-06-10', '11:00:00', '12:00:00', true, 'Pendiente', now(), NULL),
+  (1, 5, 1, '2025-06-11', '12:30:00', '13:30:00', true, 'Pendiente', now(), NULL);
+
+INSERT INTO ingesoft.mediodepago (id_medio_de_pago, id_cliente, ncuenta, cvv, vencimiento, tipo, activo, fecha_creacion, fecha_desactivacion)
+VALUES (1, 1, 12345678, 123, '2026-06-30 23:59:59', 'tarjeta_credito', true, now(), NULL);
+
+INSERT INTO ingesoft.afiliacion (id_afiliacion, id_cliente, id_medio_de_pago, id_membresia, fecha_afiliacion, fecha_desafiliacion, fecha_reactivacion, estado) VALUES (1, 1, 1, 1, now(), NULL, NULL, 'Activa');
+
+INSERT INTO ingesoft.comunidad_cliente (id_cliente, id_comunidad)
+VALUES (1, 1);
+
+INSERT INTO ingesoft.periodo (id_periodo, afiliacion, cant_reservas, fecha_inicio, fecha_fin)
+VALUES (1, 1, 0, '2025-06-01', '2025-06-30');
