@@ -28,13 +28,19 @@ function UsuarioSuccess({modulo, detalle, route= "/admin/usuarios"}: Props){
         }
     }, [location]);
 
-    return(
-        <div className="w-full flex flex-row justify-center items-center">
-            <ModalExito modulo={modulo} detalle={detalle} onConfirm={() => {
-                navigate(route, { replace: true });
-            }}/>
+    return (
+    <>
+        <div className="fixed inset-0 bg-black/60 z-40" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+        <ModalExito
+            modulo={modulo}
+            detalle={detalle}
+            onConfirm={() => {
+            navigate(route, { replace: true });
+            }}
+        />
         </div>
-        
+    </>
     );
 }
 

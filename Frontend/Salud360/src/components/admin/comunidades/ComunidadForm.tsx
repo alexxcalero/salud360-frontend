@@ -3,6 +3,8 @@ import Button from "@/components/Button";
 import Checkbox from "@/components/Checkbox";
 import { useNavigate } from "react-router";
 import { useState } from "react";
+import ModalError from "@/components/ModalError";
+import ModalValidacion from "@/components/ModalValidacion";
 
 interface Servicio {
   idServicio: number;
@@ -71,6 +73,39 @@ function ComunidadForm({
 
   const navigate = useNavigate();
   //const [nuevasMembresias, setNuevasMembresias] = useState<Item[]>([]);
+  const textoValido = (texto: string) => /^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9 ]*$/.test(texto);
+
+  const validarCampos = () => {
+    if (!textoValido(nombre)) {
+      setMensajeError("El nombre de la comunidad contiene caracteres no permitidos.");
+      setShowModalValidacion(true);
+      return false;
+    }
+
+    if (!textoValido(descripcion)) {
+      setMensajeError("La descripción contiene caracteres no permitidos.");
+      setShowModalValidacion(true);
+      return false;
+    }
+
+    if (!textoValido(proposito)) {
+      setMensajeError("El propósito contiene caracteres no permitidos.");
+      setShowModalValidacion(true);
+      return false;
+    }
+
+    for (let i = 0; i < nuevasMembresias.length; i++) {
+      const m = nuevasMembresias[i];
+      const camposTexto = [m.nombre, m.tipo, m.descripcion, m.icono];
+      if (!camposTexto.every((txt) => textoValido(txt))) {
+        setMensajeError(`Uno o más campos de membresías contienen caracteres inválidos (fila ${i + 1}).`);
+        setShowModalValidacion(true);
+        return false;
+      }
+    }
+
+    return true;
+  };
 
   const toggle = (id: number, selected: number[], setSelected: (val: number[]) => void) => {
     if (readOnly) return;
@@ -80,6 +115,9 @@ function ComunidadForm({
         : [...selected, id]
     );
   };
+
+  const [showModalValidacion, setShowModalValidacion] = useState(false);
+  const [mensajeError, setMensajeError] = useState("");
 
   const handleAddMembresia = () => {
     setNuevasMembresias([
@@ -97,11 +135,24 @@ function ComunidadForm({
     ]);
   };
   
+  
 
   const handleChangeMembresia = (index: number, field: string, value: any) => {
     const updated = [...nuevasMembresias];
-    updated[index][field] = value;
-    console.log("El nuevo objeto membresía es:", updated)
+
+    // Si se está cambiando el valor de "conTope"
+    if (field === "conTope") {
+      updated[index]["conTope"] = value;
+      updated[index]["maxReservas"] = value ? 0 : -1; // si tiene tope: inicia en 0, sino -1
+    } else {
+      // Si es maxReservas y el campo conTope es false, forzamos -1
+      if (field === "maxReservas" && !updated[index].conTope) {
+        updated[index][field] = -1;
+      } else {
+        updated[index][field] = value;
+      }
+    }
+
     setNuevasMembresias(updated);
   };
 
@@ -213,13 +264,14 @@ function ComunidadForm({
               <input
                 type="number"
                 placeholder="Máx. Reservas"
-                value={m.maxReservas}
+                value={m.conTope ? m.maxReservas ?? "" : ""}
                 min={0}
-                onChange={(e) =>
-                  handleChangeMembresia(index, "maxReservas", Math.max(0, parseInt(e.target.value)))
-                }
+                onChange={(e) => {
+                  const val = e.target.value === "" ? "" : Math.max(0, parseInt(e.target.value));
+                  handleChangeMembresia(index, "maxReservas", val);
+                }}
                 className="border p-1 rounded"
-                disabled={readOnly}
+                disabled={readOnly || !m.conTope}
               />
               <input
                 type="number"
@@ -304,16 +356,35 @@ function ComunidadForm({
 
 
       <div className="flex flex-row justify-between">
-          <div className="">
-              <Button variant="primary" size="lg" className="my-4" onClick={() => navigate(-1)}>Volver</Button>
-          </div>
-
-          <div className="">
-              {!readOnly && (<Button variant="primary" size="lg" className="my-4" onClick={onSubmit}>{buttonText}</Button>)}
-          </div>
+        <Button variant="primary" size="lg" className="my-4" onClick={() => navigate(-1)}>Volver</Button>
+        {!readOnly && (
+          <Button variant="primary" size="lg" className="my-4" onClick={() => {
+            if (validarCampos()) {
+              onSubmit();
+            }
+          }}>{buttonText}</Button>
+        )}
       </div>
+
+      {showModalValidacion && (
+        <>
+          <div className="fixed inset-0 bg-black/60 z-40" />
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <ModalValidacion
+              titulo="Error en los campos"
+              mensaje={mensajeError}
+              onClose={() => setShowModalValidacion(false)}
+            />
+          </div>
+        </>
+      )}
+
     </div>
+    
   );
+
+  
+
 }
 
 export default ComunidadForm;
