@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 import { ChevronLeft, ChevronRight, Filter } from "lucide-react";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Popover,
   PopoverContent,
@@ -9,21 +9,51 @@ import {
 import CalendarioSemanal from "./CalendarioSemanal";
 import CalendarioMensual from "./CalendarioMensual";
 import CalendarioDiario from "./CalendarioDiario";
+import { citaMedicaType } from "@/schemas/citaMedica";
+import { claseType } from "@/schemas/clase";
+import { useLoading } from "@/hooks/LoadingContext";
+import { useToasts } from "@/hooks/ToastContext";
+import { getCalendarData } from "@/services/calendarioUsuario.service";
 
 interface Props {
   fechaSemana?: DateTime;
 }
 
 const Calendario = ({ fechaSemana = DateTime.now() }: Props) => {
+  const [citasMedicas, setCitasMedicas] = useState<citaMedicaType[]>([]);
+  const [clases, setClases] = useState<claseType[]>([]);
+
+  const { setLoading } = useLoading();
+  const { createToast } = useToasts();
+
   const [periodo, setPeriodo] = useState<"week" | "day" | "month">("week");
   const [targetDay, setTargetDay] = useState<DateTime>(
     DateTime.fromObject({ day: fechaSemana.day })
   );
 
+  useEffect(() => {
+    setLoading(true);
+    const fetchData = async () => {
+      try {
+        const [dataCitas, dataClases] = await getCalendarData();
+        setCitasMedicas(dataCitas);
+        setClases(dataClases);
+      } catch (error) {
+        createToast("error", {
+          title: "Error en la consulta de datos",
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [periodo, targetDay]);
+
   const rangeDays = useMemo<{ initial: DateTime; final: DateTime }>(
     () => ({
-      initial: targetDay.startOf(periodo).startOf("week"),
-      final: targetDay.endOf(periodo).endOf("week"),
+      initial: targetDay.startOf(periodo),
+      final: targetDay.endOf(periodo),
     }),
     [targetDay, periodo]
   );
@@ -107,14 +137,38 @@ const Calendario = ({ fechaSemana = DateTime.now() }: Props) => {
         </div>
       </div>
       {periodo === "week" && (
-        <CalendarioSemanal inicioSemana={rangeDays.initial} />
+        <CalendarioSemanal
+          inicioSemana={rangeDays.initial}
+          citasMedicas={citasMedicas.filter((elem) =>
+            elem.fecha.hasSame(rangeDays.initial, "week")
+          )}
+          clases={clases.filter((elem) =>
+            elem.fecha.hasSame(rangeDays.initial, "week")
+          )}
+        />
       )}
-      {periodo === "day" && <CalendarioDiario dia={rangeDays.initial} />}
+      {periodo === "day" && (
+        <CalendarioDiario
+          dia={rangeDays.initial}
+          citasMedicas={citasMedicas.filter((elem) =>
+            elem.fecha.hasSame(rangeDays.initial, "day")
+          )}
+          clases={clases.filter((elem) =>
+            elem.fecha.hasSame(rangeDays.initial, "day")
+          )}
+        />
+      )}
       {periodo === "month" && (
         <CalendarioMensual
           mes={targetDay.month}
           inicioMes={rangeDays.initial}
           finMes={rangeDays.final}
+          citasMedicas={citasMedicas.filter((elem) =>
+            elem.fecha.hasSame(rangeDays.initial, "month")
+          )}
+          clases={clases.filter((elem) =>
+            elem.fecha.hasSame(rangeDays.initial, "month")
+          )}
         />
       )}
     </>

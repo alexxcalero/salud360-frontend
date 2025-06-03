@@ -1,10 +1,20 @@
+import { citaMedicaType } from "@/schemas/citaMedica";
 import { DateTime } from "luxon";
+import { claseType } from "@/schemas/clase";
+import { CitaMedicaCard } from "./CitaMedicoCard";
+import { ClaseCard } from "./ClaseCard";
 
 interface Props {
   dia: DateTime;
+  citasMedicas?: citaMedicaType[];
+  clases?: claseType[];
 }
 
-const CalendarioDiario = ({ dia }: Props) => {
+const CalendarioDiario = ({
+  dia,
+  citasMedicas = new Array(),
+  clases = new Array(),
+}: Props) => {
   return (
     <>
       <table className="w-full grid grid-cols-[50px_1fr_50px] border-collapse">
@@ -27,23 +37,45 @@ const CalendarioDiario = ({ dia }: Props) => {
             <th></th>
           </tr>
         </thead>
-        <tbody className="grid grid-cols-subgrid col-span-full grid-rows-[25px_68px] auto-rows-[68px]">
+        <tbody className="grid grid-cols-subgrid col-span-full grid-rows-[25px_120px] auto-rows-[120px]">
           <tr className="grid grid-cols-subgrid col-span-full">
             <td className="border-1 border-neutral-300 "></td>
             <td className="border-1 border-neutral-300 "></td>
             <td className="border-1 border-neutral-300 "></td>
           </tr>
-          {Array.from({ length: 24 }, (_, i) => (
-            <tr key={i} className="grid grid-cols-subgrid col-span-full">
-              <td className="border-1 border-neutral-300 text-right text-label-medium flex items-end justify-end pr-1">
-                {DateTime.fromObject({ hour: i }).toFormat("h a")}
-              </td>
-              <td className="text-center group border-1 border-neutral-300 p-2">
-                diaaaa
-              </td>
-              <td className="border-1 border-neutral-300"></td>
-            </tr>
-          ))}
+          {Array.from({ length: 24 }, (_, hora) => {
+            const virtualCitasMedicas = citasMedicas.filter(
+              (elem) =>
+                elem.fecha.hasSame(dia, "day") &&
+                elem.fecha.hasSame(dia, "month") &&
+                elem.fecha.hasSame(dia, "year") &&
+                elem.hora.hour === hora
+            );
+            const virtualClases = clases.filter(
+              (elem) =>
+                elem.fecha.hasSame(dia, "day") &&
+                elem.fecha.hasSame(dia, "month") &&
+                elem.fecha.hasSame(dia, "year") &&
+                elem.horaInicio.hour <= hora &&
+                hora <= elem.horaFin.hour
+            );
+            return (
+              <tr key={hora} className="grid grid-cols-subgrid col-span-full">
+                <td className="border-1 border-neutral-300 text-right text-label-medium flex items-end justify-end pr-1">
+                  {DateTime.fromObject({ hour: hora }).toFormat("h a")}
+                </td>
+                <td className="text-center group border-1 border-neutral-300 p-2">
+                  {virtualCitasMedicas.map((cM, index) => (
+                    <CitaMedicaCard key={index} citaMedica={cM} />
+                  ))}
+                  {virtualClases.map((cM, index) => (
+                    <ClaseCard key={index} clase={cM} />
+                  ))}
+                </td>
+                <td className="border-1 border-neutral-300"></td>
+              </tr>
+            );
+          })}
         </tbody>
         <tfoot className="grid grid-cols-subgrid col-span-full grid-rows-[25px]">
           <tr className="grid grid-cols-subgrid col-span-full">

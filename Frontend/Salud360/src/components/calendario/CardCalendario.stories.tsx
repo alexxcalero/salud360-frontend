@@ -1,9 +1,10 @@
 import { Meta, StoryObj } from "@storybook/react";
 
-import CardCalendario from "./CardCalendario";
+import { DefaultCard } from "./CardCalendario";
 
-const meta: Meta<typeof CardCalendario> = {
-  component: CardCalendario,
+const meta: Meta<typeof DefaultCard> = {
+  title: "Calendario/CardCita",
+  component: DefaultCard,
   tags: ["autodocs"],
   argTypes: {
     variant: {
@@ -37,7 +38,7 @@ const meta: Meta<typeof CardCalendario> = {
 
 export default meta;
 
-type Story = StoryObj<typeof CardCalendario>;
+type Story = StoryObj<typeof DefaultCard>;
 export const Default: Story = {
   args: {
     variant: "blue",

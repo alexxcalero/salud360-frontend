@@ -1,23 +1,35 @@
+import { citaMedicaType } from "@/schemas/citaMedica";
+import { claseType } from "@/schemas/clase";
 import { DateTime, WeekdayNumbers } from "luxon";
+import CitaCardDot from "./CitaCardDot";
 
 interface Props {
   inicioMes: DateTime;
   finMes: DateTime;
   mes: number;
+  citasMedicas?: citaMedicaType[];
+  clases?: claseType[];
 }
 
-const CalendarioMensual = ({ mes, inicioMes, finMes }: Props) => {
-  const dias: DateTime[] = [];
+const CalendarioMensual = ({
+  mes,
+  inicioMes,
+  finMes,
+  citasMedicas = new Array(),
+  clases = new Array(),
+}: Props) => {
+  const diasPorSemanas: DateTime[][] = [];
 
-  let _diaTmp = inicioMes;
-  while (_diaTmp <= finMes) {
-    dias.push(_diaTmp);
-    _diaTmp = _diaTmp.plus({ days: 1 });
+  let _diaTmp = inicioMes.startOf("week");
+  while (_diaTmp <= finMes.endOf("week")) {
+    const tmp: DateTime[] = [],
+      prevEnd: DateTime = _diaTmp.endOf("week");
+    while (_diaTmp <= prevEnd) {
+      tmp.push(_diaTmp);
+      _diaTmp = _diaTmp.plus({ days: 1 });
+    }
+    diasPorSemanas.push(tmp);
   }
-
-  // @ts-ignore
-  const diasPorSemanas = Object.groupBy(dias, (dia) => dia.weekNumber);
-  console.log(diasPorSemanas);
 
   return (
     <>
@@ -26,7 +38,7 @@ const CalendarioMensual = ({ mes, inicioMes, finMes }: Props) => {
           <tr className="grid grid-cols-subgrid col-span-full">
             {Array.from({ length: 7 }, (_, i) =>
               DateTime.fromObject(
-                { weekday: i as WeekdayNumbers },
+                { weekday: (i + 1) as WeekdayNumbers },
                 { locale: "es" }
               )
             ).map((dia, index) => (
@@ -38,11 +50,17 @@ const CalendarioMensual = ({ mes, inicioMes, finMes }: Props) => {
             ))}
           </tr>
         </thead>
-        <tbody className="grid grid-cols-subgrid col-span-full grid-rows-5">
-          {Object.values(diasPorSemanas as { [key: number]: DateTime[] }).map(
-            (_dias, i) => (
-              <tr key={i} className="grid grid-cols-subgrid col-span-full">
-                {_dias.map((dia, index) => (
+        <tbody className="grid grid-cols-subgrid col-span-full auto-rows-fr">
+          {diasPorSemanas.map((_dias, i) => (
+            <tr key={i} className="grid grid-cols-subgrid col-span-full">
+              {_dias.map((dia, index) => {
+                const virtualCitasMedicas = citasMedicas.filter(
+                  (elem) =>
+                    elem.fecha.hasSame(dia, "day") &&
+                    elem.fecha.hasSame(dia, "month") &&
+                    elem.fecha.hasSame(dia, "year")
+                );
+                return (
                   <td
                     key={index}
                     className={`text-center group border-1 border-neutral-300 p-2 ${
@@ -50,11 +68,16 @@ const CalendarioMensual = ({ mes, inicioMes, finMes }: Props) => {
                     }`}
                   >
                     <div className="text-label-large">{dia.toFormat("dd")}</div>
+                    <div className="grid-cols-3">
+                      {virtualCitasMedicas.map((cM, index) => (
+                        <CitaCardDot key={index} citaMedica={cM} />
+                      ))}
+                    </div>
                   </td>
-                ))}
-              </tr>
-            )
-          )}
+                );
+              })}
+            </tr>
+          ))}
         </tbody>
       </table>
     </>

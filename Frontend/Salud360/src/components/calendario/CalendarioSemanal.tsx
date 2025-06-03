@@ -1,10 +1,20 @@
+import { citaMedicaType } from "@/schemas/citaMedica";
+import { claseType } from "@/schemas/clase";
 import { DateTime } from "luxon";
+import { CitaMedicaCard } from "./CitaMedicoCard";
+import { ClaseCard } from "./ClaseCard";
 
 interface Props {
   inicioSemana: DateTime;
+  citasMedicas?: citaMedicaType[];
+  clases?: claseType[];
 }
 
-const CalendarioSemanal = ({ inicioSemana }: Props) => {
+const CalendarioSemanal = ({
+  inicioSemana,
+  citasMedicas = new Array(),
+  clases = new Array(),
+}: Props) => {
   const dias = Array.from({ length: 7 }, (_, i) =>
     inicioSemana.plus({ days: i })
   );
@@ -32,7 +42,7 @@ const CalendarioSemanal = ({ inicioSemana }: Props) => {
             <th></th>
           </tr>
         </thead>
-        <tbody className="grid grid-cols-subgrid col-span-full grid-rows-[25px_68px] auto-rows-[68px]">
+        <tbody className="grid grid-cols-subgrid col-span-full grid-rows-[25px] auto-rows-[120px]">
           <tr className="grid grid-cols-subgrid col-span-full">
             <td className="border-1 border-neutral-300 "></td>
             <td className="border-1 border-neutral-300 "></td>
@@ -44,17 +54,43 @@ const CalendarioSemanal = ({ inicioSemana }: Props) => {
             <td className="border-1 border-neutral-300 "></td>
             <td className="border-1 border-neutral-300 "></td>
           </tr>
-          {Array.from({ length: 24 }, (_, i) => (
-            <tr key={i} className="grid grid-cols-subgrid col-span-full">
+          {Array.from({ length: 24 }, (_, hora) => (
+            <tr key={hora} className="grid grid-cols-subgrid col-span-full">
               <td className="border-1 border-neutral-300 text-right text-label-medium flex items-end justify-end pr-1">
-                {DateTime.fromObject({ hour: i }).toFormat("h a")}
+                {DateTime.fromObject({ hour: hora }).toFormat("h a")}
               </td>
-              {dias.map((dia, index) => (
-                <td
-                  key={index}
-                  className="text-center group border-1 border-neutral-300 p-2"
-                ></td>
-              ))}
+              {dias.map((dia, index) => {
+                const virtualCitasMedicas = citasMedicas.filter(
+                  (elem) =>
+                    elem.fecha.hasSame(dia, "day") &&
+                    elem.fecha.hasSame(dia, "month") &&
+                    elem.fecha.hasSame(dia, "year") &&
+                    elem.hora.hour === hora
+                );
+                const virtualClases = clases.filter(
+                  (elem) =>
+                    elem.fecha.hasSame(dia, "day") &&
+                    elem.fecha.hasSame(dia, "month") &&
+                    elem.fecha.hasSame(dia, "year") &&
+                    elem.horaInicio.hour <= hora &&
+                    hora <= elem.horaFin.hour
+                );
+                return (
+                  <td
+                    key={index}
+                    className="text-center group border-1 border-neutral-300 p-2"
+                  >
+                    <div className="flex w-full">
+                      {virtualCitasMedicas.map((cM, index) => (
+                        <CitaMedicaCard key={index} citaMedica={cM} />
+                      ))}
+                      {virtualClases.map((cM, index) => (
+                        <ClaseCard key={index} clase={cM} />
+                      ))}
+                    </div>
+                  </td>
+                );
+              })}
               <td className="border-1 border-neutral-300"></td>
             </tr>
           ))}
