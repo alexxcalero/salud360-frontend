@@ -18,12 +18,11 @@ function DetalleComunidad() {
 
   const [membresias, setMembresias] = useState<any[]>([]);
   const [membresiasSeleccionadas, setMembresiasSeleccionadas] = useState<number[]>([]);
+  const [nuevasMembresias, setNuevasMembresias] = useState<any[]>([]);
 
   const [locales, setLocales] = useState<any[]>([]);
   const [localesSeleccionados, setLocalesSeleccionados] = useState<number[]>([]);
-
   const [serviciosDisponibles, setServiciosDisponibles] = useState<any[]>([]);
-  const [imagen, setImagen] = useState<File | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -44,13 +43,14 @@ function DetalleComunidad() {
         ]);
 
         const comunidad = comunidadRes.data;
+
         setNombre(comunidad.nombre);
         setDescripcion(comunidad.descripcion);
         setProposito(comunidad.proposito);
         setServicios(comunidad.servicios?.map((s: any) => s.idServicio) || []);
-
-        setMembresiasSeleccionadas(comunidad.membresias?.map((m: any) => m.id) || []);
-        setLocalesSeleccionados(comunidad.locales?.map((l: any) => l.id) || []);
+        setMembresiasSeleccionadas(comunidad.membresias?.map((m: any) => m.idMembresia) || []);
+        setNuevasMembresias(comunidad.membresias || []);
+        setLocalesSeleccionados(comunidad.locales?.map((l: any) => l.idLocal) || []);
 
         setServiciosDisponibles(serviciosRes.data);
         setMembresias(membresiasRes.data);
@@ -58,17 +58,15 @@ function DetalleComunidad() {
 
         setLoading(false);
       } catch (err) {
-        console.error("Error cargando los datos de la comunidad", err);
+        console.error("❌ Error cargando datos de la comunidad", err);
         setLoading(false);
       }
     };
 
     fetchData();
-  }, []);
+  }, [id]);
 
-  if (loading) {
-    return <p>Cargando comunidad...</p>;
-  }
+  if (loading) return <p className="p-6">Cargando comunidad...</p>;
 
   return (
     <div className="w-full px-10 py-8 text-left">
@@ -87,11 +85,13 @@ function DetalleComunidad() {
         membresiasDisponibles={membresias}
         membresiasSeleccionadas={membresiasSeleccionadas}
         setMembresiasSeleccionadas={setMembresiasSeleccionadas}
+        nuevasMembresias={nuevasMembresias}
+        setNuevasMembresias={setNuevasMembresias}
         localesDisponibles={locales}
         localesSeleccionados={localesSeleccionados}
         setLocalesSeleccionados={setLocalesSeleccionados}
-        imagen={imagen}
-        setImagen={setImagen}
+        imagen={null}
+        setImagen={() => {}}
         buttonText=""
         onSubmit={() => {}}
         readOnly={true}
