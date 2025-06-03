@@ -4,6 +4,7 @@ import { Calendar } from "lucide-react"
 import { FaBuilding } from "react-icons/fa";
 import Button from "@/components/Button";
 import axios from "axios";
+import { useEffect, useState } from "react";
 
 interface Props {
   data: {
@@ -16,6 +17,23 @@ interface Props {
 }
 
 export default function ReporteServicioForm({ data, onChange }: Props) {
+  const [locales, setLocales] = useState<{ value: string; label: string }[]>([]);
+
+  useEffect(() => {
+    const fetchLocales = async () => {
+      try {
+        const res = await axios.get("http://localhost:8080/api/locales", {
+          auth: { username: "admin", password: "admin123" }
+        });
+        const opciones = res.data.map((l: any) => ({ value: l.idLocal, label: l.nombre }));
+        setLocales([{ value: "", label: "Elige una opcion" }, ...opciones]);
+      } catch (err) {
+        console.error("Error cargando locales", err);
+      }
+    };
+    fetchLocales();
+  }, []);
+
   const handleGenerarReporte = async () => {
     try {
       const response = await axios.post("http://localhost:8080/api/reportes/servicios", {
@@ -61,7 +79,7 @@ export default function ReporteServicioForm({ data, onChange }: Props) {
         icon={<FaBuilding className="w-5 h-5" />} htmlFor="local"
         label="Locales"
         value={data.local} onChange={onChange}
-        options={[{ value: "", label: "Elige una opcion" }]}
+        options={locales}
       />
       <div className="col-span-2 flex justify-end mt-4">
         <Button type="button" onClick={handleGenerarReporte}>

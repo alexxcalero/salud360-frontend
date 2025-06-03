@@ -4,6 +4,7 @@ import { Calendar, Shield } from "lucide-react"
 import { FaHandHoldingUsd } from "react-icons/fa";
 import Button from "@/components/Button";
 import axios from "axios";
+import { useEffect, useState } from "react";
 
 interface Props {
   data: {
@@ -16,6 +17,23 @@ interface Props {
 }
 
 export default function ReporteLocalForm({ data, onChange }: Props) {
+  const [servicios, setServicios] = useState<{ value: string; label: string }[]>([]);
+
+  useEffect(() => {
+    const fetchServicios = async () => {
+      try {
+        const res = await axios.get("http://localhost:8080/api/servicios", {
+          auth: { username: "admin", password: "admin123" }
+        });
+        const opciones = res.data.map((s: any) => ({ value: s.idServicio, label: s.nombre }));
+        setServicios([{ value: "", label: "Elige una opcion" }, ...opciones]);
+      } catch (err) {
+        console.error("Error cargando servicios", err);
+      }
+    }
+    fetchServicios();
+  }, []);
+  
   const handleGenerarReporte = async () => {
     try {
       const response = await axios.post("http://localhost:8080/api/reportes/locales", {
@@ -61,7 +79,7 @@ export default function ReporteLocalForm({ data, onChange }: Props) {
         icon={<FaHandHoldingUsd className="w-5 h-5" />} htmlFor="servicio"
         label="Servicio"
         value={data.servicio} onChange={onChange}
-        options={[{ value: "", label: "Elige una opcion" }]}
+        options={servicios}
       />
       <div className="col-span-2 flex justify-end mt-4">
         <Button type="button" onClick={handleGenerarReporte}>
