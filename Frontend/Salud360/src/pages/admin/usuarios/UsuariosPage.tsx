@@ -19,6 +19,8 @@ function UsuariosPage() {
   const [search, setSearch] = useState("");
   const [paginaActual, setPaginaActual] = useState(1);
 
+  //Para la funcionalidad de búsqueda:
+  const [busqueda, setBusqueda] = useState("");
 
   const fetchUsuarios = () => {
     axios.get("http://localhost:8080/api/admin/clientes", {
@@ -74,10 +76,20 @@ function UsuariosPage() {
     { label: "Status", className: "w-1/6 text-left" },
     { label: "Actions", className: "w-24 text-center" },
   ];
+  
+    const usuariosFiltrados = usuarios
+    .filter(usu => usu.nombres.toLowerCase().includes(busqueda.toLowerCase()));
 
-  const rows = usuarios
-  .slice() // para no mutar el estado original
-  .sort((a: any, b: any) => a.idCliente - b.idCliente)
+    const usuariosOrdenados = usuariosFiltrados.slice()
+    .sort(  (a, b) => a.idCliente - b.idCliente);
+
+    const registrosPorPagina = 4;
+    const totalPaginas = Math.ceil(usuariosOrdenados.length / registrosPorPagina);
+
+    const usuariosPaginados = usuariosOrdenados.slice(
+    (paginaActual - 1) * registrosPorPagina, paginaActual * registrosPorPagina);
+
+    const rows = usuariosPaginados
   .map((usuario: any) => [
     {
       content: <input type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
@@ -131,21 +143,14 @@ function UsuariosPage() {
 
   const navigate = useNavigate();
 
-  const registrosPorPagina = 10;
-  const totalPaginas = Math.ceil(usuarios.length / registrosPorPagina);
-
 
   return (
     <div className="w-full px-6 py-4 overflow-auto">
       <div className="grid grid-cols-12 gap-4 items-center mb-4">
         <div className="col-span-4">
-          <InputIcon icon={<Search className="w-5 h-5" />} value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Buscar usuarios" type="search" />
+          <InputIcon icon={<Search className="w-5 h-5" />} value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Buscar usuarios" type="search" value={busqueda} onChange={(e) => setBusqueda(e.target.value)} />
         </div>
-        <div className="col-span-6 flex gap-2">
-          <ButtonIcon icon={<Search className="w-6 h-6" />} size="lg" variant="primary">Buscar</ButtonIcon>
-          <ButtonIcon icon={<Filter className="w-6 h-6" />} size="lg" variant="primary">Aplicar filtros</ButtonIcon>
-        </div>
-        <div className="col-span-2 flex justify-end">
+        <div className="col-span-8 flex justify-end">
           <ButtonIcon icon={<UserPlus className="w-6 h-6" />} size="lg" variant="primary" onClick={() => navigate("/admin/usuarios/crear")}>Agregar usuario</ButtonIcon>
         </div>
       </div>

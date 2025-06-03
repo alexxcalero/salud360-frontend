@@ -19,6 +19,10 @@ function PersonalMedicoPage(){
     const [showModalError, setShowModalError] = useState(false);
     const [paginaActual, setPaginaActual] = useState(1);
 
+    //Para la funcionalidad de búsqueda:
+    const [busqueda, setBusqueda] = useState("");
+
+
     const handleSelectAll = () => {
         setSelectAll(!selectAll);
     };
@@ -75,7 +79,22 @@ function PersonalMedicoPage(){
         { label: "Actions", className: "w-24 text-center" },
     ];
 
-    const rows = medicos.map((medico: any) => [
+    
+    
+    const medicosFiltrados = medicos
+    .filter((med: any) =>`${med.nombres} ${med.apellidos}`.toLowerCase().includes(busqueda.toLowerCase()));
+
+    const medicosOrdenados = medicosFiltrados.slice()
+    .sort(  (a, b) => a.idMedico - b.idMedico);
+
+    const registrosPorPagina = 4;
+    const totalPaginas = Math.ceil(medicosOrdenados.length / registrosPorPagina);
+
+    const medicosPaginados = medicosOrdenados.slice(
+    (paginaActual - 1) * registrosPorPagina, paginaActual * registrosPorPagina);
+
+    const rows = medicosPaginados
+    .map((medico: any) => [
         {
             content: <input type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
             className: "w-10",
@@ -128,20 +147,13 @@ function PersonalMedicoPage(){
 
     )
 
-    const registrosPorPagina = 10;
-    const totalPaginas = Math.ceil(medicos.length /registrosPorPagina); 
-
     return (
         <div className="w-full px-6 py-4 overflow-auto">
             <div className="grid grid-cols-12 gap-4 items-center mb-4">
                 <div className="col-span-4">
-                <InputIcon icon={<Search className="w-5 h-5" />} placeholder="Buscar médicos" type="search" />
+                <InputIcon icon={<Search className="w-5 h-5" />} placeholder="Buscar médicos" type="search" value={busqueda} onChange={(e) => setBusqueda(e.target.value)}/>
                 </div>
-                <div className="col-span-6 flex gap-2">
-                <ButtonIcon icon={<Search className="w-6 h-6" />} size="lg" variant="primary">Buscar</ButtonIcon>
-                <ButtonIcon icon={<Filter className="w-6 h-6" />} size="lg" variant="primary">Aplicar filtros</ButtonIcon>
-                </div>
-                <div className="col-span-2 flex justify-end">
+                <div className="col-span-8 flex justify-end">
                 <ButtonIcon icon={<UserPlus className="w-6 h-6" />} size="lg" variant="primary" onClick={() => navigate("/admin/personalMedico/crear")}>Agregar médico</ButtonIcon>
                 </div>
             </div>

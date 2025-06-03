@@ -22,6 +22,8 @@ function AuditoriasPage(){
   const indiceInicio = (paginaActual - 1) * registrosPorPagina
   const indiceFin = indiceInicio + registrosPorPagina;
 
+
+  
   const fetchAuditorias = () => {
     axios.get("http://localhost:8080/api/auditorias", {
       auth: {
@@ -131,11 +133,7 @@ function AuditoriasPage(){
         <div className="col-span-4">
           <InputIcon icon={<Search className="w-5 h-5" />} value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Buscar registros" type="search" />
         </div>
-        <div className="col-span-6 flex gap-2">
-          <ButtonIcon icon={<Search className="w-6 h-6" />} size="lg" variant="primary">Buscar</ButtonIcon>
-          <ButtonIcon icon={<Filter className="w-6 h-6" />} size="lg" variant="primary">Aplicar filtros</ButtonIcon>
-        </div>
-        <div className="col-span-2 flex justify-end">
+        <div className="col-span-8 flex justify-end">
           <ButtonIcon icon={<FileText className="w-6 h-6" />} size="lg" variant="primary" onClick={() => navigate("/admin/usuarios/crear")}>Emitir reporte</ButtonIcon>
         </div>
       </div>
