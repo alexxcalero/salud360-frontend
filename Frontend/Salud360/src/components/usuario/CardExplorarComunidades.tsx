@@ -7,9 +7,10 @@ interface Props{
     title: string;
     subtitle: string;
     showButton?: boolean;
+    isMiComunidad?: boolean;
 }
 
-function CardExplorarComunidades({id, image, title, subtitle, showButton=true}: Props){
+function CardExplorarComunidades({id, image, title, subtitle, showButton=true, isMiComunidad=false}: Props){
 
     const navigate = useNavigate();
 
@@ -24,13 +25,17 @@ function CardExplorarComunidades({id, image, title, subtitle, showButton=true}: 
 
 
                 <div className="flex flex-row justify-between">
-                    <div className="inline-block w-32">
+                    {!isMiComunidad && <div className="inline-block w-32">
                         <Button size="lg" className="w-full" onClick={() => navigate(`/usuario/comunidades/detalle/${id}`)}>Inscribirse</Button>
-                    </div>
+                    </div>}
 
                     <div className="inline-block w-32">
-                        <Button size="lg" className="w-full" onClick={() => navigate(`/usuario/comunidades/detalle/${id}`)}>Información</Button>
+                        <Button size="lg" className="w-full" onClick={() => navigate(`/usuario/comunidades/detalle/${id}`)}>{isMiComunidad ? 'Ver' : 'Información'}</Button>
                     </div>
+
+                    {isMiComunidad && <div className="inline-block w-32">
+                        <Button size="lg" className="w-full" variant="danger" onClick={() => navigate(`/usuario/comunidades/detalle/${id}`)}>Abandonar</Button>
+                    </div>}
                     
                 </div>
 

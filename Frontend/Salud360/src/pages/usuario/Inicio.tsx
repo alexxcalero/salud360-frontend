@@ -1,19 +1,46 @@
 import { AuthContext } from "@/hooks/AuthContext";
 import UnderConstruction from "../UnderConstruction";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { User, Pencil, IdCard, PersonStanding, Settings, CreditCard, Calendar  } from "lucide-react";
 import AccesoRapido from "@/components/usuario/AccesoRapido";
 import { Link } from "react-router";
+import axios from "axios";
 
 function Inicio(){
 
-    useEffect(() => {
-            window.scrollTo(0, 0); //Para que apenas cargue aparezca en el tope de la página.
-    }, []);
-
     const {usuario, logout, loading} = useContext(AuthContext)
+    const [comunidadRandom, setComunidadRandom] = useState([]);
       
     if (loading || !usuario) return null;
+
+    const id = usuario.idCliente;
+    const tieneComunidades = usuario.comunidades.length !== 0
+
+    const fetchComunidadAleatoria = () => {
+
+        //console.log("El id del cliente a enviar es:", id)
+
+        axios.get("http://localhost:8080/api/cliente/aleatoria", {
+            params: {
+                idCliente: id
+            },
+            auth: {
+                username: "admin",
+                password: "admin123"
+            }
+        })
+            .then(res => {
+                console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
+                setComunidadRandom(res.data);
+                console.log("*********Comunidad aleatoria:", res.data);
+            })
+            .catch(err => console.error("Error cargando usuarios", err));
+    }
+
+    useEffect(() => {
+        fetchComunidadAleatoria()
+            window.scrollTo(0, 0); //Para que apenas cargue aparezca en el tope de la página.
+    }, []);
 
     const {
         nombres,
@@ -29,7 +56,7 @@ function Inicio(){
     } = usuario;
 
     const tipoDocumento = rawTipoDocumento?.nombre;
-    const cantComunidades = 2;
+    const cantComunidades = usuario.comunidades.length;
     const fechaCreacion = new Date(rawFechaCreacion).toLocaleDateString("es-PE", {
             day: "2-digit",
             month: "long",

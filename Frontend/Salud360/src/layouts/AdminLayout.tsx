@@ -6,19 +6,19 @@ import { Outlet, useLocation } from "react-router";
 const routeToIndex: Record<string, number> = {
   dashboard: 0,
   configuracion: 1,
-  roles: 2,
+  //roles: 2,
   //membresias: 3,
-  comunidades: 3,
-  servicios: 4,
-  locales: 5,
-  usuarios: 6,
-  personalMedico: 7,
-  calificaciones: 8,
-  logs: 9,
-  auditorias: 10,
-  reportes: 11,
-  clases: 12,
-  citasMedicas: 13
+  comunidades: 2,
+  servicios: 3,
+  locales: 4,
+  usuarios: 5,
+  personalMedico: 6,
+  calificaciones: 7,
+  logs: 8,
+  auditorias: 9,
+  reportes: 10,
+  clases: 11,
+  citasMedicas: 12
 }
 
 // Active: Es el índice del elemento del sidebar que será activo

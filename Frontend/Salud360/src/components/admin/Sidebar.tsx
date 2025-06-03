@@ -24,7 +24,7 @@ import logo from "@/assets/logo.png";
 const routes = [
   "dashboard",
   "configuracion",
-  "roles",
+  //"roles",
   //"membresias",
   "comunidades",
   "servicios",
@@ -59,7 +59,7 @@ function Sidebar({ active = 0 }: { active: number }) {
         {[
           [LayoutDashboard, "Dashboard"],
           [Settings, "Configuración General"],
-          [Lock, "Roles y Permisos"],
+          //[Lock, "Roles y Permisos"],
           //[IdCard, "Membresías"],
           [PersonStanding, "Comunidades"],
           [Puzzle, "Servicios"],
