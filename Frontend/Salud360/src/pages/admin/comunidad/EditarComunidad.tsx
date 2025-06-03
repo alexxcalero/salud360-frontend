@@ -71,10 +71,9 @@ function EditarComunidad() {
         nombre,
         descripcion,
         proposito,
-        idServicios: servicios,
-        idMembresias: membresiasSeleccionadas,
-        idLocales: localesSeleccionados,
-        membresias: nuevasMembresias
+        membresias: nuevasMembresias,
+        servicios: servicios.map(id => ({ idServicio: id })),
+        //imagen: imagen ?? null, // si no hay imagen, enviamos null (o puedes omitir este campo si no aplica)
       };
 
       const response = await axios.put(`http://localhost:8080/api/comunidades/${id}`, payload, {
@@ -87,8 +86,12 @@ function EditarComunidad() {
         }
       });
 
-      console.log("✅ Comunidad actualizada:", response.data);
-      navigate("/admin/comunidades/successEditar");
+      console.log("✅ Comunidad editada:", response.data);
+      //alert("Usuario creado exitosamente");
+      console.log("A punto de navegar a successCrear")
+      navigate("/admin/comunidades/successEditar", {
+        state: { created: true }
+      });
 
     } catch (error) {
       console.error("❌ Error al editar comunidad:", error);
