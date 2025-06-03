@@ -66,7 +66,25 @@ INSERT INTO ingesoft.medico (
     2, 'CE123456', 'Carlos', 'Valverde Ríos',
     'Masculino', 'Médico general con amplia experiencia en medicina interna.', 'Medicina General', NULL,
     CURRENT_TIMESTAMP, NULL, true
-);
+),
+(1, '01234567', 'Alex', 'Calero',
+ 'Masculino', 'Médico Ginecólogo con más de 1 millón de años de experiencia en cirugías.', 'Ginecología', NULL,
+ CURRENT_TIMESTAMP, NULL, true),
+
+-- Médico 2: Clara Guevara Roller
+(1, '07654321', 'Clara', 'Guevara Roller',
+ 'Femenino', 'Pediatra desde el día en que nací. Me gustan mucho los niños como mi Rodrigo querido.', 'Pediatría', NULL,
+ CURRENT_TIMESTAMP, NULL, true),
+
+-- Médico 3: Jean Paul Tomasto Córdova
+(1, '01239876', 'Jean Paul', 'Tomasto Córdova',
+ 'Masculino', 'Soy médico.', 'Médico General', NULL,
+ CURRENT_TIMESTAMP, NULL, true),
+
+-- Médico 4: Rodrigo Roller Cachay
+(1, '07651234', 'Rodrigo', 'Roller Cachay',
+ 'Masculino', 'Me hice cardiólogo porque jugaba voley y me gustaba sentir los latidos de mi corazón. Si me permites, puedo sentir los tuyos.', 'Cardiología', NULL,
+ CURRENT_TIMESTAMP, NULL, true);
 
 
 INSERT INTO ingesoft.comunidad (
@@ -133,6 +151,16 @@ INSERT INTO ingesoft.comunidad (
     NULL,
     0,
     0.0
+),
+(
+    'Comunidad de Mindfulness Corporativo#',
+    'Red de profesionales interesados en la salud mental y bienestar dentro del entorno laboral',
+    'Promover prácticas de bienestar emocional y físico en contextos empresariales',
+    true,
+    CURRENT_TIMESTAMP,
+    NULL,
+    0,
+    0.0
 );
 
 INSERT INTO ingesoft.servicio (
@@ -194,7 +222,23 @@ INSERT INTO ingesoft.servicio (
     NULL,
     'Meditación Guiada',
     'Bienestar'
-);
+),
+(
+    true,
+    'Evaluación y seguimiento postural con planes personalizados de corrección.',
+    CURRENT_TIMESTAMP,
+    NULL,
+    'Terapia Postural#',
+    'Fisioterapia'
+),
+(
+    true,
+    'Asesoría en técnicas de respiración, pausas activas y gestión del estrés laboral.',
+    CURRENT_TIMESTAMP,
+    NULL,
+    'Bienestar Corporativo#',
+    'Salud Ocupacional'
+);;
 
 INSERT INTO ingesoft.comunidad_servicio (id_comunidad, id_servicio) VALUES
 (1, 2),  -- Psicología: Terapia Psicológica
@@ -229,7 +273,13 @@ INSERT INTO ingesoft.comunidad_servicio (id_comunidad, id_servicio) VALUES
 (6, 4),  -- IA: Gimnasio Funcional
 (6, 5),  -- IA: Yoga Integral
 (6, 6),  -- IA: Estiramiento y Movilidad
-(6, 7);  -- IA: Meditación Guiada
+(6, 7),  -- IA: Meditación Guiada
+
+(7, 5),   -- Yoga Integral
+(7, 6),   -- Estiramiento y Movilidad
+(7, 7),   -- Meditación Guiada
+(7, 8),   -- Terapia Postural
+(7, 9);   -- Bienestar Corporativo
 
 INSERT INTO ingesoft.membresia (
     activo, cant_usuarios, con_tope, descripcion,
@@ -361,12 +411,19 @@ INSERT INTO ingesoft.local (
 insert into ingesoft.reglas_de_negocio 
 (max_capacidad, max_dias_suspension, max_reservas, max_tiempo_cancelacion) 
 values 
-(10, 10, 10, 10)
+(10, 10, 10, 10);
 
 --ALTER TABLE ingesoft.usuario ALTER COLUMN contrasenha DROP NOT NULL;
 
 
-
-
-
-
+INSERT INTO ingesoft.cita_medica (
+  id_cliente, id_medico, id_servicio, fecha, hora, activo, estado, fecha_creacion, fecha_desactivacion
+)
+VALUES
+  (1, 1, 1, '2025-06-05', '09:00:00', true, 'Pendiente', now(), NULL),
+  (1, 1, 2, '2025-06-06', '10:30:00', true, 'Pendiente', now(), NULL),
+  (1, 1, 3, '2025-06-07', '12:00:00', true, 'Pendiente', now(), NULL),
+  (1, 2, 1, '2025-06-08', '09:30:00', true, 'Pendiente', now(), NULL),
+  (1, 3, 1, '2025-06-09', '10:00:00', true, 'Pendiente', now(), NULL),
+  (1, 4, 1, '2025-06-10', '11:00:00', true, 'Pendiente', now(), NULL),
+  (1, 5, 1, '2025-06-11', '12:30:00', true, 'Pendiente', now(), NULL);

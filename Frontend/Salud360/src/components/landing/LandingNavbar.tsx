@@ -33,7 +33,7 @@ function LandingNavbar(){
                         {usuario ? (
                             <>
                             <div className="mt-3 flex flex-row justify-between gap-6">
-                                <NotificationIcon/>
+                                {usuario.rol?.idRol != 1 && <NotificationIcon/>}
                                 <ProfileIcon/>
                             </div>
                             </>

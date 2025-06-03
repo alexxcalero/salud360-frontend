@@ -17,6 +17,10 @@ function UsuariosPage() {
   const [showModalExito, setShowModalExito] = useState(false);
   const [showModalError, setShowModalError] = useState(false);
   const [search, setSearch] = useState("");
+  const [paginaActual, setPaginaActual] = useState(1);
+
+  //Para la funcionalidad de búsqueda:
+  const [busqueda, setBusqueda] = useState("");
 
   const fetchUsuarios = () => {
     axios.get("http://localhost:8080/api/admin/clientes", {
@@ -72,8 +76,21 @@ function UsuariosPage() {
     { label: "Status", className: "w-1/6 text-left" },
     { label: "Actions", className: "w-24 text-center" },
   ];
+  
+    const usuariosFiltrados = usuarios
+    .filter(usu => usu.nombres.toLowerCase().includes(busqueda.toLowerCase()));
 
-  const rows = usuarios.map((usuario: any) => [
+    const usuariosOrdenados = usuariosFiltrados.slice()
+    .sort(  (a, b) => a.idCliente - b.idCliente);
+
+    const registrosPorPagina = 4;
+    const totalPaginas = Math.ceil(usuariosOrdenados.length / registrosPorPagina);
+
+    const usuariosPaginados = usuariosOrdenados.slice(
+    (paginaActual - 1) * registrosPorPagina, paginaActual * registrosPorPagina);
+
+    const rows = usuariosPaginados
+  .map((usuario: any) => [
     {
       content: <input type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
       className: "w-10",
@@ -126,17 +143,14 @@ function UsuariosPage() {
 
   const navigate = useNavigate();
 
+
   return (
     <div className="w-full px-6 py-4 overflow-auto">
       <div className="grid grid-cols-12 gap-4 items-center mb-4">
         <div className="col-span-4">
-          <InputIcon icon={<Search className="w-5 h-5" />} value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Buscar usuarios" type="search" />
+          <InputIcon icon={<Search className="w-5 h-5" />} value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Buscar usuarios" type="search" value={busqueda} onChange={(e) => setBusqueda(e.target.value)} />
         </div>
-        <div className="col-span-6 flex gap-2">
-          <ButtonIcon icon={<Search className="w-6 h-6" />} size="lg" variant="primary">Buscar</ButtonIcon>
-          <ButtonIcon icon={<Filter className="w-6 h-6" />} size="lg" variant="primary">Aplicar filtros</ButtonIcon>
-        </div>
-        <div className="col-span-2 flex justify-end">
+        <div className="col-span-8 flex justify-end">
           <ButtonIcon icon={<UserPlus className="w-6 h-6" />} size="lg" variant="primary" onClick={() => navigate("/admin/usuarios/crear")}>Agregar usuario</ButtonIcon>
         </div>
       </div>
@@ -146,6 +160,26 @@ function UsuariosPage() {
           <TableHeader columns={columns} />
           <TableBody rows={rows} />
         </table>
+      </div>
+      {/* Paginación */}
+      <div className="flex justify-center items-center gap-4 mt-4">
+        <button
+          className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
+          onClick={() => setPaginaActual((p) => Math.max(1, p - 1))}
+          disabled={paginaActual === 1}
+        >
+          Anterior
+        </button>
+
+        <span className="text-sm">Página {paginaActual} de {totalPaginas}</span>
+
+        <button
+          className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
+          onClick={() => setPaginaActual((p) => Math.min(totalPaginas, p + 1))}
+          disabled={paginaActual === totalPaginas}
+        >
+          Siguiente
+        </button>
       </div>
 
       { usuarioSeleccionado && (usuarioSeleccionado.activo ?

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Search, Filter, UserPlus, Info, Pencil, Trash2, RotateCcw } from "lucide-react";
+import { Search, Filter, UserPlus, Info, Pencil, Trash2, RotateCcw, FolderPlus } from "lucide-react";
 import { useNavigate } from "react-router";
 
 import InputIcon from "@/components/InputIcon";
@@ -7,6 +7,8 @@ import ButtonIcon from "@/components/ButtonIcon";
 import TableHeader from "@/components/admin/TableHeader";
 import TableBody from "@/components/admin/TableBody";
 import axios from "axios";
+import ModalError from "@/components/ModalError";
+import ModalExito from "@/components/ModalExito";
 
 function ServiciosPage() {
   const [selectAll, setSelectAll] = useState(false);
@@ -15,6 +17,7 @@ function ServiciosPage() {
   const [showModalExito, setShowModalExito] = useState(false);
   const [showModalError, setShowModalError] = useState(false);
   const [search, setSearch] = useState("");
+  const [paginaActual, setPaginaActual] = useState(1);
 
   const fetchServicios = () => {
     axios.get("http://localhost:8080/api/servicios", {
@@ -37,13 +40,16 @@ function ServiciosPage() {
 
   const navigate = useNavigate();
 
+  //Para la funcionalidad de búsqueda:
+  const [busqueda, setBusqueda] = useState("");
+
   const handleSelectAll = () => {
     setSelectAll(!selectAll);
   };
 
   const handleEliminarServicio = (): void => {
-    //console.log("El id del usuario a eliminar es:", usuarioSeleccionado.idServicio)
-    axios.delete(`http://localhost:8080/api/admin/clientes/${servicioSeleccionado.idServicio}`)
+    //console.log("El id del servicio a eliminar es:", servicioSeleccionado.idServicio)
+    axios.delete(`http://localhost:8080/api/servicios/${servicioSeleccionado.idServicio}`)
     .then(() => {
       setShowModalExito(true);
       setShowModalError(false)
@@ -52,8 +58,8 @@ function ServiciosPage() {
   }
 
   const handleReactivarServicio = (): void => {
-    console.log("El id del usuario a reactivar es:", servicioSeleccionado.idServicio)
-    axios.put(`http://localhost:8080/api/admin/clientes/${servicioSeleccionado.idServicio}/reactivar`)
+    console.log("El id del servicio a reactivar es:", servicioSeleccionado.idServicio)
+    axios.put(`http://localhost:8080/api/servicios/${servicioSeleccionado.idServicio}/reactivar`)
     .then(() => {
       setShowModalExito(true);
       setShowModalError(false)
@@ -70,8 +76,21 @@ function ServiciosPage() {
     { label: "Status", className: "w-1/6" },
     { label: "Actions", className: "w-24" },
   ];
+  
+  const serviciosFiltrados = servicios
+  .filter(ser => ser.nombre.toLowerCase().includes(busqueda.toLowerCase()));
 
-  const rows = servicios.map((servicio: any) => [
+  const serviciosOrdenados = serviciosFiltrados.slice()
+  .sort(  (a, b) => a.idServicio - b.idServicio);
+
+  const registrosPorPagina = 4;
+  const totalPaginas = Math.ceil(serviciosOrdenados.length / registrosPorPagina);
+
+  const serviciosPaginados = serviciosOrdenados.slice(
+  (paginaActual - 1) * registrosPorPagina, paginaActual * registrosPorPagina);
+
+  const rows = serviciosPaginados
+  .map((servicio: any) => [
     {
       content: <input type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
       className: "w-10",
@@ -100,16 +119,16 @@ function ServiciosPage() {
     {
       content: (
         <div className="flex justify-center gap-2">
-          <Info className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => navigate(`/admin/usuarios/detalle/${servicio.idCliente}`)}/>
-          <Pencil className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => navigate(`/admin/usuarios/editar/${servicio.idCliente}`)}/>
+          <Info className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => navigate(`/admin/servicios/detalle/${servicio.idServicio}`)}/>
+          <Pencil className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => navigate(`/admin/servicios/editar/${servicio.idServicio}`)}/>
           {servicio.activo ? 
             <Trash2 className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => {
-              //setUsuarioSeleccionado(usuario);
+              setServicioSeleccionado(servicio);
               setShowModalError(true);
             }}/>
             :
             <RotateCcw className= "w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => {
-              //setUsuarioSeleccionado(usuario);
+              setServicioSeleccionado(servicio);
               setShowModalError(true);
             }}/>
         }
@@ -119,6 +138,8 @@ function ServiciosPage() {
     },
   ]);
 
+  
+
   return (
     <div className="w-full px-6 py-4 overflow-auto">
       {/* Filtros */}
@@ -126,24 +147,13 @@ function ServiciosPage() {
         <div className="col-span-4">
           <InputIcon
             icon={<Search className="w-5 h-5" />}
-            placeholder="Buscar Servicio"
-            type="search"
+            placeholder="Buscar servicios"
+            type="search" value={busqueda} onChange={(e) => setBusqueda(e.target.value)}
           />
         </div>
 
-        <div className="col-span-6 flex gap-2">
-          <ButtonIcon icon={<Search className="w-6 h-6" />} size="lg" variant="primary">
-            Buscar
-          </ButtonIcon>
-          <ButtonIcon icon={<Filter className="w-6 h-6" />} size="lg" variant="primary">
-            Aplicar filtros
-          </ButtonIcon>
-        </div>
-
-        <div className="col-span-2 flex justify-end">
-          <ButtonIcon icon={<UserPlus className="w-6 h-6" />} size="lg" variant="primary">
-            Agregar servicio
-          </ButtonIcon>
+        <div className="col-span-8 flex justify-end">
+          <ButtonIcon icon={<FolderPlus className="w-6 h-6" />} size="lg" variant="primary" onClick={() => navigate("/admin/servicios/crear")}>Agregar servicio</ButtonIcon>
         </div>
       </div>
 
@@ -154,6 +164,84 @@ function ServiciosPage() {
           <TableBody rows={rows} />
         </table>
       </div>
+
+      {/* Paginación */}
+      <div className="flex justify-center items-center gap-4 mt-4">
+        <button
+          className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
+          onClick={() => setPaginaActual((p) => Math.max(1, p - 1))}
+          disabled={paginaActual === 1}
+        >
+          Anterior
+        </button>
+
+        <span className="text-sm">Página {paginaActual} de {totalPaginas}</span>
+
+        <button
+          className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
+          onClick={() => setPaginaActual((p) => Math.min(totalPaginas, p + 1))}
+          disabled={paginaActual === totalPaginas}
+        >
+          Siguiente
+        </button>
+      </div>
+
+
+
+      { servicioSeleccionado && (servicioSeleccionado.activo ?
+        <>
+          {showModalError && (
+            <>
+              <div className="fixed inset-0 bg-black/60 z-40" />
+              <div className="fixed inset-0 z-50 flex items-center justify-center">
+                <ModalError modulo="¿Estás seguro de que quieres eliminarlo?" detalle={`Servicio: ${servicioSeleccionado?.nombre}`} onConfirm={() => {
+                  handleEliminarServicio();
+
+                }} onCancel={() => setShowModalError(false)} />
+              </div>
+            </>
+          )}
+          {showModalExito && (
+            <>
+              <div className="fixed inset-0 bg-black/60 z-40" />
+              <div className="fixed inset-0 z-50 flex items-center justify-center">
+                <ModalExito modulo="¡Servicio eliminado correctamente!" detalle="El servicio fue eliminado correctamente" onConfirm={() => {
+                  setShowModalExito(false);
+                  fetchServicios();
+                }} />
+              </div>
+            </>
+          )}
+        </>
+        :
+        <>
+          {showModalError && (
+            <>
+              <div className="fixed inset-0 bg-black/60 z-40" />
+              <div className="fixed inset-0 z-50 flex items-center justify-center">
+                <ModalError modulo="¿Estás seguro de que quieres reactivarlo?" detalle={`Servicio: ${servicioSeleccionado?.nombre}`} buttonConfirm="Reactivar" onConfirm={() => {
+                  handleReactivarServicio();
+                }} onCancel={() => setShowModalError(false)} />
+              </div>
+            </>
+          )}
+
+          {showModalExito && (
+            <>
+              <div className="fixed inset-0 bg-black/60 z-40" />
+              <div className="fixed inset-0 z-50 flex items-center justify-center">
+                <ModalExito modulo="¡Servicio reactivado correctamente!" detalle="El servicio fue reactivado correctamente" onConfirm={() => {
+                  setShowModalExito(false);
+                  fetchServicios();
+                }} />
+              </div>
+            </>
+          )}
+        </>
+
+      )}
+
+
     </div>
   );
 }

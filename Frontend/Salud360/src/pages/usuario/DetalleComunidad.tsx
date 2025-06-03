@@ -6,6 +6,13 @@ import { useParams } from "react-router";
 import { useComunidad } from "@/hooks/ComunidadContext";
 import DAB from "@/assets/DAB.jpg";
 import SelectLabel from "@/components/SelectLabel";
+import ServicioConLocalesSection from "./ServicioConLocalesSection";
+import UnderConstruction from "../UnderConstruction";
+import CarrouselLocales from "@/components/usuario/CarrouselLocales";
+import CardLocal from "@/components/usuario/CardLocal";
+import CarrouselMedicos from "@/components/usuario/CarrouselMedicos";
+//No funciona: //import PANDA from "https://png.pngtree.com/png-clipart/20201224/ourmid/pngtree-panda-bamboo-bamboo-shoots-simple-strokes-cartoon-with-pictures-small-fresh-png-image_2625172.jpg"
+
 
 function DetalleComunidad(){
     const {comunidad} = useComunidad();
@@ -18,6 +25,32 @@ function DetalleComunidad(){
 
     console.log(comunidad)
 
+    const serviciosConLocales = comunidad.servicios.filter(
+      (servicio: any) => servicio.locales && servicio.locales.length > 0
+    );
+    const tieneLocales = serviciosConLocales.length > 0
+    //console.log("Los serviciosConLocales son:", serviciosConLocales)
+    //console.log("Tiene locales? Es:", tieneLocales)
+
+    const medicos: any[] = [];
+    comunidad.servicios.forEach((servicio: any) => {
+      if (servicio.citasMedicas && servicio.citasMedicas.length > 0) {
+        servicio.citasMedicas.forEach((cita: any) => {
+          if (cita.medico) {
+            // Verifica que no esté repetido por ID
+            const yaExiste = medicos.some((m) => m.idMedico === cita.medico.idMedico);
+            if (!yaExiste) {
+              medicos.push(cita.medico);
+            }
+          }
+        });
+      }
+    });
+
+    const tieneMedicos = medicos.length > 0
+    console.log("Los medicos son:", medicos)
+    console.log("Tiene medicos? Es:", tieneMedicos)
+
     return (
       <section className="flex flex-col mt-32 gap-32 px-32 mx-auto justify-center">
 
@@ -27,24 +60,22 @@ function DetalleComunidad(){
         </div>
 
 
-        <section className="flex flex-col gap-16">
-          <div className="text-left flex flex-col gap-2">
-            <h3>Únete a nuestros distintos locales...</h3>
-            <hr className="border border-gray-500"/>
-          </div>
-          <img src={DAB} alt="DAB" />
-        </section>
+        {tieneLocales && serviciosConLocales.map((servicio: any) => (
+            <ServicioConLocalesSection servicio={servicio}/>
+        ))}
 
-        <section className="flex flex-col gap-16">
-          <div className="text-left flex flex-col gap-2">
-            <h3>Solicita ayuda de nuestos especialistas</h3>
-            <hr className="border border-gray-500"/>
-          </div>
-          <div className="text-right">
-            <SelectLabel options={optionsSelect} placeholder="Seleccione un especialista" htmlFor="email" label="Especialistas:" />
-          </div>
-          <img src={DAB} alt="DAB" />
-        </section>
+        {tieneMedicos &&
+          <>
+            <section className="flex flex-col gap-16">
+              <div className="text-left flex flex-col gap-2">
+                <h3>Solicita ayuda de nuestros especialistas</h3>
+                <hr className="border border-gray-500"/>
+              </div>
+              
+              <CarrouselMedicos medicos={medicos}/>
+            </section>
+          </>
+        }
 
         <section>
           <div className="text-left flex flex-col gap-2">
@@ -52,7 +83,7 @@ function DetalleComunidad(){
             <hr className="border border-gray-500"/>
           </div>
           <div className="my-32">
-            a
+            <UnderConstruction/>
           </div>
         </section>
 
@@ -61,3 +92,10 @@ function DetalleComunidad(){
 }
 
 export default DetalleComunidad;
+
+{/*
+  
+          <p>Messi:</p>
+          <CardLocal local={serviciosConLocales[0].locales[0]}/>
+          <p>arriba</p>
+  */}

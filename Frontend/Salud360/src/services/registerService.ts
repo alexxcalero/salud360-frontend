@@ -11,6 +11,6 @@ export const register = async (datosRegistro: {
   contraseña: string
   telefono: string
 }) => {
-  const response = await axios.post("http://localhost:8080/api/usuarios/registro", datosRegistro)
+  const response = await axios.post("http://localhost:8080/api/usuarios/signup", datosRegistro)
   return response.data
 }

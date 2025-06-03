@@ -2,6 +2,7 @@ import InputLabel from "@/components/InputLabel";
 import Button from "@/components/Button";
 import Checkbox from "@/components/Checkbox";
 import { useNavigate } from "react-router";
+import { useState } from "react";
 
 interface Servicio {
   idServicio: number;
@@ -11,6 +12,11 @@ interface Servicio {
 interface Item {
   id: number;
   nombre: string;
+  idServicio: number;
+  direccion?: string;
+  tipo?: string;
+  cantUsuarios?: number;
+  precio?: number;
   [key: string]: any;
 }
 
@@ -34,6 +40,8 @@ interface Props {
   localesDisponibles: Item[];
   localesSeleccionados: number[];
   setLocalesSeleccionados: (ids: number[]) => void;
+  nuevasMembresias: Item[]; // ⬅️ Agrega este
+  setNuevasMembresias: (items: Item[]) => void; // ⬅️ Y este también
   imagen: File | null;
   setImagen: (file: File | null) => void;
   readOnly?: boolean;
@@ -61,6 +69,7 @@ function ComunidadForm({
 }: Props) {
 
   const navigate = useNavigate();
+  const [nuevasMembresias, setNuevasMembresias] = useState<Item[]>([]);
 
   const toggle = (id: number, selected: number[], setSelected: (val: number[]) => void) => {
     if (readOnly) return;
@@ -69,6 +78,40 @@ function ComunidadForm({
         ? selected.filter(item => item !== id)
         : [...selected, id]
     );
+  };
+
+  const handleAddMembresia = () => {
+    setNuevasMembresias([
+      ...nuevasMembresias,
+      {
+        id: Date.now(),
+        nombre: "",
+        tipo: "",
+        cantUsuarios: 0,
+        maxReservas: 0,
+        precio: 0,
+        descripcion: "",
+        icono: "",
+        idServicio: 0 // ← Agregado para cumplir con la interfaz
+      }
+    ]);
+  };
+  
+
+  const handleChangeMembresia = (index: number, field: string, value: any) => {
+    const updated = [...nuevasMembresias];
+    updated[index][field] = value;
+    setNuevasMembresias(updated);
+  };
+
+  const localesFiltrados = localesDisponibles.filter(local =>
+    serviciosSeleccionados.includes(local.idServicio)
+  );
+
+  const handleRemoveMembresia = (index: number) => {
+    const updated = [...nuevasMembresias];
+    updated.splice(index, 1);
+    setNuevasMembresias(updated);
   };
 
   return (
@@ -102,37 +145,109 @@ function ComunidadForm({
       </div>
 
       <div className="mt-6">
-        <p className="font-medium mb-2">Seleccione las membresías asociadas a la comunidad</p>
-        <div className="border rounded-lg overflow-hidden">
-          <div className="grid grid-cols-4 bg-blue-500 text-white py-2 px-4 text-sm font-semibold">
+        <div className="flex justify-between items-center mb-2">
+          <p className="font-medium">Añada las membresías asociadas a la comunidad</p>
+          {!readOnly && (
+            <button
+              type="button"
+              onClick={handleAddMembresia}
+              className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-3 rounded"
+            >
+              +
+            </button>
+          )}
+        </div>
+
+        <div className="border rounded-lg overflow-auto">
+          <div className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_2fr_1fr_auto] bg-blue-500 text-white py-2 px-4 text-sm font-semibold min-w-[1000px]">
             <span>Nombre</span>
             <span>Tipo</span>
             <span>Tope</span>
+            <span>Max. Reservas</span>
             <span>Precio</span>
+            <span>Descripción</span>
+            <span>Ícono</span>
+            <span></span> {/* Espacio del tachito */}
           </div>
-          {membresiasDisponibles.map((m) => (
-            <div
-              key={m.id}
-              className="grid grid-cols-4 border-t text-sm py-2 px-4 hover:bg-gray-100 cursor-pointer"
-              onClick={() => !readOnly && toggle(m.id, membresiasSeleccionadas, setMembresiasSeleccionadas)}
-            >
-              <span>{m.nombre}</span>
-              <span>{m.tipo || "-"}</span>
-              <span>{m.tope || "-"}</span>
-              <span>{m.precio || "-"}</span>
+
+          {nuevasMembresias.map((m, index) => (
+            <div key={m.id} className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_2fr_1fr_auto] border-t text-sm py-2 px-4 gap-2 min-w-[1000px]">
+              <input
+                type="text"
+                placeholder="Nombre"
+                value={m.nombre}
+                onChange={(e) => handleChangeMembresia(index, "nombre", e.target.value)}
+                className="border p-1 rounded"
+                disabled={readOnly}
+              />
+              <input
+                type="text"
+                placeholder="Tipo"
+                value={m.tipo}
+                onChange={(e) => handleChangeMembresia(index, "tipo", e.target.value)}
+                className="border p-1 rounded"
+                disabled={readOnly}
+              />
+              <input
+                type="number"
+                placeholder="Tope"
+                value={m.cantUsuarios}
+                onChange={(e) => handleChangeMembresia(index, "cantUsuarios", parseInt(e.target.value))}
+                className="border p-1 rounded"
+                disabled={readOnly}
+              />
+              <input
+                type="number"
+                placeholder="Máx. Reservas"
+                value={m.maxReservas}
+                onChange={(e) => handleChangeMembresia(index, "maxReservas", parseInt(e.target.value))}
+                className="border p-1 rounded"
+                disabled={readOnly}
+              />
+              <input
+                type="number"
+                placeholder="Precio"
+                value={m.precio}
+                onChange={(e) => handleChangeMembresia(index, "precio", parseFloat(e.target.value))}
+                className="border p-1 rounded"
+                disabled={readOnly}
+              />
+              <input
+                type="text"
+                placeholder="Descripción"
+                value={m.descripcion}
+                onChange={(e) => handleChangeMembresia(index, "descripcion", e.target.value)}
+                className="border p-1 rounded"
+                disabled={readOnly}
+              />
+              <input
+                type="text"
+                placeholder="Ícono"
+                value={m.icono}
+                onChange={(e) => handleChangeMembresia(index, "icono", e.target.value)}
+                className="border p-1 rounded"
+                disabled={readOnly}
+              />
+              <button
+                type="button"
+                onClick={() => handleRemoveMembresia(index)}
+                className="text-gray-600 hover:text-red-600"
+              >
+                🗑️
+              </button>
             </div>
           ))}
         </div>
       </div>
 
       <div className="mt-6">
-        <p className="font-medium mb-2">Seleccione los locales asociados a la comunidad</p>
+        <p className="font-medium mb-2">Los locales asociados a la comunidad son:</p>
         <div className="border rounded-lg overflow-hidden">
           <div className="grid grid-cols-2 bg-blue-500 text-white py-2 px-4 text-sm font-semibold">
             <span>Nombre</span>
             <span>Dirección</span>
           </div>
-          {localesDisponibles.map((l) => (
+          {localesFiltrados.map((l) => (
             <div
               key={l.id}
               className="grid grid-cols-2 border-t text-sm py-2 px-4 hover:bg-gray-100 cursor-pointer"

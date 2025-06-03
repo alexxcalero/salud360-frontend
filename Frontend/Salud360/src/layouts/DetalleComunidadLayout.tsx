@@ -21,7 +21,7 @@ function DetalleComunidadLayout(){
             password: "admin123",
           },
         });
-        console.log("Ahora es:", res.data)
+        console.log("Comunidad en Flujo Usuario:", res.data)
         setComunidad(res.data);
       } catch (error) {
         console.error("Error cargando comunidad", error);

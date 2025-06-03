@@ -17,6 +17,11 @@ function PersonalMedicoPage(){
     const [medicoSeleccionado, setMedicoSeleccionado] = useState<any>();
     const [showModalExito, setShowModalExito] = useState(false);
     const [showModalError, setShowModalError] = useState(false);
+    const [paginaActual, setPaginaActual] = useState(1);
+
+    //Para la funcionalidad de búsqueda:
+    const [busqueda, setBusqueda] = useState("");
+
 
     const handleSelectAll = () => {
         setSelectAll(!selectAll);
@@ -74,7 +79,22 @@ function PersonalMedicoPage(){
         { label: "Actions", className: "w-24 text-center" },
     ];
 
-    const rows = medicos.map((medico: any) => [
+    
+    
+    const medicosFiltrados = medicos
+    .filter((med: any) =>`${med.nombres} ${med.apellidos}`.toLowerCase().includes(busqueda.toLowerCase()));
+
+    const medicosOrdenados = medicosFiltrados.slice()
+    .sort(  (a, b) => a.idMedico - b.idMedico);
+
+    const registrosPorPagina = 4;
+    const totalPaginas = Math.ceil(medicosOrdenados.length / registrosPorPagina);
+
+    const medicosPaginados = medicosOrdenados.slice(
+    (paginaActual - 1) * registrosPorPagina, paginaActual * registrosPorPagina);
+
+    const rows = medicosPaginados
+    .map((medico: any) => [
         {
             content: <input type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
             className: "w-10",
@@ -131,13 +151,9 @@ function PersonalMedicoPage(){
         <div className="w-full px-6 py-4 overflow-auto">
             <div className="grid grid-cols-12 gap-4 items-center mb-4">
                 <div className="col-span-4">
-                <InputIcon icon={<Search className="w-5 h-5" />} placeholder="Buscar médicos" type="search" />
+                <InputIcon icon={<Search className="w-5 h-5" />} placeholder="Buscar médicos" type="search" value={busqueda} onChange={(e) => setBusqueda(e.target.value)}/>
                 </div>
-                <div className="col-span-6 flex gap-2">
-                <ButtonIcon icon={<Search className="w-6 h-6" />} size="lg" variant="primary">Buscar</ButtonIcon>
-                <ButtonIcon icon={<Filter className="w-6 h-6" />} size="lg" variant="primary">Aplicar filtros</ButtonIcon>
-                </div>
-                <div className="col-span-2 flex justify-end">
+                <div className="col-span-8 flex justify-end">
                 <ButtonIcon icon={<UserPlus className="w-6 h-6" />} size="lg" variant="primary" onClick={() => navigate("/admin/personalMedico/crear")}>Agregar médico</ButtonIcon>
                 </div>
             </div>
@@ -147,6 +163,26 @@ function PersonalMedicoPage(){
                 <TableHeader columns={columns} />
                 <TableBody rows={rows} />
                 </table>
+            </div>
+            {/* Paginación */}
+            <div className="flex justify-center items-center gap-4 mt-4">
+                <button
+                className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
+                onClick={() => setPaginaActual((p) => Math.max(1, p - 1))}
+                disabled={paginaActual === 1}
+                >
+                Anterior
+                </button>
+
+                <span className="text-sm">Página {paginaActual} de {totalPaginas}</span>
+
+                <button
+                className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
+                onClick={() => setPaginaActual((p) => Math.min(totalPaginas, p + 1))}
+                disabled={paginaActual === totalPaginas}
+                >
+                Siguiente
+                </button>
             </div>
 
             { medicoSeleccionado && (medicoSeleccionado.activo ?
