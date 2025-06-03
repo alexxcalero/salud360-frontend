@@ -40,6 +40,9 @@ function ServiciosPage() {
 
   const navigate = useNavigate();
 
+  //Para la funcionalidad de búsqueda:
+  const [busqueda, setBusqueda] = useState("");
+
   const handleSelectAll = () => {
     setSelectAll(!selectAll);
   };
@@ -73,10 +76,20 @@ function ServiciosPage() {
     { label: "Status", className: "w-1/6" },
     { label: "Actions", className: "w-24" },
   ];
+  
+  const serviciosFiltrados = servicios
+  .filter(ser => ser.nombre.toLowerCase().includes(busqueda.toLowerCase()));
 
-  const rows = servicios
-  .slice()
-  .sort((a: any, b: any) => a.idServicio - b.idServicio)
+  const serviciosOrdenados = serviciosFiltrados.slice()
+  .sort(  (a, b) => a.idServicio - b.idServicio);
+
+  const registrosPorPagina = 4;
+  const totalPaginas = Math.ceil(serviciosOrdenados.length / registrosPorPagina);
+
+  const serviciosPaginados = serviciosOrdenados.slice(
+  (paginaActual - 1) * registrosPorPagina, paginaActual * registrosPorPagina);
+
+  const rows = serviciosPaginados
   .map((servicio: any) => [
     {
       content: <input type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
@@ -125,9 +138,7 @@ function ServiciosPage() {
     },
   ]);
 
-  //const [paginaActual, setPaginaActual] = useState(1);
-  const registrosPorPagina = 10;
-  const totalPaginas = Math.ceil(servicios.length / registrosPorPagina);
+  
 
   return (
     <div className="w-full px-6 py-4 overflow-auto">
@@ -137,20 +148,11 @@ function ServiciosPage() {
           <InputIcon
             icon={<Search className="w-5 h-5" />}
             placeholder="Buscar servicios"
-            type="search"
+            type="search" value={busqueda} onChange={(e) => setBusqueda(e.target.value)}
           />
         </div>
 
-        <div className="col-span-6 flex gap-2">
-          <ButtonIcon icon={<Search className="w-6 h-6" />} size="lg" variant="primary">
-            Buscar
-          </ButtonIcon>
-          <ButtonIcon icon={<Filter className="w-6 h-6" />} size="lg" variant="primary">
-            Aplicar filtros
-          </ButtonIcon>
-        </div>
-
-        <div className="col-span-2 flex justify-end">
+        <div className="col-span-8 flex justify-end">
           <ButtonIcon icon={<FolderPlus className="w-6 h-6" />} size="lg" variant="primary" onClick={() => navigate("/admin/servicios/crear")}>Agregar servicio</ButtonIcon>
         </div>
       </div>

@@ -22,6 +22,9 @@ function ComunidadPage() {
 
   const navigate = useNavigate();
 
+  //Para la funcionalidad de búsqueda:
+  const [busqueda, setBusqueda] = useState("");
+
   const fetchComunidades = () => {
     axios.get("http://localhost:8080/api/comunidades", {
       auth: { username: "admin", password: "admin123" }
@@ -65,9 +68,20 @@ function ComunidadPage() {
     { label: "Acciones", className: "w-24 text-center" },
   ];
 
-  const rows = comunidades
-  .slice() // para no mutar el estado original
-  .sort((a: any, b: any) => a.idComunidad - b.idComunidad)
+
+  const comunidadesFiltradas = comunidades
+  .filter(com => com.nombre.toLowerCase().includes(busqueda.toLowerCase()));
+
+  const comunidadesOrdenadas = comunidadesFiltradas.slice()
+  .sort(  (a, b) => a.idComunidad - b.idComunidad);
+
+  const registrosPorPagina = 4;
+  const totalPaginas = Math.ceil(comunidadesOrdenadas.length / registrosPorPagina);
+
+  const comunidadesPaginadas = comunidadesOrdenadas.slice(
+  (paginaActual - 1) * registrosPorPagina, paginaActual * registrosPorPagina);
+
+  const rows = comunidadesPaginadas
   .map((comunidad: any) => [
     {
       content: <input type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
@@ -123,21 +137,15 @@ function ComunidadPage() {
     },
   ]);
 
-  const registrosPorPagina = 10;
-  const totalPaginas = Math.ceil(comunidades.length / registrosPorPagina);
-
+  
   return (
     <div className="w-full px-6 py-4 overflow-auto">
       {/* Filtros y acciones */}
       <div className="grid grid-cols-12 gap-4 items-center mb-4">
         <div className="col-span-4">
-          <InputIcon icon={<Search className="w-5 h-5" />} placeholder="Buscar Comunidad" type="search" />
+          <InputIcon icon={<Search className="w-5 h-5" />} placeholder="Buscar Comunidad" type="search" value={busqueda} onChange={(e) => setBusqueda(e.target.value)}/>
         </div>
-        <div className="col-span-6 flex gap-2">
-          <ButtonIcon icon={<Search className="w-6 h-6" />} size="lg" variant="primary">Buscar</ButtonIcon>
-          <ButtonIcon icon={<Filter className="w-6 h-6" />} size="lg" variant="primary">Aplicar filtros</ButtonIcon>
-        </div>
-        <div className="col-span-2 flex justify-end">
+        <div className="col-span-8 flex justify-end">
           <ButtonIcon icon={<FolderPlus className="w-6 h-6" />} size="lg" variant="primary" onClick={() => navigate("/admin/comunidades/crear")}>Agregar comunidad</ButtonIcon>
         </div>
       </div>

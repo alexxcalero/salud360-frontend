@@ -19,6 +19,9 @@ function LocalesPage() {
     const [search, setSearch] = useState("");
     const [paginaActual, setPaginaActual] = useState(1);
 
+    //Para la funcionalidad de búsqueda:
+    const [busqueda, setBusqueda] = useState("");
+
     const fetchLocales = () => {
         axios.get("http://localhost:8080/api/locales/admin", {
             auth: {
@@ -76,9 +79,19 @@ function LocalesPage() {
     { label: "Actions", className: "w-24 text-center" },                                                            // acciones
     ];
 
-    const rows = locales
-    .slice() // para no mutar el estado original
-    .sort((a: any, b: any) => a.idLocal - b.idLocal)
+    const localesFiltrados = locales
+    .filter(loc => loc.nombre.toLowerCase().includes(busqueda.toLowerCase()));
+
+    const localesOrdenados = localesFiltrados.slice()
+    .sort(  (a, b) => a.idLocal - b.idLocal);
+
+    const registrosPorPagina = 4;
+    const totalPaginas = Math.ceil(localesOrdenados.length / registrosPorPagina);
+
+    const localesPaginados = localesOrdenados.slice(
+    (paginaActual - 1) * registrosPorPagina, paginaActual * registrosPorPagina);
+
+    const rows = localesPaginados
     .map((local: any) => [
     {
         content: <input type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
@@ -132,10 +145,6 @@ function LocalesPage() {
     },
     ]);
 
-    const registrosPorPagina = 10;
-    const totalPaginas = Math.ceil(locales.length / registrosPorPagina);
-
-
     return (
         <div className="w-full px-6 py-4 overflow-auto">
             {/* Filtros */}
@@ -144,20 +153,11 @@ function LocalesPage() {
                     <InputIcon
                         icon={<Search className="w-5 h-5" />}
                         placeholder="Buscar locales"
-                        type="search"
+                        type="search" value={busqueda} onChange={(e) => setBusqueda(e.target.value)}
                     />
                 </div>
 
-                <div className="col-span-6 flex gap-2">
-                    <ButtonIcon icon={<Search className="w-6 h-6" />} size="lg" variant="primary">
-                        Buscar
-                    </ButtonIcon>
-                    <ButtonIcon icon={<Filter className="w-6 h-6" />} size="lg" variant="primary">
-                        Aplicar filtros
-                    </ButtonIcon>
-                </div>
-
-                <div className="col-span-2 flex justify-end">
+                <div className="col-span-8 flex justify-end">
                     <ButtonIcon icon={<FolderPlus className="w-6 h-6" />} size="lg" variant="primary" onClick={() => navigate("/admin/locales/crear")}>Agregar local</ButtonIcon>
                 </div>
             </div>

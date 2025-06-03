@@ -89,11 +89,7 @@ function RolesPage() {
         <div className="col-span-4">
           <InputIcon icon={<Search className="w-5 h-5" />} placeholder="Buscar rol" type="search" />
         </div>
-        <div className="col-span-6 flex gap-2">
-          <ButtonIcon icon={<Search className="w-6 h-6" />} size="lg" variant="primary">Buscar</ButtonIcon>
-          <ButtonIcon icon={<Filter className="w-6 h-6" />} size="lg" variant="primary">Aplicar filtros</ButtonIcon>
-        </div>
-        <div className="col-span-2 flex justify-end">
+        <div className="col-span-8 flex justify-end">
           <ButtonIcon icon={<UserPlus className="w-6 h-6" />} size="lg" variant="primary" onClick={() => navigate("/admin/roles/crear")}>Agregar rol</ButtonIcon>
         </div>
       </div>
