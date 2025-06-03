@@ -39,7 +39,8 @@ const Spinner = () => {
           ></stop>
         </radialGradient>
         <circle
-          transform-origin="center"
+          // @ts-ignore
+          transformOrigin="center"
           fill="none"
           stroke="url(#a8)"
           strokeWidth="15"
@@ -51,7 +52,8 @@ const Spinner = () => {
           r="70"
         ></circle>
         <circle
-          transform-origin="center"
+          // @ts-ignore
+          transformOrigin="center"
           fill="none"
           opacity=".2"
           stroke={colors.blue["500"]}
