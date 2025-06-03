@@ -5,12 +5,12 @@ import { FaBuilding } from "react-icons/fa";
 import { FaHandHoldingUsd } from "react-icons/fa";
 import Button from "@/components/Button";
 import axios from "axios";
+import { useEffect, useState } from "react";
 
 interface Props {
   data: {
     fechaInicio: string;
     fechaFin: string;
-    correo: string;
     servicio: string;
     local: string;
     descripcion: string;
@@ -18,13 +18,45 @@ interface Props {
   onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
 }
 export default function ReporteUsuarioForm({ data, onChange }: Props) {
+  const [servicios, setServicios] = useState<{ value: string; label: string }[]>([]);
+  const [locales, setLocales] = useState<{ value: string; label: string }[]>([]);
+
+  useEffect(() => {
+    const fetchServicios = async () => {
+      try {
+        const res = await axios.get("http://localhost:8080/api/servicios", {
+          auth: { username: "admin", password: "admin123" }
+        });
+        const opciones = res.data.map((s: any) => ({ value: s.idServicio, label: s.nombre }));
+        setServicios([{ value: "", label: "Elige una opcion" }, ...opciones]);
+      } catch (err) {
+        console.error("Error cargando servicios", err);
+      }
+    };
+
+    const fetchLocales = async () => {
+      try {
+        const res = await axios.get("http://localhost:8080/api/locales", {
+          auth: { username: "admin", password: "admin123" }
+        });
+        const opciones = res.data.map((l: any) => ({ value: l.idLocal, label: l.nombre }));
+        setLocales([{ value: "", label: "Elige una opcion" }, ...opciones]);
+      } catch (err) {
+        console.error("Error cargando locales", err);
+      }
+    };
+
+    fetchServicios();
+    fetchLocales();
+  }, []);
+
+
   const handleGenerarReporte = async () => {
     try {
       const response = await axios.post("http://localhost:8080/api/reportes/usuarios", {
         descripcion: data.descripcion,
         fechaInicio: data.fechaInicio,
         fechaFin: data.fechaFin,
-        correo: data.correo,
         servicio: data.servicio,
         local: data.local
       }, {
@@ -66,13 +98,13 @@ export default function ReporteUsuarioForm({ data, onChange }: Props) {
         icon={<FaHandHoldingUsd className="w-5 h-5" />} htmlFor="Servicio"
         label="Servicio"
         value={data.servicio} onChange={onChange}
-        options={[{ value: "", label: "Elige una opcion" }]}
+        options={servicios}
       />
       <SelectIconLabel
         icon={<FaBuilding className="w-5 h-5" />} htmlFor="Local"
         label="Local"
         value={data.local} onChange={onChange}
-        options={[{ value: "", label: "Elige una opcion" }]}
+        options={locales}
       />
       <div className="col-span-2 flex justify-end mt-4">
         <Button type="button" onClick={handleGenerarReporte}>
