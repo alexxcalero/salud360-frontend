@@ -80,6 +80,7 @@ import CrearLocal from "./pages/admin/locales/CrearLocal";
 import DetalleLocal from "./pages/admin/locales/DetalleLocal";
 import EditarLocal from "./pages/admin/locales/EditarLocal";
 import EditarServicio from "./pages/admin/servicios/EditarServicio";
+import RegistrarCitaMedicasPage from "./pages/admin/citasMedicas/RegistrarCitaMedicasPage";
 
 const CLIENT_ID =
   "442103352631-urj3v36db8bhki2cg4vu6c2q404dkko7.apps.googleusercontent.com";
@@ -225,7 +226,7 @@ createRoot(document.getElementById("root")!).render(
               </Route>
               <Route path="citasMedicas">
                 <Route index element={<CitasMedicasPage />} />
-                <Route path="crear" element={<CrearUsuario />} />
+                <Route path="crear" element={<RegistrarCitaMedicasPage />} />
               </Route>
             </Route>
             <Route path="/example" element={<Example />} />

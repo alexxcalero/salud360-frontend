@@ -7,6 +7,7 @@ interface Props {
   inicioMes: DateTime;
   finMes: DateTime;
   mes: number;
+  blankTileAction?: (_: DateTime) => void;
   citasMedicas?: citaMedicaType[];
   clases?: claseType[];
 }
@@ -15,6 +16,7 @@ const CalendarioMensual = ({
   mes,
   inicioMes,
   finMes,
+  blankTileAction,
   citasMedicas = new Array(),
   clases = new Array(),
 }: Props) => {

@@ -54,7 +54,7 @@ function SortingButton<Data>({ column }: { column: Column<Data> }) {
 function dataColumnsGenerator<Data extends Record<string, any>>({
   columns,
 }: {
-  columns: Record<keyof Data, Salud360Column>;
+  columns: Partial<Record<keyof Data, Salud360Column>>;
 }) {
   return (Object.entries(columns) as [string, Salud360Column][]).map(
     ([key, value]) => {

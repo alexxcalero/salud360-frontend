@@ -1,4 +1,4 @@
-import { Input } from "@/components/ui/input";
+import { Input as ShadcnInput } from "@/components/ui/input";
 import { HTMLInputTypeAttribute, useId, useState } from "react";
 
 export interface InputProps {
@@ -20,7 +20,7 @@ interface BaseProps extends InputProps {
   rightIcon?: React.ReactNode;
 }
 
-const UnifiedInput = ({
+const Input = ({
   type,
   placeholder = "Ingrese su texto aquí",
   leftIcon,
@@ -64,7 +64,7 @@ const UnifiedInput = ({
             {leftIcon}
           </span>
         )}
-        <Input
+        <ShadcnInput
           id={id}
           name={name}
           type={type}
@@ -94,4 +94,4 @@ const UnifiedInput = ({
   );
 };
 
-export default UnifiedInput;
+export default Input;

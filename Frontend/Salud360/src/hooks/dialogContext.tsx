@@ -65,13 +65,15 @@ export function DialogProvider({ children }: { children: ReactNode }) {
       value={{ callSuccessDialog, callErrorDialog, callAlertDialog }}
     >
       {children}
-      <SuccessModal
-        open={openSuccess}
-        setOpen={setOpenSuccess}
-        {...dataSuccess}
-      />
-      <ErrorModal open={openError} setOpen={setOpenError} {...dataError} />
-      <AlertModal open={openAlert} setOpen={setOpenAlert} {...dataAlert} />
+      <div className="fixed z-[900]">
+        <SuccessModal
+          open={openSuccess}
+          setOpen={setOpenSuccess}
+          {...dataSuccess}
+        />
+        <ErrorModal open={openError} setOpen={setOpenError} {...dataError} />
+        <AlertModal open={openAlert} setOpen={setOpenAlert} {...dataAlert} />
+      </div>
     </dialogContext.Provider>
   );
 }

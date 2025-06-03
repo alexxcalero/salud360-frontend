@@ -1,0 +1,64 @@
+"use client";
+
+import * as React from "react";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
+
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { DateTime } from "luxon";
+import { InputProps } from "./Input";
+
+interface CalendarInputProps extends Omit<InputProps, "defaultValue"> {
+  defaultValue: DateTime;
+}
+
+export function CalendarInput({
+  placeholder = "Pick a date",
+  label,
+  defaultValue,
+  className,
+  disabled,
+  required,
+}: CalendarInputProps) {
+  const [date, setDate] = React.useState<DateTime>(defaultValue);
+
+  return (
+    <div>
+      {label && (
+        <label className="block text-sm text-left font-medium text-gray-700 mb-2 w-max">
+          {label} {required && <span className="text-red-500">*</span>}
+        </label>
+      )}
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button
+            variant={"outline"}
+            className={`relative flex border-[#6A6262] border-2 rounded-[5px] py-0 px-2 gap-2 items-center focus-within:border-blue-500 group ${
+              disabled && "border-neutral-300 bg-neutral-50"
+            } ${className}`}
+          >
+            <CalendarIcon />
+            {date ? date.toFormat("D") : <span>{placeholder}</span>}
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-auto p-0" align="start">
+          <Calendar
+            mode="single"
+            selected={date?.toJSDate()}
+            onSelect={(e) => {
+              if (e !== undefined) setDate(DateTime.fromJSDate(e));
+            }}
+            initialFocus
+          />
+        </PopoverContent>
+      </Popover>
+    </div>
+  );
+}

@@ -17,9 +17,13 @@ import { getCalendarData } from "@/services/calendarioUsuario.service";
 
 interface Props {
   fechaSemana?: DateTime;
+  blankTileAction?: (_: DateTime) => void;
 }
 
-const Calendario = ({ fechaSemana = DateTime.now() }: Props) => {
+const Calendario = ({
+  fechaSemana = DateTime.now(),
+  blankTileAction,
+}: Props) => {
   const [citasMedicas, setCitasMedicas] = useState<citaMedicaType[]>([]);
   const [clases, setClases] = useState<claseType[]>([]);
 
@@ -34,6 +38,7 @@ const Calendario = ({ fechaSemana = DateTime.now() }: Props) => {
   useEffect(() => {
     setLoading(true);
     const fetchData = async () => {
+      await new Promise<string>((res) => setTimeout(() => res(""), 1000));
       try {
         const [dataCitas, dataClases] = await getCalendarData();
         setCitasMedicas(dataCitas);
@@ -139,6 +144,7 @@ const Calendario = ({ fechaSemana = DateTime.now() }: Props) => {
       {periodo === "week" && (
         <CalendarioSemanal
           inicioSemana={rangeDays.initial}
+          blankTileAction={blankTileAction}
           citasMedicas={citasMedicas.filter((elem) =>
             elem.fecha.hasSame(rangeDays.initial, "week")
           )}
@@ -150,6 +156,7 @@ const Calendario = ({ fechaSemana = DateTime.now() }: Props) => {
       {periodo === "day" && (
         <CalendarioDiario
           dia={rangeDays.initial}
+          blankTileAction={blankTileAction}
           citasMedicas={citasMedicas.filter((elem) =>
             elem.fecha.hasSame(rangeDays.initial, "day")
           )}
@@ -161,6 +168,7 @@ const Calendario = ({ fechaSemana = DateTime.now() }: Props) => {
       {periodo === "month" && (
         <CalendarioMensual
           mes={targetDay.month}
+          blankTileAction={blankTileAction}
           inicioMes={rangeDays.initial}
           finMes={rangeDays.final}
           citasMedicas={citasMedicas.filter((elem) =>

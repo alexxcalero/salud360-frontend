@@ -9,3 +9,5 @@ export const medicoSchema = z.object({
   especialidad: z.string(),
   descripcion: z.string(),
 });
+
+export type medicoType = z.infer<typeof medicoSchema>;

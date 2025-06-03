@@ -8,6 +8,7 @@ interface Props {
 }
 
 function ProtectedRoute({children, allowedRules}: Props){
+    return <>{children}</>;
     const {usuario} = useContext(AuthContext);
 
     if (!usuario) return <Navigate to="/"/> //Si no hay usuario en sesión

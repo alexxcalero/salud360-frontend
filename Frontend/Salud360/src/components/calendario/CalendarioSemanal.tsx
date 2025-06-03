@@ -6,12 +6,14 @@ import { ClaseCard } from "./ClaseCard";
 
 interface Props {
   inicioSemana: DateTime;
+  blankTileAction?: (_: DateTime) => void;
   citasMedicas?: citaMedicaType[];
   clases?: claseType[];
 }
 
 const CalendarioSemanal = ({
   inicioSemana,
+  blankTileAction,
   citasMedicas = new Array(),
   clases = new Array(),
 }: Props) => {
@@ -65,7 +67,7 @@ const CalendarioSemanal = ({
                     elem.fecha.hasSame(dia, "day") &&
                     elem.fecha.hasSame(dia, "month") &&
                     elem.fecha.hasSame(dia, "year") &&
-                    elem.hora.hour === hora
+                    elem.horaInicio.hour === hora
                 );
                 const virtualClases = clases.filter(
                   (elem) =>
@@ -78,16 +80,35 @@ const CalendarioSemanal = ({
                 return (
                   <td
                     key={index}
-                    className="text-center group border-1 border-neutral-300 p-2"
+                    className="text-center group border-1 border-neutral-300"
                   >
-                    <div className="flex w-full">
-                      {virtualCitasMedicas.map((cM, index) => (
-                        <CitaMedicaCard key={index} citaMedica={cM} />
-                      ))}
-                      {virtualClases.map((cM, index) => (
-                        <ClaseCard key={index} clase={cM} />
-                      ))}
-                    </div>
+                    {virtualCitasMedicas.length !== 0 ||
+                    virtualClases.length !== 0 ? (
+                      <div className="flex max-w-full max-h-full p-2">
+                        {virtualCitasMedicas.map((cM, index) => (
+                          <CitaMedicaCard key={index} citaMedica={cM} />
+                        ))}
+                        {virtualClases.map((cM, index) => (
+                          <ClaseCard key={index} clase={cM} />
+                        ))}
+                      </div>
+                    ) : (
+                      <>
+                        <button
+                          className="w-full h-full"
+                          onClick={() =>
+                            blankTileAction?.(
+                              DateTime.fromObject({
+                                year: dia.year,
+                                month: dia.month,
+                                day: dia.day,
+                                hour: hora,
+                              })
+                            )
+                          }
+                        ></button>
+                      </>
+                    )}
                   </td>
                 );
               })}

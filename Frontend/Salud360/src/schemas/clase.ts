@@ -23,6 +23,9 @@ export const claseSchema = z.object({
   estado: z
     .enum(["available", "canceled", "suscribed", "soon", "full"])
     .optional(),
+  activo: z.boolean(),
+  fechaCreacion: z.string().transform((str) => DateTime.fromISO(str)),
+  fechaDesactivacion: z.string().transform((str) => DateTime.fromISO(str)),
 });
 
 export type claseType = z.infer<typeof claseSchema>;
