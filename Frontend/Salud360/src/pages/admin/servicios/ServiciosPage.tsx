@@ -17,6 +17,7 @@ function ServiciosPage() {
   const [showModalExito, setShowModalExito] = useState(false);
   const [showModalError, setShowModalError] = useState(false);
   const [search, setSearch] = useState("");
+  const [paginaActual, setPaginaActual] = useState(1);
 
   const fetchServicios = () => {
     axios.get("http://localhost:8080/api/servicios", {
@@ -73,7 +74,10 @@ function ServiciosPage() {
     { label: "Actions", className: "w-24" },
   ];
 
-  const rows = servicios.map((servicio: any) => [
+  const rows = servicios
+  .slice()
+  .sort((a: any, b: any) => a.idServicio - b.idServicio)
+  .map((servicio: any) => [
     {
       content: <input type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
       className: "w-10",
@@ -121,6 +125,10 @@ function ServiciosPage() {
     },
   ]);
 
+  //const [paginaActual, setPaginaActual] = useState(1);
+  const registrosPorPagina = 10;
+  const totalPaginas = Math.ceil(servicios.length / registrosPorPagina);
+
   return (
     <div className="w-full px-6 py-4 overflow-auto">
       {/* Filtros */}
@@ -154,6 +162,29 @@ function ServiciosPage() {
           <TableBody rows={rows} />
         </table>
       </div>
+
+      {/* Paginación */}
+      <div className="flex justify-center items-center gap-4 mt-4">
+        <button
+          className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
+          onClick={() => setPaginaActual((p) => Math.max(1, p - 1))}
+          disabled={paginaActual === 1}
+        >
+          Anterior
+        </button>
+
+        <span className="text-sm">Página {paginaActual} de {totalPaginas}</span>
+
+        <button
+          className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
+          onClick={() => setPaginaActual((p) => Math.min(totalPaginas, p + 1))}
+          disabled={paginaActual === totalPaginas}
+        >
+          Siguiente
+        </button>
+      </div>
+
+
 
       { servicioSeleccionado && (servicioSeleccionado.activo ?
         <>

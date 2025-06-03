@@ -17,6 +17,7 @@ function PersonalMedicoPage(){
     const [medicoSeleccionado, setMedicoSeleccionado] = useState<any>();
     const [showModalExito, setShowModalExito] = useState(false);
     const [showModalError, setShowModalError] = useState(false);
+    const [paginaActual, setPaginaActual] = useState(1);
 
     const handleSelectAll = () => {
         setSelectAll(!selectAll);
@@ -127,6 +128,9 @@ function PersonalMedicoPage(){
 
     )
 
+    const registrosPorPagina = 10;
+    const totalPaginas = Math.ceil(medicos.length /registrosPorPagina); 
+
     return (
         <div className="w-full px-6 py-4 overflow-auto">
             <div className="grid grid-cols-12 gap-4 items-center mb-4">
@@ -147,6 +151,26 @@ function PersonalMedicoPage(){
                 <TableHeader columns={columns} />
                 <TableBody rows={rows} />
                 </table>
+            </div>
+            {/* Paginación */}
+            <div className="flex justify-center items-center gap-4 mt-4">
+                <button
+                className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
+                onClick={() => setPaginaActual((p) => Math.max(1, p - 1))}
+                disabled={paginaActual === 1}
+                >
+                Anterior
+                </button>
+
+                <span className="text-sm">Página {paginaActual} de {totalPaginas}</span>
+
+                <button
+                className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
+                onClick={() => setPaginaActual((p) => Math.min(totalPaginas, p + 1))}
+                disabled={paginaActual === totalPaginas}
+                >
+                Siguiente
+                </button>
             </div>
 
             { medicoSeleccionado && (medicoSeleccionado.activo ?
