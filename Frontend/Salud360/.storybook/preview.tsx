@@ -12,6 +12,7 @@ import type { Preview } from "@storybook/react";
 import { BrowserRouter, Routes, Route } from "react-router";
 import { LoadingContext } from "@/hooks/LoadingContext";
 import { ToastProvider } from "@/hooks/ToastContext";
+import { DialogProvider } from "@/hooks/dialogContext";
 
 const preview: Preview = {
   parameters: {
@@ -40,9 +41,11 @@ const preview: Preview = {
       <BrowserRouter>
         <LoadingContext>
           <ToastProvider>
-            <Routes>
-              <Route path="*" element={<Story />} />
-            </Routes>
+            <DialogProvider>
+              <Routes>
+                <Route path="*" element={<Story />} />
+              </Routes>
+            </DialogProvider>
           </ToastProvider>
         </LoadingContext>
       </BrowserRouter>
