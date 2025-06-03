@@ -5,6 +5,16 @@ import axios from "axios";
 import useComunidadForm from "@/hooks/useComunidadForm";
 import ComunidadForm from "@/components/admin/comunidades/ComunidadForm";
 
+interface Item {
+  nombre: string;
+  conTope: boolean;
+  direccion?: string;
+  tipo?: string;
+  cantUsuarios?: number;
+  precio?: number;
+  [key: string]: any;
+}
+
 function CrearComunidad() {
   const navigate = useNavigate();
 
@@ -25,7 +35,7 @@ function CrearComunidad() {
   const [imagen, setImagen] = useState<File | null>(null);
 
   // ✅ Aquí se mantiene el estado de membresías nuevas y se pasa correctamente al form
-  const [nuevasMembresias, setNuevasMembresias] = useState<any[]>([]);
+  const [nuevasMembresias, setNuevasMembresias] = useState<Item[]>([]);
 
   // Cargar datos iniciales
   useEffect(() => {
@@ -47,30 +57,37 @@ function CrearComunidad() {
 
   const handleCrearComunidad = async () => {
     try {
-      const formData = new FormData();
-      formData.append("nombre", nombre);
-      formData.append("descripcion", descripcion);
-      formData.append("proposito", proposito);
-      formData.append("membresias", JSON.stringify(nuevasMembresias));
-      formData.append("idServicios", JSON.stringify(servicios));
-      formData.append("idMembresias", JSON.stringify(membresiasSeleccionadas));
 
-      if (imagen) {
-        formData.append("imagen", imagen);
-      }
+      console.log("Las membresias a enviar son:", nuevasMembresias)      
 
-      // Debug: mostrar datos en consola
-      for (let pair of formData.entries()) {
-        console.log("📦 Enviando", pair[0], "=>", pair[1]);
-      }
+      const requestBody = {
+        nombre,
+        activo: true,
+        descripcion,
+        proposito,
+        membresias: nuevasMembresias,
+        servicios: servicios.map(id => ({ idServicio: id })),
+        imagen: imagen ?? null, // si no hay imagen, enviamos null (o puedes omitir este campo si no aplica)
+      };
 
-      await axios.post("http://localhost:8080/api/comunidades", formData, {
-        auth: { username: "admin", password: "admin123" }
+      console.log("Enviando datos de comunidad:", requestBody);
+
+      const response = await axios.post("http://localhost:8080/api/comunidades", requestBody, {
+        auth: {
+          username: "admin",
+          password: "admin123"
+        },
+        headers: {
+          "Content-Type": "application/json"
+        }
       });
 
-      alert("Comunidad creada exitosamente");
-      navigate("/admin/comunidades");
-
+      console.log("Usuario creado:", response.data);
+      //alert("Usuario creado exitosamente");
+      console.log("A punto de navegar a successCrear")
+      navigate("/admin/comunidades/successCrear", {
+        state: { created: true }
+      });
     } catch (err: any) {
       if (axios.isAxiosError(err)) {
         console.error("Respuesta del servidor:", err.response?.data);

@@ -83,7 +83,7 @@ function UsuariosPage() {
     const usuariosOrdenados = usuariosFiltrados.slice()
     .sort(  (a, b) => a.idCliente - b.idCliente);
 
-    const registrosPorPagina = 4;
+    const registrosPorPagina = 10;
     const totalPaginas = Math.ceil(usuariosOrdenados.length / registrosPorPagina);
 
     const usuariosPaginados = usuariosOrdenados.slice(

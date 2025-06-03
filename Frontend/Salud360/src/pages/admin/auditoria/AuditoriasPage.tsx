@@ -98,7 +98,7 @@ function AuditoriasPage(){
     { content: auditoria.idAuditoria, className: "w-14" },
     { content: auditoria.descripcion || "Sin detalles", className: "w-1/3 text-left" },
     { content: formatFechaHora(auditoria.fechaModificacion), className: "w-1/3 text-left" },
-    { content: auditoria.idUsuarioModificador, className: "w-1/6" },
+    { content: auditoria.nombreUsuarioModificador, className: "w-1/6" },
     { content: auditoria.nombreTabla, className: "w-1/6" },
     {
       content: (

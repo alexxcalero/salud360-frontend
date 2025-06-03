@@ -83,7 +83,7 @@ function ServiciosPage() {
   const serviciosOrdenados = serviciosFiltrados.slice()
   .sort(  (a, b) => a.idServicio - b.idServicio);
 
-  const registrosPorPagina = 4;
+  const registrosPorPagina = 10;
   const totalPaginas = Math.ceil(serviciosOrdenados.length / registrosPorPagina);
 
   const serviciosPaginados = serviciosOrdenados.slice(

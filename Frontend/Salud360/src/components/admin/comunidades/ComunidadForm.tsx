@@ -10,9 +10,8 @@ interface Servicio {
 }
 
 interface Item {
-  id: number;
   nombre: string;
-  idServicio: number;
+  conTope: boolean;
   direccion?: string;
   tipo?: string;
   cantUsuarios?: number;
@@ -63,13 +62,15 @@ function ComunidadForm({
   localesDisponibles,
   localesSeleccionados,
   setLocalesSeleccionados,
+  nuevasMembresias,
+  setNuevasMembresias,
   imagen,
   setImagen,
   readOnly = false
 }: Props) {
 
   const navigate = useNavigate();
-  const [nuevasMembresias, setNuevasMembresias] = useState<Item[]>([]);
+  //const [nuevasMembresias, setNuevasMembresias] = useState<Item[]>([]);
 
   const toggle = (id: number, selected: number[], setSelected: (val: number[]) => void) => {
     if (readOnly) return;
@@ -84,15 +85,14 @@ function ComunidadForm({
     setNuevasMembresias([
       ...nuevasMembresias,
       {
-        id: Date.now(),
         nombre: "",
+        conTope: true,
         tipo: "",
         cantUsuarios: 0,
         maxReservas: 0,
         precio: 0,
         descripcion: "",
         icono: "",
-        idServicio: 0 // ← Agregado para cumplir con la interfaz
       }
     ]);
   };
@@ -101,6 +101,7 @@ function ComunidadForm({
   const handleChangeMembresia = (index: number, field: string, value: any) => {
     const updated = [...nuevasMembresias];
     updated[index][field] = value;
+    console.log("El nuevo objeto membresía es:", updated)
     setNuevasMembresias(updated);
   };
 
@@ -120,9 +121,9 @@ function ComunidadForm({
       <h2 className="text-lg text-gray-700 mb-6">{subtitle}</h2>
 
       <div className="grid grid-cols-1 gap-4">
-        <InputLabel label="Nombre *" htmlFor="nombre" value={nombre} onChange={(e) => setNombre(e.target.value)} readOnly={readOnly} />
-        <InputLabel label="Descripción *" htmlFor="descripcion" value={descripcion} onChange={(e) => setDescripcion(e.target.value)} readOnly={readOnly} />
-        <InputLabel label="Propósito *" htmlFor="proposito" value={proposito} onChange={(e) => setProposito(e.target.value)} readOnly={readOnly} />
+        <InputLabel label="Nombre *" htmlFor="nombre" value={nombre} onChange={(e) => setNombre(e.target.value)} disabled={readOnly} />
+        <InputLabel label="Descripción *" htmlFor="descripcion" value={descripcion} onChange={(e) => setDescripcion(e.target.value)} disabled={readOnly} />
+        <InputLabel label="Propósito *" htmlFor="proposito" value={proposito} onChange={(e) => setProposito(e.target.value)} disabled={readOnly} />
       </div>
 
       <div className="mt-6">

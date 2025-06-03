@@ -75,7 +75,7 @@ function ComunidadPage() {
   const comunidadesOrdenadas = comunidadesFiltradas.slice()
   .sort(  (a, b) => a.idComunidad - b.idComunidad);
 
-  const registrosPorPagina = 4;
+  const registrosPorPagina = 5;
   const totalPaginas = Math.ceil(comunidadesOrdenadas.length / registrosPorPagina);
 
   const comunidadesPaginadas = comunidadesOrdenadas.slice(

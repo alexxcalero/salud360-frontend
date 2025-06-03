@@ -87,7 +87,7 @@ function PersonalMedicoPage(){
     const medicosOrdenados = medicosFiltrados.slice()
     .sort(  (a, b) => a.idMedico - b.idMedico);
 
-    const registrosPorPagina = 4;
+    const registrosPorPagina = 10;
     const totalPaginas = Math.ceil(medicosOrdenados.length / registrosPorPagina);
 
     const medicosPaginados = medicosOrdenados.slice(
