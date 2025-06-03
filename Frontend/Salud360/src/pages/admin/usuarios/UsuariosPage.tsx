@@ -17,6 +17,8 @@ function UsuariosPage() {
   const [showModalExito, setShowModalExito] = useState(false);
   const [showModalError, setShowModalError] = useState(false);
   const [search, setSearch] = useState("");
+  const [paginaActual, setPaginaActual] = useState(1);
+
 
   const fetchUsuarios = () => {
     axios.get("http://localhost:8080/api/admin/clientes", {
@@ -73,7 +75,10 @@ function UsuariosPage() {
     { label: "Actions", className: "w-24 text-center" },
   ];
 
-  const rows = usuarios.map((usuario: any) => [
+  const rows = usuarios
+  .slice() // para no mutar el estado original
+  .sort((a: any, b: any) => a.idCliente - b.idCliente)
+  .map((usuario: any) => [
     {
       content: <input type="checkbox" checked={selectAll} onChange={handleSelectAll} />,
       className: "w-10",
@@ -126,6 +131,10 @@ function UsuariosPage() {
 
   const navigate = useNavigate();
 
+  const registrosPorPagina = 10;
+  const totalPaginas = Math.ceil(usuarios.length / registrosPorPagina);
+
+
   return (
     <div className="w-full px-6 py-4 overflow-auto">
       <div className="grid grid-cols-12 gap-4 items-center mb-4">
@@ -146,6 +155,26 @@ function UsuariosPage() {
           <TableHeader columns={columns} />
           <TableBody rows={rows} />
         </table>
+      </div>
+      {/* Paginación */}
+      <div className="flex justify-center items-center gap-4 mt-4">
+        <button
+          className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
+          onClick={() => setPaginaActual((p) => Math.max(1, p - 1))}
+          disabled={paginaActual === 1}
+        >
+          Anterior
+        </button>
+
+        <span className="text-sm">Página {paginaActual} de {totalPaginas}</span>
+
+        <button
+          className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
+          onClick={() => setPaginaActual((p) => Math.min(totalPaginas, p + 1))}
+          disabled={paginaActual === totalPaginas}
+        >
+          Siguiente
+        </button>
       </div>
 
       { usuarioSeleccionado && (usuarioSeleccionado.activo ?
