@@ -1,13 +1,50 @@
 import InputIconLabelEdit from "@/components/InputIconLabelEdit"
 import SelectIconLabel from "@/components/SelectIconLabel"
-import { Calendar, MapPin } from "lucide-react"
+import { Calendar } from "lucide-react"
+import { FaBuilding } from "react-icons/fa";
+import Button from "@/components/Button";
+import axios from "axios";
 
 interface Props {
-  data: any
-  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void
+  data: {
+    fechaInicio: string;
+    fechaFin: string;
+    local: string;
+    descripcion: string;
+  };
+  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
 }
 
-function ReporteServicioForm({ data, onChange }: Props) {
+export default function ReporteServicioForm({ data, onChange }: Props) {
+  const handleGenerarReporte = async () => {
+    try {
+      const response = await axios.post("http://localhost:8080/api/reportes/servicios", {
+        descripcion: data.descripcion,
+        fechaInicio: data.fechaInicio,
+        fechaFin: data.fechaFin,
+        local: data.local
+      }, {
+        auth: {
+          username: "admin",
+          password: "admin123"
+        },
+        responseType: "blob"
+      });
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "reporte-servicios.pdf");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+    } catch (error) {
+      console.error("Error al generar reporte de servicios:", error);
+      alert("Hubo un error al generar el reporte.");
+    }
+  };
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <InputIconLabelEdit
@@ -21,13 +58,16 @@ function ReporteServicioForm({ data, onChange }: Props) {
         value={data.fechaFin} onChange={onChange}
       />
       <SelectIconLabel
-        icon={<MapPin className="w-5 h-5" />} htmlFor="idLocal"
+        icon={<FaBuilding className="w-5 h-5" />} htmlFor="local"
         label="Locales"
-        value={data.idLocal} onChange={onChange}
-        options={[{ value: "", label: "-- select one option --" }]}
+        value={data.local} onChange={onChange}
+        options={[{ value: "", label: "Elige una opcion" }]}
       />
+      <div className="col-span-2 flex justify-end mt-4">
+        <Button type="button" onClick={handleGenerarReporte}>
+          Generar reporte
+        </Button>
+      </div>
     </div>
   )
 }
-
-export default ReporteServicioForm

@@ -2,31 +2,34 @@ import { useState } from "react";
 import ReporteUsuarioForm from "@/components/admin/reportes/ReporteUsuarioForm";
 import ReporteServicioForm from "@/components/admin/reportes/ReporteServicioForm";
 import ReporteLocalForm from "@/components/admin/reportes/ReporteLocalForm";
-
-const [formData, setFormData] = useState({
-  descripcion: "",
-  fechaInicio: "",
-  fechaFin: "",
-  correo: "",
-  servicio: "",
-  local: ""
-});
-
-const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-  const { name, value } = e.target;
-  setFormData(prev => ({ ...prev, [name]: value }));
-};
+import { FileText } from "lucide-react";
+import InputIconLabelEdit from "@/components/InputIconLabelEdit";
+import InputLabel from "@/components/InputLabel";
 
 export default function ReportePanel() {
   const [tabActivo, setTabActivo] = useState("usuarios");
+  const [descripcion, setDescripcion] = useState("");
+  const readOnly = false; 
+
+  const [formData, setFormData] = useState({
+    fechaInicio: "",
+    fechaFin: "",
+    servicio: "",
+    local: ""
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
 
   return (
     <div className="w-full px-10 py-6">
-      <h1 className="text-3xl font-bold mb-2">Panel de Reportes</h1>
-      <p className="text-md text-gray-600 mb-6">
-        Seleccione el tema del reporte a generar
-      </p>
-
+      <div className="flex flex-col gap-16 mt-4 mb-12">
+            <div className="w-full h-48 rounded-md flex flex-col items-center justify-center cursor-pointer">
+                <InputLabel type="text" placeholder="Ingrese la descripción" htmlFor="text" label="Descripción" value={descripcion} disabled={readOnly} className="w-full h-full" onChange={(e) => setDescripcion(e.target.value)}/>
+            </div>
+        </div>
       {/* Tabs */}
       <div className="border-b mb-6">
         <nav className="flex space-x-4">
@@ -51,16 +54,16 @@ export default function ReportePanel() {
         </nav>
       </div>
 
-      /* Contenido de tab */
-        {tabActivo === "usuarios" && (
-            <ReporteUsuarioForm data={formData} onChange={handleChange} />
-        )}
-        {tabActivo === "servicios" && (
-            <ReporteServicioForm data={formData} onChange={handleChange} />
-        )}
-        {tabActivo === "locales" && (
-            <ReporteLocalForm data={formData} onChange={handleChange} />
-        )}
+      {/* Contenido de tab */}
+      {tabActivo === "usuarios" && (
+        <ReporteUsuarioForm data={formData} onChange={handleChange} />
+      )}
+      {tabActivo === "servicios" && (
+        <ReporteServicioForm data={formData} onChange={handleChange} />
+      )}
+      {tabActivo === "locales" && (
+        <ReporteLocalForm data={formData} onChange={handleChange} />
+      )}
     </div>
   );
 }
