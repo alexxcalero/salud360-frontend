@@ -107,6 +107,13 @@ function EditarUsuario(){
       setShowModalValidacion(true);
       return false;
     }
+
+    const fechaIngresada = new Date(fechaNacimiento);
+    const hoy = new Date();
+    if (isNaN(fechaIngresada.getTime()) || fechaIngresada >= hoy) {
+      setMensajeValidacion("La fecha de nacimiento debe ser válida y anterior a hoy.");
+      return false;
+    }
     return true;
   };   
 
