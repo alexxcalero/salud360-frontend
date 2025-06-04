@@ -126,7 +126,7 @@ function CalendarioSemanal<Data>({
                         </div>
                       ) : (
                         <>
-                          {futuro && (
+                          {futuro && blankTileAction && (
                             <Tooltip key={index}>
                               <TooltipTrigger asChild>
                                 <button
