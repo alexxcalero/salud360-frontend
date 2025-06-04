@@ -3,7 +3,15 @@ import Input from "@/components/input/Input";
 import PasswordInput from "@/components/input/PasswordInput";
 import { AuthContext } from "@/hooks/AuthContext";
 import { useUsuario } from "@/hooks/useUsuario";
-import { Calendar, ChevronDown, Mail, MapPin, Pen, Phone, User } from "lucide-react";
+import {
+  Calendar,
+  ChevronDown,
+  Mail,
+  MapPin,
+  Pen,
+  Phone,
+  User,
+} from "lucide-react";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom"; // Asegúrate de tener esto bien configurado
 import axios from "axios";
@@ -11,9 +19,8 @@ import { useEffect, useState } from "react";
 import SelectLabel from "@/components/SelectLabel";
 
 function InicioPerfi() {
-  
-  const {usuario, logout, loading} = useContext(AuthContext)
-    
+  const { usuario, logout, loading } = useContext(AuthContext);
+
   if (loading || !usuario) return null;
 
   const {
@@ -26,14 +33,17 @@ function InicioPerfi() {
     direccion,
     fotoPerfil,
     numeroDocumento,
-    fechaCreacion: rawFechaCreacion //Lo renombro así para formatearlo
+    fechaCreacion: rawFechaCreacion, //Lo renombro así para formatearlo
   } = usuario;
 
-  const fechaCreacion = new Date(usuario.fechaCreacion).toLocaleDateString("es-PE", {
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
-    });
+  const fechaCreacion = new Date(usuario.fechaCreacion).toLocaleDateString(
+    "es-PE",
+    {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    }
+  );
 
   const [showModalLogout, setShowModalLogout] = useState(false);
   const navigate = useNavigate();
@@ -48,28 +58,29 @@ function InicioPerfi() {
   const [telefonoInput, setTelefonoInput] = useState(telefono ?? "");
 
   const fetchTipoDocumentos = () => {
-    axios.get("http://localhost:8080/api/admin/tiposDocumentos", {
-      auth: {
-        username: "admin",
-        password: "admin123"
-      }
-    })
-      .then(res => {
+    axios
+      .get("http://localhost:8080/api/admin/tiposDocumentos", {
+        auth: {
+          username: "admin",
+          password: "admin123",
+        },
+      })
+      .then((res) => {
         console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
-        
-        const opciones = res.data.map((tipoDocX: any) => ({
-            value: tipoDocX.idTipoDocumento.toString(),
-            content: tipoDocX.nombre
-        }))
 
-        setTipoDocumentos(opciones)
+        const opciones = res.data.map((tipoDocX: any) => ({
+          value: tipoDocX.idTipoDocumento.toString(),
+          content: tipoDocX.nombre,
+        }));
+
+        setTipoDocumentos(opciones);
         console.log("Tipo Documentos:", opciones);
       })
-      .catch(err => console.error("Error cargando tipo documentos", err));
-  }
+      .catch((err) => console.error("Error cargando tipo documentos", err));
+  };
 
   useEffect(() => {
-      fetchTipoDocumentos();
+    fetchTipoDocumentos();
   }, []);
 
   useEffect(() => {
@@ -118,14 +129,17 @@ function InicioPerfi() {
         <section className="flex gap-4 mb-8">
           <figure className="relative group">
             {fotoPerfil ? (
-                <img
-                    src={fotoPerfil}
-                    alt="Foto de perfil"
-                    className="h-[72px] aspect-1/1 rounded-full"
-                />
-                ):
-                <User color="black" className="h-[72px] aspect-1/1 border-[#2A86FF] rounded-full"/>
-                }
+              <img
+                src={fotoPerfil}
+                alt="Foto de perfil"
+                className="h-[72px] aspect-1/1 rounded-full"
+              />
+            ) : (
+              <User
+                color="black"
+                className="h-[72px] aspect-1/1 border-[#2A86FF] rounded-full"
+              />
+            )}
             <div className="opacity-0 group-hover:opacity-100 absolute top-0 left-0 w-full h-full bg-black/40 rounded-full backdrop-blur-xs flex justify-center items-center transition-all ease-out duration-100">
               <Pen color="white" />
             </div>
@@ -215,7 +229,6 @@ function InicioPerfi() {
             defaultValue={numeroDocumento}
             placeholder="Ingrese su número de documento"
           />
-
         </section>
         <hr />
         <section className="mt-8 flex flex-col gap-4">

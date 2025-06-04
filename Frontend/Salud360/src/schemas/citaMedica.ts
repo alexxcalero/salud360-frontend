@@ -39,5 +39,12 @@ export const extendedCitaMedicaSchema = citaMedicaSchema.extend({
   servicio: z.lazy(() => servicioSchema.optional()),
 });
 
+export const citaMedicaVistaUsuarioSchema = citaMedicaSchema.extend({
+  medico: z.lazy(() => medicoSchema.optional()),
+});
+
 export type citaMedicaType = z.infer<typeof citaMedicaSchema>;
 export type extenedCitaMedicaType = z.infer<typeof extendedCitaMedicaSchema>;
+export type citaMedicaVistaUsuarioType = z.infer<
+  typeof citaMedicaVistaUsuarioSchema
+>;
