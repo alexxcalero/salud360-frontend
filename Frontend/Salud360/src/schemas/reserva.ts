@@ -9,9 +9,9 @@ export const reservaSchema = z.object({
   estado: z.string(),
   fechaReserva: z.string().transform((v: string) => DateTime.fromISO(v)),
   fechaCancelacion: z.string().transform((v: string) => DateTime.fromISO(v)),
-  cliente: clienteSchema,
-  clase: claseSchema.optional(),
-  citaMedica: citaMedicaSchema.optional(),
+  cliente: z.lazy(() => clienteSchema),
+  clase: z.lazy(() => claseSchema.optional().nullable()),
+  citaMedica: z.lazy(() => citaMedicaSchema.optional().nullable()),
 });
 
 export type reservaType = z.infer<typeof reservaSchema>;

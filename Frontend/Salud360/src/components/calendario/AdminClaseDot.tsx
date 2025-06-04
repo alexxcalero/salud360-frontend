@@ -3,23 +3,19 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
-import { extenedCitaMedicaType } from "@/schemas/citaMedica";
 import Button from "../Button";
 import { Pencil, Trash } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useInternalModals } from "@/hooks/useInternalModals";
 import { useDialog } from "@/hooks/dialogContext";
+import { claseDTOType } from "@/schemas/clase";
 import {
-  deleteCitaMedicaAPI,
-  reactivarCitaMedicaAPI,
-} from "@/services/citasMedicasAdmin.service";
-import ActualizarCitaModalForm from "./modals/actualizarCitaModalForm";
+  deleteClaseAPI,
+  reactivarClaseAPI,
+} from "@/services/clasesAdmin.service";
+import ActualizarClaseModalForm from "./modals/actualizarClaseForm";
 
-const AdminCitaMedicaDot = ({
-  citaMedica,
-}: {
-  citaMedica: extenedCitaMedicaType;
-}) => {
+const AdminClaseDot = ({ clase }: { clase: claseDTOType }) => {
   const { callAlertDialog, callErrorDialog, callSuccessDialog } = useDialog();
   const { activeModal, setActiveModal, reload } = useInternalModals();
   return (
@@ -29,7 +25,7 @@ const AdminCitaMedicaDot = ({
           <div
             className={cn(
               "bg-blue-500 h-4 w-4 rounded-full",
-              !citaMedica.activo && "bg-neutral-500"
+              !clase.activo && "bg-neutral-500"
             )}
           ></div>
         </HoverCardTrigger>
@@ -38,24 +34,22 @@ const AdminCitaMedicaDot = ({
           <div>
             <p>Detalles:</p>
             <ul className="list-disc pl-6">
-              {citaMedica.estado && <li>Estado: {citaMedica.estado}</li>}
+              {clase.estado && <li>Estado: {clase.estado}</li>}
+              <li>Local: {clase.nombre} </li>
+              <li>Descripcion: {clase.descripcion}</li>
               <li>
-                Dr(a): {citaMedica.medico?.nombres}{" "}
-                {citaMedica.medico?.apellidos}
+                Ubicacion: {clase.local?.nombre} ({clase.local?.direccion})
               </li>
-              <li>Especialidad: {citaMedica.medico?.especialidad}</li>
+              <li>Fecha: {clase.fecha?.toFormat("DDDD", { locale: "es" })}</li>
               <li>
-                Fecha: {citaMedica.fecha?.toFormat("DDDD", { locale: "es" })}
-              </li>
-              <li>
-                Hora: {citaMedica.horaInicio?.toFormat("t", { locale: "es" })} -{" "}
-                {citaMedica.horaFin?.toFormat("t", { locale: "es" })}
+                Hora: {clase.horaInicio?.toFormat("t", { locale: "es" })} -{" "}
+                {clase.horaFin?.toFormat("t", { locale: "es" })}
               </li>
             </ul>
           </div>
           <div className="flex gap-4 justify-end mt-3">
             <div className="flex gap-4 mb-2">
-              {citaMedica.activo && (
+              {clase.activo && (
                 <>
                   <Button onClick={() => setActiveModal?.("actualizarCita")}>
                     <Pencil size={16} color="white" /> Editar
@@ -67,10 +61,8 @@ const AdminCitaMedicaDot = ({
                       callAlertDialog({
                         title: "¿Estàs seguro que quieres eliminar esto?",
                         onConfirm: async () => {
-                          if (!citaMedica.idCitaMedica) return false;
-                          const response = await deleteCitaMedicaAPI(
-                            citaMedica.idCitaMedica
-                          );
+                          if (!clase.idClase) return false;
+                          const response = await deleteClaseAPI(clase.idClase);
                           if (response) {
                             callSuccessDialog({
                               title: "La cita fue eliminada con exito",
@@ -90,7 +82,7 @@ const AdminCitaMedicaDot = ({
                   </Button>
                 </>
               )}
-              {!citaMedica.activo && (
+              {!clase.activo && (
                 <div className="p-2">
                   <Button
                     onClick={() =>
@@ -98,9 +90,9 @@ const AdminCitaMedicaDot = ({
                         title: "¿Estàs seguro que quieres reactivar esto?",
                         buttonLabel: "Restaurar",
                         onConfirm: async () => {
-                          if (!citaMedica.idCitaMedica) return false;
-                          const response = await reactivarCitaMedicaAPI(
-                            citaMedica.idCitaMedica
+                          if (!clase.idClase) return false;
+                          const response = await reactivarClaseAPI(
+                            clase.idClase
                           );
                           if (response) {
                             callSuccessDialog({
@@ -125,17 +117,17 @@ const AdminCitaMedicaDot = ({
           </div>
         </HoverCardContent>
       </HoverCard>
-      {citaMedica.activo && (
-        <ActualizarCitaModalForm
+      {clase.activo && (
+        <ActualizarClaseModalForm
           open={activeModal === "actualizarCita"}
           setOpen={(b) =>
             b ? setActiveModal?.("actualizarCita") : setActiveModal?.("")
           }
-          citaMedica={citaMedica}
+          clase={clase}
         />
       )}
     </>
   );
 };
 
-export default AdminCitaMedicaDot;
+export default AdminClaseDot;

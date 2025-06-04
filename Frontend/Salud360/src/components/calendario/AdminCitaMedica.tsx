@@ -42,88 +42,88 @@ export function AdminCitaMedicaCard({
             </span>
           </div>
         </TooltipTrigger>
-        {citaMedica.activo && (
-          <TooltipContent className="w-max">
-            <div className="p-2">
-              <div className="flex gap-4 mb-2">
-                <Button onClick={() => setActiveModal?.("actualizarCita")}>
-                  <Pencil size={16} color="white" /> Editar
-                </Button>
+        <TooltipContent className="w-max">
+          <div className="p-2">
+            <div className="flex gap-4 mb-2">
+              {citaMedica.activo && (
+                <>
+                  <Button onClick={() => setActiveModal?.("actualizarCita")}>
+                    <Pencil size={16} color="white" /> Editar
+                  </Button>
 
-                <Button
-                  variant="danger"
-                  onClick={() =>
-                    callAlertDialog({
-                      title: "¿Estàs seguro que quieres eliminar esto?",
-                      onConfirm: async () => {
-                        if (!citaMedica.idCitaMedica) return false;
-                        const response = await deleteCitaMedicaAPI(
-                          citaMedica.idCitaMedica
-                        );
-                        if (response) {
-                          callSuccessDialog({
-                            title: "La cita fue eliminada con exito",
+                  <Button
+                    variant="danger"
+                    onClick={() =>
+                      callAlertDialog({
+                        title: "¿Estàs seguro que quieres eliminar esto?",
+                        onConfirm: async () => {
+                          if (!citaMedica.idCitaMedica) return false;
+                          const response = await deleteCitaMedicaAPI(
+                            citaMedica.idCitaMedica
+                          );
+                          if (response) {
+                            callSuccessDialog({
+                              title: "La cita fue eliminada con exito",
+                            });
+                            reload();
+                            return false;
+                          }
+                          callErrorDialog({
+                            title: "No se pudo eliminar la cita",
                           });
-                          reload();
-                          return false;
-                        }
-                        callErrorDialog({
-                          title: "No se pudo eliminar la cita",
-                        });
-                        return true;
-                      },
-                    })
-                  }
-                >
-                  <Trash size={16} color="white" /> Eliminar
-                </Button>
-              </div>
-              <p>
-                <span className="text-lg">
-                  {citaMedica.fecha?.toFormat("DDDD", { locale: "es" })}
-                </span>
-                <br />
-                {citaMedica.horaInicio?.toFormat("TTTT", {
-                  locale: "es",
-                })}{" "}
-                - {citaMedica.horaFin?.toFormat("TTTT", { locale: "es" })}
-              </p>
+                          return true;
+                        },
+                      })
+                    }
+                  >
+                    <Trash size={16} color="white" /> Eliminar
+                  </Button>
+                </>
+              )}
+              {!citaMedica.activo && (
+                <div className="p-2">
+                  <Button
+                    onClick={() =>
+                      callAlertDialog({
+                        title: "¿Estàs seguro que quieres reactivar esto?",
+                        buttonLabel: "Restaurar",
+                        onConfirm: async () => {
+                          if (!citaMedica.idCitaMedica) return false;
+                          const response = await reactivarCitaMedicaAPI(
+                            citaMedica.idCitaMedica
+                          );
+                          if (response) {
+                            callSuccessDialog({
+                              title: "La cita fue eliminada con exito",
+                            });
+                            reload();
+                            return false;
+                          }
+                          callErrorDialog({
+                            title: "No se pudo eliminar la cita",
+                          });
+                          return true;
+                        },
+                      })
+                    }
+                  >
+                    Reactivar
+                  </Button>
+                </div>
+              )}
             </div>
-          </TooltipContent>
-        )}
-        {!citaMedica.activo && (
-          <TooltipContent className="w-max">
-            <div className="p-2">
-              <Button
-                onClick={() =>
-                  callAlertDialog({
-                    title: "¿Estàs seguro que quieres reactivar esto?",
-                    buttonLabel: "Restaurar",
-                    onConfirm: async () => {
-                      if (!citaMedica.idCitaMedica) return false;
-                      const response = await reactivarCitaMedicaAPI(
-                        citaMedica.idCitaMedica
-                      );
-                      if (response) {
-                        callSuccessDialog({
-                          title: "La cita fue eliminada con exito",
-                        });
-                        reload();
-                        return false;
-                      }
-                      callErrorDialog({
-                        title: "No se pudo eliminar la cita",
-                      });
-                      return true;
-                    },
-                  })
-                }
-              >
-                Reactivar
-              </Button>
-            </div>
-          </TooltipContent>
-        )}
+            <p>
+              <span className="text-lg">
+                {citaMedica.fecha?.toFormat("DDDD", { locale: "es" })}
+              </span>
+              <br />
+              {citaMedica.horaInicio?.toFormat("TTTT", {
+                locale: "es",
+              })}{" "}
+              - {citaMedica.horaFin?.toFormat("TTTT", { locale: "es" })}
+            </p>
+          </div>
+        </TooltipContent>
       </Tooltip>
       {citaMedica.activo && (
         <ActualizarCitaModalForm

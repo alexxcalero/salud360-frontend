@@ -12,36 +12,36 @@ import { useToasts } from "@/hooks/ToastContext";
 import { DateTime } from "luxon";
 import { FormEvent, useState } from "react";
 import Button from "@/components/Button";
+import { putCitaMedicaAPI } from "@/services/citasMedicasAdmin.service";
 import { useFetchHandler } from "@/hooks/useFetchHandler";
 import { useInternalModals } from "@/hooks/useInternalModals";
-import { localType } from "@/schemas/local";
-import { postClaseAPI } from "@/services/clasesAdmin.service";
+import { claseDTOType } from "@/schemas/clase";
 
-const RegistrarClaseModalForm = ({
+const ActualizarClaseModalForm = ({
   open,
   setOpen,
   onCreate,
-  local,
-  date,
+  clase,
 }: {
   open: boolean;
   setOpen: (_: boolean) => void;
-  local: localType;
-  date: DateTime;
+  clase: claseDTOType;
   onCreate?: () => void;
 }) => {
   const { reload } = useInternalModals();
+
+  const [horaInicio, setHoraInicio] = useState(clase.horaInicio?.toFormat("T"));
+  const [horaFin, setHoraFin] = useState(clase.horaFin?.toFormat("T"));
+
+  const [dateInput, setDateInput] = useState<DateTime>(
+    clase.fecha ?? DateTime.now()
+  );
 
   const [nombre, setNombre] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const [capacidad, setCapacidad] = useState("");
 
-  const [horaInicio, setHoraInicio] = useState(date?.toFormat("T"));
-  const [horaFin, setHoraFin] = useState(date?.plus({ hour: 1 }).toFormat("T"));
-
-  const [dateInput, setDateInput] = useState<DateTime>(date ?? DateTime.now());
-
-  const [estadoInput, setEstadoInput] = useState<string>("");
+  const [estadoInput, setEstadoInput] = useState<string>(clase.estado ?? "");
 
   const { fetch } = useFetchHandler();
   const { createToast } = useToasts();
@@ -50,18 +50,25 @@ const RegistrarClaseModalForm = ({
     e.preventDefault();
 
     const uploadData = {
+      idClase: clase.idClase,
       nombre,
       descripcion,
       capacidad,
+      cantAsistentes: clase.cantAsistentes,
       horaInicio: horaInicio,
       horaFin: horaFin,
+      fechaCreacion: clase.fechaCreacion,
+      fechaDesactivacion: clase.fechaDesactivacion,
+      activo: clase.activo,
       fecha: dateInput.toISODate(),
       estado: estadoInput,
-      local,
+      local: clase.local,
+      cliente: clase.cliente,
+      reservas: clase.reservas,
     };
 
     fetch(async () => {
-      await postClaseAPI(uploadData);
+      await putCitaMedicaAPI(uploadData);
       setOpen(false);
       onCreate?.();
       createToast("success", { title: "Cita actualizada correctamente" });
@@ -73,8 +80,10 @@ const RegistrarClaseModalForm = ({
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <form action="" onSubmit={submitHanlder}>
-            <DialogTitle>Registrar clase</DialogTitle>
+            <DialogTitle>Actualizar cita mèdica</DialogTitle>
             <div className="my-4 flex flex-col gap-4">
+              <p>Para: {clase.nombre}</p>
+
               <Input
                 name="nombre"
                 placeholder="Ingrese el nombre"
@@ -155,4 +164,4 @@ const RegistrarClaseModalForm = ({
   );
 };
 
-export default RegistrarClaseModalForm;
+export default ActualizarClaseModalForm;

@@ -5,6 +5,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
 
 interface Props<Data> {
   inicioSemana: DateTime;
@@ -92,6 +93,7 @@ function CalendarioSemanal<Data>({
                 const virtualElems = data.filter((elem) =>
                   metadata.equalFunc(elem, dia)
                 );
+                const futuro = dia >= DateTime.now();
                 // const virtualClases = clases.filter(
                 //   (elem) =>
                 //     elem.fecha.hasSame(dia, "day") &&
@@ -105,7 +107,12 @@ function CalendarioSemanal<Data>({
                     key={index}
                     className="text-center group border-1 border-neutral-300"
                   >
-                    <div className="max-w-full max-h-full relative">
+                    <div
+                      className={cn(
+                        "w-full h-full relative",
+                        !futuro && "bg-neutral-50"
+                      )}
+                    >
                       {virtualElems.length !== 0 ? (
                         <div className="flex max-w-full max-h-full p-2 relative">
                           {virtualElems.map((d, index) => (
@@ -118,19 +125,23 @@ function CalendarioSemanal<Data>({
                           ))}
                         </div>
                       ) : (
-                        <Tooltip key={index}>
-                          <TooltipTrigger asChild>
-                            <button
-                              className="w-full h-full"
-                              onClick={() => {
-                                blankTileAction?.(dia);
-                              }}
-                            ></button>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>Haz click para registrar cita</p>
-                          </TooltipContent>
-                        </Tooltip>
+                        <>
+                          {futuro && (
+                            <Tooltip key={index}>
+                              <TooltipTrigger asChild>
+                                <button
+                                  className="w-full h-full"
+                                  onClick={() => {
+                                    blankTileAction?.(dia);
+                                  }}
+                                ></button>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>Haz click para registrar</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          )}
+                        </>
                       )}
                     </div>
                   </td>

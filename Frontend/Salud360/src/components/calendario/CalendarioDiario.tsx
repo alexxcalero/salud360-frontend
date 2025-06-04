@@ -1,6 +1,7 @@
 import { DateTime } from "luxon";
 import { ReactNode, useMemo } from "react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { cn } from "@/lib/utils";
 
 interface Props<Data> {
   dia: DateTime;
@@ -59,33 +60,50 @@ function CalendarioDiario<Data>({
             const virtual = data.filter((elem) =>
               metadata.equalFunc(elem, hora)
             );
+            const futuro = hora >= DateTime.now();
             return (
               <tr key={index} className="grid grid-cols-subgrid col-span-full">
                 <td className="border-1 border-neutral-300 text-right text-label-medium flex items-end justify-end pr-1">
                   {hora.toFormat("h a")}
                 </td>
                 <td className="text-center group border-1 border-neutral-300">
-                  {virtual.length !== 0 ? (
-                    <div className="p-2 max-w-full max-h-full flex gap-1">
-                      {virtual.map((d, index) => (
-                        <div key={index}>{metadata.card(d)}</div>
-                      ))}
-                    </div>
-                  ) : (
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <button
-                          className="w-full h-full"
-                          onClick={() => {
-                            blankTileAction?.(hora);
-                          }}
-                        ></button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Haz click para registrar cita</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  )}
+                  <div
+                    className={cn(
+                      "w-full h-full relative",
+                      !futuro && "bg-neutral-50"
+                    )}
+                  >
+                    {virtual.length !== 0 ? (
+                      <div className="flex max-w-full max-h-full p-2 relative">
+                        {virtual.map((d, index) => (
+                          <div
+                            key={index}
+                            className="absolute top-2 left-2 right-2 bottom-2"
+                          >
+                            {metadata.card(d)}
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <>
+                        {futuro && (
+                          <Tooltip key={index}>
+                            <TooltipTrigger asChild>
+                              <button
+                                className="w-full h-full"
+                                onClick={() => {
+                                  blankTileAction?.(dia);
+                                }}
+                              ></button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Haz click para registrar</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        )}
+                      </>
+                    )}
+                  </div>
                 </td>
                 <td className="border-1 border-neutral-300"></td>
               </tr>
