@@ -137,10 +137,12 @@ function Inicio(){
                     <h1>Accesos Rápidos</h1>
                 </div>
                 
-                <div className="w-full flex flex-row justify-between p-8 border border-gray-300">
+                <div className="w-full flex flex-wrap gap-y-2 justify-center p-8 border border-gray-300">
                     {/*<AccesoRapido icon={<Pencil className="text-black"/>} title="Mis membresías" subtitle={`${cantComunidades} activas`}/>*/}
                     {accesosRapidos.map(([Icon, title, subtitle, route]: any) => (
-                        <AccesoRapido icon={<Icon className="w-16 h-16 text-black "/>} title={title} subtitle={subtitle} route={route}/>
+                        <div className="m-auto">
+                            <AccesoRapido icon={<Icon className="w-16 h-16 text-black "/>} title={title} subtitle={subtitle} route={route}/>
+                        </div>
                     ))}
                 </div>
             </div>
