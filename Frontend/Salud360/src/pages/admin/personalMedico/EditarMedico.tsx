@@ -3,11 +3,12 @@ import axios from "axios";
 import { useParams } from "react-router";
 import usePersonalMedicoForm from "@/hooks/usePersonalMedicoForm";
 import PersonalMedicoForms from "@/components/admin/personalMedico/PersonalMedicoForms";
+import { useNavigate } from "react-router";
 
 function EditarMedico() {
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
-
+  const navigate = useNavigate();
   const {
     nombres,
     setNombres,
@@ -63,7 +64,7 @@ function EditarMedico() {
       const sexo = genero;
 
       const response = await axios.put(
-        `http://localhost:8080/api/medicos/${id}`,
+        `http://localhost:8080/api/admin/medicos/${id}`,
         {
           nombres,
           apellidos,
@@ -86,11 +87,13 @@ function EditarMedico() {
         }
       );
 
-      console.log("Médico editado:", response.data);
-      alert("Médico editado exitosamente");
+      navigate("/admin/personalMedico/", {
+        state: { updated: true }
+      });
+
     } catch (err) {
-      console.error("Error al crear usuario:", err);
-      alert("Hubo un error al crear el usuario");
+      console.error("Error al editar el medico:", err);
+      alert("Hubo un error al editar el medico");
     }
   };
 
