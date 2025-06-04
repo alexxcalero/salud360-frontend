@@ -10,7 +10,7 @@ import {
 import { useDialog } from "@/hooks/dialogContext";
 import { useLoading } from "@/hooks/LoadingContext";
 import { useToasts } from "@/hooks/ToastContext";
-import { citaMedicaType } from "@/schemas/citaMedica";
+import { citaMedicaSchema, citaMedicaType } from "@/schemas/citaMedica";
 import { reservarCitaMedica } from "@/services/calendarioUsuario.service";
 import { FormEvent } from "react";
 
@@ -32,6 +32,7 @@ const AgendarCitaModalForm = ({
     const reservarEvent = async () => {
       setLoading(true);
       try {
+        if (!idCitaMedica) throw new Error("Id no deberìa ser indefinido");
         const d = await reservarCitaMedica(idCitaMedica);
         if (d) {
           callSuccessDialog({ title: "Cita agendada correctamente" });

@@ -14,10 +14,15 @@ interface ModalInterface {
   description?: string;
 }
 
+interface AlertModalInterface extends ModalInterface {
+  onConfirm?: () => Promise<boolean>;
+  buttonLabel?: string;
+}
+
 interface DialogContext {
   callSuccessDialog: (_: ModalInterface) => void;
   callErrorDialog: (_: ModalInterface) => void;
-  callAlertDialog: (_: ModalInterface) => void;
+  callAlertDialog: (_: AlertModalInterface) => void;
 }
 
 const dialogContext = createContext<DialogContext | undefined>(undefined);
@@ -42,9 +47,10 @@ export function DialogProvider({ children }: { children: ReactNode }) {
     title: "",
     description: "",
   });
-  const [dataAlert, setDataAlert] = useState<ModalInterface>({
+  const [dataAlert, setDataAlert] = useState<AlertModalInterface>({
     title: "",
     description: "",
+    onConfirm: undefined,
   });
 
   const callSuccessDialog = useCallback((d: ModalInterface) => {
@@ -55,7 +61,7 @@ export function DialogProvider({ children }: { children: ReactNode }) {
     setDataError(d);
     setOpenError(true);
   }, []);
-  const callAlertDialog = useCallback((d: ModalInterface) => {
+  const callAlertDialog = useCallback((d: AlertModalInterface) => {
     setDataAlert(d);
     setOpenAlert(true);
   }, []);

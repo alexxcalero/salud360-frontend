@@ -16,9 +16,9 @@ export const extendedServicioSchema = servicioSchema.extend({
   activo: z.boolean(),
   fechaCreacion: z.string().transform((v: string) => DateTime.fromISO(v)),
   fechaDesactivacion: z.string().transform((v: string) => DateTime.fromISO(v)),
-  comunidades: comunidadSchema.optional(),
-  locales: localSchema.optional(),
-  citas: citaMedicaSchema.optional(),
+  comunidades: z.lazy(() => comunidadSchema.optional()),
+  locales: z.lazy(() => localSchema.optional()),
+  citas: z.lazy(() => citaMedicaSchema.optional()),
 });
 
 export type servicioType = z.infer<typeof servicioSchema>;

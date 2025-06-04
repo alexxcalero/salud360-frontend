@@ -71,7 +71,6 @@ import CalendarioYReservas from "./pages/usuario/CalendarioYReservas";
 import CitasMedicas from "./pages/usuario/CitasMedicas";
 import HistorialMedico from "./pages/usuario/HistorialMedico";
 import ClasesPage from "./pages/admin/clases/ClasesPage";
-import CitasMedicasPage from "./pages/admin/citasMedicas/CitasMedicasPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { DialogProvider } from "./hooks/dialogContext";
 import CrearServicio from "./pages/admin/servicios/CrearServicio";
@@ -80,7 +79,7 @@ import CrearLocal from "./pages/admin/locales/CrearLocal";
 import DetalleLocal from "./pages/admin/locales/DetalleLocal";
 import EditarLocal from "./pages/admin/locales/EditarLocal";
 import EditarServicio from "./pages/admin/servicios/EditarServicio";
-import RegistrarCitaMedicasPage from "./pages/admin/citasMedicas/RegistrarCitaMedicasPage";
+import CitasMedicasPage from "./pages/admin/citasMedicas/CitasMedicasPage";
 
 const CLIENT_ID =
   "442103352631-urj3v36db8bhki2cg4vu6c2q404dkko7.apps.googleusercontent.com";
@@ -226,7 +225,6 @@ createRoot(document.getElementById("root")!).render(
               </Route>
               <Route path="citasMedicas">
                 <Route index element={<CitasMedicasPage />} />
-                <Route path="crear" element={<RegistrarCitaMedicasPage />} />
               </Route>
             </Route>
             <Route path="/example" element={<Example />} />

@@ -15,8 +15,11 @@ import {
 import { DateTime } from "luxon";
 import { InputProps } from "./Input";
 
-interface CalendarInputProps extends Omit<InputProps, "defaultValue"> {
-  defaultValue: DateTime;
+interface CalendarInputProps
+  extends Omit<Omit<Omit<InputProps, "setValue">, "value">, "defaultValue"> {
+  defaultValue?: DateTime;
+  value?: DateTime;
+  setValue?: (_: DateTime) => void;
 }
 
 export function CalendarInput({
@@ -26,8 +29,13 @@ export function CalendarInput({
   className,
   disabled,
   required,
+  value,
+  setValue,
 }: CalendarInputProps) {
-  const [date, setDate] = React.useState<DateTime>(defaultValue);
+  const [date, setDate] =
+    value !== undefined && setValue !== undefined
+      ? [value, setValue]
+      : React.useState<DateTime>(defaultValue ?? DateTime.now());
 
   return (
     <div>

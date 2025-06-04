@@ -1,22 +1,32 @@
-import { citaMedicaType } from "@/schemas/citaMedica";
 import { DateTime } from "luxon";
-import { claseType } from "@/schemas/clase";
-import { CitaMedicaCard } from "./CitaMedicoCard";
-import { ClaseCard } from "./ClaseCard";
+import { ReactNode, useMemo } from "react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
-interface Props {
+interface Props<Data> {
   dia: DateTime;
   blankTileAction?: (_: DateTime) => void;
-  citasMedicas?: citaMedicaType[];
-  clases?: claseType[];
+  metadata: {
+    card: (_: Data) => ReactNode;
+    equalFunc: (_: Data, _2: DateTime) => boolean;
+  };
+  data: Data[];
 }
 
-const CalendarioDiario = ({
+function CalendarioDiario<Data>({
   dia,
   blankTileAction,
-  citasMedicas = new Array(),
-  clases = new Array(),
-}: Props) => {
+  metadata,
+  data,
+}: Props<Data>) {
+  const inicioDia = DateTime.local().startOf("day"); // o cualquier otro día específico
+  const horasDelDia = useMemo<DateTime[]>(() => {
+    const horas = [];
+    for (let h = 0; h < 24; h++) {
+      horas.push(inicioDia.plus({ hours: h }));
+    }
+    return horas;
+  }, []);
+
   return (
     <>
       <table className="w-full grid grid-cols-[50px_1fr_50px] border-collapse">
@@ -45,51 +55,36 @@ const CalendarioDiario = ({
             <td className="border-1 border-neutral-300 "></td>
             <td className="border-1 border-neutral-300 "></td>
           </tr>
-          {Array.from({ length: 24 }, (_, hora) => {
-            const virtualCitasMedicas = citasMedicas.filter(
-              (elem) =>
-                elem.fecha.hasSame(dia, "day") &&
-                elem.fecha.hasSame(dia, "month") &&
-                elem.fecha.hasSame(dia, "year") &&
-                elem.horaInicio.hour === hora
-            );
-            const virtualClases = clases.filter(
-              (elem) =>
-                elem.fecha.hasSame(dia, "day") &&
-                elem.fecha.hasSame(dia, "month") &&
-                elem.fecha.hasSame(dia, "year") &&
-                elem.horaInicio.hour <= hora &&
-                hora <= elem.horaFin.hour
+          {horasDelDia.map((hora, index) => {
+            const virtual = data.filter((elem) =>
+              metadata.equalFunc(elem, hora)
             );
             return (
-              <tr key={hora} className="grid grid-cols-subgrid col-span-full">
+              <tr key={index} className="grid grid-cols-subgrid col-span-full">
                 <td className="border-1 border-neutral-300 text-right text-label-medium flex items-end justify-end pr-1">
-                  {DateTime.fromObject({ hour: hora }).toFormat("h a")}
+                  {hora.toFormat("h a")}
                 </td>
                 <td className="text-center group border-1 border-neutral-300">
-                  {virtualCitasMedicas.length !== 0 ||
-                  virtualClases.length !== 0 ? (
+                  {virtual.length !== 0 ? (
                     <div className="p-2 max-w-full max-h-full flex gap-1">
-                      {virtualCitasMedicas.map((cM, index) => (
-                        <CitaMedicaCard key={index} citaMedica={cM} />
-                      ))}
-                      {virtualClases.map((cM, index) => (
-                        <ClaseCard key={index} clase={cM} />
+                      {virtual.map((d, index) => (
+                        <div key={index}>{metadata.card(d)}</div>
                       ))}
                     </div>
                   ) : (
-                    <button
-                      onClick={() =>
-                        blankTileAction?.(
-                          DateTime.fromObject({
-                            year: dia.year,
-                            month: dia.month,
-                            day: dia.day,
-                            hour: hora,
-                          })
-                        )
-                      }
-                    ></button>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <button
+                          className="w-full h-full"
+                          onClick={() => {
+                            blankTileAction?.(hora);
+                          }}
+                        ></button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Haz click para registrar cita</p>
+                      </TooltipContent>
+                    </Tooltip>
                   )}
                 </td>
                 <td className="border-1 border-neutral-300"></td>
@@ -107,6 +102,6 @@ const CalendarioDiario = ({
       </table>
     </>
   );
-};
+}
 
 export default CalendarioDiario;

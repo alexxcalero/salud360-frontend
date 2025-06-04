@@ -12,6 +12,6 @@ export const comunidadSchema = z.object({
 });
 
 export const extendedComunidadSchema = comunidadSchema.extend({
-  servicios: z.array(extendedServicioSchema),
+  servicios: z.lazy(() => z.array(extendedServicioSchema)),
 });
 export type tipoDocumentoType = z.infer<typeof comunidadSchema>;

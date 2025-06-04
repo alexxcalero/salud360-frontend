@@ -9,42 +9,49 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useToasts } from "@/hooks/ToastContext";
-import { medicoType } from "@/schemas/medico";
 import { servicioType } from "@/schemas/servicio";
 import { DateTime } from "luxon";
 import { FormEvent, useEffect, useState } from "react";
 import Button from "@/components/Button";
 import { getServiciosAPI } from "@/services/servicio.service";
-import { postCitaMedicaAPI } from "@/services/citasMedicasAdmin.service";
+import { putCitaMedicaAPI } from "@/services/citasMedicasAdmin.service";
 import { useFetchHandler } from "@/hooks/useFetchHandler";
+import { extenedCitaMedicaType } from "@/schemas/citaMedica";
 import { useInternalModals } from "@/hooks/useInternalModals";
 
-const RegistrarCitaModalForm = ({
+const ActualizarCitaModalForm = ({
   open,
   setOpen,
-  date,
-  medico,
   onCreate,
+  citaMedica,
 }: {
   open: boolean;
   setOpen: (_: boolean) => void;
-  date: DateTime;
-  medico: medicoType;
+  citaMedica: extenedCitaMedicaType;
   onCreate?: () => void;
 }) => {
   const [servicios, setServicios] = useState<servicioType[]>([]);
-  const [servicioInput, setServicioInput] = useState("");
+  const [servicioInput, setServicioInput] = useState(
+    citaMedica.servicio?.idServicio.toString() ?? ""
+  );
 
-  const [horaInicio, setHoraInicio] = useState(date.toFormat("T"));
-  const [horaFin, setHoraFin] = useState(date.plus({ hour: 1 }).toFormat("T"));
+  const { reload } = useInternalModals();
 
-  const [dateInput, setDateInput] = useState<DateTime>(date);
+  const [horaInicio, setHoraInicio] = useState(
+    citaMedica.horaInicio?.toFormat("T")
+  );
+  const [horaFin, setHoraFin] = useState(citaMedica.horaFin?.toFormat("T"));
 
-  const [estadoInput, setEstadoInput] = useState<string>("");
+  const [dateInput, setDateInput] = useState<DateTime>(
+    citaMedica.fecha ?? DateTime.now()
+  );
+
+  const [estadoInput, setEstadoInput] = useState<string>(
+    citaMedica.estado ?? ""
+  );
 
   const { fetch } = useFetchHandler();
   const { createToast } = useToasts();
-  const { reload } = useInternalModals();
 
   useEffect(() => {
     fetch(async () => {
@@ -57,28 +64,33 @@ const RegistrarCitaModalForm = ({
     e.preventDefault();
 
     const uploadData = {
+      idCitaMedica: citaMedica.idCitaMedica,
       horaInicio: horaInicio,
       horaFin: horaFin,
       fecha: dateInput.toISODate(),
       estado: estadoInput,
+      activo: citaMedica.activo,
+      fechaCrecion: citaMedica.fechaCreacion,
+      fechaDesactivacion: citaMedica.fechaDesactivacion,
       medico: {
-        idMedico: medico.idMedico,
-        nombres: medico.nombres,
-        apellidos: medico.apellidos,
-        especialidad: medico.especialidad,
-        descripcion: medico.descripcion,
-        fotoPerfil: medico.fotoPerfil,
+        idMedico: citaMedica.medico?.idMedico,
+        nombres: citaMedica.medico?.nombres,
+        apellidos: citaMedica.medico?.apellidos,
+        especialidad: citaMedica.medico?.especialidad,
+        descripcion: citaMedica.medico?.descripcion,
+        fotoPerfil: citaMedica.medico?.fotoPerfil,
       },
+      cliente: citaMedica.cliente,
       servicio: servicios.find(
         ({ idServicio }) => idServicio?.toString() === servicioInput
       ),
     };
 
     fetch(async () => {
-      await postCitaMedicaAPI(uploadData);
+      await putCitaMedicaAPI(uploadData);
       setOpen(false);
-      createToast("success", { title: "Cita creada correctamente" });
       onCreate?.();
+      createToast("success", { title: "Cita actualizada correctamente" });
       reload();
     });
   };
@@ -87,11 +99,12 @@ const RegistrarCitaModalForm = ({
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <form action="" onSubmit={submitHanlder}>
-            <DialogTitle>Registrar cita mèdica</DialogTitle>
+            <DialogTitle>Actualizar cita mèdica</DialogTitle>
             <div className="my-4 flex flex-col gap-4">
               <p>
-                Para: {medico.nombres} {medico.apellidos} -{" "}
-                {medico.especialidad}
+                Para: {citaMedica.medico?.nombres}{" "}
+                {citaMedica.medico?.apellidos} -{" "}
+                {citaMedica.medico?.especialidad}
               </p>
               <SelectLabel
                 htmlFor="servicio"
@@ -158,4 +171,4 @@ const RegistrarCitaModalForm = ({
   );
 };
 
-export default RegistrarCitaModalForm;
+export default ActualizarCitaModalForm;

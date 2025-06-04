@@ -1,25 +1,50 @@
-import { citaMedicaType } from "@/schemas/citaMedica";
-import { claseType } from "@/schemas/clase";
 import { DateTime } from "luxon";
-import { CitaMedicaCard } from "./CitaMedicoCard";
-import { ClaseCard } from "./ClaseCard";
+import { ReactNode, useMemo } from "react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
-interface Props {
+interface Props<Data> {
   inicioSemana: DateTime;
   blankTileAction?: (_: DateTime) => void;
-  citasMedicas?: citaMedicaType[];
-  clases?: claseType[];
+  metadata: {
+    card: (_: Data) => ReactNode;
+    equalFunc: (_: Data, _2: DateTime) => boolean;
+  };
+  data: Data[];
 }
 
-const CalendarioSemanal = ({
+function CalendarioSemanal<Data>({
   inicioSemana,
   blankTileAction,
-  citasMedicas = new Array(),
-  clases = new Array(),
-}: Props) => {
+  metadata,
+  data,
+}: Props<Data>) {
   const dias = Array.from({ length: 7 }, (_, i) =>
     inicioSemana.plus({ days: i })
   );
+  const horasSemana = useMemo<DateTime[][]>(() => {
+    const tmp = [];
+    for (let h = 0; h < 24; h++) {
+      const filaHora: DateTime[] = [];
+
+      for (let d = 0; d < 7; d++) {
+        const fecha = inicioSemana
+          .startOf("week")
+          .startOf("day")
+          .plus({ days: d, hours: h });
+
+        filaHora.push(fecha);
+      }
+
+      tmp.push(filaHora);
+    }
+
+    return tmp;
+  }, []);
+
   return (
     <>
       <table className="w-full grid grid-cols-[50px_repeat(7,1fr)_50px] border-collapse">
@@ -56,59 +81,58 @@ const CalendarioSemanal = ({
             <td className="border-1 border-neutral-300 "></td>
             <td className="border-1 border-neutral-300 "></td>
           </tr>
-          {Array.from({ length: 24 }, (_, hora) => (
-            <tr key={hora} className="grid grid-cols-subgrid col-span-full">
-              <td className="border-1 border-neutral-300 text-right text-label-medium flex items-end justify-end pr-1">
-                {DateTime.fromObject({ hour: hora }).toFormat("h a")}
+          {/* Recorrer por horas */}
+          {horasSemana.map((horaDias, index) => (
+            <tr key={index} className="grid grid-cols-subgrid col-span-full">
+              <td className="border-1 border-neutral-300 text-right text-label-medium flex items-start justify-end pr-1">
+                {horaDias[0].toFormat("h a")}
               </td>
-              {dias.map((dia, index) => {
-                const virtualCitasMedicas = citasMedicas.filter(
-                  (elem) =>
-                    elem.fecha.hasSame(dia, "day") &&
-                    elem.fecha.hasSame(dia, "month") &&
-                    elem.fecha.hasSame(dia, "year") &&
-                    elem.horaInicio.hour === hora
+              {/* Recorrer por dìas de la semana */}
+              {horaDias.map((dia, index) => {
+                const virtualElems = data.filter((elem) =>
+                  metadata.equalFunc(elem, dia)
                 );
-                const virtualClases = clases.filter(
-                  (elem) =>
-                    elem.fecha.hasSame(dia, "day") &&
-                    elem.fecha.hasSame(dia, "month") &&
-                    elem.fecha.hasSame(dia, "year") &&
-                    elem.horaInicio.hour <= hora &&
-                    hora <= elem.horaFin.hour
-                );
+                // const virtualClases = clases.filter(
+                //   (elem) =>
+                //     elem.fecha.hasSame(dia, "day") &&
+                //     elem.fecha.hasSame(dia, "month") &&
+                //     elem.fecha.hasSame(dia, "year") &&
+                //     elem.horaInicio.hour <= hora &&
+                //     hora <= elem.horaFin.hour
+                // );
                 return (
                   <td
                     key={index}
                     className="text-center group border-1 border-neutral-300"
                   >
-                    {virtualCitasMedicas.length !== 0 ||
-                    virtualClases.length !== 0 ? (
-                      <div className="flex max-w-full max-h-full p-2">
-                        {virtualCitasMedicas.map((cM, index) => (
-                          <CitaMedicaCard key={index} citaMedica={cM} />
-                        ))}
-                        {virtualClases.map((cM, index) => (
-                          <ClaseCard key={index} clase={cM} />
-                        ))}
-                      </div>
-                    ) : (
-                      <>
-                        <button
-                          className="w-full h-full"
-                          onClick={() =>
-                            blankTileAction?.(
-                              DateTime.fromObject({
-                                year: dia.year,
-                                month: dia.month,
-                                day: dia.day,
-                                hour: hora,
-                              })
-                            )
-                          }
-                        ></button>
-                      </>
-                    )}
+                    <div className="max-w-full max-h-full relative">
+                      {virtualElems.length !== 0 ? (
+                        <div className="flex max-w-full max-h-full p-2 relative">
+                          {virtualElems.map((d, index) => (
+                            <div
+                              key={index}
+                              className="absolute top-2 left-2 right-2 bottom-2"
+                            >
+                              {metadata.card(d)}
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <Tooltip key={index}>
+                          <TooltipTrigger asChild>
+                            <button
+                              className="w-full h-full"
+                              onClick={() => {
+                                blankTileAction?.(dia);
+                              }}
+                            ></button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Haz click para registrar cita</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      )}
+                    </div>
                   </td>
                 );
               })}
@@ -132,6 +156,6 @@ const CalendarioSemanal = ({
       </table>
     </>
   );
-};
+}
 
 export default CalendarioSemanal;

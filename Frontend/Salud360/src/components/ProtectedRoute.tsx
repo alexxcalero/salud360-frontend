@@ -8,7 +8,7 @@ interface Props {
 }
 
 function ProtectedRoute({children, allowedRules}: Props){
-    return <>{children}</>;
+    return <>{children}</>; // Recordar que esto es un hack
     const {usuario} = useContext(AuthContext);
 
     if (!usuario) return <Navigate to="/"/> //Si no hay usuario en sesión

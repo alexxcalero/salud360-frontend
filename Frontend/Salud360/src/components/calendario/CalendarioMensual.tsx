@@ -1,25 +1,26 @@
-import { citaMedicaType } from "@/schemas/citaMedica";
-import { claseType } from "@/schemas/clase";
 import { DateTime, WeekdayNumbers } from "luxon";
-import CitaCardDot from "./CitaCardDot";
+import { ReactNode } from "react";
 
-interface Props {
+interface Props<Data> {
   inicioMes: DateTime;
   finMes: DateTime;
   mes: number;
   blankTileAction?: (_: DateTime) => void;
-  citasMedicas?: citaMedicaType[];
-  clases?: claseType[];
+  metadata: {
+    card: (_: Data) => ReactNode;
+    equalFunc: (_: Data, _2: DateTime) => boolean;
+  };
+  data: Data[];
 }
 
-const CalendarioMensual = ({
+function CalendarioMensual<Data>({
   mes,
   inicioMes,
   finMes,
   blankTileAction,
-  citasMedicas = new Array(),
-  clases = new Array(),
-}: Props) => {
+  data,
+  metadata,
+}: Props<Data>) {
   const diasPorSemanas: DateTime[][] = [];
 
   let _diaTmp = inicioMes.startOf("week");
@@ -56,11 +57,8 @@ const CalendarioMensual = ({
           {diasPorSemanas.map((_dias, i) => (
             <tr key={i} className="grid grid-cols-subgrid col-span-full">
               {_dias.map((dia, index) => {
-                const virtualCitasMedicas = citasMedicas.filter(
-                  (elem) =>
-                    elem.fecha.hasSame(dia, "day") &&
-                    elem.fecha.hasSame(dia, "month") &&
-                    elem.fecha.hasSame(dia, "year")
+                const virtual = data.filter((elem) =>
+                  metadata.equalFunc(elem, dia)
                 );
                 return (
                   <td
@@ -70,9 +68,9 @@ const CalendarioMensual = ({
                     }`}
                   >
                     <div className="text-label-large">{dia.toFormat("dd")}</div>
-                    <div className="grid-cols-3">
-                      {virtualCitasMedicas.map((cM, index) => (
-                        <CitaCardDot key={index} citaMedica={cM} />
+                    <div className="flex flex-wrap gap-2">
+                      {virtual.map((d, index) => (
+                        <div key={index}>{metadata.card(d)}</div>
                       ))}
                     </div>
                   </td>
@@ -84,6 +82,6 @@ const CalendarioMensual = ({
       </table>
     </>
   );
-};
+}
 
 export default CalendarioMensual;

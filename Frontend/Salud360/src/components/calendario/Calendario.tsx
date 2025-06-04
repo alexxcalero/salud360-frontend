@@ -1,59 +1,48 @@
 import { DateTime } from "luxon";
-import { ChevronLeft, ChevronRight, Filter } from "lucide-react";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ReactNode, useCallback, useMemo, useState } from "react";
 import CalendarioSemanal from "./CalendarioSemanal";
 import CalendarioMensual from "./CalendarioMensual";
 import CalendarioDiario from "./CalendarioDiario";
-import { citaMedicaType } from "@/schemas/citaMedica";
-import { claseType } from "@/schemas/clase";
-import { useLoading } from "@/hooks/LoadingContext";
-import { useToasts } from "@/hooks/ToastContext";
-import { getCalendarData } from "@/services/calendarioUsuario.service";
+import FiltrarCalendario from "./utils/FiltrarCalendario";
+import CambiarPeriodos from "./utils/CambiarDias";
 
-interface Props {
+interface Props<Data> {
   fechaSemana?: DateTime;
   blankTileAction?: (_: DateTime) => void;
+  data: Data[];
+  rangeDaysFilterFunc: (_: DateTime, _2: DateTime, _3: Data) => boolean;
+  metadata: {
+    day: {
+      card: (_: Data) => ReactNode;
+      equalFunc: (_: Data, _2: DateTime) => boolean;
+    };
+    week: {
+      card: (_: Data) => ReactNode;
+      equalFunc: (_: Data, _2: DateTime) => boolean;
+    };
+    month: {
+      card: (_: Data) => ReactNode;
+      equalFunc: (_: Data, _2: DateTime) => boolean;
+    };
+  };
+  filterContent?: ReactNode;
+  filterFuncs?: ((d: Data) => boolean)[];
 }
 
-const Calendario = ({
+function Calendario<Data>({
   fechaSemana = DateTime.now(),
   blankTileAction,
-}: Props) => {
-  const [citasMedicas, setCitasMedicas] = useState<citaMedicaType[]>([]);
-  const [clases, setClases] = useState<claseType[]>([]);
-
-  const { setLoading } = useLoading();
-  const { createToast } = useToasts();
-
+  data,
+  metadata,
+  rangeDaysFilterFunc,
+  filterContent,
+  filterFuncs,
+}: Props<Data>) {
   const [periodo, setPeriodo] = useState<"week" | "day" | "month">("week");
   const [targetDay, setTargetDay] = useState<DateTime>(
     DateTime.fromObject({ day: fechaSemana.day })
   );
-
-  useEffect(() => {
-    setLoading(true);
-    const fetchData = async () => {
-      await new Promise<string>((res) => setTimeout(() => res(""), 1000));
-      try {
-        const [dataCitas, dataClases] = await getCalendarData();
-        setCitasMedicas(dataCitas);
-        setClases(dataClases);
-      } catch (error) {
-        createToast("error", {
-          title: "Error en la consulta de datos",
-        });
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [periodo, targetDay]);
 
   const rangeDays = useMemo<{ initial: DateTime; final: DateTime }>(
     () => ({
@@ -62,6 +51,12 @@ const Calendario = ({
     }),
     [targetDay, periodo]
   );
+
+  const filteredData = useMemo<Data[]>(() => {
+    return data
+      .filter((d) => rangeDaysFilterFunc(rangeDays.initial, rangeDays.final, d))
+      .filter((d) => filterFuncs?.every((f) => f(d)) ?? true);
+  }, [rangeDays, data]);
 
   const changeDate = useCallback(
     (step = 1) => {
@@ -107,80 +102,47 @@ const Calendario = ({
         </div>
 
         <div className="flex gap-2 items-center">
-          <Popover>
-            <PopoverTrigger>
-              <Filter />
-            </PopoverTrigger>
-            <PopoverContent className="w-72">
-              <h2>Filtros</h2>
-            </PopoverContent>
-          </Popover>
+          <FiltrarCalendario>{filterContent}</FiltrarCalendario>
 
-          <div className="flex border-1 border-neutral-300 rounded-full overflow-hidden">
-            <button
-              data-active={periodo === "day"}
-              className="border-r-1 border-neutral-300 py-1 px-4 hover:bg-neutral-200 transition-colors duration-200 ease-in-out data-[active=true]:bg-blue-500 data-[active=true]:text-white"
-              onClick={() => setPeriodo("day")}
-            >
-              Día
-            </button>
-            <button
-              data-active={periodo === "week"}
-              className="border-r-1 border-neutral-300 py-1 px-4 hover:bg-neutral-200 transition-colors duration-200 ease-in-out data-[active=true]:bg-blue-500 data-[active=true]:text-white"
-              onClick={() => setPeriodo("week")}
-            >
-              Semana
-            </button>
-            <button
-              data-active={periodo === "month"}
-              className="py-1 px-4 hover:bg-neutral-200 transition-colors duration-200 ease-in-out data-[active=true]:bg-blue-500 data-[active=true]:text-white"
-              onClick={() => setPeriodo("month")}
-            >
-              Mes
-            </button>
-          </div>
+          <CambiarPeriodos
+            setDay={() => setPeriodo("day")}
+            setWeek={() => setPeriodo("week")}
+            setMonth={() => setPeriodo("month")}
+            periodo={periodo}
+          />
         </div>
       </div>
       {periodo === "week" && (
         <CalendarioSemanal
+          key={rangeDays.initial.toISO()}
           inicioSemana={rangeDays.initial}
           blankTileAction={blankTileAction}
-          citasMedicas={citasMedicas.filter((elem) =>
-            elem.fecha.hasSame(rangeDays.initial, "week")
-          )}
-          clases={clases.filter((elem) =>
-            elem.fecha.hasSame(rangeDays.initial, "week")
-          )}
+          metadata={metadata.week}
+          data={filteredData}
         />
       )}
       {periodo === "day" && (
         <CalendarioDiario
+          key={rangeDays.initial.toISO()}
           dia={rangeDays.initial}
           blankTileAction={blankTileAction}
-          citasMedicas={citasMedicas.filter((elem) =>
-            elem.fecha.hasSame(rangeDays.initial, "day")
-          )}
-          clases={clases.filter((elem) =>
-            elem.fecha.hasSame(rangeDays.initial, "day")
-          )}
+          metadata={metadata.day}
+          data={filteredData}
         />
       )}
       {periodo === "month" && (
         <CalendarioMensual
+          key={targetDay.month}
           mes={targetDay.month}
           blankTileAction={blankTileAction}
           inicioMes={rangeDays.initial}
           finMes={rangeDays.final}
-          citasMedicas={citasMedicas.filter((elem) =>
-            elem.fecha.hasSame(rangeDays.initial, "month")
-          )}
-          clases={clases.filter((elem) =>
-            elem.fecha.hasSame(rangeDays.initial, "month")
-          )}
+          metadata={metadata.month}
+          data={filteredData}
         />
       )}
     </>
   );
-};
+}
 
 export default Calendario;

@@ -5,24 +5,38 @@ import { clienteSchema } from "./cliente";
 import { servicioSchema } from "./servicio";
 
 export const citaMedicaSchema = z.object({
-  idCitaMedica: z.number(),
+  idCitaMedica: z.number().optional(),
   /** @example 14:30:00 */
-  horaInicio: z.string().transform((str) => DateTime.fromISO(str)),
-  horaFin: z.string().transform((str) => DateTime.fromISO(str)),
-  /** Format: date */
-  fecha: z.string().transform((str) => DateTime.fromISO(str)),
-  estado: z
-    .enum(["available", "canceled", "suscribed", "soon", "full"])
+  horaInicio: z
+    .string()
+    .transform((str) => DateTime.fromFormat(str, "HH:mm:ss"))
     .optional(),
-  activo: z.boolean().optional().default(false),
-  fechaCreacion: z.string().transform((str) => DateTime.fromISO(str)),
-  fechaDesactivacion: z.string().transform((str) => DateTime.fromISO(str)),
+  horaFin: z
+    .string()
+    .transform((str) => DateTime.fromFormat(str, "HH:mm:ss"))
+    .optional(),
+  /** Format: date */
+  fecha: z
+    .string()
+    .transform((str) => DateTime.fromISO(str))
+    .optional(),
+  estado: z.enum(["Disponible", "Reservada", "Cancelada"]).optional(),
+  activo: z.boolean().optional(),
+  fechaCreacion: z
+    .string()
+    .transform((str) => DateTime.fromISO(str))
+    .optional(),
+  fechaDesactivacion: z
+    .string()
+    .transform((str) => DateTime.fromISO(str))
+    .optional()
+    .nullable(),
 });
 
 export const extendedCitaMedicaSchema = citaMedicaSchema.extend({
-  medico: medicoSchema,
-  cliente: clienteSchema,
-  servicio: servicioSchema,
+  medico: z.lazy(() => medicoSchema.optional()),
+  cliente: z.lazy(() => clienteSchema.optional().nullable()),
+  servicio: z.lazy(() => servicioSchema.optional()),
 });
 
 export type citaMedicaType = z.infer<typeof citaMedicaSchema>;
