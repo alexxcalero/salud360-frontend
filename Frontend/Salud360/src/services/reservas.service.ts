@@ -19,3 +19,9 @@ export const getAllUserReservas = async (idCliente: number) => {
   const parsed = z.array(reservaSchema).parse(response.data);
   return parsed;
 };
+
+export const getAllCommunityReservasAPI = async (idComunidad: number) => {
+  const response = await baseAPI.get(`/comunidades/${idComunidad}/reservas`);
+  const parsed = z.array(reservaSchema).parse(response.data);
+  return parsed;
+};

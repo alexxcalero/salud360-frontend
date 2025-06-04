@@ -86,7 +86,7 @@ function CalendarioDiario<Data>({
                       </div>
                     ) : (
                       <>
-                        {futuro && (
+                        {futuro && blankTileAction && (
                           <Tooltip key={index}>
                             <TooltipTrigger asChild>
                               <button
