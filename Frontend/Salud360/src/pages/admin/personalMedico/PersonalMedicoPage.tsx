@@ -72,7 +72,6 @@ function PersonalMedicoPage(){
         { label: "ID", className: "w-16" },
         { label: "Foto", className: "w-16" },
         { label: "Nombre", className: "w-1/4 text-left" },
-        { label: "Correo", className: "w-1/3 text-left" },
         { label: "Especialidad", className: "w-1/6 text-left" },
         { label: "Descripción", className: "w-1/6 text-left" },
         { label: "Status", className: "w-1/6 text-left" },
@@ -111,7 +110,6 @@ function PersonalMedicoPage(){
             className: "w-16",
         },
         { content: `${medico.nombres} ${medico.apellidos}`, className: "w-1/4 text-left" },
-        { content: medico.correo, className: "w-1/3 text-left" },
         { content: medico.especialidad, className: "w-1/6 text-left" },
         { content: medico.descripcion, className: "w-1/6 text-left" },
         {
