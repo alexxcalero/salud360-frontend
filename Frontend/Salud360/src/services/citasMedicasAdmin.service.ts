@@ -1,7 +1,4 @@
-import {
-  extendedCitaMedicaSchema,
-  extenedCitaMedicaType,
-} from "@/schemas/citaMedica";
+import { extendedCitaMedicaSchema } from "@/schemas/citaMedica";
 import { baseAPI } from "./baseAPI";
 import { z } from "zod";
 
