@@ -13,13 +13,13 @@ function UsuarioSuccess({modulo, detalle, route= "/admin/usuarios"}: Props){
     const location = useLocation();
     const navigate = useNavigate();
 
-    console.log("DESDE USUARIO SUCCESS, NO USE EFFECT EL VALOR DE LOCATION.state ES:", location.state)
-    console.log("DESDE USUARIO SUCCESS, NO USE EFFECT EL VALOR DE LOCATION.state.created ES:", location.state?.created)
+    //console.log("DESDE USUARIO SUCCESS, NO USE EFFECT EL VALOR DE LOCATION.state ES:", location.state)
+    //console.log("DESDE USUARIO SUCCESS, NO USE EFFECT EL VALOR DE LOCATION.state.created ES:", location.state?.created)
 
     useEffect(() => {
 
-        console.log("DESDE USUARIO SUCCESS, EL VALOR DE LOCATION.state ES:", location.state)
-        console.log("DESDE USUARIO SUCCESS, EL VALOR DE LOCATION.state.created ES:", location.state?.created)
+        //console.log("DESDE USUARIO SUCCESS, EL VALOR DE LOCATION.state ES:", location.state)
+        //console.log("DESDE USUARIO SUCCESS, EL VALOR DE LOCATION.state.created ES:", location.state?.created)
 
         if (location.state === undefined) return;
 
@@ -28,13 +28,19 @@ function UsuarioSuccess({modulo, detalle, route= "/admin/usuarios"}: Props){
         }
     }, [location]);
 
-    return(
-        <div className="w-full flex flex-row justify-center items-center">
-            <ModalExito modulo={modulo} detalle={detalle} onConfirm={() => {
-                navigate(route, { replace: true });
-            }}/>
+    return (
+    <>
+        <div className="fixed inset-0 bg-black/60 z-40" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+        <ModalExito
+            modulo={modulo}
+            detalle={detalle}
+            onConfirm={() => {
+            navigate(route, { replace: true });
+            }}
+        />
         </div>
-        
+    </>
     );
 }
 

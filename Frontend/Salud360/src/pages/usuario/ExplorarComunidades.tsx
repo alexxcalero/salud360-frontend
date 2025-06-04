@@ -8,7 +8,7 @@ function ExplorarComunidades(){
     const [comunidades, setComunidades] = useState([]);
 
     const fetchComunidades = () => {
-    axios.get("http://localhost:8080/api/comunidades", {
+    axios.get("http://localhost:8080/api/comunidades/activas", {
       auth: {
         username: "admin",
         password: "admin123"

@@ -82,7 +82,7 @@ function CrearComunidad() {
         }
       });
 
-      console.log("Usuario creado:", response.data);
+      console.log("✅ Comunidad creada:", response.data);
       //alert("Usuario creado exitosamente");
       console.log("A punto de navegar a successCrear")
       navigate("/admin/comunidades/successCrear", {

@@ -11,64 +11,34 @@ interface Props {
   data: {
     fechaInicio: string;
     fechaFin: string;
-    servicio: string;
-    local: string;
     descripcion: string;
   };
   onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
 }
 export default function ReporteUsuarioForm({ data, onChange }: Props) {
-  const [servicios, setServicios] = useState<{ value: string; label: string }[]>([]);
-  const [locales, setLocales] = useState<{ value: string; label: string }[]>([]);
-
-  useEffect(() => {
-    const fetchServicios = async () => {
-      try {
-        const res = await axios.get("http://localhost:8080/api/servicios", {
-          auth: { username: "admin", password: "admin123" }
-        });
-        const opciones = res.data.map((s: any) => ({ value: s.idServicio, label: s.nombre }));
-        setServicios([{ value: "", label: "Elige una opcion" }, ...opciones]);
-      } catch (err) {
-        console.error("Error cargando servicios", err);
-      }
-    };
-
-    const fetchLocales = async () => {
-      try {
-        const res = await axios.get("http://localhost:8080/api/locales", {
-          auth: { username: "admin", password: "admin123" }
-        });
-        const opciones = res.data.map((l: any) => ({ value: l.idLocal, label: l.nombre }));
-        setLocales([{ value: "", label: "Elige una opcion" }, ...opciones]);
-      } catch (err) {
-        console.error("Error cargando locales", err);
-      }
-    };
-
-    fetchServicios();
-    fetchLocales();
-  }, []);
-
-
   const handleGenerarReporte = async () => {
     try {
-      const response = await axios.post("http://localhost:8080/api/reportes/usuarios", {
-        descripcion: data.descripcion,
+      const response = await axios.post("http://localhost:8080/api/reportes/usuarios", {   
         fechaInicio: data.fechaInicio,
+        descripcion: data.descripcion,
         fechaFin: data.fechaFin,
-        servicio: data.servicio,
-        local: data.local
       }, {
         auth: {
           username: "admin",
           password: "admin123"
-        },
-        responseType: "blob" // importante si tu backend devuelve un PDF
+        }
       });
 
-      // Descarga del PDF
-      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const base64 = response.data.pdf;
+      const byteCharacters = atob(base64);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: "application/pdf" });
+
+      const url = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
       link.setAttribute("download", "reporte-usuarios.pdf");
@@ -93,18 +63,6 @@ export default function ReporteUsuarioForm({ data, onChange }: Props) {
         icon={<Calendar className="w-5 h-5" />} htmlFor="fechaFin"
         type="date" label="Fecha fin"
         value={data.fechaFin} onChange={onChange}
-      />
-      <SelectIconLabel
-        icon={<FaHandHoldingUsd className="w-5 h-5" />} htmlFor="Servicio"
-        label="Servicio"
-        value={data.servicio} onChange={onChange}
-        options={servicios}
-      />
-      <SelectIconLabel
-        icon={<FaBuilding className="w-5 h-5" />} htmlFor="Local"
-        label="Local"
-        value={data.local} onChange={onChange}
-        options={locales}
       />
       <div className="col-span-2 flex justify-end mt-4">
         <Button type="button" onClick={handleGenerarReporte}>

@@ -36,20 +36,28 @@ export default function ReporteLocalForm({ data, onChange }: Props) {
   
   const handleGenerarReporte = async () => {
     try {
-      const response = await axios.post("http://localhost:8080/api/reportes/locales", {
-        descripcion: data.descripcion,
+      const response = await axios.post("http://localhost:8080/api/reportes/locales", {     
         fechaInicio: data.fechaInicio,
+        descripcion: data.descripcion,
         fechaFin: data.fechaFin,
         servicio: data.servicio
       }, {
         auth: {
           username: "admin",
           password: "admin123"
-        },
-        responseType: "blob"
+        }
       });
 
-      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const base64 = response.data.pdf;
+      const byteCharacters = atob(base64);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: "application/pdf" });
+
+      const url = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
       link.setAttribute("download", "reporte-locales.pdf");

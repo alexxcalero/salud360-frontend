@@ -9,8 +9,9 @@ import { AlertTriangle } from "lucide-react";
 function Comunidades(){
     
     //const [comunidades, setComunidades] = useState([]);
-    const {usuario, logout, loading} = useContext(AuthContext)
+    const {usuario, logout, loading} = useContext(AuthContext);
       
+
     if (loading || !usuario) return null;
 
     const id = usuario.idUsuario;
@@ -22,14 +23,14 @@ function Comunidades(){
     const tieneComunidades = comunidades.length !== 0
 
     useEffect(() => {
-            window.scrollTo(0, 0); //Para que apenas cargue aparezca en el tope de la página.
+        window.scrollTo(0, 0); //Para que apenas cargue aparezca en el tope de la página.
     }, []);
 
     return(
         <section className="flex flex-col gap-16">
 
             <div className="flex flex-row justify-between items-center py-8 px-32 ">
-                <h1>Comunidades</h1>
+                <h1>Mis comunidades</h1>
                 {tieneComunidades && <div>
                     <p>Activas</p>
                     {/*Tengo que instalar el switch de shadcn pero el p$%@ npm no me deja. Será para luego */}
@@ -51,7 +52,8 @@ function Comunidades(){
                         id={comunidad.idComunidad}
                         image={"https://png.pngtree.com/png-clipart/20201224/ourmid/pngtree-panda-bamboo-bamboo-shoots-simple-strokes-cartoon-with-pictures-small-fresh-png-image_2625172.jpg"}
                         title={comunidad.nombre} 
-                        subtitle={comunidad.descripcion} 
+                        subtitle={comunidad.descripcion}
+                        isMiComunidad={true} 
                         />  
                     </div>
                 ))}

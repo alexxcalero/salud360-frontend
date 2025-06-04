@@ -3,6 +3,8 @@ import Button from "@/components/Button";
 import Checkbox from "@/components/Checkbox";
 import { useNavigate } from "react-router";
 import { useState } from "react";
+import ModalError from "@/components/ModalError";
+import ModalValidacion from "@/components/ModalValidacion";
 
 interface Servicio {
   idServicio: number;
@@ -71,6 +73,39 @@ function ComunidadForm({
 
   const navigate = useNavigate();
   //const [nuevasMembresias, setNuevasMembresias] = useState<Item[]>([]);
+  const textoValido = (texto: string) => /^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9 ]*$/.test(texto);
+
+  const validarCampos = () => {
+    if (!textoValido(nombre)) {
+      setMensajeError("El nombre de la comunidad contiene caracteres no permitidos.");
+      setShowModalValidacion(true);
+      return false;
+    }
+
+    if (!textoValido(descripcion)) {
+      setMensajeError("La descripción contiene caracteres no permitidos.");
+      setShowModalValidacion(true);
+      return false;
+    }
+
+    if (!textoValido(proposito)) {
+      setMensajeError("El propósito contiene caracteres no permitidos.");
+      setShowModalValidacion(true);
+      return false;
+    }
+
+    for (let i = 0; i < nuevasMembresias.length; i++) {
+      const m = nuevasMembresias[i];
+      const camposTexto = [m.nombre, m.tipo, m.descripcion, m.icono];
+      if (!camposTexto.every((txt) => textoValido(txt))) {
+        setMensajeError(`Uno o más campos de membresías contienen caracteres inválidos (fila ${i + 1}).`);
+        setShowModalValidacion(true);
+        return false;
+      }
+    }
+
+    return true;
+  };
 
   const toggle = (id: number, selected: number[], setSelected: (val: number[]) => void) => {
     if (readOnly) return;
@@ -80,6 +115,9 @@ function ComunidadForm({
         : [...selected, id]
     );
   };
+
+  const [showModalValidacion, setShowModalValidacion] = useState(false);
+  const [mensajeError, setMensajeError] = useState("");
 
   const handleAddMembresia = () => {
     setNuevasMembresias([
@@ -97,11 +135,24 @@ function ComunidadForm({
     ]);
   };
   
+  
 
   const handleChangeMembresia = (index: number, field: string, value: any) => {
     const updated = [...nuevasMembresias];
-    updated[index][field] = value;
-    console.log("El nuevo objeto membresía es:", updated)
+
+    // Si se está cambiando el valor de "conTope"
+    if (field === "conTope") {
+      updated[index]["conTope"] = value;
+      updated[index]["maxReservas"] = value ? 0 : -1; // si tiene tope: inicia en 0, sino -1
+    } else {
+      // Si es maxReservas y el campo conTope es false, forzamos -1
+      if (field === "maxReservas" && !updated[index].conTope) {
+        updated[index][field] = -1;
+      } else {
+        updated[index][field] = value;
+      }
+    }
+
     setNuevasMembresias(updated);
   };
 
@@ -159,110 +210,64 @@ function ComunidadForm({
           )}
         </div>
 
-        <div className="border rounded-lg overflow-auto">
-          <div className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr_2fr_1fr_auto] bg-blue-500 text-white py-2 px-4 text-sm font-semibold min-w-[1000px]">
-            <span>Nombre</span>
-            <span>Tipo</span>
-            <span>Tope</span>
-            <span>Cant. Usuarios</span>
-            <span>Max. Reservas</span>
-            <span>Precio</span>
-            <span>Descripción</span>
-            <span>Ícono</span>
-            <span></span> {/* Espacio del tachito */}
-          </div>
-
-          {nuevasMembresias.map((m, index) => (
-            <div key={m.id} className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr_2fr_1fr_auto] border-t text-sm py-2 px-4 gap-2 min-w-[1000px]">
-              <input
-                type="text"
-                placeholder="Nombre"
-                value={m.nombre}
-                onChange={(e) => handleChangeMembresia(index, "nombre", e.target.value)}
-                className="border p-1 rounded"
-                disabled={readOnly}
-              />
-              <input
-                type="text"
-                placeholder="Tipo"
-                value={m.tipo}
-                onChange={(e) => handleChangeMembresia(index, "tipo", e.target.value)}
-                className="border p-1 rounded"
-                disabled={readOnly}
-              />
-              <select
-                value={m.conTope ? "true" : "false"}
-                onChange={(e) => handleChangeMembresia(index, "conTope", e.target.value === "true")}
-                className="border p-1 rounded"
-                disabled={readOnly}
-              >
-                <option value="true">Sí</option>
-                <option value="false">No</option>
-              </select>
-              <input
-                type="number"
-                placeholder="Cant. Usuarios"
-                value={m.cantUsuarios}
-                min={0}
-                onChange={(e) =>
-                  handleChangeMembresia(index, "cantUsuarios", Math.max(0, parseInt(e.target.value)))
-                }
-                className="border p-1 rounded"
-                disabled={readOnly}
-              />
-              <input
-                type="number"
-                placeholder="Máx. Reservas"
-                value={m.maxReservas}
-                min={0}
-                onChange={(e) =>
-                  handleChangeMembresia(index, "maxReservas", Math.max(0, parseInt(e.target.value)))
-                }
-                className="border p-1 rounded"
-                disabled={readOnly}
-              />
-              <input
-                type="number"
-                placeholder="Precio"
-                value={m.precio}
-                min={0}
-                onChange={(e) =>
-                  handleChangeMembresia(index, "precio", Math.max(0, parseFloat(e.target.value)))
-                }
-                className="border p-1 rounded"
-                disabled={readOnly}
-              />
-              <input
-                type="text"
-                placeholder="Descripción"
-                value={m.descripcion}
-                onChange={(e) => handleChangeMembresia(index, "descripcion", e.target.value)}
-                className="border p-1 rounded"
-                disabled={readOnly}
-              />
-              <input
-                type="text"
-                placeholder="Ícono"
-                value={m.icono}
-                onChange={(e) => handleChangeMembresia(index, "icono", e.target.value)}
-                className="border p-1 rounded"
-                disabled={readOnly}
-              />
-              <button
-                type="button"
-                onClick={() => handleRemoveMembresia(index)}
-                className="text-gray-600 hover:text-red-600"
-              >
-                🗑️
-              </button>
-            </div>
-          ))}
+        <div className="w-full overflow-x-auto rounded-lg border">
+          <table className="min-w-[1000px] w-full text-sm">
+            <thead>
+              <tr className="bg-blue-500 text-white font-semibold">
+                <th className="py-2 px-4">Nombre</th>
+                <th className="py-2 px-4">Tipo</th>
+                <th className="py-2 px-4">Tope</th>
+                <th className="py-2 px-4">Cant. Usuarios</th>
+                <th className="py-2 px-4">Max. Reservas</th>
+                <th className="py-2 px-4">Precio (S/.)</th>
+                <th className="py-2 px-4">Descripción</th>
+                <th className="py-2 px-4">Ícono</th>
+                <th className="py-2 px-4"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {nuevasMembresias.map((m, index) => (
+                <tr key={index} className="border-t">
+                  <td className="p-2">
+                    <input type="text" value={m.nombre} onChange={(e) => handleChangeMembresia(index, "nombre", e.target.value)} className="border p-1 rounded w-full" disabled={readOnly} />
+                  </td>
+                  <td className="p-2">
+                    <input type="text" value={m.tipo} onChange={(e) => handleChangeMembresia(index, "tipo", e.target.value)} className="border p-1 rounded w-full" disabled={readOnly} />
+                  </td>
+                  <td className="p-2">
+                    <select value={m.conTope ? "true" : "false"} onChange={(e) => handleChangeMembresia(index, "conTope", e.target.value === "true")} className="border p-1 rounded w-full" disabled={readOnly}>
+                      <option value="true">Sí</option>
+                      <option value="false">No</option>
+                    </select>
+                  </td>
+                  <td className="p-2">
+                    <input type="number" value={m.cantUsuarios} min={0} onChange={(e) => handleChangeMembresia(index, "cantUsuarios", Math.max(0, parseInt(e.target.value)))} className="border p-1 rounded w-full" disabled={readOnly} />
+                  </td>
+                  <td className="p-2">
+                    <input type="number" value={m.conTope ? m.maxReservas ?? "" : ""} min={0} onChange={(e) => handleChangeMembresia(index, "maxReservas", e.target.value === "" ? "" : Math.max(0, parseInt(e.target.value)))} className="border p-1 rounded w-full" disabled={readOnly || !m.conTope} />
+                  </td>
+                  <td className="p-2">
+                    <input type="number" value={m.precio} min={0} onChange={(e) => handleChangeMembresia(index, "precio", Math.max(0, parseFloat(e.target.value)))} className="border p-1 rounded w-full" disabled={readOnly} />
+                  </td>
+                  <td className="p-2">
+                    <input type="text" value={m.descripcion} onChange={(e) => handleChangeMembresia(index, "descripcion", e.target.value)} className="border p-1 rounded w-full" disabled={readOnly} />
+                  </td>
+                  <td className="p-2">
+                    <input type="text" value={m.icono} onChange={(e) => handleChangeMembresia(index, "icono", e.target.value)} className="border p-1 rounded w-full" disabled={readOnly} />
+                  </td>
+                  <td className="p-2 text-center">
+                    <button type="button" onClick={() => handleRemoveMembresia(index)} className="text-gray-600 hover:text-red-600">🗑️</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
 
       <div className="mt-6">
         <p className="font-medium mb-2">Los locales asociados a la comunidad son:</p>
-        <div className="border rounded-lg overflow-hidden">
+        <div className="w-full overflow-x-auto border rounded-lg">
           <div className="grid grid-cols-2 bg-blue-500 text-white py-2 px-4 text-sm font-semibold">
             <span>Nombre</span>
             <span>Dirección</span>
@@ -304,16 +309,35 @@ function ComunidadForm({
 
 
       <div className="flex flex-row justify-between">
-          <div className="">
-              <Button variant="primary" size="lg" className="my-4" onClick={() => navigate(-1)}>Volver</Button>
-          </div>
-
-          <div className="">
-              {!readOnly && (<Button variant="primary" size="lg" className="my-4" onClick={onSubmit}>{buttonText}</Button>)}
-          </div>
+        <Button variant="primary" size="lg" className="my-4" onClick={() => navigate(-1)}>Volver</Button>
+        {!readOnly && (
+          <Button variant="primary" size="lg" className="my-4" onClick={() => {
+            if (validarCampos()) {
+              onSubmit();
+            }
+          }}>{buttonText}</Button>
+        )}
       </div>
+
+      {showModalValidacion && (
+        <>
+          <div className="fixed inset-0 bg-black/60 z-40" />
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <ModalValidacion
+              titulo="Error en los campos"
+              mensaje={mensajeError}
+              onClose={() => setShowModalValidacion(false)}
+            />
+          </div>
+        </>
+      )}
+
     </div>
+    
   );
+
+  
+
 }
 
 export default ComunidadForm;

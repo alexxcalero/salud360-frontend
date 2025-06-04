@@ -4,8 +4,11 @@ import PasswordInput from "@/components/input/PasswordInput";
 import { AuthContext } from "@/hooks/AuthContext";
 import { useUsuario } from "@/hooks/useUsuario";
 import { Calendar, ChevronDown, Mail, MapPin, Pen, Phone, User } from "lucide-react";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom"; // Asegúrate de tener esto bien configurado
+import axios from "axios";
+import { useEffect, useState } from "react";
+import SelectLabel from "@/components/SelectLabel";
 
 function InicioPerfi() {
   
@@ -35,9 +38,83 @@ function InicioPerfi() {
   const [showModalLogout, setShowModalLogout] = useState(false);
   const navigate = useNavigate();
 
+  const [tipoDocSeleccionado, setTipoDocSeleccionado] = useState("");
+  const [sexoSeleccionado, setSexoSeleccionado] = useState(sexo || "");
+  const [tipoDocumentos, setTipoDocumentos] = useState([]);
+  const [sexoOpciones, setSexoOpciones] = useState([
+    { value: "Masculino", content: "Masculino" },
+    { value: "Femenino", content: "Femenino" },
+  ]);
+  const [telefonoInput, setTelefonoInput] = useState(telefono ?? "");
+
+  const fetchTipoDocumentos = () => {
+    axios.get("http://localhost:8080/api/admin/tiposDocumentos", {
+      auth: {
+        username: "admin",
+        password: "admin123"
+      }
+    })
+      .then(res => {
+        console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
+        
+        const opciones = res.data.map((tipoDocX: any) => ({
+            value: tipoDocX.idTipoDocumento.toString(),
+            content: tipoDocX.nombre
+        }))
+
+        setTipoDocumentos(opciones)
+        console.log("Tipo Documentos:", opciones);
+      })
+      .catch(err => console.error("Error cargando tipo documentos", err));
+  }
+
+  useEffect(() => {
+      fetchTipoDocumentos();
+  }, []);
+
+  useEffect(() => {
+    if (usuario?.tipoDocumento?.idTipoDocumento) {
+      setTipoDocSeleccionado(usuario.tipoDocumento.idTipoDocumento.toString());
+    }
+  }, [usuario]);
+
+  const handleAplicarCambios = async (e: React.FormEvent) => {
+    e.preventDefault(); // Previene el comportamiento por defecto del submit
+
+    try {
+      await axios.put(
+        `http://localhost:8080/api/usuarios/${usuario.idUsuario}`,
+        {
+          telefono,
+          direccion,
+          sexo: sexoSeleccionado,
+          tipoDocumento: {
+            idTipoDocumento: Number(tipoDocSeleccionado),
+          },
+          numeroDocumento,
+          fechaNacimiento,
+        },
+        {
+          auth: {
+            username: "admin",
+            password: "admin123",
+          },
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      navigate("/usuario"); // ✅ Redirige después del éxito
+    } catch (error) {
+      console.error("❌ Error al actualizar perfil:", error);
+      alert("Hubo un error al aplicar los cambios.");
+    }
+  };
+
   return (
     <div className="p-8">
-      <form action="">
+      <form onSubmit={handleAplicarCambios}>
         <section className="flex gap-4 mb-8">
           <figure className="relative group">
             {fotoPerfil ? (
@@ -96,15 +173,17 @@ function InicioPerfi() {
             idName="telefono"
             label="Teléfono"
             leftIcon={<Phone />}
-            required={true}
-            defaultValue={telefono}
+            required
+            value={telefonoInput}
+            onChange={(e) => setTelefonoInput(e.target.value)}
           />
-          <Input
-            idName="sexo"
+          <SelectLabel
+            htmlFor="sexo"
             label="Sexo"
-            rightIcon={<ChevronDown />}
-            required={true}
-            defaultValue={sexo}
+            options={sexoOpciones}
+            value={sexoSeleccionado}
+            onChange={(value) => setSexoSeleccionado(value)}
+            placeholder="Seleccione su género"
           />
           <Input
             idName="ubicacion"
@@ -121,12 +200,13 @@ function InicioPerfi() {
             required={true}
             defaultValue={fechaNacimiento}
           />
-          <Input
-            idName="tipo-documento"
+          <SelectLabel
+            htmlFor="tipo-documento"
             label="Tipo de documento de identidad"
-            required={true}
+            options={tipoDocumentos}
+            value={tipoDocSeleccionado}
+            onChange={(value) => setTipoDocSeleccionado(value)}
             placeholder="Seleccione una opción"
-            rightIcon={<ChevronDown />}
           />
           <Input
             idName="numero-documento"
@@ -136,24 +216,6 @@ function InicioPerfi() {
             placeholder="Ingrese su número de documento"
           />
 
-          {/* <div>
-          <label htmlFor="genre">Género</label>
-          <select id="genre" name="genre" required>
-          <option value="M">Masculino</option>
-          <option value="F">Femenino</option>
-          </select>
-          </div> */}
-          {/* <div>
-          <label htmlFor="doc-type">Tipo de documento</label>
-          <select id="doc-type" name="doc-type" required>
-          <option value="M">DNI</option>
-          <option value="F">Carné de extranjería</option>
-          </select>
-          </div>
-          <div>
-          <label htmlFor="num-doc">Número de documento</label>
-          <input type="number" name="num-doc" id="num-doc" required />
-          </div> */}
         </section>
         <hr />
         <section className="mt-8 flex flex-col gap-4">
