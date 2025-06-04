@@ -40,7 +40,6 @@ export default function LoginForm() {
       console.log("El token de response es:", response.token);
 
       var usuario = response.usuario;
-
       let activeUser = null;
 
       if (usuario.cliente) {
