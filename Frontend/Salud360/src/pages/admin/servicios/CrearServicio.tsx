@@ -119,38 +119,3 @@ function CrearServicio(){
 }
 
 export default CrearServicio;
-
-/*
-const validarCampos = (): boolean => {
-        const soloLetras = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
-        const soloNumeros = /^[0-9]+$/;
-
-        if (!nombre || nombre.trim() === "") {
-        setMensajeValidacion("El nombre del servicio no puede estar vacíos.");
-        setShowModalValidacion(true);
-        return false;
-        }
-        if (!descripcion || descripcion.trim() === "") {
-        setMensajeValidacion("La descripción no puede estar vacía.");
-        setShowModalValidacion(true);
-        return false;
-        }
-        if (!tipo || tipo.trim() === "") {
-        setMensajeValidacion("El tipo no puede estar vacío.");
-        setShowModalValidacion(true);
-        return false;
-        }
-    }
-
-{showModalValidacion && (
-            <div className="fixed inset-0 bg-black/60 z-40">
-            <div className="fixed inset-0 z-50 flex items-center justify-center">
-            <ModalValidacion
-                titulo="Error en los campos"
-                mensaje={mensajeValidacion}
-                onClose={() => setShowModalValidacion(false)}
-            />
-            </div>
-            </div>
-         )}
-*/
