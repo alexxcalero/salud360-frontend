@@ -48,7 +48,7 @@ export default function Tabla<Data extends Record<string, any>>({
   actionButton,
 }: {
   idKey: keyof Data;
-  columns: Record<keyof Data, Salud360Column>;
+  columns: Partial<Record<keyof Data, Salud360Column>>;
   actions?: {
     details?: (id: any) => void;
     edit?: (id: any) => void;
@@ -66,14 +66,16 @@ export default function Tabla<Data extends Record<string, any>>({
             table.getIsAllPageRowsSelected() ||
             (table.getIsSomePageRowsSelected() && "indeterminate")
           }
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          onCheckedChange={(value: boolean) =>
+            table.toggleAllPageRowsSelected(value)
+          }
           aria-label="Select all"
         />
       ),
       cell: ({ row }: { row: Row<Data> }) => (
         <Checkbox
           checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          onCheckedChange={(value: boolean) => row.toggleSelected(value)}
           aria-label="Select row"
         />
       ),

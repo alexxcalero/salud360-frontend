@@ -65,7 +65,7 @@ export function TableActions<Data>({
 
         {/* Subir archivos */}
         <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger>
+          <DialogTrigger asChild>
             <FabianButton>
               <Upload /> Subir Datos
             </FabianButton>

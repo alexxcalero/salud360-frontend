@@ -1,0 +1,17 @@
+import { DateTime } from "luxon";
+import { z } from "zod";
+import { clienteSchema } from "./cliente";
+import { claseSchema } from "./clase";
+import { citaMedicaSchema } from "./citaMedica";
+
+export const reservaSchema = z.object({
+  idReserva: z.number(),
+  estado: z.string(),
+  fechaReserva: z.string().transform((v: string) => DateTime.fromISO(v)),
+  fechaCancelacion: z.string().transform((v: string) => DateTime.fromISO(v)),
+  cliente: z.lazy(() => clienteSchema),
+  clase: z.lazy(() => claseSchema.optional().nullable()),
+  citaMedica: z.lazy(() => citaMedicaSchema.optional().nullable()),
+});
+
+export type reservaType = z.infer<typeof reservaSchema>;

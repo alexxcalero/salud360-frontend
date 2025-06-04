@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -19,13 +18,7 @@ interface Props {
   currentCapacity?: number;
 }
 
-/** Es una Card que servirá para mostrar información en el calendario, esto incluye:
- * Reservas pendientes
- * Reservas disponibles
- * Reservas terminadas
- * Reservas próximas
- */
-const CardCalendario = ({
+export const DefaultCard = ({
   variant,
   nombreServicio,
   titulo,
@@ -89,22 +82,4 @@ const CardCalendario = ({
       </DialogContent>
     </Dialog>
   );
-  // return (
-  //   <div>
-  //     <button
-  //       onClick={() => setOpen(!open)}
-  //       className="rounded-lg bg-white shadow-lg p-4"
-  //     >
-  //       {nombreServicio}
-  //     </button>
-  //     <dialog
-  //       open={open}
-  //       className="rounded-lg bg-white shadow-lg p-4 fixed top-[50vw] left-[50vh]"
-  //     >
-  //       asdasdads
-  //     </dialog>
-  //   </div>
-  // );
 };
-
-export default CardCalendario;

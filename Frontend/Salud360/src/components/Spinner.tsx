@@ -3,7 +3,11 @@ import colors from "tailwindcss/colors";
 const Spinner = () => {
   return (
     <div className={`w-[96px] aspect-1/1 rounded-full`}>
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 200 200"
+        className="animate-spin"
+      >
         <radialGradient
           id="a8"
           cx=".66"
@@ -35,7 +39,8 @@ const Spinner = () => {
           ></stop>
         </radialGradient>
         <circle
-          transform-origin="center"
+          // @ts-ignore
+          transformOrigin="center"
           fill="none"
           stroke="url(#a8)"
           strokeWidth="15"
@@ -45,20 +50,10 @@ const Spinner = () => {
           cx="100"
           cy="100"
           r="70"
-        >
-          <animateTransform
-            type="rotate"
-            attributeName="transform"
-            calcMode="spline"
-            dur="2"
-            values="360;0"
-            keyTimes="0;1"
-            keySplines="0 0 1 1"
-            repeatCount="indefinite"
-          ></animateTransform>
-        </circle>
+        ></circle>
         <circle
-          transform-origin="center"
+          // @ts-ignore
+          transformOrigin="center"
           fill="none"
           opacity=".2"
           stroke={colors.blue["500"]}

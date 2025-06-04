@@ -1,13 +1,51 @@
 import { DateTime } from "luxon";
+import { ReactNode, useMemo } from "react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
 
-interface Props {
+interface Props<Data> {
   inicioSemana: DateTime;
+  blankTileAction?: (_: DateTime) => void;
+  metadata: {
+    card: (_: Data) => ReactNode;
+    equalFunc: (_: Data, _2: DateTime) => boolean;
+  };
+  data: Data[];
 }
 
-const CalendarioSemanal = ({ inicioSemana }: Props) => {
+function CalendarioSemanal<Data>({
+  inicioSemana,
+  blankTileAction,
+  metadata,
+  data,
+}: Props<Data>) {
   const dias = Array.from({ length: 7 }, (_, i) =>
     inicioSemana.plus({ days: i })
   );
+  const horasSemana = useMemo<DateTime[][]>(() => {
+    const tmp = [];
+    for (let h = 0; h < 24; h++) {
+      const filaHora: DateTime[] = [];
+
+      for (let d = 0; d < 7; d++) {
+        const fecha = inicioSemana
+          .startOf("week")
+          .startOf("day")
+          .plus({ days: d, hours: h });
+
+        filaHora.push(fecha);
+      }
+
+      tmp.push(filaHora);
+    }
+
+    return tmp;
+  }, []);
+
   return (
     <>
       <table className="w-full grid grid-cols-[50px_repeat(7,1fr)_50px] border-collapse">
@@ -32,7 +70,7 @@ const CalendarioSemanal = ({ inicioSemana }: Props) => {
             <th></th>
           </tr>
         </thead>
-        <tbody className="grid grid-cols-subgrid col-span-full grid-rows-[25px_68px] auto-rows-[68px]">
+        <tbody className="grid grid-cols-subgrid col-span-full grid-rows-[25px] auto-rows-[120px]">
           <tr className="grid grid-cols-subgrid col-span-full">
             <td className="border-1 border-neutral-300 "></td>
             <td className="border-1 border-neutral-300 "></td>
@@ -44,17 +82,71 @@ const CalendarioSemanal = ({ inicioSemana }: Props) => {
             <td className="border-1 border-neutral-300 "></td>
             <td className="border-1 border-neutral-300 "></td>
           </tr>
-          {Array.from({ length: 24 }, (_, i) => (
-            <tr key={i} className="grid grid-cols-subgrid col-span-full">
-              <td className="border-1 border-neutral-300 text-right text-label-medium flex items-end justify-end pr-1">
-                {DateTime.fromObject({ hour: i }).toFormat("h a")}
+          {/* Recorrer por horas */}
+          {horasSemana.map((horaDias, index) => (
+            <tr key={index} className="grid grid-cols-subgrid col-span-full">
+              <td className="border-1 border-neutral-300 text-right text-label-medium flex items-start justify-end pr-1">
+                {horaDias[0].toFormat("h a")}
               </td>
-              {dias.map((dia, index) => (
-                <td
-                  key={index}
-                  className="text-center group border-1 border-neutral-300 p-2"
-                ></td>
-              ))}
+              {/* Recorrer por dìas de la semana */}
+              {horaDias.map((dia, index) => {
+                const virtualElems = data.filter((elem) =>
+                  metadata.equalFunc(elem, dia)
+                );
+                const futuro = dia >= DateTime.now();
+                // const virtualClases = clases.filter(
+                //   (elem) =>
+                //     elem.fecha.hasSame(dia, "day") &&
+                //     elem.fecha.hasSame(dia, "month") &&
+                //     elem.fecha.hasSame(dia, "year") &&
+                //     elem.horaInicio.hour <= hora &&
+                //     hora <= elem.horaFin.hour
+                // );
+                return (
+                  <td
+                    key={index}
+                    className="text-center group border-1 border-neutral-300"
+                  >
+                    <div
+                      className={cn(
+                        "w-full h-full relative",
+                        !futuro && "bg-neutral-50"
+                      )}
+                    >
+                      {virtualElems.length !== 0 ? (
+                        <div className="flex max-w-full max-h-full p-2 relative">
+                          {virtualElems.map((d, index) => (
+                            <div
+                              key={index}
+                              className="absolute top-2 left-2 right-2 bottom-2"
+                            >
+                              {metadata.card(d)}
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <>
+                          {futuro && (
+                            <Tooltip key={index}>
+                              <TooltipTrigger asChild>
+                                <button
+                                  className="w-full h-full"
+                                  onClick={() => {
+                                    blankTileAction?.(dia);
+                                  }}
+                                ></button>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>Haz click para registrar</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  </td>
+                );
+              })}
               <td className="border-1 border-neutral-300"></td>
             </tr>
           ))}
@@ -75,6 +167,6 @@ const CalendarioSemanal = ({ inicioSemana }: Props) => {
       </table>
     </>
   );
-};
+}
 
 export default CalendarioSemanal;

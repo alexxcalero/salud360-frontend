@@ -68,7 +68,7 @@ const FileInput = ({
       <label
         htmlFor={id}
         data-is-dragging={isDragging}
-        className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 data-[is-dragging=true]:bg-blue-500 data-[is-dragging=true]:border-blue-900 group"
+        className="flex flex-col items-center justify-center w-full h-36 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 data-[is-dragging=true]:bg-blue-500 data-[is-dragging=true]:border-blue-900 group"
       >
         <div className="flex flex-col items-center justify-center pt-5 pb-6">
           <UploadCloud
