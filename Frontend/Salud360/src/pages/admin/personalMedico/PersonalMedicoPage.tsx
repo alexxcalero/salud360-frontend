@@ -189,7 +189,7 @@ function PersonalMedicoPage() {
             <>
               <div className="fixed inset-0 bg-black/60 z-40" />
               <div className="fixed inset-0 z-50 flex items-center justify-center">
-                <ModalError modulo="¿Estás seguro de que quieres eliminarlo?" detalle={`Medico: ${medicoSeleccionado?.nombre}`} onConfirm={() => {
+                <ModalError modulo="¿Estás seguro de que quieres eliminarlo?" detalle={`Médico: ${medicoSeleccionado?.nombres} ${medicoSeleccionado?.apellidos}`} onConfirm={() => {
                   handleEliminarMedico();
 
                 }} onCancel={() => setShowModalError(false)} />
@@ -214,7 +214,7 @@ function PersonalMedicoPage() {
             <>
               <div className="fixed inset-0 bg-black/60 z-40" />
               <div className="fixed inset-0 z-50 flex items-center justify-center">
-                <ModalError modulo="¿Estás seguro de que quieres reactivarla?" detalle={`Medico: ${medicoSeleccionado?.nombre}`} buttonConfirm="Reactivar" onConfirm={() => {
+                <ModalError modulo="¿Estás seguro de que quieres reactivarla?" detalle={`Médico: ${medicoSeleccionado?.nombres} ${medicoSeleccionado?.apellidos}`} buttonConfirm="Reactivar" onConfirm={() => {
                   handleReactivarMedico();
                 }} onCancel={() => setShowModalError(false)} />
               </div>
