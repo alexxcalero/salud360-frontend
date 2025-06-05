@@ -87,7 +87,7 @@ const RegistrarCitaModalForm = ({
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <form action="" onSubmit={submitHanlder}>
-            <DialogTitle>Registrar cita mèdica</DialogTitle>
+            <DialogTitle>Registrar cita médica</DialogTitle>
             <div className="my-4 flex flex-col gap-4">
               <p>
                 Para: {medico.nombres} {medico.apellidos} -{" "}

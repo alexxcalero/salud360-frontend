@@ -69,13 +69,13 @@ const RegistrarCitaMedicasPageWrapped = () => {
         <div className="p-4 flex flex-col items-start gap-3 border-b-1 border-neutral-500">
           <h1>Calendario</h1>
           <p className="self-stretch text-left">
-            Escoja un local primero, en el cual se realizaràn las citas
+            Escoja un local primero, en el cual se realizarán las citas
           </p>
           <div className="self-stretch">
             <SelectLabel
               htmlFor="medico"
-              label="Seleccione un mèdico"
-              placeholder="Seleccione un mèdico"
+              label="Seleccione un médico"
+              placeholder="Seleccione un médico"
               value={medicoInput}
               onChange={setMedicoInput}
               options={medicos.map(
