@@ -53,7 +53,6 @@ const RegistrarCitaMedicasPageWrapped = () => {
   useEffect(() => {
     fetch(async () => {
       const data = await getAllCitasMedicasAPI();
-      console.log(data);
       setData(
         data?.filter(
           ({ medico }) =>

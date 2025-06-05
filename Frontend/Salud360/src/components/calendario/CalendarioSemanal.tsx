@@ -94,7 +94,6 @@ function CalendarioSemanal<Data>({
                   metadata.equalFunc(elem, dia)
                 );
                 const futuro = dia >= DateTime.now();
-                console.log(virtualElems);
                 // const virtualClases = clases.filter(
                 //   (elem) =>
                 //     elem.fecha.hasSame(dia, "day") &&
