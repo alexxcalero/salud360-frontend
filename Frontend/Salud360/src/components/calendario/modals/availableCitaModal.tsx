@@ -25,7 +25,7 @@ const AvailableCitaModal = ({
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <DialogTitle>
-            ¿Desea reservar su cita mèdica con {citaMedica.medico.apellidos}?
+            ¿Desea reservar su cita médica con {citaMedica.medico.apellidos}?
           </DialogTitle>
           <div>
             <p>

@@ -59,7 +59,7 @@
     "@storybook/test": "^8.6.12",
     "@types/luxon": "^3.6.2",
     "@types/node": "^22.15.3",
-    "@types/react": "^19.0.10",
+    "@types/react": "^19.1.6",
     "@types/react-dom": "^19.0.4",
     "@types/react-router-hash-link": "^2.4.9",
     "@vitejs/plugin-react-swc": "^3.8.0",

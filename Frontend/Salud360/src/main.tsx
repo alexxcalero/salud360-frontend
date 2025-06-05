@@ -203,7 +203,7 @@ createRoot(document.getElementById("root")!).render(
                 <Route path="successCrear" element={<UsuarioSuccess modulo="¡Médico creado correctamente!" detalle="El médico fue creado correctamente" route="/admin/personalMedico"/>} />
                 <Route path="successEditar" element={<UsuarioSuccess modulo="¡Médico modificado correctamente!" detalle="El médico fue modificado correctamente" route="/admin/personalMedico" />} />
               </Route>
-              <Route path="calificaciones">
+              <Route path="testimonios">
                 <Route index element={<CalificacionesPage />} />
                 <Route path="crear" element={<CrearUsuario />} />
               </Route>

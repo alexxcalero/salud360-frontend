@@ -24,7 +24,7 @@ export default function ReportePanel() {
   };
 
   return (
-    <div className="w-full px-10 py-6">
+    <div className="">
       <div className="flex flex-col gap-16 mt-4 mb-12">
             <div className="w-full h-48 rounded-md flex flex-col items-center justify-center cursor-pointer">
                 <InputLabel type="text" placeholder="Ingrese la descripción" htmlFor="text" label="Descripción" value={descripcion} disabled={readOnly} className="w-full h-full" onChange={(e) => setDescripcion(e.target.value)}/>

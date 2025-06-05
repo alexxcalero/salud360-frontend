@@ -4,7 +4,7 @@ import CalendarioComunidad from "@/components/usuario/CalendarioComunidad";
 function DetalleComunidadReservas() {
   const { id } = useParams();
   return (
-    <section>
+    <section className="w-full px-8 py-8">
       <CalendarioComunidad idComunidad={Number(id)} />
     </section>
   );

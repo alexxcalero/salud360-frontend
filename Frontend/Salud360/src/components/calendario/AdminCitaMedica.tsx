@@ -55,7 +55,7 @@ export function AdminCitaMedicaCard({
                     variant="danger"
                     onClick={() =>
                       callAlertDialog({
-                        title: "¿Estàs seguro que quieres eliminar esto?",
+                        title: "¿Estás seguro que quieres eliminar esto?",
                         onConfirm: async () => {
                           if (!citaMedica.idCitaMedica) return false;
                           const response = await deleteCitaMedicaAPI(
@@ -85,7 +85,7 @@ export function AdminCitaMedicaCard({
                   <Button
                     onClick={() =>
                       callAlertDialog({
-                        title: "¿Estàs seguro que quieres reactivar esto?",
+                        title: "¿Estás seguro que quieres reactivar esto?",
                         buttonLabel: "Restaurar",
                         onConfirm: async () => {
                           if (!citaMedica.idCitaMedica) return false;

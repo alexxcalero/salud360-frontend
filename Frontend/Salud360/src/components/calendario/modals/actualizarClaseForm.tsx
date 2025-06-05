@@ -80,7 +80,7 @@ const ActualizarClaseModalForm = ({
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <form action="" onSubmit={submitHanlder}>
-            <DialogTitle>Actualizar cita mèdica</DialogTitle>
+            <DialogTitle>Actualizar cita médica</DialogTitle>
             <div className="my-4 flex flex-col gap-4">
               <p>Para: {clase.nombre}</p>
 

@@ -7,7 +7,7 @@ export const getClaseByIdAPI = async (idClase: number) => {
   const response = await baseAPI.get(`/clases/${idClase}`);
   const parsed = claseDTOSchema.parse(response.data);
 
-  if (response.status !== 200) throw new Error("Respuesta invàlida de la API");
+  if (response.status !== 200) throw new Error("Respuesta inválida de la API");
 
   return parsed;
 };
@@ -26,7 +26,7 @@ export const deleteClaseAPI = async (idClase: number) => {
   const response = await baseAPI.delete(`/clases/${idClase}`);
   const parsed = z.string().parse(response.data);
 
-  if (response.status !== 200) throw new Error("Respuesta invàlida de la API");
+  if (response.status !== 200) throw new Error("Respuesta inválida de la API");
 
   return parsed;
 };
@@ -35,7 +35,7 @@ export const reactivarClaseAPI = async (idClase: number) => {
   const response = await baseAPI.post(`/clases/${idClase}/reactivar`);
   const parsed = z.string().parse(response.data);
 
-  if (response.status !== 200) throw new Error("Respuesta invàlida de la API");
+  if (response.status !== 200) throw new Error("Respuesta inválida de la API");
 
   return parsed;
 };
@@ -49,7 +49,7 @@ export const getAllClasesAPI = async () => {
     console.log(parsed.error.format());
   }
 
-  if (response.status !== 200) throw new Error("Respuesta invàlida de la API");
+  if (response.status !== 200) throw new Error("Respuesta inválida de la API");
 
   return parsed.data;
 };

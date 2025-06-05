@@ -83,11 +83,11 @@ function Calendario<Data>({
             <ChevronLeft />
           </button>
           <p>
-            {rangeDays.initial.toFormat("LLLL", { locale: "es" })}
+            {rangeDays.initial.toFormat("LLLL", { locale: "es" }).replace(/^./, (c) => c.toUpperCase())}
             {rangeDays.initial.month !== rangeDays.final.month && (
               <span>
                 {" "}
-                - {rangeDays.final.toFormat("LLLL", { locale: "es" })}
+                - {rangeDays.final.toFormat("LLLL", { locale: "es" }).replace(/^./, (c) => c.toUpperCase())}
               </span>
             )}{" "}
           </p>
@@ -101,7 +101,7 @@ function Calendario<Data>({
           {rangeDays.initial.endOf("week").toFormat("DDD", { locale: "es" })}
         </div>
 
-        <div className="flex gap-2 items-center">
+        <div className="flex gap-4 items-center">
           <FiltrarCalendario>{filterContent}</FiltrarCalendario>
 
           <CambiarPeriodos

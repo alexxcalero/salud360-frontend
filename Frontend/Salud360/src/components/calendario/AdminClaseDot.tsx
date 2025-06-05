@@ -30,7 +30,7 @@ const AdminClaseDot = ({ clase }: { clase: claseDTOType }) => {
           ></div>
         </HoverCardTrigger>
         <HoverCardContent className="p-4">
-          <h3>Cita mèdica</h3>
+          <h3>Cita médica</h3>
           <div>
             <p>Detalles:</p>
             <ul className="list-disc pl-6">
@@ -59,7 +59,7 @@ const AdminClaseDot = ({ clase }: { clase: claseDTOType }) => {
                     variant="danger"
                     onClick={() =>
                       callAlertDialog({
-                        title: "¿Estàs seguro que quieres eliminar esto?",
+                        title: "¿Estás seguro que quieres eliminar esto?",
                         onConfirm: async () => {
                           if (!clase.idClase) return false;
                           const response = await deleteClaseAPI(clase.idClase);
@@ -87,7 +87,7 @@ const AdminClaseDot = ({ clase }: { clase: claseDTOType }) => {
                   <Button
                     onClick={() =>
                       callAlertDialog({
-                        title: "¿Estàs seguro que quieres reactivar esto?",
+                        title: "¿Estás seguro que quieres reactivar esto?",
                         buttonLabel: "Restaurar",
                         onConfirm: async () => {
                           if (!clase.idClase) return false;

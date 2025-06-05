@@ -24,7 +24,7 @@ const CitaCardDot = ({ citaMedica }: { citaMedica: citaMedicaType }) => {
           <div className="bg-blue-500 h-4 w-4 rounded-full"></div>
         </HoverCardTrigger>
         <HoverCardContent className="p-4">
-          <h3>Cita mèdica</h3>
+          <h3>Cita médica</h3>
           <p>
             Detalles:
             <ul className="list-disc pl-6">

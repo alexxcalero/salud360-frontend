@@ -8,14 +8,20 @@ function CalendarioYReservas() {
 
   return (
     <section className="flex flex-col gap-4">
-      <div className="flex flex-col gap-2 px-4 py-8 text-left">
-        <h1>Calendario de Reservas</h1>
-        <p>
+      <div className="w-full px-8 py-8 text-left">
+        <h1 className="text-4xl font-bold mb-2">Calendario de Reservas</h1>
+        <h2 className="text-lg text-gray-700 mb-6">
           En este calendario puedes visualizar, reservar y anular citas o
           actividades:
-        </p>
+        </h2>
+        <hr className="mt-16 border"/>
       </div>
-      <CalendarioUsuarios />
+      
+
+      <div className="w-full px-8">
+        <CalendarioUsuarios />
+      </div>
+
     </section>
   );
 }

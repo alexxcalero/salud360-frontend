@@ -44,7 +44,7 @@ const PostergarCitaModal = ({
         <DialogContent>
           <form action="" onSubmit={submitHanlder}>
             <DialogTitle>Postergar clase</DialogTitle>
-            <p>La cita que desea postergar, atualmente se darà para fecha:</p>
+            <p>La cita que desea postergar, atualmente se dará para fecha:</p>
             <ul className="pl-6 list-disc">
               <li>
                 Dia: {citaMedica.fecha.toFormat("DDDD", { locale: "es" })}

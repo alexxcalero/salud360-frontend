@@ -13,7 +13,7 @@ const routeToIndex: Record<string, number> = {
   locales: 4,
   usuarios: 5,
   personalMedico: 6,
-  calificaciones: 7,
+  testimonios: 7,
   logs: 8,
   auditorias: 9,
   reportes: 10,

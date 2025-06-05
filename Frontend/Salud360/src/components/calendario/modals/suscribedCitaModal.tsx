@@ -46,8 +46,8 @@ const SuscribedCitaModal = ({
               variant="danger"
               onClick={() => {
                 callAlertDialog({
-                  title: "¿Estàs seguro que quieres anular esta cita?",
-                  description: "El cambio serà irrevertible",
+                  title: "¿Estás seguro que quieres anular esta cita?",
+                  description: "El cambio será irrevertible",
                 });
                 setOpen(false);
               }}

@@ -65,16 +65,16 @@ const RegistrarCitaMedicasPageWrapped = () => {
 
   return (
     <>
-      <div>
-        <div className="p-4 flex flex-col items-start gap-3 border-b-1 border-neutral-500">
-          <h1>Calendario</h1>
-          <p className="self-stretch text-left">
-            Escoja un local primero, en el cual se realizarán las citas
-          </p>
+      <div className="flex flex-col gap-4">
+        <div className="w-full px-8 py-8 text-left">
+          <h1 className="text-4xl font-bold mb-2">Citas médicas</h1>
+          <h2 className="text-lg text-gray-700 mb-6">
+            Seleccione un médico para ver y crear citas.
+          </h2>
           <div className="self-stretch">
             <SelectLabel
               htmlFor="medico"
-              label="Seleccione un médico"
+              label="Médico"
               placeholder="Seleccione un médico"
               value={medicoInput}
               onChange={setMedicoInput}
@@ -86,10 +86,12 @@ const RegistrarCitaMedicasPageWrapped = () => {
               )}
             />
           </div>
+          <hr className="mt-16 border"/>
         </div>
 
         {medicoSeleccionado !== undefined ? (
-          <>
+
+          <div className="w-full px-8">
             <Calendario<citaMedicaType>
               data={data}
               rangeDaysFilterFunc={(initial, final, d) =>
@@ -160,13 +162,13 @@ const RegistrarCitaMedicasPageWrapped = () => {
                 medico={medicoSeleccionado}
               />
             )}
-          </>
+          </div>
         ) : (
           <>
             <div className="mt-30 flex items-center flex-col gap-4">
               <CircleDot color={colors.blue["500"]} size={48} />
               <p className="text-2xl max-w-88">
-                Seleccione un mèdico para poder realizar cambios o ver los datos
+                Seleccione un médico para comenzar.
               </p>
             </div>
           </>

@@ -51,7 +51,7 @@ const AgendarCitaModalForm = ({
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <form onSubmit={submitHandler} action="">
-            <DialogTitle>Formulario de agenda de cita mèdica</DialogTitle>
+            <DialogTitle>Formulario de agenda de cita médica</DialogTitle>
             <div className="flex gap-4 my-2">
               <Input
                 name="nombres"
