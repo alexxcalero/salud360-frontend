@@ -42,10 +42,11 @@ function ConfiguracionGeneralPage() {
   }, []);
 
   return (
-    <div className="w-full px-6 py-4">
-      <h1 className="use-title-large mb-4">Configuración del sistema</h1>
+    <div className="w-full px-8 py-8 text-left">
+      <h1 className="text-4xl font-bold mb-2">Configuración General</h1>
+      <h2 className="text-lg text-gray-700 mb-6">Valores configurables aplicados en los procesos del sistema.</h2>
 
-      <div className="flex justify-start mb-6">
+      <div className="flex justify-start my-6">
         <ButtonIcon icon={<Pencil className="w-5 h-5 text-white" />} size="lg" variant="primary" onClick={() => navigate("/admin/configuracion/editar")}>
           Editar
         </ButtonIcon>
@@ -61,7 +62,7 @@ function ConfiguracionGeneralPage() {
           text={<BlueBullet>{reglas ? estandar(reglas.maxDiasSuspension, "día", "días") : "Cargando..."}</BlueBullet>}
         />
         <InfoCard
-          title="Máximas cantidad de reservas posibles por usuario"
+          title="Máxima cantidad de reservas posibles por usuario"
           text={<BlueBullet>{reglas ? estandar(reglas.maxReservas, "reserva", "reservas") : "Cargando..."}</BlueBullet>}
         />
         <InfoCard

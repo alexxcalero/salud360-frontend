@@ -7,7 +7,7 @@ export const getServiciosAPI = async () => {
 
   const parsed = z.array(servicioSchema).parse(response.data);
 
-  if (response.status !== 200) throw new Error("Respuesta invàlida de la API");
+  if (response.status !== 200) throw new Error("Respuesta inválida de la API");
 
   return parsed;
 };

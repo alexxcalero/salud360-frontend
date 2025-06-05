@@ -5,12 +5,12 @@ import { useContext, useEffect } from "react"
 
 export default function ReportesPage() {
   return (
-    <div className="px-10 py-6 w-full">
-      <h1 className="text-3xl font-bold mb-2">Panel de Reportes</h1>
-      <p className="text-lg text-gray-600 mb-6">
+    <div className="w-full px-8 py-8 text-left">
+      <h1 className="text-4xl font-bold mb-2">Panel de Reportes</h1>
+      <h2 className="text-lg text-gray-700 mb-6">
         Seleccione el tema del reporte a generar
-      </p>
-      <ReportePanel/>
+      </h2>
+      <ReportePanel />
     </div>
   )
 }

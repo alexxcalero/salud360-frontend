@@ -11,7 +11,7 @@ export const getMedicos = async () => {
   });
   const parsed = z.array(medicoSchema).parse(response.data);
 
-  if (response.status !== 200) throw new Error("Respuesta invàlida de la API");
+  if (response.status !== 200) throw new Error("Respuesta inválida de la API");
 
   return parsed;
 };

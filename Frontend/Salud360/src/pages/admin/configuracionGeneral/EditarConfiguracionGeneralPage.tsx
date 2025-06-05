@@ -80,8 +80,8 @@ function EditarConfiguracionGeneralPage() {
   };
 
   return (
-    <div className="w-full px-6 py-4">
-      <h1 className="use-title-large mb-4">Editar información de la empresa</h1>
+    <div className="w-full px-8 py-8 text-left">
+      <h1 className="text-4xl font-bold mb-4">Editar información de la empresa</h1>
 
       {reglas && (
         <div className="space-y-5">
@@ -114,7 +114,7 @@ function EditarConfiguracionGeneralPage() {
             }
           />
           <InfoCard
-            title="Máximas cantidad de reservas posibles por usuario"
+            title="Máxima cantidad de reservas posibles por usuario"
             text={
               <BlueBullet>
                 <input
@@ -147,7 +147,7 @@ function EditarConfiguracionGeneralPage() {
       )}
 
       <div className="flex justify-end gap-4 pt-6">
-        <Button variant="outline" size="lg" onClick={() => navigate("/admin/configuracion")}>
+        <Button variant="danger" size="lg" onClick={() => navigate("/admin/configuracion")}>
           Cancelar
         </Button>
         <Button variant="primary" size="lg" onClick={handleActualizar}>

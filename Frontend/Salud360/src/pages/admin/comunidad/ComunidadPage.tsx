@@ -143,7 +143,7 @@ function ComunidadPage() {
       {/* Filtros y acciones */}
       <div className="grid grid-cols-12 gap-4 items-center mb-4">
         <div className="col-span-4">
-          <InputIcon icon={<Search className="w-5 h-5" />} placeholder="Buscar Comunidad" type="search" value={busqueda} onChange={(e) => setBusqueda(e.target.value)}/>
+          <InputIcon icon={<Search className="w-5 h-5" />} placeholder="Buscar comunidad" type="search" value={busqueda} onChange={(e) => setBusqueda(e.target.value)}/>
         </div>
         <div className="col-span-8 flex justify-end">
           <ButtonIcon icon={<FolderPlus className="w-6 h-6" />} size="lg" variant="primary" onClick={() => navigate("/admin/comunidades/crear")}>Agregar comunidad</ButtonIcon>

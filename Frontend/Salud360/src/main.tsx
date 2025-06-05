@@ -143,7 +143,7 @@ createRoot(document.getElementById("root")!).render(
 
 
             {/*3. Sección de Admin */} {/*id de Roles permitidos: Admin (1) */}
-            <Route path="/admin" element={<ProtectedRoute allowedRules={[1]}></ProtectedRoute>}>
+            <Route path="/admin" element={<ProtectedRoute allowedRules={[1]}/>}>
               <Route element={<AdminLayout />}>
                 <Route index element={<div></div>} />
                 {" "}

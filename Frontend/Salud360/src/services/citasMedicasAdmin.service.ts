@@ -6,7 +6,7 @@ export const getCitaMedicaByIdAPI = async (idCitaMedica: number) => {
   const response = await baseAPI.get(`/citas-medicas/${idCitaMedica}`);
   const parsed = extendedCitaMedicaSchema.parse(response.data);
 
-  if (response.status !== 200) throw new Error("Respuesta invàlida de la API");
+  if (response.status !== 200) throw new Error("Respuesta inválida de la API");
 
   return parsed;
 };
@@ -28,7 +28,7 @@ export const deleteCitaMedicaAPI = async (idCitaMedica: number) => {
   const response = await baseAPI.delete(`/citas-medicas/${idCitaMedica}`);
   const parsed = z.string().parse(response.data);
 
-  if (response.status !== 200) throw new Error("Respuesta invàlida de la API");
+  if (response.status !== 200) throw new Error("Respuesta inválida de la API");
 
   return parsed;
 };
@@ -39,7 +39,7 @@ export const reactivarCitaMedicaAPI = async (idCitaMedica: number) => {
   );
   const parsed = z.string().parse(response.data);
 
-  if (response.status !== 200) throw new Error("Respuesta invàlida de la API");
+  if (response.status !== 200) throw new Error("Respuesta inválida de la API");
 
   return parsed;
 };
@@ -54,7 +54,7 @@ export const getAllCitasMedicasAPI = async () => {
     console.log(parsed.error.format());
   }
 
-  if (response.status !== 200) throw new Error("Respuesta invàlida de la API");
+  if (response.status !== 200) throw new Error("Respuesta inválida de la API");
 
   return parsed.data;
 };

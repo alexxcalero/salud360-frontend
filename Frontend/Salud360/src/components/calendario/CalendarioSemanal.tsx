@@ -58,11 +58,11 @@ function CalendarioSemanal<Data>({
                 className="text-center group"
                 data-active={dia.hasSame(DateTime.now(), "day")}
               >
-                <span className="text-label-large font-normal text-neutral-700">
+                <span className="text-label-large font-normal text-neutral-700 group-data-[active=true]:text-blue-500">
                   {dia.toFormat("ccc", { locale: "es" }).toUpperCase()}
                 </span>
                 <br />
-                <div className="p-1 mx-auto w-[2rem] h-[2rem] text-body-medium text-neutral-900 font-medium group-data-[active=true]:text-white group-data-[active=true]:bg-blue-500 rounded-full aspect-1/1">
+                <div className=" mx-auto w-[2rem] h-[2rem] text-body-medium text-neutral-900 font-medium group-data-[active=true]:text-white group-data-[active=true]:bg-blue-500 rounded-full aspect-1/1">
                   {dia.toFormat("dd")}
                 </div>
               </th>
