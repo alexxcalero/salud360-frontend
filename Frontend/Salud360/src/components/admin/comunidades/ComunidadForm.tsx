@@ -73,7 +73,7 @@ function ComunidadForm({
 
   const navigate = useNavigate();
   //const [nuevasMembresias, setNuevasMembresias] = useState<Item[]>([]);
-  const textoValido = (texto: string) => /^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9 ]*$/.test(texto);
+  const textoValido = (texto: string) => /^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9 ,.;-]*$/.test(texto);
 
   const validarCampos = () => {
     if (!textoValido(nombre)) {
