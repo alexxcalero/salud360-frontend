@@ -7,7 +7,6 @@ import {
 
 import Button from "../Button";
 import { useDialog } from "@/hooks/dialogContext";
-import ActualizarCitaModalForm from "./modals/actualizarCitaModalForm";
 import { useInternalModals } from "@/hooks/useInternalModals";
 import { claseDTOType } from "@/schemas/clase";
 import {
