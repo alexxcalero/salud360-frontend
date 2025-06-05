@@ -1,4 +1,4 @@
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Check } from "lucide-react";
 import Button from "../Button";
 
@@ -19,7 +19,7 @@ function SuccessModal({
 }: Props) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent>
+      <DialogContent aria-describedby="Modal de éxito">
         <div className="max-w-md w-full text-center">
           {/* Círculo con check */}
           <div className="flex justify-center mb-4">
@@ -29,7 +29,7 @@ function SuccessModal({
           </div>
 
           {/* Título */}
-          <h2 className="text-2xl font-bold mb-2">{title}</h2>
+          <DialogTitle className="text-2xl font-bold mb-2">{title}</DialogTitle>
 
           {/* Subtítulo */}
           <p className="mb-6">{description}</p>

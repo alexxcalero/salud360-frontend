@@ -1,5 +1,5 @@
 import Button from "@/components/Button";
-import { Dialog, DialogContent } from "../ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "../ui/dialog";
 
 interface Props {
   title?: string;
@@ -18,7 +18,7 @@ function ErrorModal({
 }: Props) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent>
+      <DialogContent aria-describedby="Modal de error">
         <div className="max-w-md w-full text-center">
           {/* Icono de advertencia */}
           <div className="flex justify-center mb-4">
@@ -28,7 +28,7 @@ function ErrorModal({
           </div>
 
           {/* Mensaje principal */}
-          <h2 className="text-2xl font-bold mb-2">{title}</h2>
+          <DialogTitle className="text-2xl font-bold mb-2">{title}</DialogTitle>
 
           {/* Detalle del elemento */}
           <p className="mb-6">{description}</p>
