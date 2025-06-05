@@ -17,13 +17,19 @@ import { useNavigate } from "react-router-dom"; // Asegúrate de tener esto bien
 import axios from "axios";
 import { useEffect, useState } from "react";
 import SelectLabel from "@/components/SelectLabel";
+import useUsuarioForm from "@/hooks/useUsuarioForm";
 
 function InicioPerfi() {
   const { usuario, logout, loading } = useContext(AuthContext);
+  const [showModalLogout, setShowModalLogout] = useState(false);
+  const [waiting, setWaiting] = useState(true);
+  const navigate = useNavigate();
+  
+  const [tipoDocumentos, setTipoDocumentos] = useState([]);
 
   if (loading || !usuario) return null;
 
-  const {
+  /*const {
     nombres,
     apellidos,
     correo,
@@ -34,9 +40,41 @@ function InicioPerfi() {
     fotoPerfil,
     numeroDocumento,
     fechaCreacion: rawFechaCreacion, //Lo renombro así para formatearlo
+  } = usuario;*/
+
+  const {
+    fotoPerfil,
+    fechaCreacion: rawFechaCreacion
   } = usuario;
 
-  const fechaCreacion = new Date(usuario.fechaCreacion).toLocaleDateString(
+  const {
+        nombres, setNombres,
+        apellidos, setApellidos,
+        tipoDoc, setTipoDoc,
+        DNI, setDNI,
+        telefono, setTelefono,
+        direccion, setDireccion,
+        correo, setCorreo,
+        genero, setGenero,
+        fechaNacimiento, setFechaNacimiento,
+        contrasenha, setContrasenha,
+        setUsuarioAPI
+  } = useUsuarioForm();
+
+  useEffect(() => {
+    console.log("El usuario en use effect es:", usuario)
+    console.log("El nombre de un usuario en en use effect es:", usuario.nombres)
+    setUsuarioAPI(usuario);
+    console.log("Nombres:", nombres, " Apellidos:", apellidos, " numeroDocumento:", DNI, " Telefono:", telefono,
+                 " correo:", correo, " sexo:", genero, " contraseña:", contrasenha, " fechaNacimiento:", fechaNacimiento);
+    setWaiting(false);
+  }, [])
+
+  if (waiting) {
+      return <p>Cargando usuario...</p>; // o un spinner
+  }
+
+  const fechaCreacion = new Date(rawFechaCreacion).toLocaleDateString(
     "es-PE",
     {
       day: "2-digit",
@@ -45,12 +83,12 @@ function InicioPerfi() {
     }
   );
 
-  const [showModalLogout, setShowModalLogout] = useState(false);
-  const navigate = useNavigate();
 
+  
+  
+  /*
   const [tipoDocSeleccionado, setTipoDocSeleccionado] = useState("");
   const [sexoSeleccionado, setSexoSeleccionado] = useState(sexo || "");
-  const [tipoDocumentos, setTipoDocumentos] = useState([]);
   const [sexoOpciones, setSexoOpciones] = useState([
     { value: "Masculino", content: "Masculino" },
     { value: "Femenino", content: "Femenino" },
@@ -61,57 +99,52 @@ function InicioPerfi() {
   const [telefonoInput, setTelefonoInput] = useState(telefono ?? "");
   const [direccionInput, setDireccionInput] = useState(direccion ?? "");
   const [fechaNacimientoInput, setFechaNacimientoInput] = useState(fechaNacimiento ?? "");
-  const [numeroDocumentoInput, setNumeroDocumentoInput] = useState(numeroDocumento ?? "");
+  const [numeroDocumentoInput, setNumeroDocumentoInput] = useState(numeroDocumento ?? "");*/
 
 
+  
+ 
 
-  const fetchTipoDocumentos = () => {
-    axios
-      .get("http://localhost:8080/api/admin/tiposDocumentos", {
-        auth: {
-          username: "admin",
-          password: "admin123",
-        },
-      })
-      .then((res) => {
-        console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
+  const sexo = [
+    { value: "Masculino", content: "Masculino" },
+    { value: "Femenino", content: "Femenino" }
+  ]
 
-        const opciones = res.data.map((tipoDocX: any) => ({
-          value: tipoDocX.idTipoDocumento.toString(),
-          content: tipoDocX.nombre,
-        }));
-
-        setTipoDocumentos(opciones);
-        console.log("Tipo Documentos:", opciones);
-      })
-      .catch((err) => console.error("Error cargando tipo documentos", err));
-  };
-
-  useEffect(() => {
-    fetchTipoDocumentos();
-  }, []);
-
-  useEffect(() => {
+  /*useEffect(() => {
     if (usuario?.tipoDocumento?.idTipoDocumento) {
       setTipoDocSeleccionado(usuario.tipoDocumento.idTipoDocumento.toString());
     }
-  }, [usuario]);
+  }, [usuario]);*/
 
   const handleAplicarCambios = async (e: React.FormEvent) => {
     e.preventDefault(); // Previene el comportamiento por defecto del submit
-
-    
     try {
       
       await axios.put(
         `http://localhost:8080/api/usuarios/${usuario.idUsuario}`,
         {
-          telefono: telefonoInput,
+          nombres,
+          apellidos,
+          numeroDocumento: DNI,
+          correo,
+          telefono,
+          sexo,
+          fechaNacimiento,
+          //notificacionPorCorreo: true,
+          //notificacionPorSMS: true,
+          //notificacionPorWhatsApp: true,
+          direccion,
+          tipoDocumento: {
+              idTipoDocumento: tipoDoc
+          },
+
+
+          /*telefono: telefonoInput,
           direccion: direccionInput,
           sexo: sexoSeleccionado,
           fechaNacimiento: fechaNacimientoInput,
           numeroDocumento: numeroDocumentoInput,
-          idTipoDocumento: Number(tipoDocSeleccionado),
+          idTipoDocumento: Number(tipoDocSeleccionado),*/
         },
         {
           auth: {
@@ -130,6 +163,8 @@ function InicioPerfi() {
       alert("Hubo un error al aplicar los cambios.");
     }
   };
+
+  
 
   return (
     <div className="p-8">
@@ -173,15 +208,15 @@ function InicioPerfi() {
             name="nombres"
             label="Nombres"
             required={true}
-            value={nombresInput}
-            onChange={(e) => setNombresInput(e.target.value)}
+            value={nombres}
+            onChange={(e) => setNombres(e.target.value)}
           />
           <Input
             name="apellidos"
             label="Apellidos"
             required={true}
-            value={apellidosInput}
-            onChange={(e) => setApellidosInput(e.target.value)}
+            value={apellidos}
+            onChange={(e) => setApellidos(e.target.value)}
           />
           <div className="col-span-full">
             <Input
@@ -190,24 +225,24 @@ function InicioPerfi() {
               type="email"
               leftIcon={<Mail />}
               required={true}
-              value={correoInput}
-              onChange={(e) => setCorreoInput(e.target.value)}
+              value={correo}
+              onChange={(e) => setCorreo(e.target.value)}
             />
           </div>
           <Input
             name="telefono"
             label="Teléfono"
             leftIcon={<Phone />}
-            required
-            value={telefonoInput}
-            onChange={(e) => setTelefonoInput(e.target.value)}
+            required={true}
+            value={telefono}
+            onChange={(e) => setTelefono(e.target.value)}
           />
           <SelectLabel
             htmlFor="sexo"
             label="Sexo"
-            options={sexoOpciones}
-            value={sexoSeleccionado}
-            onChange={(value) => setSexoSeleccionado(value)}
+            options={sexo}
+            value={genero}
+            onChange={(value) => setGenero(value)}
             placeholder="Seleccione su género"
           />
           <Input
@@ -215,8 +250,8 @@ function InicioPerfi() {
             label="Ubicación"
             leftIcon={<MapPin />}
             required={true}
-            value={direccionInput}
-            onChange={(e) => setDireccionInput(e.target.value)}
+            value={direccion}
+            onChange={(e) => setDireccion(e.target.value)}
           />
           <Input
             name="fecha-nacimiento"
@@ -224,23 +259,23 @@ function InicioPerfi() {
             type="date"
             leftIcon={<Calendar />}
             required={true}
-            value={fechaNacimientoInput}
-            onChange={(e) => setFechaNacimientoInput(e.target.value)}
+            value={fechaNacimiento}
+            onChange={(e) => setFechaNacimiento(e.target.value)}
           />
           <SelectLabel
             htmlFor="tipo-documento"
             label="Tipo de documento de identidad"
             options={tipoDocumentos}
-            value={tipoDocSeleccionado}
-            onChange={(value) => setTipoDocSeleccionado(value)}
-            placeholder="Seleccione una opción"
+            placeholder="Seleccione el tipo de documento"
+            value={tipoDoc}
+            onChange={(value) => setTipoDoc(value)}
           />
           <Input
             name="numero-documento"
             label="Número de documento de identidad"
             required={true}
-            value={numeroDocumentoInput}
-            onChange={(e) => setNumeroDocumentoInput(e.target.value)}
+            value={DNI}
+            onChange={(e) => setDNI(e.target.value)}
             placeholder="Ingrese su número de documento"
           />
         </section>
