@@ -57,7 +57,7 @@ export const claseDTOSchema = z.object({
   capacidad: z.number().optional().nullable(),
   cantAsistentes: z.number().optional().nullable(),
   estado: z
-    .enum(["available", "canceled", "suscribed", "soon", "full"]) // Recordatorio: Debo ver de nuevo el audio de Alex para entender esto
+    .string() // Recordatorio: Debo ver de nuevo el audio de Alex para entender esto
     .optional()
     .nullable(),
   activo: z.boolean().optional().nullable(),
@@ -72,7 +72,7 @@ export const claseDTOSchema = z.object({
     .optional()
     .nullable(),
   local: z.lazy(() => localSchema.optional().nullable()),
-  reservas: z.lazy(() => reservaSchema.optional().nullable()),
+  reservas: z.lazy(() => z.array(reservaSchema).optional().nullable()),
   cliente: z.lazy(() => clienteSchema.optional().nullable()),
 });
 
