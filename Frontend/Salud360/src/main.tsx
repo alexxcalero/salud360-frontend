@@ -112,18 +112,19 @@ createRoot(document.getElementById("root")!).render(
 
                 {/*2. Sección de Usuario */} {/*id de Roles permitidos: Cliente Visitante y Cliente Miembro (2 y 3) */}
                 
-                  <Route path="/usuario" element={<ProtectedRoute allowedRules={[2, 3]}><UsuarioLayout /></ProtectedRoute>}>
-                    <Route index element={<Inicio />} />
-                    <Route path="configuracion" element={<UsuarioConfigLayout />}>
-                      <Route index element={<ConfigPerfil />} />
-                      <Route path="sistema" element={<ConfigSistema />} />
-                      <Route path="membresias" element={<Membresias />} />
-                      <Route path="historial-pagos" element={<HistorialPagos />} />
-                    </Route>
-                    <Route path="calendarioYReservas" element={<CalendarioYReservas/>}></Route>
-                    {/*<Route path="citasMedicas" element={<CitasMedicas/>}></Route>
-                    <Route path="historialMedico" element={<HistorialMedico/>}></Route>*/}
-                    <Route path="comunidades">
+                  <Route path="/usuario" element={<ProtectedRoute allowedRules={[2, 3]} />}>
+                    <Route element={<UsuarioLayout />}>
+                      <Route index element={<Inicio />} />
+                      <Route path="configuracion" element={<UsuarioConfigLayout />}>
+                        <Route index element={<ConfigPerfil />} />
+                        <Route path="sistema" element={<ConfigSistema />} />
+                        <Route path="membresias" element={<Membresias />} />
+                        <Route path="historial-pagos" element={<HistorialPagos />} />
+                      </Route>
+                      <Route path="calendarioYReservas" element={<CalendarioYReservas/>}></Route>
+                      {/*<Route path="citasMedicas" element={<CitasMedicas/>}></Route>
+                      <Route path="historialMedico" element={<HistorialMedico/>}></Route>*/}
+                      <Route path="comunidades">
                         <Route index element={<ComunidadesUsuario />} />
                         <Route path="explorarComunidades" element={<ExplorarComunidades />} />
                           <Route path="detalle/:id" element={<ComunidadProvider> <DetalleComunidadLayout /> </ComunidadProvider>}>
@@ -134,6 +135,7 @@ createRoot(document.getElementById("root")!).render(
                             {/*<Route path="integrantes" element={<DetalleComunidadIntegrantes/>}></Route>*/}
                           </Route>
                       </Route>
+                    </Route>
                   </Route>
 
 
@@ -141,90 +143,93 @@ createRoot(document.getElementById("root")!).render(
 
 
             {/*3. Sección de Admin */} {/*id de Roles permitidos: Admin (1) */}
-            <Route path="/admin" element={<ProtectedRoute allowedRules={[1]}><AdminLayout /></ProtectedRoute>}>
-              {" "}
-              {/* ESTO ES PARA LA PANTALLAS DE ROLES Y PERMISOS*/}
-              {/* Ejemplo de ruta anidada con un layout */}
-              <Route path="example" element={<Test />} />
-              <Route path="dashboard">
-                <Route index element={<DashboardPage />} />
-              </Route>
-              <Route path="configuracion">
-                <Route index element={<ConfiguracionGeneralPage />} />
-                <Route path="editar" element={<EditarConfiguracionGeneralPage />} />
-              </Route>
-              <Route path="roles">
-                <Route index element={<RolesPage />} />
-                <Route path="crear" element={<CrearUsuario />} />
-              </Route>
-              {/*<Route path="membresias">
-                <Route index element={<MembresiasPage />} />
-                <Route path="crear" element={<CrearUsuario />} />
-                <Route path="detalle/:id" element={<DetalleComunidadLanding />} />
-                <Route path="editar/:id" element={<EditarComunidad />} />
-              </Route>*/}
-              <Route path="comunidades">
-                <Route index element={<ComunidadPage />} />
-                <Route path="crear" element={<CrearComunidad />} />
-                <Route path="editar/:id" element={<EditarComunidad />} />
-                <Route path="detalle/:id" element={<DetalleComunidad />} />
-                <Route path="successCrear" element={<UsuarioSuccess modulo="¡Comunidad creada correctamente!" detalle="La comunidad fue creada correctamente" route="/admin/comunidades"/>} />
-                <Route path="successEditar" element={<UsuarioSuccess modulo="¡Comunidad modificada correctamente!" detalle="La comunidad fue modificada correctamente" route="/admin/comunidades"/>} />
-              </Route>
-              <Route path="servicios">
-                <Route index element={<ServiciosPage />} />
-                <Route path="crear" element={<CrearServicio />} />
-                <Route path="detalle/:id" element={<DetalleServicio />} />
-                <Route path="editar/:id" element={<EditarServicio />} />
-                <Route path="successCrear" element={<UsuarioSuccess modulo="¡Servicio creado correctamente!" detalle="El servicio fue creado correctamente" route="/admin/servicios"/>} />
-                <Route path="successEditar" element={<UsuarioSuccess modulo="¡Servicio modificado correctamente!" detalle="El servicio fue modificado correctamente" route="/admin/servicios"/>} />
-              </Route>
-              <Route path="locales">
-                <Route index element={<LocalesPage />} />
-                <Route path="crear" element={<CrearLocal />} />
-                <Route path="detalle/:id" element={<DetalleLocal />} />
-                <Route path="editar/:id" element={<EditarLocal />} />
-                <Route path="successCrear" element={<UsuarioSuccess modulo="¡Local creado correctamente!" detalle="El local fue creado correctamente" route="/admin/locales"/>} />
-                <Route path="successEditar" element={<UsuarioSuccess modulo="¡Local modificado correctamente!" detalle="El local fue modificado correctamente" route="/admin/locales"/>} />
-              </Route>
-              <Route path="usuarios">
-                <Route index element={<UsuariosPage />} />
-                <Route path="crear" element={<CrearUsuario />} />
-                <Route path="detalle/:id" element={<DetalleUsuario />} />
-                <Route path="editar/:id" element={<EditarUsuario />} />
-                <Route path="successCrear" element={<UsuarioSuccess modulo="¡Usuario creado correctamente!" detalle="El usuario fue creado correctamente" />} />
-                <Route path="successEditar" element={<UsuarioSuccess modulo="¡Usuario modificado correctamente!" detalle="El usuario fue modificado correctamente" />} />
-              </Route>
-              <Route path="personalMedico">
-                <Route index element={<PersonalMedicoPage />} />
-                <Route path="crear" element={<CrearMedico />} />
-                <Route path="detalle/:id" element={<DetalleMedico />} />
-                <Route path="editar/:id" element={<EditarMedico />} />
-                <Route path="successCrear" element={<UsuarioSuccess modulo="¡Médico creado correctamente!" detalle="El médico fue creado correctamente" route="/admin/personalMedico"/>} />
-                <Route path="successEditar" element={<UsuarioSuccess modulo="¡Médico modificado correctamente!" detalle="El médico fue modificado correctamente" route="/admin/personalMedico" />} />
-              </Route>
-              <Route path="testimonios">
-                <Route index element={<CalificacionesPage />} />
-                <Route path="crear" element={<CrearUsuario />} />
-              </Route>
-              <Route path="logs">
-                <Route index element={<LogsPage />} />
-                <Route path="crear" element={<CrearUsuario />} />
-              </Route>
-              <Route path="auditorias">
-                  <Route index element={<AuditoriasPage />} />
-                  <Route path="detalle/:id" element={<DetalleAuditoriaPage />} />
-              </Route>
-              <Route path="reportes">
-                <Route index element={<ReportesPage />} />
-                <Route path="crear" element={<CrearUsuario />} />
-              </Route>
-              <Route path="clases">
-                <Route index element={<ClasesPage />} />
-                <Route path="crear" element={<CrearUsuario />} />
-              </Route>
-              <Route path="citasMedicas">
-                <Route index element={<CitasMedicasPage />} />
+            <Route path="/admin" element={<ProtectedRoute allowedRules={[1]}/>}>
+              <Route element={<AdminLayout />}>
+                <Route index element={<div></div>} />
+                {" "}
+                {/* ESTO ES PARA LA PANTALLAS DE ROLES Y PERMISOS*/}
+                {/* Ejemplo de ruta anidada con un layout */}
+                <Route path="example" element={<Test />} />
+                <Route path="dashboard">
+                  <Route index element={<DashboardPage />} />
+                </Route>
+                <Route path="configuracion">
+                  <Route index element={<ConfiguracionGeneralPage />} />
+                  <Route path="editar" element={<EditarConfiguracionGeneralPage />} />
+                </Route>
+                <Route path="roles">
+                  <Route index element={<RolesPage />} />
+                  <Route path="crear" element={<CrearUsuario />} />
+                </Route>
+                {/*<Route path="membresias">
+                  <Route index element={<MembresiasPage />} />
+                  <Route path="crear" element={<CrearUsuario />} />
+                  <Route path="detalle/:id" element={<DetalleComunidadLanding />} />
+                  <Route path="editar/:id" element={<EditarComunidad />} />
+                </Route>*/}
+                <Route path="comunidades">
+                  <Route index element={<ComunidadPage />} />
+                  <Route path="crear" element={<CrearComunidad />} />
+                  <Route path="editar/:id" element={<EditarComunidad />} />
+                  <Route path="detalle/:id" element={<DetalleComunidad />} />
+                  <Route path="successCrear" element={<UsuarioSuccess modulo="¡Comunidad creada correctamente!" detalle="La comunidad fue creada correctamente" route="/admin/comunidades"/>} />
+                  <Route path="successEditar" element={<UsuarioSuccess modulo="¡Comunidad modificada correctamente!" detalle="La comunidad fue modificada correctamente" route="/admin/comunidades"/>} />
+                </Route>
+                <Route path="servicios">
+                  <Route index element={<ServiciosPage />} />
+                  <Route path="crear" element={<CrearServicio />} />
+                  <Route path="detalle/:id" element={<DetalleServicio />} />
+                  <Route path="editar/:id" element={<EditarServicio />} />
+                  <Route path="successCrear" element={<UsuarioSuccess modulo="¡Servicio creado correctamente!" detalle="El servicio fue creado correctamente" route="/admin/servicios"/>} />
+                  <Route path="successEditar" element={<UsuarioSuccess modulo="¡Servicio modificado correctamente!" detalle="El servicio fue modificado correctamente" route="/admin/servicios"/>} />
+                </Route>
+                <Route path="locales">
+                  <Route index element={<LocalesPage />} />
+                  <Route path="crear" element={<CrearLocal />} />
+                  <Route path="detalle/:id" element={<DetalleLocal />} />
+                  <Route path="editar/:id" element={<EditarLocal />} />
+                  <Route path="successCrear" element={<UsuarioSuccess modulo="¡Local creado correctamente!" detalle="El local fue creado correctamente" route="/admin/locales"/>} />
+                  <Route path="successEditar" element={<UsuarioSuccess modulo="¡Local modificado correctamente!" detalle="El local fue modificado correctamente" route="/admin/locales"/>} />
+                </Route>
+                <Route path="usuarios">
+                  <Route index element={<UsuariosPage />} />
+                  <Route path="crear" element={<CrearUsuario />} />
+                  <Route path="detalle/:id" element={<DetalleUsuario />} />
+                  <Route path="editar/:id" element={<EditarUsuario />} />
+                  <Route path="successCrear" element={<UsuarioSuccess modulo="¡Usuario creado correctamente!" detalle="El usuario fue creado correctamente" />} />
+                  <Route path="successEditar" element={<UsuarioSuccess modulo="¡Usuario modificado correctamente!" detalle="El usuario fue modificado correctamente" />} />
+                </Route>
+                <Route path="personalMedico">
+                  <Route index element={<PersonalMedicoPage />} />
+                  <Route path="crear" element={<CrearMedico />} />
+                  <Route path="detalle/:id" element={<DetalleMedico />} />
+                  <Route path="editar/:id" element={<EditarMedico />} />
+                  <Route path="successCrear" element={<UsuarioSuccess modulo="¡Médico creado correctamente!" detalle="El médico fue creado correctamente" route="/admin/personalMedico"/>} />
+                  <Route path="successEditar" element={<UsuarioSuccess modulo="¡Médico modificado correctamente!" detalle="El médico fue modificado correctamente" route="/admin/personalMedico" />} />
+                </Route>
+                <Route path="calificaciones">
+                  <Route index element={<CalificacionesPage />} />
+                  <Route path="crear" element={<CrearUsuario />} />
+                </Route>
+                <Route path="logs">
+                  <Route index element={<LogsPage />} />
+                  <Route path="crear" element={<CrearUsuario />} />
+                </Route>
+                <Route path="auditorias">
+                    <Route index element={<AuditoriasPage />} />
+                    <Route path="detalle/:id" element={<DetalleAuditoriaPage />} />
+                </Route>
+                <Route path="reportes">
+                  <Route index element={<ReportesPage />} />
+                  <Route path="crear" element={<CrearUsuario />} />
+                </Route>
+                <Route path="clases">
+                  <Route index element={<ClasesPage />} />
+                  <Route path="crear" element={<CrearUsuario />} />
+                </Route>
+                <Route path="citasMedicas">
+                  <Route index element={<CitasMedicasPage />} />
+                </Route>
               </Route>
             </Route>
             <Route path="/example" element={<Example />} />

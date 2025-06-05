@@ -1,14 +1,21 @@
 import { AuthContext } from "@/hooks/AuthContext";
 import { useContext } from "react";
-import { Navigate } from "react-router";
+import { Navigate, Outlet } from "react-router";
+import Spinner from "./Spinner";
 
 interface Props {
-  children: React.ReactNode;
   allowedRules: number[];
 }
 
-function ProtectedRoute({ children, allowedRules }: Props) {
-  const { usuario } = useContext(AuthContext);
+function ProtectedRoute({ allowedRules }: Props) {
+  const { usuario, loading } = useContext(AuthContext);
+
+  if (loading)
+    return (
+      <div className="fixed top-0 bottom-0 left-0 right-0 flex justify-center items-center">
+        <Spinner />
+      </div>
+    );
 
   if (!usuario) return <Navigate to="/" />; //Si no hay usuario en sesión
 
@@ -19,7 +26,7 @@ function ProtectedRoute({ children, allowedRules }: Props) {
     return <Navigate to="/" />;
   }
 
-  return <>{children}</>;
+  return <Outlet />;
 }
 
 export default ProtectedRoute;
