@@ -36,44 +36,47 @@ export default function LoginForm() {
 
     try {
       const response = await loginRequest(formData.correo, formData.contraseña);
-      console.log("El response del inicio de sesión es:", response)
-      console.log("El token de response es:", response.token)
+      console.log("El response del inicio de sesión es:", response);
+      console.log("El token de response es:", response.token);
 
-      var usuario = response.usuario;
+      const usuario = response.usuario;
+      let activeUser = null;
 
-      let activeUser = null
-
-      if (usuario.cliente){
-        activeUser = usuario.cliente
+      if (usuario.cliente) {
+        activeUser = {
+          ...usuario.cliente,
+          idUsuario: usuario.idUsuario, // ✅ importante
+        };
+      } else if (usuario.administrador) {
+        activeUser = {
+          ...usuario.administrador,
+          idUsuario: usuario.idUsuario, // ✅ importante
+        };
+      }else {
+        console.error("❌ Usuario no contiene ni cliente ni administrador:", usuario);
       }
-      else if (usuario.administrador){
-        activeUser = usuario.administrador
-      }
 
-      console.log("******activeUser contiene:", activeUser)
+      console.log("******activeUser contiene:", activeUser);
+      console.log("🧠 Usuario activo con ID:", activeUser.idUsuario);
+      
+      const token = response.token;
+      const idRol = activeUser.rol?.idRol;
 
-      //var activeUser = response.usuario;
-      var token = response.token;
-      var idRol = activeUser.rol?.idRol;
+      loginContext(activeUser, token); // ✅ ahora contiene idUsuario
 
-      loginContext(activeUser, token)
+      console.log("el idRol es:", idRol);
 
-      console.log("el idRol es:", idRol)
-
-      setLoading(false)
-      switch(idRol){
+      setLoading(false);
+      switch (idRol) {
         case 1: //Admin
           navigate("/admin");
-          console.log("HOLA");
           break;
         case 2: //Cliente Visitante
-          navigate("/usuario")
-          break;
         case 3: //Cliente Miembro
-          navigate("/usuario")
+          navigate("/usuario");
           break;
         default:
-          navigate("/")
+          navigate("/");
       }
 
     } catch (error: any) {

@@ -45,7 +45,15 @@ function InicioPerfi() {
     { value: "Masculino", content: "Masculino" },
     { value: "Femenino", content: "Femenino" },
   ]);
+  const [nombresInput, setNombresInput] = useState(nombres ?? "");
+  const [apellidosInput, setApellidosInput] = useState(apellidos ?? "");
+  const [correoInput, setCorreoInput] = useState(correo ?? "");
   const [telefonoInput, setTelefonoInput] = useState(telefono ?? "");
+  const [direccionInput, setDireccionInput] = useState(direccion ?? "");
+  const [fechaNacimientoInput, setFechaNacimientoInput] = useState(fechaNacimiento ?? "");
+  const [numeroDocumentoInput, setNumeroDocumentoInput] = useState(numeroDocumento ?? "");
+
+
 
   const fetchTipoDocumentos = () => {
     axios.get("http://localhost:8080/api/admin/tiposDocumentos", {
@@ -81,18 +89,18 @@ function InicioPerfi() {
   const handleAplicarCambios = async (e: React.FormEvent) => {
     e.preventDefault(); // Previene el comportamiento por defecto del submit
 
+    
     try {
+      
       await axios.put(
         `http://localhost:8080/api/usuarios/${usuario.idUsuario}`,
         {
-          telefono,
-          direccion,
+          telefono: telefonoInput,
+          direccion: direccionInput,
           sexo: sexoSeleccionado,
-          tipoDocumento: {
-            idTipoDocumento: Number(tipoDocSeleccionado),
-          },
-          numeroDocumento,
-          fechaNacimiento,
+          fechaNacimiento: fechaNacimientoInput,
+          numeroDocumento: numeroDocumentoInput,
+          idTipoDocumento: Number(tipoDocSeleccionado),
         },
         {
           auth: {
@@ -148,29 +156,32 @@ function InicioPerfi() {
         </section>
         <section className="grid grid-cols-2 justify-start place-items-stretch gap-4 mb-8">
           <Input
-            idName="nombres"
+            name="nombres"
             label="Nombres"
             required={true}
-            defaultValue={nombres}
+            value={nombresInput}
+            onChange={(e) => setNombresInput(e.target.value)}
           />
           <Input
-            idName="apellidos"
+            name="apellidos"
             label="Apellidos"
             required={true}
-            defaultValue={apellidos}
+            value={apellidosInput}
+            onChange={(e) => setApellidosInput(e.target.value)}
           />
           <div className="col-span-full">
             <Input
-              idName="correo-electronico"
+              name="correo-electronico"
               label="Correo electrónico"
               type="email"
               leftIcon={<Mail />}
               required={true}
-              defaultValue={correo}
+              value={correoInput}
+              onChange={(e) => setCorreoInput(e.target.value)}
             />
           </div>
           <Input
-            idName="telefono"
+            name="telefono"
             label="Teléfono"
             leftIcon={<Phone />}
             required
@@ -186,19 +197,21 @@ function InicioPerfi() {
             placeholder="Seleccione su género"
           />
           <Input
-            idName="ubicacion"
+            name="ubicacion"
             label="Ubicación"
             leftIcon={<MapPin />}
             required={true}
-            defaultValue={direccion}
+            value={direccionInput}
+            onChange={(e) => setDireccionInput(e.target.value)}
           />
           <Input
-            idName="fecha-nacimiento"
+            name="fecha-nacimiento"
             label="Fecha de nacimiento"
             type="date"
             leftIcon={<Calendar />}
             required={true}
-            defaultValue={fechaNacimiento}
+            value={fechaNacimientoInput}
+            onChange={(e) => setFechaNacimientoInput(e.target.value)}
           />
           <SelectLabel
             htmlFor="tipo-documento"
@@ -209,30 +222,31 @@ function InicioPerfi() {
             placeholder="Seleccione una opción"
           />
           <Input
-            idName="numero-documento"
+            name="numero-documento"
             label="Número de documento de identidad"
             required={true}
-            defaultValue={numeroDocumento}
+            value={numeroDocumentoInput}
+            onChange={(e) => setNumeroDocumentoInput(e.target.value)}
             placeholder="Ingrese su número de documento"
           />
-
         </section>
+
         <hr />
         <section className="mt-8 flex flex-col gap-4">
           <PasswordInput
-            idName="contrasenha-actual"
+            name="contrasenha-actual"
             label="Contraseña actual"
             placeholder="Ingrese la contraseña actual"
             required={false}
           />
           <PasswordInput
-            idName="contrasenha"
+            name="contrasenha"
             label="Contraseña nueva"
             placeholder="Ingrese la nueva contraseña"
             required={false}
           />
           <PasswordInput
-            idName="confirmar-contrasenha"
+            name="confirmar-contrasenha"
             label="Confirmar contraseña nueva"
             placeholder="Confirme la nueva contraseña"
             required={false}
