@@ -3,26 +3,28 @@ import { z } from "zod";
 import { tipoDocumentoSchema } from "./tipoDocumento";
 
 export const medicoSchema = z.object({
-  idMedico: z.number().optional(),
-  nombres: z.string().optional(),
-  apellidos: z.string().optional(),
-  numeroDocumento: z.string().optional(),
-  correo: z.string().optional().optional(),
-  especialidad: z.string().optional(),
-  descripcion: z.string().optional(),
-  sexo: z.string().optional(),
+  idMedico: z.number().optional().nullable(),
+  nombres: z.string().optional().nullable(),
+  apellidos: z.string().optional().nullable(),
+  numeroDocumento: z.string().optional().nullable(),
+  correo: z.string().optional().optional().nullable(),
+  especialidad: z.string().optional().nullable(),
+  descripcion: z.string().optional().nullable(),
+  sexo: z.string().optional().nullable(),
   fotoPerfil: z.string().url().optional().nullable(),
-  activo: z.boolean().optional(),
+  activo: z.boolean().optional().nullable(),
   fechaCreacion: z
-    .string()
-    .transform((v) => DateTime.fromISO(v))
-    .optional(),
-  fechaDesactivacion: z
     .string()
     .transform((v) => DateTime.fromISO(v))
     .optional()
     .nullable(),
-  tipoDocumento: tipoDocumentoSchema.optional(),
+  fechaDesactivacion: z
+    .string()
+    .transform((v) => DateTime.fromISO(v))
+    .optional()
+    .nullable()
+    .nullable(),
+  tipoDocumento: tipoDocumentoSchema.optional().nullable(),
 });
 
 export type medicoType = z.infer<typeof medicoSchema>;

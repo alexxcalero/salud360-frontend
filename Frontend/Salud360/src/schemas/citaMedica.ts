@@ -20,7 +20,7 @@ export const citaMedicaSchema = z.object({
     .string()
     .transform((str) => DateTime.fromISO(str))
     .optional(),
-  estado: z.enum(["Disponible", "Reservada", "Cancelada"]).optional(),
+  estado: z.string().optional(),
   activo: z.boolean().optional(),
   fechaCreacion: z
     .string()
@@ -34,9 +34,9 @@ export const citaMedicaSchema = z.object({
 });
 
 export const extendedCitaMedicaSchema = citaMedicaSchema.extend({
-  medico: z.lazy(() => medicoSchema.optional()),
+  medico: z.lazy(() => medicoSchema.optional().nullable()),
   cliente: z.lazy(() => clienteSchema.optional().nullable()),
-  servicio: z.lazy(() => servicioSchema.optional()),
+  servicio: z.lazy(() => servicioSchema.optional().nullable()),
 });
 
 export const citaMedicaVistaUsuarioSchema = citaMedicaSchema.extend({
