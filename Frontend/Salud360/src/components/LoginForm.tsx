@@ -39,22 +39,30 @@ export default function LoginForm() {
       console.log("El response del inicio de sesión es:", response);
       console.log("El token de response es:", response.token);
 
-      var usuario = response.usuario;
+      const usuario = response.usuario;
       let activeUser = null;
 
       if (usuario.cliente) {
-        activeUser = usuario.cliente;
+        activeUser = {
+          ...usuario.cliente,
+          idUsuario: usuario.idUsuario, // ✅ importante
+        };
       } else if (usuario.administrador) {
-        activeUser = usuario.administrador;
+        activeUser = {
+          ...usuario.administrador,
+          idUsuario: usuario.idUsuario, // ✅ importante
+        };
+      }else {
+        console.error("❌ Usuario no contiene ni cliente ni administrador:", usuario);
       }
 
       console.log("******activeUser contiene:", activeUser);
+      console.log("🧠 Usuario activo con ID:", activeUser.idUsuario);
+      
+      const token = response.token;
+      const idRol = activeUser.rol?.idRol;
 
-      //var activeUser = response.usuario;
-      var token = response.token;
-      var idRol = activeUser.rol?.idRol;
-
-      loginContext(activeUser, token);
+      loginContext(activeUser, token); // ✅ ahora contiene idUsuario
 
       console.log("el idRol es:", idRol);
 
@@ -62,11 +70,8 @@ export default function LoginForm() {
       switch (idRol) {
         case 1: //Admin
           navigate("/admin");
-          console.log("HOLA");
           break;
         case 2: //Cliente Visitante
-          navigate("/usuario");
-          break;
         case 3: //Cliente Miembro
           navigate("/usuario");
           break;

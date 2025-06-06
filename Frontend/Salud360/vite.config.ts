@@ -11,4 +11,14 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  server:{
+    allowedHosts: [
+        "ec2-3-86-240-219.compute-1.amazonaws.com",
+        "localhost",
+        "127.0.0.1",
+        // Puedes agregar otros dominios aquí si quieres
+      ],
+    strictPort: true,
+    host: "0.0.0.0"
+  }
 })

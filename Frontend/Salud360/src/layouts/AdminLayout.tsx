@@ -14,11 +14,10 @@ const routeToIndex: Record<string, number> = {
   usuarios: 5,
   personalMedico: 6,
   testimonios: 7,
-  logs: 8,
-  auditorias: 9,
-  reportes: 10,
-  clases: 11,
-  citasMedicas: 12,
+  auditorias: 8,
+  reportes: 9,
+  clases: 10,
+  citasMedicas: 11,
 };
 
 // Active: Es el índice del elemento del sidebar que será activo
