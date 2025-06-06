@@ -42,7 +42,7 @@ interface Props<Data> {
     data: Data;
   }) => ReactNode;
   fetchData: () => Promise<Data[]>;
-  fetchDataDependences: any[];
+  fetchDataDependences?: any[];
 }
 
 function CalendarioWrapped<Data>({
@@ -131,11 +131,16 @@ function CalendarioWrapped<Data>({
   }, []);
 
   const { fetch } = useFetchHandler();
-  useEffect(() => {
-    fetch(async () => {
-      setData(await fetchData());
-    });
-  }, [reloadState, ...fetchDataDependences]);
+  useEffect(
+    () => {
+      fetch(async () => {
+        setData(await fetchData());
+      });
+    },
+    fetchDataDependences && fetchDataDependences.length === 0
+      ? [reloadState, ...fetchDataDependences]
+      : [reloadState]
+  );
 
   return (
     <>
