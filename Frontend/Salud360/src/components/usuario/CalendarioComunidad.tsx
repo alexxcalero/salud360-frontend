@@ -7,7 +7,13 @@ import {
 import { ComunidadCitaMedicaCard } from "../calendario/ComunidadCitaMedicaCard";
 import { ComunidadClaseCard } from "../calendario/ComunidadClaseCard";
 
-const CalendarioComunidad = ({ id }: { id: number }) => {
+const CalendarioComunidad = ({
+  id,
+  filtrosAdicionales,
+}: {
+  id: number;
+  filtrosAdicionales: [(d: comunidadHorarioType) => boolean];
+}) => {
   return (
     <>
       <Calendario<comunidadHorarioType>
@@ -39,6 +45,7 @@ const CalendarioComunidad = ({ id }: { id: number }) => {
             </>
           ),
         }}
+        filterFuncs={[...filtrosAdicionales]}
         fetchData={async () => {
           const citasMedicas = await getAllCitasMedicasByComunityAPI(
             Number(id) ?? 0
