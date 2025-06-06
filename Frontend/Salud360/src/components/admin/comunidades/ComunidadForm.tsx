@@ -76,6 +76,12 @@ function ComunidadForm({
   const textoValido = (texto: string) => /^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9 ,.;-]*$/.test(texto);
 
   const validarCampos = () => {
+    if (!nombre.trim() || !descripcion.trim() || !proposito.trim()) {
+      setMensajeError("Los campos Nombre, Descripción y Propósito son obligatorios.");
+      setShowModalValidacion(true);
+      return false;
+    }
+
     if (!textoValido(nombre)) {
       setMensajeError("El nombre de la comunidad contiene caracteres no permitidos.");
       setShowModalValidacion(true);
