@@ -54,6 +54,21 @@ const RegistrarClaseModalForm = ({
       DateTime.fromISO(horaInicio),
       ["hour", "day", "month", "year"]
     ).hours;
+
+    if (
+      (date
+        ?.set({
+          hour: DateTime.fromISO(horaInicio).hour,
+          minute: DateTime.fromISO(horaInicio).minute,
+        })
+        .diff(DateTime.now()).milliseconds ?? 0) < 0
+    ) {
+      createToast("error", {
+        title: "Error al ingresar la fecha",
+        description: "La fecha no puede ser pasada",
+      });
+      return;
+    }
     if (diferenciaDeHoras < 0) {
       createToast("error", {
         title: "Error al ingressar horas",

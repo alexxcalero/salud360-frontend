@@ -52,6 +52,21 @@ const ActualizarClaseModalForm = ({
   const submitHanlder = async (e: FormEvent) => {
     e.preventDefault();
 
+    if (
+      (dateInput
+        ?.set({
+          hour: DateTime.fromISO(horaInicio).hour,
+          minute: DateTime.fromISO(horaInicio).minute,
+        })
+        .diff(DateTime.now()).milliseconds ?? 0) < 0
+    ) {
+      createToast("error", {
+        title: "Error al ingresar la fecha",
+        description: "La fecha no puede ser pasada",
+      });
+      return;
+    }
+
     const diferenciaDeHoras = DateTime.fromISO(horaFin).diff(
       DateTime.fromISO(horaInicio),
       ["hour", "day", "month", "year"]

@@ -5,6 +5,7 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -31,16 +32,15 @@ const ActualizarCitaModalForm = ({
   onCreate?: () => void;
 }) => {
   const [servicios, setServicios] = useState<servicioType[]>([]);
-  const [servicioInput, setServicioInput] = useState(
-    citaMedica.servicio?.idServicio.toString() ?? ""
-  );
 
   const { reload } = useInternalModals();
 
   const [horaInicio, setHoraInicio] = useState(
-    citaMedica.horaInicio?.toFormat("T")
+    citaMedica.horaInicio?.toFormat("T") ?? ""
   );
-  const [horaFin, setHoraFin] = useState(citaMedica.horaFin?.toFormat("T"));
+  const [horaFin, setHoraFin] = useState(
+    citaMedica.horaFin?.toFormat("T") ?? ""
+  );
 
   const [dateInput, setDateInput] = useState<DateTime>(
     citaMedica.fecha ?? DateTime.now()
@@ -63,6 +63,41 @@ const ActualizarCitaModalForm = ({
   const submitHanlder = async (e: FormEvent) => {
     e.preventDefault();
 
+    const diferenciaDeHoras = DateTime.fromISO(horaFin).diff(
+      DateTime.fromISO(horaInicio),
+      ["hour", "day", "month", "year"]
+    ).hours;
+
+    if (
+      (dateInput
+        ?.set({
+          hour: DateTime.fromISO(horaInicio).hour,
+          minute: DateTime.fromISO(horaInicio).minute,
+        })
+        .diff(DateTime.now()).milliseconds ?? 0) < 0
+    ) {
+      createToast("error", {
+        title: "Error al ingresar la fecha",
+        description: "La fecha no puede ser pasada",
+      });
+      return;
+    }
+    if (diferenciaDeHoras < 0) {
+      createToast("error", {
+        title: "Error al ingressar horas",
+        description: "La hora final no debe ir antes que hora de inicio",
+      });
+      return;
+    }
+    if (diferenciaDeHoras < 0.5) {
+      createToast("error", {
+        title: "Error al ingressar horas",
+        description:
+          "Las horas deben estar separadas por, al menos, 30 minutos",
+      });
+      return;
+    }
+
     const uploadData = {
       idCitaMedica: citaMedica.idCitaMedica,
       horaInicio: horaInicio,
@@ -81,9 +116,7 @@ const ActualizarCitaModalForm = ({
         fotoPerfil: citaMedica.medico?.fotoPerfil,
       },
       cliente: citaMedica.cliente,
-      servicio: servicios.find(
-        ({ idServicio }) => idServicio?.toString() === servicioInput
-      ),
+      servicio: citaMedica.servicio,
     };
 
     fetch(async () => {
@@ -101,22 +134,11 @@ const ActualizarCitaModalForm = ({
           <form action="" onSubmit={submitHanlder}>
             <DialogTitle>Actualizar cita médica</DialogTitle>
             <div className="my-4 flex flex-col gap-4">
-              <p>
+              <DialogDescription>
                 Para: {citaMedica.medico?.nombres}{" "}
                 {citaMedica.medico?.apellidos} -{" "}
                 {citaMedica.medico?.especialidad}
-              </p>
-              <SelectLabel
-                htmlFor="servicio"
-                label="Seleccione servicio *"
-                placeholder="Seleccione servicio"
-                value={servicioInput}
-                onChange={setServicioInput}
-                options={servicios.map((s) => ({
-                  value: s.idServicio.toString(),
-                  content: s.nombre,
-                }))}
-              />
+              </DialogDescription>
               <CalendarInput
                 value={dateInput}
                 setValue={setDateInput}
@@ -162,7 +184,7 @@ const ActualizarCitaModalForm = ({
               <DialogClose asChild>
                 <Button variant="outline">Cancelar</Button>
               </DialogClose>
-              <Button type="submit">Registrar</Button>
+              <Button type="submit">Actualizar</Button>
             </DialogFooter>
           </form>
         </DialogContent>
