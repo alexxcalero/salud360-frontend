@@ -1,14 +1,11 @@
 import { AdminClaseCard } from "@/components/calendario/AdminClaseCard";
 import AdminClaseDot from "@/components/calendario/AdminClaseDot";
 import Calendario from "@/components/calendario/Calendario";
+import ActualizarClaseModalForm from "@/components/calendario/modals/actualizarClaseForm";
 import RegistrarClaseModalForm from "@/components/calendario/modals/registrarClaseModalForm";
 import SelectLabel from "@/components/SelectLabel";
 import { Switch } from "@/components/ui/switch";
 import { useFetchHandler } from "@/hooks/useFetchHandler";
-import {
-  InternalModalsProvider,
-  useInternalModals,
-} from "@/hooks/useInternalModals";
 import { claseDTOType } from "@/schemas/clase";
 import { localType } from "@/schemas/local";
 import { getAllClasesAPI } from "@/services/clasesAdmin.service";
@@ -19,14 +16,6 @@ import { useEffect, useMemo, useState } from "react";
 import colors from "tailwindcss/colors";
 
 export default function ClasesPage() {
-  return (
-    <InternalModalsProvider>
-      <ClasesPageWrapped />
-    </InternalModalsProvider>
-  );
-}
-
-const ClasesPageWrapped = () => {
   const [locales, setLocales] = useState<localType[]>([]);
   const [localInput, setLocalInput] = useState("");
 
@@ -35,12 +24,7 @@ const ClasesPageWrapped = () => {
     [localInput, locales]
   );
 
-  const [createDate, setCreateDate] = useState<DateTime | undefined>();
   const { fetch } = useFetchHandler();
-  const { activeModal, setActiveModal, reloadState, reload } =
-    useInternalModals();
-
-  const [data, setData] = useState<claseDTOType[]>([]);
 
   const [showDeactivated, setShowDeactivated] = useState(false);
 
@@ -51,27 +35,11 @@ const ClasesPageWrapped = () => {
     });
   }, []);
 
-  useEffect(() => {
-    fetch(async () => {
-      const data = await getAllClasesAPI();
-      setData(
-        data?.filter(
-          ({ local }) =>
-            local?.idLocal === localSeleccionado?.idLocal &&
-            local?.idLocal !== undefined
-        ) ?? []
-      );
-    });
-  }, [localSeleccionado, reloadState]);
-
   return (
     <>
-      <div className="flex flex-col gap-4">
+      <div className="grid grid-rows-[auto_1fr] min-h-0 min-w-0 gap-2">
         <div className="w-full px-8 py-8 text-left">
           <h1 className="text-4xl font-bold mb-2">Clases</h1>
-          <h2 className="text-lg text-gray-700 mb-6">
-            Seleccione un local para ver y crear clases.
-          </h2>
           <div className="self-stretch">
             <SelectLabel
               htmlFor="local"
@@ -85,97 +53,84 @@ const ClasesPageWrapped = () => {
               }))}
             />
           </div>
-
-          <hr className="mt-16 border"/>
         </div>
 
-        {localSeleccionado !== undefined ? (
-          <div className="w-full px-8">
-            <Calendario<claseDTOType>
-              data={data}
-              rangeDaysFilterFunc={(initial, final, d) =>
-                d.fecha !== undefined &&
-                d.fecha !== null &&
-                initial <= d.fecha &&
-                d.fecha <= final
-              }
-              metadata={{
-                day: {
-                  card: (d) => <AdminClaseCard clase={d} />,
-                  equalFunc: (data: claseDTOType, fecha: DateTime) =>
-                    Boolean(
-                      data.fecha?.hasSame(fecha, "day") &&
-                        data.fecha?.hasSame(fecha, "month") &&
-                        data.fecha?.hasSame(fecha, "year") &&
-                        data.horaInicio?.hasSame(fecha, "hour")
-                    ),
-                },
-                week: {
-                  card: (d) => <AdminClaseCard clase={d} />,
-                  equalFunc: (data: claseDTOType, fecha: DateTime) =>
-                    Boolean(
-                      data.fecha?.hasSame(fecha, "day") &&
-                        data.fecha?.hasSame(fecha, "month") &&
-                        data.fecha?.hasSame(fecha, "year") &&
-                        (data.horaInicio?.hour ?? Infinity) >= fecha.hour &&
-                        (data.horaInicio?.hour ?? Infinity) < fecha.hour + 1
-                    ),
-                },
-                month: {
-                  card: (d) => <AdminClaseDot clase={d} />,
-                  equalFunc: (data: claseDTOType, fecha: DateTime) =>
-                    Boolean(
-                      data.fecha?.hasSame(fecha, "day") &&
-                        data.fecha?.hasSame(fecha, "month") &&
-                        data.fecha?.hasSame(fecha, "year")
-                    ),
-                },
-              }}
-              blankTileAction={(date) => {
-                setCreateDate(date);
-                setActiveModal?.("registrarClase");
-              }}
-              filterContent={
-                <div>
-                  <div>
-                    <span className="mr-4">Mostrar desactivados</span>
-                    <Switch
-                      checked={showDeactivated}
-                      onCheckedChange={() => {
-                        setShowDeactivated((prev) => !prev);
-                        reload();
-                      }}
-                    />
-                  </div>
-                </div>
-              }
-              filterFuncs={[
-                (d) => (showDeactivated ? true : Boolean(d.activo)),
-              ]}
-            />
-            {localSeleccionado !== undefined && createDate !== undefined && (
-              <RegistrarClaseModalForm
-                key={createDate.toISO()}
-                open={activeModal === "registrarClase"}
-                setOpen={(b) =>
-                  b ? setActiveModal?.("registrarClase") : setActiveModal?.("")
+        <div className="px-2 min-h-0 min-w-0">
+          {localSeleccionado !== undefined ? (
+            <>
+              <Calendario<claseDTOType>
+                fetchData={async () =>
+                  (await getAllClasesAPI())?.filter(
+                    ({ local }) =>
+                      local?.idLocal === localSeleccionado?.idLocal &&
+                      local?.idLocal !== undefined
+                  ) ?? []
                 }
-                date={createDate}
-                local={localSeleccionado}
+                fetchDataDependences={[localSeleccionado]}
+                getDateFromData={(d) =>
+                  d.fecha && d.horaFin && d.horaInicio
+                    ? d.fecha.set({
+                        hour: d.horaInicio.hour,
+                        minute: d.horaInicio.minute,
+                      })
+                    : undefined
+                }
+                getHourRangeFromData={(d) =>
+                  d.fecha && d.horaFin && d.horaInicio
+                    ? ([d.horaInicio, d.horaFin] as [DateTime, DateTime])
+                    : undefined
+                }
+                cards={{
+                  day: (d, g) =>
+                    g ? <AdminClaseCard clase={d} update={g} /> : undefined,
+                  week: (d, g) =>
+                    g ? <AdminClaseCard clase={d} update={g} /> : undefined,
+                  month: (d, g) =>
+                    g ? <AdminClaseDot clase={d} update={g} /> : undefined,
+                }}
+                filterContent={
+                  <div>
+                    <div>
+                      <span className="mr-4">Mostrar desactivados</span>
+                      <Switch
+                        checked={showDeactivated}
+                        onCheckedChange={() => {
+                          setShowDeactivated((prev) => !prev);
+                        }}
+                      />
+                    </div>
+                  </div>
+                }
+                filterFuncs={[
+                  (d) => (showDeactivated ? true : Boolean(d.activo)),
+                ]}
+                RegisterForm={({ open, setOpen, date }) => (
+                  <RegistrarClaseModalForm
+                    open={open}
+                    setOpen={setOpen}
+                    date={date}
+                    local={localSeleccionado}
+                  />
+                )}
+                ActualizarForm={({ open, setOpen, data }) => (
+                  <ActualizarClaseModalForm
+                    open={open}
+                    setOpen={setOpen}
+                    clase={data}
+                  />
+                )}
               />
-            )}
-          </div>
-        ) : (
-          <>
+            </>
+          ) : (
             <div className="mt-30 flex items-center flex-col gap-4">
               <CircleDot color={colors.blue["500"]} size={48} />
               <p className="text-2xl max-w-88">
                 Seleccione un local para comenzar.
               </p>
             </div>
-          </>
-        )}
+          )}
+        </div>
       </div>
     </>
   );
-};
+}

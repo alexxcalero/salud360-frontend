@@ -1,5 +1,11 @@
 import Button from "@/components/Button";
-import { Dialog, DialogContent, DialogClose } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogClose,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { TriangleAlert } from "lucide-react";
 
 interface Props {
@@ -22,8 +28,12 @@ function AlertModal({
   setOpen,
 }: Props) {
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent>
+    <Dialog
+      open={open}
+      onOpenChange={setOpen}
+      aria-describedby="Modal de éxito"
+    >
+      <DialogContent aria-describedby="Modal de información">
         <div className="max-w-md w-full text-center">
           {/* Icono de advertencia */}
           <div className="flex justify-center mb-4">
@@ -33,10 +43,10 @@ function AlertModal({
           </div>
 
           {/* Mensaje principal */}
-          <h2 className="text-2xl font-bold mb-2">{title}</h2>
+          <DialogTitle className="text-2xl font-bold mb-2">{title}</DialogTitle>
 
           {/* Detalle del elemento */}
-          <p className="mb-6">{description}</p>
+          <DialogDescription className="mb-6">{description}</DialogDescription>
 
           {/* Botones */}
           <div className="flex space-x-3 justify-center">

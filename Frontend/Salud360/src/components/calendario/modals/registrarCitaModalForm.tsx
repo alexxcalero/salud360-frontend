@@ -5,6 +5,7 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -28,19 +29,19 @@ const RegistrarCitaModalForm = ({
 }: {
   open: boolean;
   setOpen: (_: boolean) => void;
-  date: DateTime;
+  date?: DateTime;
   medico: medicoType;
   onCreate?: () => void;
 }) => {
   const [servicios, setServicios] = useState<servicioType[]>([]);
   const [servicioInput, setServicioInput] = useState("");
 
-  const [horaInicio, setHoraInicio] = useState(date.toFormat("T"));
-  const [horaFin, setHoraFin] = useState(date.plus({ hour: 1 }).toFormat("T"));
+  const [horaInicio, setHoraInicio] = useState(date?.toFormat("T") ?? "");
+  const [horaFin, setHoraFin] = useState(
+    date?.plus({ hour: 1, minute: -1 }).toFormat("T") ?? ""
+  );
 
-  const [dateInput, setDateInput] = useState<DateTime>(date);
-
-  const [estadoInput, setEstadoInput] = useState<string>("");
+  const [dateInput, setDateInput] = useState<DateTime>(date ?? DateTime.now());
 
   const { fetch } = useFetchHandler();
   const { createToast } = useToasts();
@@ -56,11 +57,46 @@ const RegistrarCitaModalForm = ({
   const submitHanlder = async (e: FormEvent) => {
     e.preventDefault();
 
+    if (
+      (date
+        ?.set({
+          hour: DateTime.fromISO(horaInicio).hour,
+          minute: DateTime.fromISO(horaInicio).minute,
+        })
+        .diff(DateTime.now()).milliseconds ?? 0) < 0
+    ) {
+      createToast("error", {
+        title: "Error al ingresar la fecha",
+        description: "La fecha no puede ser pasada",
+      });
+      return;
+    }
+
+    const diferenciaDeHoras = DateTime.fromISO(horaFin).diff(
+      DateTime.fromISO(horaInicio),
+      ["hour", "day", "month", "year"]
+    ).hours;
+    if (diferenciaDeHoras < 0) {
+      createToast("error", {
+        title: "Error al ingressar horas",
+        description: "La hora final no debe ir antes que hora de inicio",
+      });
+      return;
+    }
+    if (diferenciaDeHoras < 0.5) {
+      createToast("error", {
+        title: "Error al ingressar horas",
+        description:
+          "Las horas deben estar separadas por, al menos, 30 minutos",
+      });
+      return;
+    }
+
     const uploadData = {
       horaInicio: horaInicio,
       horaFin: horaFin,
       fecha: dateInput.toISODate(),
-      estado: estadoInput,
+      estado: "Disponible",
       medico: {
         idMedico: medico.idMedico,
         nombres: medico.nombres,
@@ -88,6 +124,7 @@ const RegistrarCitaModalForm = ({
         <DialogContent>
           <form action="" onSubmit={submitHanlder}>
             <DialogTitle>Registrar cita médica</DialogTitle>
+            <DialogDescription>Llena el formulario </DialogDescription>
             <div className="my-4 flex flex-col gap-4">
               <p>
                 Para: {medico.nombres} {medico.apellidos} -{" "}
@@ -110,18 +147,6 @@ const RegistrarCitaModalForm = ({
                 name="dia"
                 label="Fecha"
                 required={true}
-              />
-
-              <SelectLabel
-                htmlFor="estado"
-                label="Seleccione el estado de la cita *"
-                placeholder="Seleccione un estado"
-                value={estadoInput}
-                onChange={setEstadoInput}
-                options={[
-                  { value: "Disponible", content: "Disponible" },
-                  { value: "Cancelada", content: "Cancelada" },
-                ]}
               />
 
               <div className="flex gap-2">

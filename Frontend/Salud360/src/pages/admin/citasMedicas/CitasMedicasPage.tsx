@@ -1,32 +1,20 @@
 import { AdminCitaMedicaCard } from "@/components/calendario/AdminCitaMedica";
 import AdminCitaMedicaDot from "@/components/calendario/AdminCitaMedicaDot";
 import Calendario from "@/components/calendario/Calendario";
+import ActualizarCitaModalForm from "@/components/calendario/modals/actualizarCitaModalForm";
 import RegistrarCitaModalForm from "@/components/calendario/modals/registrarCitaModalForm";
 import SelectLabel from "@/components/SelectLabel";
 import { Switch } from "@/components/ui/switch";
 import { useFetchHandler } from "@/hooks/useFetchHandler";
-import {
-  InternalModalsProvider,
-  useInternalModals,
-} from "@/hooks/useInternalModals";
 import { citaMedicaType } from "@/schemas/citaMedica";
 import { medicoType } from "@/schemas/medico";
 import { getAllCitasMedicasAPI } from "@/services/citasMedicasAdmin.service";
 import { getMedicos } from "@/services/medico.service";
 import { CircleDot } from "lucide-react";
-import { DateTime } from "luxon";
 import { useEffect, useMemo, useState } from "react";
 import colors from "tailwindcss/colors";
 
 export default function RegistrarCitaMedicasPage() {
-  return (
-    <InternalModalsProvider>
-      <RegistrarCitaMedicasPageWrapped />
-    </InternalModalsProvider>
-  );
-}
-
-const RegistrarCitaMedicasPageWrapped = () => {
   const [medicos, setMedicos] = useState<medicoType[]>([]);
   const [medicoInput, setMedicoInput] = useState("");
   const medicoSeleccionado = useMemo(
@@ -34,12 +22,7 @@ const RegistrarCitaMedicasPageWrapped = () => {
     [medicoInput, medicos]
   );
 
-  const [createDate, setCreateDate] = useState<DateTime | undefined>();
   const { fetch } = useFetchHandler();
-  const { activeModal, setActiveModal, reloadState, reload } =
-    useInternalModals();
-
-  const [data, setData] = useState<citaMedicaType[]>([]);
 
   const [showDeactivated, setShowDeactivated] = useState(false);
 
@@ -50,27 +33,11 @@ const RegistrarCitaMedicasPageWrapped = () => {
     });
   }, []);
 
-  useEffect(() => {
-    fetch(async () => {
-      const data = await getAllCitasMedicasAPI();
-      setData(
-        data?.filter(
-          ({ medico }) =>
-            medico?.idMedico === medicoSeleccionado?.idMedico &&
-            medico?.idMedico !== undefined
-        ) ?? []
-      );
-    });
-  }, [medicoSeleccionado, reloadState]);
-
   return (
     <>
-      <div className="flex flex-col gap-4">
+      <div className="grid grid-rows-[auto_1fr] min-h-0 min-w-0 gap-2">
         <div className="w-full px-8 py-8 text-left">
           <h1 className="text-4xl font-bold mb-2">Citas médicas</h1>
-          <h2 className="text-lg text-gray-700 mb-6">
-            Seleccione un médico para ver y crear citas.
-          </h2>
           <div className="self-stretch">
             <SelectLabel
               htmlFor="medico"
@@ -86,52 +53,35 @@ const RegistrarCitaMedicasPageWrapped = () => {
               )}
             />
           </div>
-          <hr className="mt-16 border"/>
         </div>
 
         {medicoSeleccionado !== undefined ? (
-
-          <div className="w-full px-8">
+          <div className="px-2 min-h-0 min-w-0">
             <Calendario<citaMedicaType>
-              data={data}
-              rangeDaysFilterFunc={(initial, final, d) =>
-                d.fecha !== undefined && initial <= d.fecha && d.fecha <= final
+              getDateFromData={(d) => d.fecha}
+              getHourRangeFromData={(d) =>
+                d.horaInicio && d.horaFin
+                  ? [d.horaInicio, d.horaFin]
+                  : undefined
               }
-              metadata={{
-                day: {
-                  card: (d) => <AdminCitaMedicaCard citaMedica={d} />,
-                  equalFunc: (data: citaMedicaType, fecha: DateTime) =>
-                    Boolean(
-                      data.fecha?.hasSame(fecha, "day") &&
-                        data.fecha?.hasSame(fecha, "month") &&
-                        data.fecha?.hasSame(fecha, "year") &&
-                        data.horaInicio?.hasSame(fecha, "hour")
-                    ),
-                },
-                week: {
-                  card: (d) => <AdminCitaMedicaCard citaMedica={d} />,
-                  equalFunc: (data: citaMedicaType, fecha: DateTime) =>
-                    Boolean(
-                      data.fecha?.hasSame(fecha, "day") &&
-                        data.fecha?.hasSame(fecha, "month") &&
-                        data.fecha?.hasSame(fecha, "year") &&
-                        (data.horaInicio?.hour ?? Infinity) >= fecha.hour &&
-                        (data.horaInicio?.hour ?? Infinity) < fecha.hour + 1
-                    ),
-                },
-                month: {
-                  card: (d) => <AdminCitaMedicaDot citaMedica={d} />,
-                  equalFunc: (data: citaMedicaType, fecha: DateTime) =>
-                    Boolean(
-                      data.fecha?.hasSame(fecha, "day") &&
-                        data.fecha?.hasSame(fecha, "month") &&
-                        data.fecha?.hasSame(fecha, "year")
-                    ),
-                },
-              }}
-              blankTileAction={(date) => {
-                setCreateDate(date);
-                setActiveModal?.("registrarCita");
+              fetchData={async () =>
+                (await getAllCitasMedicasAPI())?.filter(
+                  ({ medico }) =>
+                    medico?.idMedico === medicoSeleccionado?.idMedico &&
+                    medico?.idMedico !== undefined
+                ) ?? []
+              }
+              fetchDataDependences={[medicoSeleccionado]}
+              cards={{
+                day: (d, g) =>
+                  g ? (
+                    <AdminCitaMedicaCard citaMedica={d} update={g} />
+                  ) : undefined,
+                week: (d, g) =>
+                  g ? (
+                    <AdminCitaMedicaCard citaMedica={d} update={g} />
+                  ) : undefined,
+                month: (d) => <AdminCitaMedicaDot citaMedica={d} />,
               }}
               filterContent={
                 <div>
@@ -141,7 +91,6 @@ const RegistrarCitaMedicasPageWrapped = () => {
                       checked={showDeactivated}
                       onCheckedChange={() => {
                         setShowDeactivated((prev) => !prev);
-                        reload();
                       }}
                     />
                   </div>
@@ -150,18 +99,22 @@ const RegistrarCitaMedicasPageWrapped = () => {
               filterFuncs={[
                 (d) => (showDeactivated ? true : Boolean(d.activo)),
               ]}
+              RegisterForm={({ open, setOpen, date }) => (
+                <RegistrarCitaModalForm
+                  open={open}
+                  setOpen={setOpen}
+                  date={date}
+                  medico={medicoSeleccionado}
+                />
+              )}
+              ActualizarForm={({ open, setOpen, data }) => (
+                <ActualizarCitaModalForm
+                  open={open}
+                  setOpen={setOpen}
+                  citaMedica={data}
+                />
+              )}
             />
-            {medicoSeleccionado !== undefined && createDate !== undefined && (
-              <RegistrarCitaModalForm
-                key={createDate.toISO()}
-                open={activeModal === "registrarCita"}
-                setOpen={(b) =>
-                  b ? setActiveModal?.("registrarCita") : setActiveModal?.("")
-                }
-                date={createDate}
-                medico={medicoSeleccionado}
-              />
-            )}
           </div>
         ) : (
           <>
@@ -176,4 +129,4 @@ const RegistrarCitaMedicasPageWrapped = () => {
       </div>
     </>
   );
-};
+}
