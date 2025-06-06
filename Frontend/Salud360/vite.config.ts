@@ -12,14 +12,13 @@ export default defineConfig({
     },
   },
   server: {
-    host: '0.0.0.0',         // Escucha en todas las interfaces (IP pública incluida)
-    port: 5173,              // Puerto accesible desde fuera
-    strictPort: true,        // No se cambia automáticamente si está ocupado
+    host: '0.0.0.0',
+    port: 5173,
+    strictPort: true,
+    cors: true,
     hmr: {
-      protocol: 'ws',
-      host: 'localhost',
-      port: 5173
+      clientPort: 5173
     },
-    cors: true               // Habilita CORS por si accedes desde otro origen
+    allowedHosts: ['all'] // <- Esta línea permite cualquier dominio
   }
 })
