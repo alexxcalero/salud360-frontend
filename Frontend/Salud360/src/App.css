@@ -4,6 +4,7 @@
   /* padding: 2rem; */
   text-align: center;
   overflow-x: hidden;
+  scrollbar-guttter: stable;
 }
 
 .logo {

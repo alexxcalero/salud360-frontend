@@ -1,5 +1,11 @@
 import Button from "@/components/Button";
-import { Dialog, DialogContent, DialogClose } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogClose,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { DialogDescription } from "@radix-ui/react-dialog";
 import { TriangleAlert } from "lucide-react";
 
 interface Props {
@@ -33,10 +39,10 @@ function AlertModal({
           </div>
 
           {/* Mensaje principal */}
-          <h2 className="text-2xl font-bold mb-2">{title}</h2>
+          <DialogTitle className="text-2xl font-bold mb-2">{title}</DialogTitle>
 
           {/* Detalle del elemento */}
-          <p className="mb-6">{description}</p>
+          <DialogDescription className="mb-6">{description}</DialogDescription>
 
           {/* Botones */}
           <div className="flex space-x-3 justify-center">
