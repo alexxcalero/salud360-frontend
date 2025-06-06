@@ -10,11 +10,9 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useToasts } from "@/hooks/ToastContext";
-import { servicioType } from "@/schemas/servicio";
 import { DateTime } from "luxon";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 import Button from "@/components/Button";
-import { getServiciosAPI } from "@/services/servicio.service";
 import { putCitaMedicaAPI } from "@/services/citasMedicasAdmin.service";
 import { useFetchHandler } from "@/hooks/useFetchHandler";
 import { extenedCitaMedicaType } from "@/schemas/citaMedica";
@@ -31,8 +29,6 @@ const ActualizarCitaModalForm = ({
   citaMedica: extenedCitaMedicaType;
   onCreate?: () => void;
 }) => {
-  const [servicios, setServicios] = useState<servicioType[]>([]);
-
   const { reload } = useInternalModals();
 
   const [horaInicio, setHoraInicio] = useState(
@@ -52,13 +48,6 @@ const ActualizarCitaModalForm = ({
 
   const { fetch } = useFetchHandler();
   const { createToast } = useToasts();
-
-  useEffect(() => {
-    fetch(async () => {
-      const data = await getServiciosAPI();
-      setServicios(data);
-    });
-  }, []);
 
   const submitHanlder = async (e: FormEvent) => {
     e.preventDefault();
