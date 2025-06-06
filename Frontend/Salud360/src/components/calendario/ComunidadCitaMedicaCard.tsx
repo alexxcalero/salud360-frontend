@@ -9,7 +9,7 @@ import BaseCard from "./cards/BaseCard";
 import Button from "../Button";
 import { Ban, Ticket } from "lucide-react";
 import { useDialog } from "@/hooks/dialogContext";
-import { deleteReservaAPI, postReservarAPI } from "@/services/reservas.service";
+import { postReservarAPI } from "@/services/reservas.service";
 import { useContext } from "react";
 import { AuthContext } from "@/hooks/AuthContext";
 import { useParams } from "react-router";
@@ -19,7 +19,6 @@ export function ComunidadCitaMedicaCard({
   citaMedica,
 }: {
   citaMedica: extenedCitaMedicaType;
-  reservar: (_: extenedCitaMedicaType) => void;
 }) {
   const {
     callInfoDialog,
@@ -72,7 +71,7 @@ export function ComunidadCitaMedicaCard({
                       )} - ${citaMedica.horaFin?.toFormat("T")}`,
                       buttonLabel: "Reservar",
                       onConfirm: async () => {
-                        if (!usuario || !id) {
+                        if (!usuario || !id || !citaMedica.idCitaMedica) {
                           createToast("error", {
                             title: "Mal envio de datos",
                           });

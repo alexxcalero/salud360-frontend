@@ -7,15 +7,24 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import Button from "../Button";
-import { Ticket } from "lucide-react";
+import { Ban, Ticket } from "lucide-react";
+import { postReservarAPI } from "@/services/reservas.service";
+import { useDialog } from "@/hooks/dialogContext";
+import { useContext } from "react";
+import { AuthContext } from "@/hooks/AuthContext";
+import { useParams } from "react-router";
+import { useToasts } from "@/hooks/ToastContext";
 
-export function ComunidadClaseCard({
-  clase,
-  reservar,
-}: {
-  clase: claseDTOType;
-  reservar: (_: claseDTOType) => void;
-}) {
+export function ComunidadClaseCard({ clase }: { clase: claseDTOType }) {
+  const {
+    callAlertDialog,
+    callErrorDialog,
+    callInfoDialog,
+    callSuccessDialog,
+  } = useDialog();
+  const { usuario } = useContext(AuthContext);
+  const { id } = useParams();
+  const { createToast } = useToasts();
   return (
     <>
       <HoverCard openDelay={300}>
@@ -41,23 +50,103 @@ export function ComunidadClaseCard({
           </BaseCard>
         </HoverCardTrigger>
         <HoverCardContent>
-          <div className="p-2">
-            <div className="flex gap-4 mb-2">
-              <Button onClick={() => reservar(clase)}>
-                <Ticket /> Reservar
+          {clase.estado !== "Reservada" && (
+            <div className="p-2">
+              <div className="flex gap-4 mb-2">
+                <Button
+                  onClick={() => {
+                    callInfoDialog({
+                      title: "¿Quieres reservar esta clase?",
+                      description: `${clase.horaInicio?.toFormat(
+                        "T"
+                      )} - ${clase.horaFin?.toFormat("T")}`,
+                      buttonLabel: "Reservar",
+                      onConfirm: async () => {
+                        if (!usuario || !id || !clase.idClase) {
+                          createToast("error", {
+                            title: "Mal envio de datos",
+                          });
+                          return true;
+                        }
+                        const result = await postReservarAPI({
+                          cliente: {
+                            idCliente: usuario.idCliente,
+                          },
+                          clase: {
+                            idClase: clase.idClase,
+                          },
+                          comunidad: {
+                            idComunidad: Number(id),
+                          },
+                        });
+
+                        if (result)
+                          callSuccessDialog({
+                            title: "Cita reservada correctamente",
+                          });
+                        else
+                          callErrorDialog({
+                            title:
+                              "la cita no pudo ser reservada correctamente",
+                          });
+                        return false;
+                      },
+                    });
+                  }}
+                >
+                  <Ticket /> Reservar
+                </Button>
+              </div>
+              <p>
+                <span className="text-lg">
+                  {clase.fecha?.toFormat("DDDD", { locale: "es" })}
+                </span>
+                <br />
+                {clase.horaInicio?.toFormat("TTTT", {
+                  locale: "es",
+                })}{" "}
+                - {clase.horaFin?.toFormat("TTTT", { locale: "es" })}
+              </p>
+            </div>
+          )}
+
+          {clase.estado === "Reservada" && (
+            <div className="p-2">
+              <Button
+                variant="danger"
+                onClick={() => {
+                  callAlertDialog({
+                    title: "¿Quieres cancelar esta reserva?",
+                    description: `${clase.horaInicio?.toFormat(
+                      "T"
+                    )} - ${clase.horaFin?.toFormat("T")}`,
+                    buttonLabel: "Cancelar",
+                    onConfirm: async () => {
+                      if (!usuario || !id) {
+                        createToast("error", {
+                          title: "Mal envio de datos",
+                        });
+                        return true;
+                      }
+                      // const result = await deleteReservaAPI(citaMedica.);
+
+                      // if (result)
+                      //   callSuccessDialog({
+                      //     title: "Cita reservada correctamente",
+                      //   });
+                      // else
+                      //   callErrorDialog({
+                      //     title: "la cita no pudo ser reservada correctamente",
+                      //   });
+                      return false;
+                    },
+                  });
+                }}
+              >
+                <Ban /> Cancelar Reserva
               </Button>
             </div>
-            <p>
-              <span className="text-lg">
-                {clase.fecha?.toFormat("DDDD", { locale: "es" })}
-              </span>
-              <br />
-              {clase.horaInicio?.toFormat("TTTT", {
-                locale: "es",
-              })}{" "}
-              - {clase.horaFin?.toFormat("TTTT", { locale: "es" })}
-            </p>
-          </div>
+          )}
         </HoverCardContent>
       </HoverCard>
     </>

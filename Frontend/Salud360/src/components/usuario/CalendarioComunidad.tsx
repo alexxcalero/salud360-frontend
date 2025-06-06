@@ -6,8 +6,6 @@ import {
 } from "@/services/comunidadServices.service";
 import { ComunidadCitaMedicaCard } from "../calendario/ComunidadCitaMedicaCard";
 import { ComunidadClaseCard } from "../calendario/ComunidadClaseCard";
-import { extenedCitaMedicaType } from "@/schemas/citaMedica";
-import { claseDTOType } from "@/schemas/clase";
 
 const CalendarioComunidad = ({ id }: { id: number }) => {
   return (
@@ -18,47 +16,26 @@ const CalendarioComunidad = ({ id }: { id: number }) => {
           d.horaInicio && d.horaFin ? [d.horaInicio, d.horaFin] : undefined
         }
         cards={{
-          day: (d, g) => (
+          day: (d) => (
             <>
               {d.tipo === "citaMedica" && (
-                <ComunidadCitaMedicaCard
-                  citaMedica={d}
-                  reservar={g as (_: extenedCitaMedicaType) => void}
-                />
+                <ComunidadCitaMedicaCard citaMedica={d} />
               )}
-              {d.tipo === "clase" && (
-                <ComunidadClaseCard
-                  clase={d}
-                  reservar={g as (_: claseDTOType) => void}
-                />
-              )}
+              {d.tipo === "clase" && <ComunidadClaseCard clase={d} />}
             </>
           ),
-          week: (d, g) => (
+          week: (d) => (
             <>
               {d.tipo === "citaMedica" && (
-                <ComunidadCitaMedicaCard
-                  citaMedica={d}
-                  reservar={g as (_: extenedCitaMedicaType) => void}
-                />
+                <ComunidadCitaMedicaCard citaMedica={d} />
               )}
-              {d.tipo === "clase" && (
-                <ComunidadClaseCard
-                  clase={d}
-                  reservar={g as (_: claseDTOType) => void}
-                />
-              )}
+              {d.tipo === "clase" && <ComunidadClaseCard clase={d} />}
             </>
           ),
-          month: (d, g) => (
+          month: (d) => (
             <>
               {d.tipo === "citaMedica" && <>{d.medico?.nombres}</>}
-              {d.tipo === "clase" && (
-                <ComunidadClaseCard
-                  clase={d}
-                  reservar={g as (_: claseDTOType) => void}
-                />
-              )}
+              {d.tipo === "clase" && <ComunidadClaseCard clase={d} />}
             </>
           ),
         }}
