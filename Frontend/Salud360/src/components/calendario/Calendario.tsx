@@ -175,7 +175,9 @@ function CalendarioWrapped<Data>({
           </div>
 
           <div className="flex gap-4 items-center">
-            <FiltrarCalendario>{filterContent}</FiltrarCalendario>
+            {filterContent && (
+              <FiltrarCalendario>{filterContent}</FiltrarCalendario>
+            )}
 
             <CambiarPeriodos
               setDay={() => setPeriodo("day")}
