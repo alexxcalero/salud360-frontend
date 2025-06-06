@@ -5,6 +5,7 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -27,7 +28,7 @@ const RegistrarClaseModalForm = ({
   open: boolean;
   setOpen: (_: boolean) => void;
   local: localType;
-  date: DateTime;
+  date?: DateTime;
   onCreate?: () => void;
 }) => {
   const { reload } = useInternalModals();
@@ -36,18 +37,38 @@ const RegistrarClaseModalForm = ({
   const [descripcion, setDescripcion] = useState("");
   const [capacidad, setCapacidad] = useState("");
 
-  const [horaInicio, setHoraInicio] = useState(date?.toFormat("T"));
-  const [horaFin, setHoraFin] = useState(date?.plus({ hour: 1 }).toFormat("T"));
+  const [horaInicio, setHoraInicio] = useState(date?.toFormat("T") ?? "");
+  const [horaFin, setHoraFin] = useState(
+    date?.plus({ hour: 1 }).toFormat("T") ?? ""
+  );
 
   const [dateInput, setDateInput] = useState<DateTime>(date ?? DateTime.now());
-
-  const [estadoInput, setEstadoInput] = useState<string>("");
 
   const { fetch } = useFetchHandler();
   const { createToast } = useToasts();
 
   const submitHanlder = async (e: FormEvent) => {
     e.preventDefault();
+
+    const diferenciaDeHoras = DateTime.fromISO(horaFin).diff(
+      DateTime.fromISO(horaInicio),
+      ["hour", "day", "month", "year"]
+    ).hours;
+    if (diferenciaDeHoras < 0) {
+      createToast("error", {
+        title: "Error al ingressar horas",
+        description: "La hora final no debe ir antes que hora de inicio",
+      });
+      return;
+    }
+    if (diferenciaDeHoras < 0.5) {
+      createToast("error", {
+        title: "Error al ingressar horas",
+        description:
+          "Las horas deben estar separadas por, al menos, 30 minutos",
+      });
+      return;
+    }
 
     const uploadData = {
       nombre,
@@ -56,7 +77,7 @@ const RegistrarClaseModalForm = ({
       horaInicio: horaInicio,
       horaFin: horaFin,
       fecha: dateInput.toISODate(),
-      estado: estadoInput,
+      estado: "Disponible",
       local,
     };
 
@@ -74,6 +95,7 @@ const RegistrarClaseModalForm = ({
         <DialogContent>
           <form action="" onSubmit={submitHanlder}>
             <DialogTitle>Registrar clase</DialogTitle>
+            <DialogDescription>Llena el formulario </DialogDescription>
             <div className="my-4 flex flex-col gap-4">
               <Input
                 name="nombre"
@@ -107,18 +129,6 @@ const RegistrarClaseModalForm = ({
                 name="dia"
                 label="Fecha"
                 required={true}
-              />
-
-              <SelectLabel
-                htmlFor="estado"
-                label="Seleccione el estado de la cita *"
-                placeholder="Seleccione un estado"
-                value={estadoInput}
-                onChange={setEstadoInput}
-                options={[
-                  { value: "Disponible", content: "Disponible" },
-                  { value: "Cancelada", content: "Cancelada" },
-                ]}
               />
 
               <div className="flex gap-2">

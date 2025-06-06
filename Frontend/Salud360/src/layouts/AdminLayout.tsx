@@ -18,8 +18,8 @@ const routeToIndex: Record<string, number> = {
   auditorias: 9,
   reportes: 10,
   clases: 11,
-  citasMedicas: 12
-}
+  citasMedicas: 12,
+};
 
 // Active: Es el índice del elemento del sidebar que será activo
 function AdminLayout() {
@@ -27,8 +27,8 @@ function AdminLayout() {
   // Fabián dice: Vamos a usar useLocation para que dependiendo de la URL se ilumine dinamicamente el modulo correspondiente
 
   const location = useLocation();
-  const URLContent = location.pathname.split("/")
-  const module = URLContent[2]; 
+  const URLContent = location.pathname.split("/");
+  const module = URLContent[2];
 
   //console.log("El location es:", location);
   //console.log("El URLContent es:", URLContent);
@@ -36,12 +36,12 @@ function AdminLayout() {
 
   const active = routeToIndex[module] ?? 0; //Si lo encuentra, lo asigna. Si no encuentra el modulo, el valor predeterminado será 0
 
-  const {usuario, logout} = useContext(AuthContext)
+  const { usuario, logout } = useContext(AuthContext);
   console.log("En admin, el usuario es:", usuario);
 
   //REALICÉ UN CAMBIO PARA EL QUE FONDO ESTÉ MEJOR
   return (
-    <div className="min-w-[100dvw] min-h-[100dvh] grid grid-cols-[350px_1fr] bg-white"> 
+    <div className="min-w-[100dvw] min-h-[100dvh] grid grid-cols-[350px_minmax(0,1fr)] grid-rows-1 bg-white place-items-stretch">
       <Sidebar active={active} />
       <Outlet />
     </div>

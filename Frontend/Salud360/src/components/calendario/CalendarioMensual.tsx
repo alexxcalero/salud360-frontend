@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import { DateTime, WeekdayNumbers } from "luxon";
 import { ReactNode } from "react";
 
@@ -5,21 +6,24 @@ interface Props<Data> {
   inicioMes: DateTime;
   finMes: DateTime;
   mes: number;
-  blankTileAction?: (_: DateTime) => void;
-  metadata: {
-    card: (_: Data) => ReactNode;
-    equalFunc: (_: Data, _2: DateTime) => boolean;
-  };
+  getDate?: (_: DateTime) => void;
+  getCalendarData?: (_: Data) => void;
   data: Data[];
+  getDateFromData: (d: Data) => DateTime | undefined;
+  getHourRangeFromData: (d: Data) => [DateTime, DateTime] | undefined;
+  card: (_: Data, _2?: (_: Data) => void) => ReactNode;
 }
 
 function CalendarioMensual<Data>({
   mes,
   inicioMes,
   finMes,
-  blankTileAction,
+  getDateFromData,
+  getHourRangeFromData,
+  getCalendarData,
+  getDate,
   data,
-  metadata,
+  card,
 }: Props<Data>) {
   const diasPorSemanas: DateTime[][] = [];
 
@@ -36,50 +40,74 @@ function CalendarioMensual<Data>({
 
   return (
     <>
-      <table className="w-full grid grid-cols-7 border-collapse h-full grid-rows-[max-content_1fr] min-h-[600px]">
-        <thead className="border-b-1 border-neutral-400 py-3 grid grid-cols-subgrid col-span-full">
-          <tr className="grid grid-cols-subgrid col-span-full">
+      <div className="w-full grid grid-cols-7 border-collapse h-full grid-rows-[max-content_1fr] min-h-[600px]">
+        <div className="border-b-1 border-neutral-400 py-3 grid grid-cols-subgrid col-span-full">
+          <div className="grid grid-cols-subgrid col-span-full">
             {Array.from({ length: 7 }, (_, i) =>
               DateTime.fromObject(
                 { weekday: (i + 1) as WeekdayNumbers },
                 { locale: "es" }
               )
             ).map((dia, index) => (
-              <th key={index} className="text-center">
+              <div key={index} className="text-center">
                 <span className="text-label-large font-normal text-neutral-700">
                   {dia.toFormat("ccc", { locale: "es" }).toUpperCase()}
                 </span>
-              </th>
+              </div>
             ))}
-          </tr>
-        </thead>
-        <tbody className="grid grid-cols-subgrid col-span-full auto-rows-fr">
+          </div>
+        </div>
+        <div className="grid grid-cols-subgrid col-span-full auto-rows-fr">
           {diasPorSemanas.map((_dias, i) => (
-            <tr key={i} className="grid grid-cols-subgrid col-span-full">
+            <div key={i} className="grid grid-cols-subgrid col-span-full">
               {_dias.map((dia, index) => {
-                const virtual = data.filter((elem) =>
-                  metadata.equalFunc(elem, dia)
-                );
+                const virtual = data.filter((elem) => {
+                  const fecha = getDateFromData(elem);
+                  const rango = getHourRangeFromData(elem);
+
+                  if (fecha === undefined || rango === undefined) return false;
+
+                  const fecha0 = fecha.set({
+                    hour: rango[0].hour,
+                    minute: rango[0].minute,
+                  });
+                  const fechaf = fecha.set({
+                    hour: rango[1].hour,
+                    minute: rango[1].minute,
+                  });
+
+                  return (
+                    dia.startOf("day") < fecha0 && fechaf < dia.endOf("day")
+                  );
+                });
                 return (
-                  <td
+                  <div
                     key={index}
                     className={`text-center group border-1 border-neutral-300 p-2 ${
                       mes !== dia.month && "bg-neutral-100"
                     }`}
                   >
-                    <div className="text-label-large">{dia.toFormat("dd")}</div>
+                    <div
+                      className={cn(
+                        "mx-auto w-[2rem] h-[2rem] text-label-large text-neutral-900 font-medium rounded-full aspect-1/1",
+                        dia.hasSame(DateTime.now(), "day") &&
+                          "text-white bg-blue-500"
+                      )}
+                    >
+                      {dia.toFormat("dd")}
+                    </div>
                     <div className="flex flex-wrap gap-2">
                       {virtual.map((d, index) => (
-                        <div key={index}>{metadata.card(d)}</div>
+                        <div key={index}>{card(d, getCalendarData)}</div>
                       ))}
                     </div>
-                  </td>
+                  </div>
                 );
               })}
-            </tr>
+            </div>
           ))}
-        </tbody>
-      </table>
+        </div>
+      </div>
     </>
   );
 }

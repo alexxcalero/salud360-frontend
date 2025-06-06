@@ -1,9 +1,4 @@
 import { Pencil, Trash } from "lucide-react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 import Button from "../Button";
 import { useDialog } from "@/hooks/dialogContext";
@@ -13,37 +8,47 @@ import {
   deleteClaseAPI,
   reactivarClaseAPI,
 } from "@/services/clasesAdmin.service";
-import ActualizarClaseModalForm from "./modals/actualizarClaseForm";
 
-export function AdminClaseCard({ clase }: { clase: claseDTOType }) {
+import BaseCard from "./cards/BaseCard";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
+
+export function AdminClaseCard({
+  clase,
+  update,
+}: {
+  clase: claseDTOType;
+  update: (_: claseDTOType) => void;
+}) {
   const { callAlertDialog, callErrorDialog, callSuccessDialog } = useDialog();
-  const { activeModal, setActiveModal, reload } = useInternalModals();
+  const { reload } = useInternalModals();
+
   return (
     <>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <div
-            className={`w-full group p-2 gap-3 flex flex-col border-l-6 rounded-sm border-pink-500 bg-pink-700/10 text-pink-700 hover:shadow-md hover:shadow-pink-300 ${
-              !clase.activo &&
-              "border-neutral-500 bg-neutral-700/10 text-neutral-700 hover:shadow-neutral-300"
-            }`}
-          >
+      <HoverCard>
+        <HoverCardTrigger asChild>
+          <BaseCard color="pink" active={clase.activo ?? false}>
             <div className="flex items-center justify-between">
               <span className="use-label-large font-semibold">
                 {clase.nombre}
               </span>
             </div>
             <span className="use-label-large font-medium text-left">
-              {clase.local?.nombre} ({clase.local?.direccion})
+              {clase.horaInicio?.toFormat("T")} {clase.horaFin?.toFormat("T")}
             </span>
-            <span className="mt-2 text-left">{clase.descripcion}</span>
-          </div>
-        </TooltipTrigger>
+          </BaseCard>
+        </HoverCardTrigger>
         {clase.activo && (
-          <TooltipContent className="w-max">
+          <HoverCardContent
+            className="w-max"
+            aria-describedby="Actualizar clase"
+          >
             <div className="p-2">
               <div className="flex gap-4 mb-2">
-                <Button onClick={() => setActiveModal?.("actualizarCita")}>
+                <Button onClick={() => update(clase)}>
                   <Pencil size={16} color="white" /> Editar
                 </Button>
 
@@ -84,10 +89,10 @@ export function AdminClaseCard({ clase }: { clase: claseDTOType }) {
                 - {clase.horaFin?.toFormat("TTTT", { locale: "es" })}
               </p>
             </div>
-          </TooltipContent>
+          </HoverCardContent>
         )}
         {!clase.activo && (
-          <TooltipContent className="w-max">
+          <HoverCardContent className="w-max">
             <div className="p-2">
               <Button
                 onClick={() =>
@@ -115,18 +120,9 @@ export function AdminClaseCard({ clase }: { clase: claseDTOType }) {
                 Reactivar
               </Button>
             </div>
-          </TooltipContent>
+          </HoverCardContent>
         )}
-      </Tooltip>
-      {clase.activo && (
-        <ActualizarClaseModalForm
-          open={activeModal === "actualizarCita"}
-          setOpen={(b) =>
-            b ? setActiveModal?.("actualizarCita") : setActiveModal?.("")
-          }
-          clase={clase}
-        />
-      )}
+      </HoverCard>
     </>
   );
 }
