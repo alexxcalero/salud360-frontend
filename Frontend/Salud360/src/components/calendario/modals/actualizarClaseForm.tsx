@@ -12,7 +12,6 @@ import { useToasts } from "@/hooks/ToastContext";
 import { DateTime } from "luxon";
 import { FormEvent, useState } from "react";
 import Button from "@/components/Button";
-import { putCitaMedicaAPI } from "@/services/citasMedicasAdmin.service";
 import { useFetchHandler } from "@/hooks/useFetchHandler";
 import { useInternalModals } from "@/hooks/useInternalModals";
 import { claseDTOType } from "@/schemas/clase";
