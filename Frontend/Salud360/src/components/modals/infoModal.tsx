@@ -6,7 +6,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { TriangleAlert } from "lucide-react";
+import { Info } from "lucide-react";
 
 interface Props {
   title?: string;
@@ -18,7 +18,7 @@ interface Props {
   setOpen: (_: boolean) => void;
 }
 
-function AlertModal({
+function InfoModal({
   title = "",
   description = "",
   buttonLabel = "Eliminar",
@@ -37,8 +37,8 @@ function AlertModal({
         <div className="max-w-md w-full text-center">
           {/* Icono de advertencia */}
           <div className="flex justify-center mb-4">
-            <div className="bg-yellow-500 rounded-full w-16 h-16 flex items-center justify-center">
-              <TriangleAlert color="white" size={36} strokeWidth={2} />
+            <div className="bg-blue-500 rounded-full w-16 h-16 flex items-center justify-center">
+              <Info color="white" size={36} strokeWidth={2} />
             </div>
           </div>
 
@@ -61,7 +61,6 @@ function AlertModal({
               </Button>
             </DialogClose>
             <Button
-              variant="danger"
               onClick={() => {
                 onConfirm?.().then((r) => setOpen(r));
               }}
@@ -75,4 +74,4 @@ function AlertModal({
   );
 }
 
-export default AlertModal;
+export default InfoModal;

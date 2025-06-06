@@ -41,6 +41,16 @@
     }
   }
 
+  &.green {
+    @apply hover:outline-green-300;
+    & > div {
+      &::-webkit-scrollbar-thumb {
+        @apply bg-green-500;
+      }
+      @apply border-green-500 bg-green-700/10 text-green-700;
+    }
+  }
+
   /* Neutral mode */
   &.neutral {
     @apply hover:outline-neutral-300;

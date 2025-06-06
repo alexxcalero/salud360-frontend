@@ -1,60 +1,37 @@
 import Calendario from "../calendario/Calendario";
-import {
-  comunidadHorarioSchema,
-  comunidadHorarioType,
-} from "@/schemas/mutation/claseCitaMedica";
-import {
-  getAllCitasMedicasByComunityAPI,
-  getAllClasesByComunityAPI,
-} from "@/services/comunidadServices.service";
-import { z } from "zod";
+import { reservaType } from "@/schemas/reserva";
+import { DateTime } from "luxon";
+import { ReservaCard } from "../calendario/reservaCard";
+import { useContext } from "react";
+import { AuthContext } from "@/hooks/AuthContext";
+import { getAllClienteReservasAPI } from "@/services/cliente.service";
 
-const CalendarioUsuarios = ({ id }: { id: number }) => {
+const CalendarioUsuarios = () => {
+  const { usuario } = useContext(AuthContext);
   return (
     <>
-      <Calendario<comunidadHorarioType>
-        getDateFromData={(d) => d.fecha ?? undefined}
+      <Calendario<reservaType>
+        getDateFromData={(d) => d.clase?.fecha ?? d.citaMedica?.fecha}
         getHourRangeFromData={(d) =>
-          d.horaInicio && d.horaFin ? [d.horaInicio, d.horaFin] : undefined
+          d.clase
+            ? ([d.clase.horaInicio, d.clase.horaFin] as [DateTime, DateTime])
+            : d.citaMedica
+            ? ([d.citaMedica.horaInicio, d.citaMedica.horaFin] as [
+                DateTime,
+                DateTime
+              ])
+            : undefined
         }
         cards={{
-          day: (d) => (
-            <div>
-              {d.tipo === "citaMedica" && <>{d.medico?.nombres}</>}
-              {d.tipo === "clase" && <>{d.nombre}</>}
-            </div>
-          ),
-          week: (d) => (
-            <div>
-              {d.tipo === "citaMedica" && <>{d.medico?.nombres}</>}
-              {d.tipo === "clase" && <>{d.nombre}</>}
-            </div>
-          ),
-          month: (d) => (
-            <div>
-              {d.tipo === "citaMedica" && <>{d.medico?.nombres}</>}
-              {d.tipo === "clase" && <>{d.nombre}</>}
-            </div>
-          ),
+          day: (d) => <ReservaCard reserva={d} />,
+          week: (d) => <ReservaCard reserva={d} />,
+          month: (d) => <ReservaCard reserva={d} />,
         }}
         fetchData={async () => {
-          const citasMedicas = await getAllCitasMedicasByComunityAPI(
-            Number(id) ?? 0
+          const reservas = await getAllClienteReservasAPI(
+            usuario.idCliente as number
           );
-          const clases = await getAllClasesByComunityAPI(Number(id) ?? 0);
-
-          if (!citasMedicas || !clases) throw new Error("Webadas");
-
-          console.log(citasMedicas);
-          const data = z
-            .array(comunidadHorarioSchema)
-            .parse([
-              ...citasMedicas.map((c) => ({ ...c, tipo: "citaMedica" })),
-              ...clases.map((c) => ({ ...c, tipo: "clase" })),
-            ]);
-
-          console.log(data);
-          return data;
+          return reservas ?? [];
         }}
       />
     </>

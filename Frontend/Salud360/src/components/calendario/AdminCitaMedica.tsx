@@ -28,7 +28,15 @@ export function AdminCitaMedicaCard({
     <>
       <HoverCard>
         <HoverCardTrigger asChild>
-          <BaseCard color="blue" active={citaMedica.activo}>
+          <BaseCard
+            color="blue"
+            active={citaMedica.activo}
+            estado={citaMedica.estado}
+            date={citaMedica.fecha?.set({
+              hour: citaMedica.horaInicio?.hour,
+              minute: citaMedica.horaInicio?.minute,
+            })}
+          >
             <div className="flex items-center justify-between">
               <span className="use-label-large font-semibold">
                 {citaMedica.medico?.especialidad}

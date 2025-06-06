@@ -1,15 +1,18 @@
 import { cn } from "@/lib/utils";
 import { ReactNode, forwardRef, HTMLAttributes } from "react";
 import styles from "./Card.module.css";
+import { DateTime } from "luxon";
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
-  color: "blue" | "pink";
+  color: "blue" | "pink" | "green";
   active?: boolean;
+  estado?: string;
+  date?: DateTime;
 }
 
 const BaseCard = forwardRef<HTMLDivElement, Props>(
-  ({ children, active = true, color, ...props }, ref) => {
+  ({ children, active = true, date, estado, color, ...props }, ref) => {
     return (
       <div
         ref={ref}
@@ -17,6 +20,8 @@ const BaseCard = forwardRef<HTMLDivElement, Props>(
         className={cn(
           styles["card"],
           styles[color],
+          estado === "Reservada" && styles["green"],
+          date !== undefined && date < DateTime.now() && styles["neutral"],
           !active && styles["neutral"],
           props.className
         )}

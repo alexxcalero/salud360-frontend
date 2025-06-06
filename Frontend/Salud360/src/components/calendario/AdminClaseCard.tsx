@@ -30,7 +30,15 @@ export function AdminClaseCard({
     <>
       <HoverCard>
         <HoverCardTrigger asChild>
-          <BaseCard color="pink" active={clase.activo ?? false}>
+          <BaseCard
+            color="pink"
+            active={clase.activo ?? false}
+            estado={clase.estado ?? undefined}
+            date={clase.fecha?.set({
+              hour: clase.horaInicio?.hour,
+              minute: clase.horaInicio?.minute,
+            })}
+          >
             <div className="flex items-center justify-between">
               <span className="use-label-large font-semibold">
                 {clase.nombre}

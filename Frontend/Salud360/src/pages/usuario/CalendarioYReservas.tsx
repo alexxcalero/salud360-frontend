@@ -1,13 +1,10 @@
 import CalendarioUsuarios from "@/components/usuario/CalendarioUsuarios";
 import { useEffect } from "react";
-import { useParams } from "react-router";
 
 function CalendarioYReservas() {
   useEffect(() => {
     window.scrollTo(0, 0); //Para que apenas cargue aparezca en el tope de la página.
   }, []);
-
-  const { id } = useParams();
 
   return (
     <section className="flex flex-col gap-4">
@@ -21,7 +18,7 @@ function CalendarioYReservas() {
       </div>
 
       <div className="w-full px-8">
-        <CalendarioUsuarios id={Number(id)} />
+        <CalendarioUsuarios />
       </div>
     </section>
   );
