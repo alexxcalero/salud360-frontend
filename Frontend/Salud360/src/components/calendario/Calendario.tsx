@@ -1,6 +1,13 @@
 import { DateTime } from "luxon";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
+import {
+  ReactNode,
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import CalendarioSemanal from "./CalendarioSemanal";
 import CalendarioMensual from "./CalendarioMensual";
 import CalendarioDiario from "./CalendarioDiario";
@@ -11,12 +18,21 @@ import {
   useInternalModals,
 } from "@/hooks/useInternalModals";
 import { useFetchHandler } from "@/hooks/useFetchHandler";
+import Spinner from "../Spinner";
 
 export default function Calendario<Data>(props: Props<Data>) {
   return (
-    <InternalModalsProvider>
-      <CalendarioWrapped<Data> {...props} />
-    </InternalModalsProvider>
+    <Suspense
+      fallback={
+        <div>
+          <Spinner />
+        </div>
+      }
+    >
+      <InternalModalsProvider>
+        <CalendarioWrapped<Data> {...props} />
+      </InternalModalsProvider>
+    </Suspense>
   );
 }
 
@@ -55,7 +71,7 @@ function CalendarioWrapped<Data>({
   RegisterForm,
   ActualizarForm,
   fetchData,
-  fetchDataDependences,
+  fetchDataDependences = [],
 }: Props<Data>) {
   const { activeModal, setActiveModal, reloadState } = useInternalModals();
 
@@ -131,16 +147,17 @@ function CalendarioWrapped<Data>({
   }, []);
 
   const { fetch } = useFetchHandler();
-  useEffect(
-    () => {
-      fetch(async () => {
-        setData(await fetchData());
-      });
-    },
-    fetchDataDependences && fetchDataDependences.length === 0
-      ? [reloadState, ...fetchDataDependences]
-      : [reloadState]
-  );
+  useEffect(() => {
+    fetch(async () => {
+      setData(await fetchData());
+    });
+  }, [reloadState]);
+
+  useEffect(() => {
+    fetch(async () => {
+      setData(await fetchData());
+    });
+  }, fetchDataDependences);
 
   return (
     <>
