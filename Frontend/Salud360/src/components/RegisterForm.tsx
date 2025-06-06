@@ -1,5 +1,5 @@
-import { useState } from "react"
-import { Phone, User, MapPin, Calendar, IdCard, ShieldUser } from "lucide-react"
+import { useEffect, useState } from "react"
+import { Phone, User, MapPin, Calendar, IdCard, ShieldUser, Transgender } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useGoogleLogin } from "@react-oauth/google"
 import SelectIconLabel from "@/components/SelectIconLabel"
@@ -10,6 +10,8 @@ import { useLoading } from "@/hooks/LoadingContext"
 import Input from "./input/Input"
 import MailInput from "./input/MailInput"
 import PasswordInput from "./input/PasswordInput"
+import axios from "axios"
+import { FaGenderless } from "react-icons/fa"
 
 
 export default function RegisterForm() {
@@ -18,6 +20,7 @@ export default function RegisterForm() {
     apellidos: "",
     tipoDocumento: "",
     numeroDocumento: "",
+    genero: "",
     fechaNacimiento: "",
     lugarResidencia: "",
     correo: "",
@@ -26,6 +29,7 @@ export default function RegisterForm() {
     confirmarContraseña: "",
     telefono: "",
   })
+  const [tipoDocumentos, setTipoDocumentos] = useState([]);
   const {setLoading} = useLoading();
   const {createToast} = useToasts();
 
@@ -59,19 +63,27 @@ export default function RegisterForm() {
       const datosEnvio = {
         nombres: formData.nombres,
         apellidos: formData.apellidos,
-        tipoDocumento: formData.tipoDocumento,
         numeroDocumento: formData.numeroDocumento,
-        fechaNacimiento: formData.fechaNacimiento,
-        lugarResidencia: formData.lugarResidencia,
         correo: formData.correo,
-        contraseña: formData.contraseña,
+        contrasenha: formData.contraseña,
+        sexo: formData.genero,
         telefono: formData.telefono,
+        fechaNacimiento: formData.fechaNacimiento,
+        direccion: formData.lugarResidencia,
+        tipoDocumento: {
+          idTipoDocumento: formData.tipoDocumento
+        },
+        
       };
 
       await register(datosEnvio);
 
-      setLoading(false)
-      navigate("/RegistroExitoso");
+      setLoading(false);
+      console.log("✅ Usuario creado");
+      console.log("A punto de navegar a successCrear");
+      navigate("/RegistroExitoso", {
+        state: { created: true },
+      });
     } catch (error) {
       console.error("Error al registrar:", error);
       createToast("error", {
@@ -82,6 +94,37 @@ export default function RegisterForm() {
       setLoading(false)
     }
   };
+
+  //Llamada TipoDocumentos
+    const fetchTipoDocumentos = () => {
+    axios.get("http://localhost:8080/api/admin/tiposDocumentos", {
+      auth: {
+        username: "admin",
+        password: "admin123"
+      }
+    })
+      .then(res => {
+        console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
+        
+        const opciones = res.data.map((tipoDocX: any) => ({
+            value: tipoDocX.idTipoDocumento,
+            content: tipoDocX.nombre
+        }))
+
+        setTipoDocumentos(opciones)
+        console.log("Tipo Documentos:", opciones);
+      })
+      .catch(err => console.error("Error cargando tipo documentos", err));
+    }
+    useEffect(() => {
+        fetchTipoDocumentos();
+    }, []);
+
+
+  const sexo = [
+    { value: "Masculino", content: "Masculino" },
+    { value: "Femenino", content: "Femenino" }
+  ]
 
   //Uso de Google OAuth
   const registerGoogle = useGoogleLogin({
@@ -104,30 +147,19 @@ export default function RegisterForm() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="flex flex-col">
-          <SelectIconLabel
-            icon={<IdCard className="w-5 h-5" />}
-            htmlFor="tipoDocumento"
-            label="Tipo de documento de identidad *"
-            value={formData.tipoDocumento}
-            onChange={handleChange}
-            options={[
-              { value: "", label: "Escoje una opción" },
-              { value: "DNI", label: "DNI" },
-              { value: "CE", label: "Carné de extranjería" },
-            ]}
-          />
-        </div>
+        <Input name="fechaNacimiento" label="Fecha de nacimiento" type="date" leftIcon={<Calendar />} required={true} defaultValue={formData.fechaNacimiento} onChange={handleChange}/>
         <Input name="numeroDocumento" label="Número de documento de identidad" placeholder="72072230" leftIcon={<ShieldUser />} required={true} defaultValue={formData.numeroDocumento} onChange={handleChange}/>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Input name="fechaNacimiento" label="Fecha de nacimiento" type="date" leftIcon={<Calendar />} required={true} defaultValue={formData.fechaNacimiento} onChange={handleChange}/>
-        <Input name="lugarResidencia" label="Lugar de residencia" placeholder="Ubicación" leftIcon={<MapPin />} required={true} defaultValue={formData.lugarResidencia} onChange={handleChange}/>
+        <SelectIconLabel icon={<IdCard className="w-5 h-5" />} htmlFor="tipoDocumento" label="Tipo de Documento" value={formData.tipoDocumento} onChange={handleChange} required={true} options={tipoDocumentos}/>
+        <SelectIconLabel icon={<Transgender className="w-5 h-5" />} htmlFor="genero" label="Género" value={formData.genero} onChange={handleChange} required={true} options={sexo}/>
       </div>
 
-      <Input name="telefono" label="Teléfono" leftIcon={<Phone />} defaultValue={formData.telefono}
-        onChange={handleChange} required={true} />
+      <Input name="telefono" label="Teléfono" leftIcon={<Phone />} defaultValue={formData.telefono} onChange={handleChange} required={true} />
+
+      <Input name="lugarResidencia" label="Lugar de residencia" placeholder="Ubicación" leftIcon={<MapPin />} required={true} defaultValue={formData.lugarResidencia} onChange={handleChange}/>
+      
 
       <MailInput name="correo" placeholder="example@gmail.com" label="Correo electrónico"  defaultValue={formData.correo} onChange={handleChange} required={true}/>
       <MailInput name="confirmarCorreo" placeholder="example@gmail.com" label="Confirmar correo electrónico"  defaultValue={formData.confirmarCorreo} onChange={handleChange} required={true}/>

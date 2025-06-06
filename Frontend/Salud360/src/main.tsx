@@ -117,6 +117,9 @@ createRoot(document.getElementById("root")!).render(
                       <Route index element={<Inicio />} />
                       <Route path="configuracion" element={<UsuarioConfigLayout />}>
                         <Route index element={<ConfigPerfil />} />
+                        <Route path="successEditar" element={<UsuarioSuccess modulo="¡Actualización exitosa!" detalle="Tu perfil fue modificado correctamente" route="/usuario/"/>} />
+                        <Route path="successCambiarContrasenha" element={<UsuarioSuccess modulo="¡Actualización exitosa!" detalle="Tu contraseña fue actualizada correctamente" route="/usuario/"/>} />
+                        <Route path="successCambiarNotificaciones" element={<UsuarioSuccess modulo="¡Actualización exitosa!" detalle="Tus notificaciones fueron actualizadas correctamente" route="/usuario/"/>} />
                         <Route path="sistema" element={<ConfigSistema />} />
                         <Route path="membresias" element={<Membresias />} />
                         <Route path="historial-pagos" element={<HistorialPagos />} />
@@ -233,6 +236,8 @@ createRoot(document.getElementById("root")!).render(
               </Route>
             </Route>
             <Route path="/example" element={<Example />} />
+
+
             <Route path="/trash" element={<App />} />
             <Route path="*" element={<Page404 />} />
           </Routes>

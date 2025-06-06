@@ -3,11 +3,12 @@ import { Label as ShadLabel} from "@/components/ui/label"
 interface Props{
     htmlFor: string;
     children: React.ReactNode;
+    required?: boolean
 }
 
-function Label({htmlFor, children}: Props){
+function Label({htmlFor, children, required = false}: Props){
     return(
-        <ShadLabel htmlFor={htmlFor} className="mb-2">{children}</ShadLabel>
+        <ShadLabel htmlFor={htmlFor} className="mb-2">{children} {required && <span className="text-red-500">*</span>}</ShadLabel>
     );
 }
 

@@ -11,6 +11,14 @@ function useUsuarioForm(){
     const [genero, setGenero] = useState("");
     const [fechaNacimiento, setFechaNacimiento] = useState("");
     const [contrasenha, setContrasenha] = useState("");
+    //Para el flujo de usuario:
+    const [fechaCreacion, setFechaCreacion] = useState("");
+    const [fotoPerfil, setFotoPerfil] = useState("");
+    const [nombreTipoDoc, setNombreTipoDoc] = useState("");
+    const [comunidades, setComunidades] = useState([]);
+    const [notiPorCorreo, setNotiPorCorreo] = useState(false);
+    const [notiPorSMS, setNotiPorSMS] = useState(false);
+    const [notiPorWhatsApp, setNotiPorWhatsApp] = useState(false);
     
     const setUsuarioAPI = (usuario: any) => {
 
@@ -25,6 +33,13 @@ function useUsuarioForm(){
         setFechaNacimiento(usuario.fechaNacimiento || "");
         console.log("LA CONTRASEñA ES:", usuario.contrasenha)
         setContrasenha("xxxxxxxx");
+        setFechaCreacion(usuario.fechaCreacion || "");
+        setFotoPerfil(usuario.fotoPerfil || "");
+        setNombreTipoDoc(usuario.tipoDocumento.nombre || "");
+        setComunidades(usuario.comunidades || []);
+        setNotiPorCorreo(usuario.notificacionPorCorreo || false);
+        setNotiPorWhatsApp(usuario.notificacionPorWhatsApp || false);
+        setNotiPorSMS(usuario.notificacionPorSMS || false);
     }
 
     return{
@@ -38,6 +53,13 @@ function useUsuarioForm(){
         genero, setGenero,
         fechaNacimiento, setFechaNacimiento,
         contrasenha, setContrasenha,
+        fechaCreacion, setFechaCreacion,
+        fotoPerfil, setFotoPerfil,
+        nombreTipoDoc, setNombreTipoDoc,
+        comunidades, setComunidades,
+        notiPorCorreo, setNotiPorCorreo,
+        notiPorSMS, setNotiPorSMS,
+        notiPorWhatsApp, setNotiPorWhatsApp,
         setUsuarioAPI
   };
 }

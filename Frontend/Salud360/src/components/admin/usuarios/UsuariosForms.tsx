@@ -52,7 +52,8 @@ interface Props{
 
 function UsuariosForms({title="", subtitle="", nombres, setNombres = () =>{}, apellidos, setApellidos = () =>{}, tipoDoc, setTipoDoc = () =>{}, DNI, setDNI  = () =>{}, telefono, setTelefono  = () =>{}, correo, setCorreo  = () =>{}, 
     direccion, setDireccion  = () =>{}, genero, setGenero  = () =>{}, fechaNacimiento, setFechaNacimiento  = () =>{}, contrasenha, setContrasenha  = () =>{}, readOnly = false, onSubmit = () =>{}, buttonText}: Props){
-    
+
+
     const [roles, setRoles] = useState([]);
     const [tipoDocumentos, setTipoDocumentos] = useState([]);
     //const [tipoDocumentos, setTipoDocumentos] = useState([]);
@@ -127,7 +128,7 @@ function UsuariosForms({title="", subtitle="", nombres, setNombres = () =>{}, ap
       contrasenha = "xxxxxxxx";
     }
 
-    
+    console.log("Genero en UsuarioForms:", genero);
 
     /*const optionsSelect = [
         { value: "Homb", content: "Hombre" },
@@ -143,7 +144,7 @@ function UsuariosForms({title="", subtitle="", nombres, setNombres = () =>{}, ap
                     <div className="col-span-1 flex flex-col gap-6">
                         <InputLabel type="email" placeholder="Ingrese los nombres" htmlFor="email" label="Nombres *" value={nombres} disabled={readOnly} onChange={(e) => setNombres(e.target.value)}/>
                         <InputLabel type="email" placeholder="Ingrese los apellidos" htmlFor="email" label="Apellidos *" value={apellidos} disabled={readOnly} onChange={(e) => setApellidos(e.target.value)}/>
-                        <SelectLabel options={tipoDocumentos} placeholder="Seleccione el tipo de documento " htmlFor="email" label="Tipo de Documento *" value={tipoDoc} disabled={readOnly} onChange={(value) => setTipoDoc(value)}/>
+                        <SelectLabel options={tipoDocumentos} placeholder="Seleccione el tipo de documento " htmlFor="email" label="Tipo de Documento *" value={tipoDoc} disabled={readOnly} required={true} onChange={(value) => setTipoDoc(value)}/>
                         <InputIconLabel icon={<Phone className="w-5 h-5" />} placeholder="Teléfono" type="tel" htmlFor="tel" label="Teléfono *" value={telefono} disabled={readOnly} onChange={(e) => setTelefono(e.target.value)} ></InputIconLabel>
                         <InputLabel type="password" placeholder="Ingrese la contraseña" htmlFor="password" label="Contraseña *" value={contrasenha} disabled={readOnlyContrasenha} onChange={(e) => setContrasenha(e.target.value)}/>
                     </div>

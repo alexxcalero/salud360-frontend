@@ -1,5 +1,6 @@
 import { Input as ShadcnInput } from "@/components/ui/input";
 import { HTMLInputTypeAttribute, useId, useState } from "react";
+import Label from "../Label";
 
 export interface InputProps {
   name: string;
@@ -45,12 +46,7 @@ const Input = ({
   return (
     <div>
       {label && (
-        <label
-          htmlFor={id}
-          className="block text-sm text-left font-medium text-gray-700 mb-2 w-max"
-        >
-          {label} {required && <span className="text-red-500">*</span>}
-        </label>
+        <Label htmlFor={name} required={required}>{label}</Label>
       )}
       {/* Este es el campo del input */}
       <label
