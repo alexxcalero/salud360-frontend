@@ -38,7 +38,7 @@ export function ComunidadCitaMedicaCard({
   console.groupEnd();
   return (
     <>
-      <HoverCard>
+      <HoverCard openDelay={300}>
         <HoverCardTrigger asChild>
           <BaseCard
             color="blue"

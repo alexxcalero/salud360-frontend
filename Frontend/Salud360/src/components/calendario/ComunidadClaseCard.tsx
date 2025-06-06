@@ -18,7 +18,7 @@ export function ComunidadClaseCard({
 }) {
   return (
     <>
-      <HoverCard>
+      <HoverCard openDelay={300}>
         <HoverCardTrigger asChild>
           {/* Esto es por un problema del backend */}
           <BaseCard

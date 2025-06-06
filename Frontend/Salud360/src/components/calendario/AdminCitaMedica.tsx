@@ -26,7 +26,7 @@ export function AdminCitaMedicaCard({
   const { reload } = useInternalModals();
   return (
     <>
-      <HoverCard>
+      <HoverCard openDelay={300}>
         <HoverCardTrigger asChild>
           <BaseCard
             color="blue"

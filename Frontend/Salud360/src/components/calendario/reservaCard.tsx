@@ -26,7 +26,7 @@ export function ReservaCard({ reserva }: { reserva: reservaType }) {
 
   return (
     <>
-      <HoverCard>
+      <HoverCard openDelay={300}>
         <HoverCardTrigger asChild>
           <BaseCard
             color="green"

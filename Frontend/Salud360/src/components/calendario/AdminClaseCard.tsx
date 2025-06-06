@@ -28,7 +28,7 @@ export function AdminClaseCard({
 
   return (
     <>
-      <HoverCard>
+      <HoverCard openDelay={300}>
         <HoverCardTrigger asChild>
           <BaseCard
             color="pink"
