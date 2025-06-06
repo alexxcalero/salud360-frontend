@@ -96,20 +96,20 @@ function PersonalMedicoForms({title="", subtitle="", nombres, setNombres = () =>
 
                 <div className="grid grid-cols-2 gap-8 items-center w-full my-6">
                     <div className="col-span-1 flex flex-col gap-6">
-                        <InputLabel type="email" placeholder="Ingrese los nombres" htmlFor="email" label="Nombres" value={nombres} disabled={readOnly} onChange={(e) => setNombres(e.target.value)}/>
-                        <InputLabel type="email" placeholder="Ingrese los apellidos" htmlFor="email" label="Apellidos" value={apellidos} disabled={readOnly} onChange={(e) => setApellidos(e.target.value)}/>
-                        <SelectLabel options={tipoDocumentos} placeholder="Seleccione el tipo de documento" htmlFor="email" label="Tipo de Documento" value={tipoDoc} disabled={readOnly} onChange={(value) => setTipoDoc(value)}/>
+                        <InputLabel type="email" placeholder="Ingrese los nombres" htmlFor="email" label="Nombres" value={nombres} disabled={readOnly} required={true && !readOnly} onChange={(e) => setNombres(e.target.value)}/>
+                        <InputLabel type="email" placeholder="Ingrese los apellidos" htmlFor="email" label="Apellidos" value={apellidos} disabled={readOnly} required={true && !readOnly} onChange={(e) => setApellidos(e.target.value)}/>
+                        <SelectLabel options={tipoDocumentos} placeholder="Seleccione el tipo de documento" htmlFor="email" label="Tipo de Documento" value={tipoDoc} disabled={readOnly} required={true && !readOnly} onChange={(value) => setTipoDoc(value)}/>
                     </div>
                     <div className="col-span-1 flex flex-col gap-6">
-                        <SelectLabel options={sexo} placeholder="Seleccione su genero" htmlFor="email" label="Género" value={genero} disabled={readOnly} onChange={(content) => setGenero(content)}/>
-                        <InputLabel type="email" placeholder="Ingrese el número de documento de identidad" htmlFor="email" label="DNI" value={DNI} disabled={readOnly} onChange={(e) => setDNI(e.target.value)}/>
-                        <InputLabel type="text" placeholder="Ingrese la especialidad" htmlFor="text" label="Especialidad" value={especialidad} disabled={readOnly} onChange={(e) => setEspecialidad(e.target.value)}/>
+                        <SelectLabel options={sexo} placeholder="Seleccione su genero" htmlFor="email" label="Género" value={genero} disabled={readOnly} required={true && !readOnly} onChange={(content) => setGenero(content)}/>
+                        <InputLabel type="email" placeholder="Ingrese el número de documento de identidad" htmlFor="email" label="DNI" value={DNI} disabled={readOnly} required={true && !readOnly} onChange={(e) => setDNI(e.target.value)}/>
+                        <InputLabel type="text" placeholder="Ingrese la especialidad" htmlFor="text" label="Especialidad" value={especialidad} disabled={readOnly} required={true && !readOnly} onChange={(e) => setEspecialidad(e.target.value)}/>
                     </div>
                 </div>
 
                 <div className="flex flex-col gap-16">
                     <div className="w-full h-48 rounded-md flex flex-col items-center justify-center cursor-pointer">
-                        <InputLabel type="text" placeholder="Ingrese la descripción" htmlFor="text" label="Descripción" value={descripcion} disabled={readOnly} className="w-full h-full" onChange={(e) => setDescripcion(e.target.value)}/>
+                        <InputLabel type="text" placeholder="Ingrese la descripción" htmlFor="text" label="Descripción" value={descripcion} disabled={readOnly} className="w-full h-full" required={true && !readOnly} onChange={(e) => setDescripcion(e.target.value)}/>
                     </div>
                     {!readOnly && <DropImage/>}
                 </div>

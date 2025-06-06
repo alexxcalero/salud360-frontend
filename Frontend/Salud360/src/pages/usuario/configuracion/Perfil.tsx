@@ -23,6 +23,7 @@ import InputIconLabel from "@/components/InputIconLabel";
 import PerfilForms from "@/components/landing/PerfilForms";
 import { useParams } from "react-router";
 import PerfilPasswordForms from "@/components/usuario/PerfilPasswordForms";
+import ModalValidacion from "@/components/ModalValidacion";
 
 function InicioPerfil() {
   const { usuario, logout, loading: cargando } = useContext(AuthContext);
@@ -34,15 +35,18 @@ function InicioPerfil() {
     const [showModalValidacion, setShowModalValidacion] = useState(false);
     const [mensajeValidacion, setMensajeValidacion] = useState("");
 
+
+    const [staticNombres, setStaticNombres] = useState("");
+    const [staticApellidos, setStaticApellidos] = useState("");
+
     const {
-      nombres: staticNombres,
-      apellidos: staticApellidos,
       fotoPerfil,
       fechaCreacion: rawFechaCreacion,
       notificacionPorCorreo,
       notificacionPorSMS,
       notificacionPorWhatsApp,
-      idCliente: id
+      idUsuario,
+      idCliente
     } = usuario;
 
     const {
@@ -60,7 +64,7 @@ function InicioPerfil() {
     } = useUsuarioForm();
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/api/admin/clientes/${id}`, {
+        axios.get(`http://localhost:8080/api/admin/clientes/${idCliente}`, {
           auth: {
             username: "admin",
             password: "admin123"
@@ -70,6 +74,8 @@ function InicioPerfil() {
             console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
             setUsuarioAPI(res.data);
             console.log("Usuario:", res.data);
+            setStaticNombres(res.data.nombres);
+            setStaticApellidos(res.data.apellidos);
             setLoading(false);
           })
           .catch(err => {
@@ -91,13 +97,84 @@ function InicioPerfil() {
     }
   );
 
+    //VALIDACIONES DE CAMPOS 
+    const validarCampos = (): boolean => {
+    const soloLetras = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
+    const soloNumeros = /^[0-9]+$/;
+    const regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!nombres || !soloLetras.test(nombres)) {
+      setMensajeValidacion("Los nombres deben contener solo letras y no estar vacíos.");
+      return false;
+    }
+
+    if (!apellidos || !soloLetras.test(apellidos)) {
+      setMensajeValidacion("Los apellidos deben contener solo letras y no estar vacíos.");
+      return false;
+    }
+
+    if (!DNI || !soloNumeros.test(DNI) || DNI.length !== 8) {
+      setMensajeValidacion("El DNI debe tener exactamente 8 dígitos numéricos.");
+      return false;
+    }
+
+    if (!telefono || !soloNumeros.test(telefono) || telefono.length !== 9) {
+      setMensajeValidacion("El teléfono debe tener exactamente 9 dígitos numéricos.");
+      return false;
+    }
+
+    if (!correo.trim() || !regexCorreo.test(correo)) {
+      setMensajeValidacion("El correo electrónico ingresado no es válido.");
+      setShowModalValidacion(true);
+      return false;
+    }
+
+    if (!direccion || direccion.trim() === "") {
+      setMensajeValidacion("La dirección no puede estar vacía.");
+      return false;
+    }
+
+    if (!contrasenha || contrasenha.trim() === "") {
+      setMensajeValidacion("La contraseña no puede estar vacía.");
+      return false;
+    }
+
+    if (!tipoDoc || tipoDoc === 0) {
+      setMensajeValidacion("Debe seleccionar un tipo de documento.");
+      setShowModalValidacion(true);
+      return false;
+    }
+
+    if (!genero || genero.trim() === "") {
+      setMensajeValidacion("Debe seleccionar un género.");
+      setShowModalValidacion(true);
+      return false;
+    }
+
+    const fechaIngresada = new Date(fechaNacimiento);
+    const hoy = new Date();
+    if (isNaN(fechaIngresada.getTime()) || fechaIngresada >= hoy) {
+      setMensajeValidacion("La fecha de nacimiento debe ser válida y anterior a hoy.");
+      return false;
+    }
+    return true;
+  };  
+
+
   const handleAplicarCambios = async() => {
+
+    if (!validarCampos()) {
+        setShowModalValidacion(true);
+        return;
+    }
+
+
     console.log("Genero en onSubmit:", genero);
     console.log("TipoDoc en onSubmit:", tipoDoc);
     try {
       
       const response = await axios.put(
-        `http://localhost:8080/api/admin/clientes/${id}`,
+        `http://localhost:8080/api/admin/clientes/${idCliente}`,
         {
           nombres,
           apellidos,
@@ -200,9 +277,21 @@ function InicioPerfil() {
         onSubmit={handleAplicarCambios}
       />
 
+      {showModalValidacion && (
+            <div className="fixed inset-0 bg-black/60 z-40">
+            <div className="fixed inset-0 z-50 flex items-center justify-center">
+                <ModalValidacion
+                titulo="Error en los campos"
+                mensaje={mensajeValidacion}
+                onClose={() => setShowModalValidacion(false)}
+                />
+            </div>
+            </div>
+        )}
+
       <hr className="mt-8 border border-gray-300" /> 
 
-      <PerfilPasswordForms id={id}/>
+      <PerfilPasswordForms id={idUsuario}/>
 
       <hr className="mt-8 border border-gray-300" />
 
@@ -213,7 +302,9 @@ function InicioPerfil() {
             <Button variant="danger" size="lg" onClick={() => setShowModalLogout(true)} >
                 Cerrar Sesión
             </Button>
-      </section> 
+      </section>
+
+
 
         {/* Modal de confirmación */}
             {showModalLogout && (

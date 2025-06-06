@@ -113,8 +113,8 @@ function PerfilForms({nombres, setNombres = () =>{}, apellidos, setApellidos = (
         <>
             <section className="">
                 <section className="grid grid-cols-2 justify-start place-items-stretch gap-4 mb-8">
-                    <InputLabel type="name" placeholder="Ingrese los nombres" htmlFor="email" label="Nombres" value={nombres} required={true} onChange={(e) => setNombres(e.target.value)} />
-                    <InputLabel type="name" placeholder="Ingrese los apellidos" htmlFor="email" label="Apellidos" value={apellidos} required={true} onChange={(e) => setApellidos(e.target.value)} />
+                    <InputLabel type="name" placeholder="Ingrese los nombres" htmlFor="name" label="Nombres" value={nombres} required={true} onChange={(e) => setNombres(e.target.value)} />
+                    <InputLabel type="name" placeholder="Ingrese los apellidos" htmlFor="name" label="Apellidos" value={apellidos} required={true} onChange={(e) => setApellidos(e.target.value)} />
                     <div className="col-span-full">
                         <InputIconLabel icon={<Mail className="w-5 h-5" />} placeholder="Mail" type="email" htmlFor="email" label="Email" value={correo} required={true} onChange={(e) => setCorreo(e.target.value)}></InputIconLabel>
                     </div>
