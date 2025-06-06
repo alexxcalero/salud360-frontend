@@ -95,7 +95,7 @@ function CalendarioSemanal<Data>({
               ([d, fecha, range]) =>
                 [
                   d,
-                  Math.round(
+                  Math.floor(
                     fecha.diff(inicioSemana, ["days", "months", "years"]).days
                   ),
                   DateTime.fromObject({
