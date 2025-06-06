@@ -1,16 +1,19 @@
 import axios from "axios"
 
 export const register = async (datosRegistro: {
-  nombres: string
-  apellidos: string
-  tipoDocumento: string
-  numeroDocumento: string
-  fechaNacimiento: string
-  lugarResidencia: string
-  correo: string
-  contraseña: string
-  telefono: string
+  nombres: string;
+  apellidos: string;
+  numeroDocumento: string;
+  correo: string;
+  contrasenha: string;
+  sexo: string; // este campo representa el género
+  telefono: string;
+  fechaNacimiento: string;
+  direccion: string;
+  tipoDocumento: {
+    idTipoDocumento: string;
+  };
 }) => {
-  const response = await axios.post("http://localhost:8080/api/usuarios/signup", datosRegistro)
+  const response = await axios.post("http://localhost:8080/api/autenticacion/signup", datosRegistro)
   return response.data
 }
