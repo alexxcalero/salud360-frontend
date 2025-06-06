@@ -4,6 +4,8 @@ import {
   getAllCitasMedicasByComunityAPI,
   getAllClasesByComunityAPI,
 } from "@/services/comunidadServices.service";
+import { ComunidadCitaMedicaCard } from "../calendario/ComunidadCitaMedicaCard";
+import { ComunidadClaseCard } from "../calendario/ComunidadClaseCard";
 
 const CalendarioComunidad = ({ id }: { id: number }) => {
   return (
@@ -15,22 +17,26 @@ const CalendarioComunidad = ({ id }: { id: number }) => {
         }
         cards={{
           day: (d) => (
-            <div>
-              {d.tipo === "citaMedica" && <>{d.medico?.nombres}</>}
-              {d.tipo === "clase" && <>{d.nombre}</>}
-            </div>
+            <>
+              {d.tipo === "citaMedica" && (
+                <ComunidadCitaMedicaCard citaMedica={d} />
+              )}
+              {d.tipo === "clase" && <ComunidadClaseCard clase={d} />}
+            </>
           ),
           week: (d) => (
-            <div>
-              {d.tipo === "citaMedica" && <>{d.medico?.nombres}</>}
-              {d.tipo === "clase" && <>{d.nombre}</>}
-            </div>
+            <>
+              {d.tipo === "citaMedica" && (
+                <ComunidadCitaMedicaCard citaMedica={d} />
+              )}
+              {d.tipo === "clase" && <ComunidadClaseCard clase={d} />}
+            </>
           ),
           month: (d) => (
-            <div>
+            <>
               {d.tipo === "citaMedica" && <>{d.medico?.nombres}</>}
-              {d.tipo === "clase" && <>{d.nombre}</>}
-            </div>
+              {d.tipo === "clase" && <ComunidadClaseCard clase={d} />}
+            </>
           ),
         }}
         fetchData={async () => {

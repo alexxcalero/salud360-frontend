@@ -192,7 +192,7 @@ function CalendarioWrapped<Data>({
               inicioSemana={rangeDays.initial}
               card={cards.week}
               data={filteredData}
-              getDate={getDate}
+              getDate={RegisterForm ? getDate : undefined}
               getCalendarData={getCalendarData}
               getDateFromData={getDateFromData}
               getHourRangeFromData={getHourRangeFromData}
@@ -205,7 +205,7 @@ function CalendarioWrapped<Data>({
               card={cards.day}
               getDateFromData={getDateFromData}
               getHourRangeFromData={getHourRangeFromData}
-              getDate={getDate}
+              getDate={RegisterForm ? getDate : undefined}
               getCalendarData={getCalendarData}
               data={filteredData}
             />
@@ -219,7 +219,7 @@ function CalendarioWrapped<Data>({
               card={cards.month}
               getDateFromData={getDateFromData}
               getHourRangeFromData={getHourRangeFromData}
-              getDate={getDate}
+              getDate={RegisterForm ? getDate : undefined}
               getCalendarData={getCalendarData}
               data={filteredData}
             />
