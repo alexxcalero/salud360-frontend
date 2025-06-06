@@ -13,6 +13,7 @@ import { useContext } from "react";
 import { AuthContext } from "@/hooks/AuthContext";
 import { useToasts } from "@/hooks/ToastContext";
 import { reservaType } from "@/schemas/reserva";
+import { useInternalModals } from "@/hooks/useInternalModals";
 
 export function ReservaCard({ reserva }: { reserva: reservaType }) {
   const {
@@ -23,13 +24,14 @@ export function ReservaCard({ reserva }: { reserva: reservaType }) {
   } = useDialog();
   const { createToast } = useToasts();
   const { usuario } = useContext(AuthContext);
+  const { reload } = useInternalModals();
 
   return (
     <>
       <HoverCard openDelay={300}>
         <HoverCardTrigger asChild>
           <BaseCard
-            color="green"
+            color={reserva.estado === "Reservada" ? "green" : "red"}
             estado={reserva.estado ?? undefined}
             date={
               reserva.citaMedica?.fecha?.set({
@@ -58,45 +60,54 @@ export function ReservaCard({ reserva }: { reserva: reservaType }) {
           </BaseCard>
         </HoverCardTrigger>
         <HoverCardContent className="w-max">
-          <div className="p-2">
-            <Button
-              variant="danger"
-              onClick={() => {
-                callAlertDialog({
-                  title: "¿Quieres cancelar esta reserva?",
-                  description: `${
-                    reserva.clase?.horaInicio?.toFormat("T") ??
-                    reserva.citaMedica?.horaInicio?.toFormat("T")
-                  } - ${
-                    reserva.clase?.horaFin?.toFormat("T") ??
-                    reserva.citaMedica?.horaFin?.toFormat("T")
-                  }`,
-                  buttonLabel: "Cancelar",
-                  onConfirm: async () => {
-                    if (!usuario || !reserva.idReserva) {
-                      createToast("error", {
-                        title: "Mal envio de datos",
-                      });
-                      return true;
-                    }
-                    const result = await deleteReservaAPI(reserva.idReserva);
+          {reserva.estado === "Reservada" && (
+            <div className="p-2">
+              <Button
+                variant="danger"
+                onClick={() => {
+                  callAlertDialog({
+                    title: "¿Quieres cancelar esta reserva?",
+                    description: `${
+                      reserva.clase?.horaInicio?.toFormat("T") ??
+                      reserva.citaMedica?.horaInicio?.toFormat("T")
+                    } - ${
+                      reserva.clase?.horaFin?.toFormat("T") ??
+                      reserva.citaMedica?.horaFin?.toFormat("T")
+                    }`,
+                    buttonLabel: "Cancelar",
+                    onConfirm: async () => {
+                      if (!usuario || !reserva.idReserva) {
+                        createToast("error", {
+                          title: "Mal envio de datos",
+                        });
+                        return true;
+                      }
+                      const result = await deleteReservaAPI(reserva.idReserva);
 
-                    if (result)
-                      callSuccessDialog({
-                        title: "Reserva cancelada correctamente",
-                      });
-                    else
-                      callErrorDialog({
-                        title: "La reserva no pudo ser cancelada correctamente",
-                      });
-                    return false;
-                  },
-                });
-              }}
-            >
-              <Ban /> Cancelar Reserva
-            </Button>
-          </div>
+                      if (result) {
+                        callSuccessDialog({
+                          title: "Reserva cancelada correctamente",
+                        });
+                        reload();
+                      } else
+                        callErrorDialog({
+                          title:
+                            "La reserva no pudo ser cancelada correctamente",
+                        });
+                      return false;
+                    },
+                  });
+                }}
+              >
+                <Ban /> Cancelar Reserva
+              </Button>
+            </div>
+          )}
+          {reserva.estado === "Cancelada" && (
+            <div className="p-2">
+              <strong>Cancelada</strong>
+            </div>
+          )}
         </HoverCardContent>
       </HoverCard>
     </>

@@ -5,7 +5,7 @@ import { DateTime } from "luxon";
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
-  color: "blue" | "pink" | "green";
+  color: "blue" | "pink" | "green" | "red";
   active?: boolean;
   estado?: string;
   date?: DateTime;
