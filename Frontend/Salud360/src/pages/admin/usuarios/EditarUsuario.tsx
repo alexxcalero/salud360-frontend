@@ -31,6 +31,8 @@ function EditarUsuario(){
     } = useUsuarioForm();
 
     useEffect(() => {
+
+
         axios.get(`http://localhost:8080/api/admin/clientes/${id}`, {
           auth: {
             username: "admin",
@@ -120,6 +122,10 @@ function EditarUsuario(){
 
 
     const handleEditarUsuario = async() => {
+
+      
+      console.log("Genero en onSubmit de admin:", genero);
+      console.log("TipoDoc en onSubmit de admin:", tipoDoc);
 
       if (!validarCampos()) {
             setShowModalValidacion(true);

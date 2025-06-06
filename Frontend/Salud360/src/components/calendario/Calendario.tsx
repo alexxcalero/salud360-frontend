@@ -42,7 +42,7 @@ interface Props<Data> {
     data: Data;
   }) => ReactNode;
   fetchData: () => Promise<Data[]>;
-  fetchDataDependences: any[];
+  fetchDataDependences?: any[];
 }
 
 function CalendarioWrapped<Data>({
@@ -131,11 +131,16 @@ function CalendarioWrapped<Data>({
   }, []);
 
   const { fetch } = useFetchHandler();
-  useEffect(() => {
-    fetch(async () => {
-      setData(await fetchData());
-    });
-  }, [reloadState, ...fetchDataDependences]);
+  useEffect(
+    () => {
+      fetch(async () => {
+        setData(await fetchData());
+      });
+    },
+    fetchDataDependences && fetchDataDependences.length === 0
+      ? [reloadState, ...fetchDataDependences]
+      : [reloadState]
+  );
 
   return (
     <>
@@ -170,7 +175,9 @@ function CalendarioWrapped<Data>({
           </div>
 
           <div className="flex gap-4 items-center">
-            <FiltrarCalendario>{filterContent}</FiltrarCalendario>
+            {filterContent && (
+              <FiltrarCalendario>{filterContent}</FiltrarCalendario>
+            )}
 
             <CambiarPeriodos
               setDay={() => setPeriodo("day")}
@@ -187,7 +194,7 @@ function CalendarioWrapped<Data>({
               inicioSemana={rangeDays.initial}
               card={cards.week}
               data={filteredData}
-              getDate={getDate}
+              getDate={RegisterForm ? getDate : undefined}
               getCalendarData={getCalendarData}
               getDateFromData={getDateFromData}
               getHourRangeFromData={getHourRangeFromData}
@@ -200,7 +207,7 @@ function CalendarioWrapped<Data>({
               card={cards.day}
               getDateFromData={getDateFromData}
               getHourRangeFromData={getHourRangeFromData}
-              getDate={getDate}
+              getDate={RegisterForm ? getDate : undefined}
               getCalendarData={getCalendarData}
               data={filteredData}
             />
@@ -214,7 +221,7 @@ function CalendarioWrapped<Data>({
               card={cards.month}
               getDateFromData={getDateFromData}
               getHourRangeFromData={getHourRangeFromData}
-              getDate={getDate}
+              getDate={RegisterForm ? getDate : undefined}
               getCalendarData={getCalendarData}
               data={filteredData}
             />

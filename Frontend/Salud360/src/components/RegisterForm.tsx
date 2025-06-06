@@ -1,5 +1,5 @@
-import { useState } from "react"
-import { Phone, User, MapPin, Calendar, IdCard, ShieldUser } from "lucide-react"
+import { useEffect, useState } from "react"
+import { Phone, User, MapPin, Calendar, IdCard, ShieldUser, Transgender } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useGoogleLogin } from "@react-oauth/google"
 import SelectIconLabel from "@/components/SelectIconLabel"
@@ -10,6 +10,9 @@ import { useLoading } from "@/hooks/LoadingContext"
 import Input from "./input/Input"
 import MailInput from "./input/MailInput"
 import PasswordInput from "./input/PasswordInput"
+import axios from "axios"
+import { FaGenderless } from "react-icons/fa"
+import ModalValidacion from "./ModalValidacion"
 
 
 export default function RegisterForm() {
@@ -18,6 +21,7 @@ export default function RegisterForm() {
     apellidos: "",
     tipoDocumento: "",
     numeroDocumento: "",
+    genero: "",
     fechaNacimiento: "",
     lugarResidencia: "",
     correo: "",
@@ -26,6 +30,11 @@ export default function RegisterForm() {
     confirmarContraseña: "",
     telefono: "",
   })
+  const [tipoDocumentos, setTipoDocumentos] = useState([]);
+
+  const [showModalValidacion, setShowModalValidacion] = useState(false);
+  const [mensajeValidacion, setMensajeValidacion] = useState("");
+  
   const {setLoading} = useLoading();
   const {createToast} = useToasts();
 
@@ -34,8 +43,78 @@ export default function RegisterForm() {
     setFormData(prev => ({ ...prev, [name]: value }))
   }
 
+  //VALIDACIONES DE CAMPOS 
+    const validarCampos = (): boolean => {
+    const soloLetras = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
+    const soloNumeros = /^[0-9]+$/;
+    const regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!formData.nombres || !soloLetras.test(formData.nombres)) {
+      setMensajeValidacion("Los nombres deben contener solo letras y no estar vacíos.");
+      return false;
+    }
+
+    if (!formData.apellidos || !soloLetras.test(formData.apellidos)) {
+      setMensajeValidacion("Los apellidos deben contener solo letras y no estar vacíos.");
+      return false;
+    }
+
+    if (!formData.numeroDocumento || !soloNumeros.test(formData.numeroDocumento) || formData.numeroDocumento.length !== 8) {
+      setMensajeValidacion("El DNI debe tener exactamente 8 dígitos numéricos.");
+      return false;
+    }
+
+    if (!formData.telefono || !soloNumeros.test(formData.telefono) || formData.telefono.length !== 9) {
+      setMensajeValidacion("El teléfono debe tener exactamente 9 dígitos numéricos.");
+      return false;
+    }
+
+    if (!formData.correo.trim() || !regexCorreo.test(formData.correo)) {
+      setMensajeValidacion("El correo electrónico ingresado no es válido.");
+      setShowModalValidacion(true);
+      return false;
+    }
+
+    if (!formData.lugarResidencia || formData.lugarResidencia.trim() === "") {
+      setMensajeValidacion("La dirección no puede estar vacía.");
+      return false;
+    }
+
+    if (!formData.contraseña || formData.contraseña.trim() === "") {
+      setMensajeValidacion("La contraseña no puede estar vacía.");
+      return false;
+    }
+
+    if (!formData.tipoDocumento || formData.tipoDocumento === 0) {
+      setMensajeValidacion("Debe seleccionar un tipo de documento.");
+      setShowModalValidacion(true);
+      return false;
+    }
+
+    if (!formData.genero || formData.genero.trim() === "") {
+      setMensajeValidacion("Debe seleccionar un género.");
+      setShowModalValidacion(true);
+      return false;
+    }
+
+    const fechaIngresada = new Date(formData.fechaNacimiento);
+    const hoy = new Date();
+    if (isNaN(fechaIngresada.getTime()) || fechaIngresada >= hoy) {
+      setMensajeValidacion("La fecha de nacimiento debe ser válida y anterior a hoy.");
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
+
     e.preventDefault();
+
+    if (!validarCampos()) {
+        setShowModalValidacion(true);
+        return;
+    }
+    
     setLoading(true)
     console.log("Formulario enviado:", formData)
 
@@ -54,24 +133,38 @@ export default function RegisterForm() {
       })
       return;
     }
-    // conexio a axios
+
+    
+
+
+
+
+    // conexión a axios
     try {
       const datosEnvio = {
         nombres: formData.nombres,
         apellidos: formData.apellidos,
-        tipoDocumento: formData.tipoDocumento,
         numeroDocumento: formData.numeroDocumento,
-        fechaNacimiento: formData.fechaNacimiento,
-        lugarResidencia: formData.lugarResidencia,
         correo: formData.correo,
-        contraseña: formData.contraseña,
+        contrasenha: formData.contraseña,
+        sexo: formData.genero,
         telefono: formData.telefono,
+        fechaNacimiento: formData.fechaNacimiento,
+        direccion: formData.lugarResidencia,
+        tipoDocumento: {
+          idTipoDocumento: formData.tipoDocumento
+        },
+        
       };
 
       await register(datosEnvio);
 
-      setLoading(false)
-      navigate("/RegistroExitoso");
+      setLoading(false);
+      console.log("✅ Usuario creado");
+      console.log("A punto de navegar a successCrear");
+      navigate("/RegistroExitoso", {
+        state: { created: true },
+      });
     } catch (error) {
       console.error("Error al registrar:", error);
       createToast("error", {
@@ -82,6 +175,37 @@ export default function RegisterForm() {
       setLoading(false)
     }
   };
+
+  //Llamada TipoDocumentos
+    const fetchTipoDocumentos = () => {
+    axios.get("http://localhost:8080/api/admin/tiposDocumentos", {
+      auth: {
+        username: "admin",
+        password: "admin123"
+      }
+    })
+      .then(res => {
+        console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
+        
+        const opciones = res.data.map((tipoDocX: any) => ({
+            value: tipoDocX.idTipoDocumento,
+            content: tipoDocX.nombre
+        }))
+
+        setTipoDocumentos(opciones)
+        console.log("Tipo Documentos:", opciones);
+      })
+      .catch(err => console.error("Error cargando tipo documentos", err));
+    }
+    useEffect(() => {
+        fetchTipoDocumentos();
+    }, []);
+
+
+  const sexo = [
+    { value: "Masculino", content: "Masculino" },
+    { value: "Femenino", content: "Femenino" }
+  ]
 
   //Uso de Google OAuth
   const registerGoogle = useGoogleLogin({
@@ -97,6 +221,11 @@ export default function RegisterForm() {
   const navigate = useNavigate()
   
   return (
+
+    <>
+    
+    
+
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Input name="nombres" label="Nombres" placeholder="Nombre" leftIcon={<User />} required={true} defaultValue={formData.nombres} onChange={handleChange}/>
@@ -104,30 +233,19 @@ export default function RegisterForm() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="flex flex-col">
-          <SelectIconLabel
-            icon={<IdCard className="w-5 h-5" />}
-            htmlFor="tipoDocumento"
-            label="Tipo de documento de identidad *"
-            value={formData.tipoDocumento}
-            onChange={handleChange}
-            options={[
-              { value: "", label: "Escoje una opción" },
-              { value: "DNI", label: "DNI" },
-              { value: "CE", label: "Carné de extranjería" },
-            ]}
-          />
-        </div>
-        <Input name="numeroDocumento" label="Número de documento de identidad" placeholder="72072230" leftIcon={<ShieldUser />} required={true} defaultValue={formData.numeroDocumento} onChange={handleChange}/>
+        <Input name="fechaNacimiento" label="Fecha de Nacimiento" type="date" leftIcon={<Calendar />} required={true} defaultValue={formData.fechaNacimiento} onChange={handleChange}/>
+        <Input name="numeroDocumento" label="Número de Documento de Identidad" placeholder="72072230" leftIcon={<ShieldUser />} required={true} defaultValue={formData.numeroDocumento} onChange={handleChange}/>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Input name="fechaNacimiento" label="Fecha de nacimiento" type="date" leftIcon={<Calendar />} required={true} defaultValue={formData.fechaNacimiento} onChange={handleChange}/>
-        <Input name="lugarResidencia" label="Lugar de residencia" placeholder="Ubicación" leftIcon={<MapPin />} required={true} defaultValue={formData.lugarResidencia} onChange={handleChange}/>
+        <SelectIconLabel icon={<IdCard className="w-5 h-5" />} htmlFor="tipoDocumento" label="Tipo de Documento" value={formData.tipoDocumento} onChange={handleChange} required={true} options={tipoDocumentos}/>
+        <SelectIconLabel icon={<Transgender className="w-5 h-5" />} htmlFor="genero" label="Género" value={formData.genero} onChange={handleChange} required={true} options={sexo}/>
       </div>
 
-      <Input name="telefono" label="Teléfono" leftIcon={<Phone />} defaultValue={formData.telefono}
-        onChange={handleChange} required={true} />
+      <Input name="telefono" label="Teléfono" leftIcon={<Phone />} defaultValue={formData.telefono} onChange={handleChange} required={true} />
+
+      <Input name="lugarResidencia" label="Dirección" placeholder="Ubicación" leftIcon={<MapPin />} required={true} defaultValue={formData.lugarResidencia} onChange={handleChange}/>
+      
 
       <MailInput name="correo" placeholder="example@gmail.com" label="Correo electrónico"  defaultValue={formData.correo} onChange={handleChange} required={true}/>
       <MailInput name="confirmarCorreo" placeholder="example@gmail.com" label="Confirmar correo electrónico"  defaultValue={formData.confirmarCorreo} onChange={handleChange} required={true}/>
@@ -151,7 +269,21 @@ export default function RegisterForm() {
           <span className="text-sm font-medium text-gray-700">Registrarse con Google</span>
         </button>
       </div>
+    </form>
 
-    </form>  
+    {showModalValidacion && (
+                <div className="fixed inset-0 bg-black/60 z-40">
+                <div className="fixed inset-0 z-50 flex items-center justify-center">
+                    <ModalValidacion
+                    titulo="Error en los campos"
+                    mensaje={mensajeValidacion}
+                    onClose={() => setShowModalValidacion(false)}
+                    />
+                </div>
+                </div>
+            )}
+
+    </>
+  
   )
 }

@@ -17,6 +17,7 @@ import { useInternalModals } from "@/hooks/useInternalModals";
 import { claseDTOType } from "@/schemas/clase";
 import { DialogDescription } from "@radix-ui/react-dialog";
 import { putClaseAPI } from "@/services/clasesAdmin.service";
+import TextAreaInput from "@/components/input/TextAreaInput";
 
 const ActualizarClaseModalForm = ({
   open,
@@ -130,7 +131,7 @@ const ActualizarClaseModalForm = ({
                 value={nombre}
                 setValue={setNombre}
               />
-              <Input
+              <TextAreaInput
                 name="description"
                 placeholder="Descripcion..."
                 label="Descripcion"

@@ -71,9 +71,9 @@ function ServiciosForm({title, subtitle, nombre, setNombre = () =>{}, descripcio
         <h2 className="text-lg text-gray-700 mb-6">{subtitle}</h2>
 
         <div className="grid grid-cols-1 gap-4">
-            <InputLabel placeholder="Ingrese el nombre" label="Nombre *" htmlFor="nombre" value={nombre} onChange={(e) => setNombre(e.target.value)} disabled={readOnly} />
-            <InputLabel placeholder="Ingrese la descripción" label="Descripción *" htmlFor="descripcion" value={descripcion} onChange={(e) => setDescripcion(e.target.value)} disabled={readOnly} />
-            <InputLabel placeholder="Ingrese el tipo de servicio" label="Tipo *" htmlFor="tipo" value={tipo} onChange={(e) => setTipo(e.target.value)} disabled={readOnly} />
+            <InputLabel placeholder="Ingrese el nombre" label="Nombre" htmlFor="nombre" value={nombre} required={true && !readOnly} onChange={(e) => setNombre(e.target.value)} disabled={readOnly} />
+            <InputLabel placeholder="Ingrese la descripción" label="Descripción" htmlFor="descripcion" value={descripcion} required={true && !readOnly} onChange={(e) => setDescripcion(e.target.value)} disabled={readOnly} />
+            <InputLabel placeholder="Ingrese el tipo de servicio" label="Tipo" htmlFor="tipo" value={tipo} required={true && !readOnly} onChange={(e) => setTipo(e.target.value)} disabled={readOnly} />
         </div>
 
         {locales && <div className="mt-6">

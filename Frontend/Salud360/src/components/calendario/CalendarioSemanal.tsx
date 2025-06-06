@@ -172,7 +172,6 @@ function CalendarioSemanal<Data>({
                         <button
                           className="w-full h-full"
                           onClick={() => {
-                            console.log(dia);
                             getDate(dia);
                           }}
                         ></button>

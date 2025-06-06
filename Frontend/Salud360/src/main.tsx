@@ -117,6 +117,9 @@ createRoot(document.getElementById("root")!).render(
                       <Route index element={<Inicio />} />
                       <Route path="configuracion" element={<UsuarioConfigLayout />}>
                         <Route index element={<ConfigPerfil />} />
+                        <Route path="successEditar" element={<UsuarioSuccess modulo="¡Actualización exitosa!" detalle="Tu perfil fue modificado correctamente" route="/usuario/"/>} />
+                        <Route path="successCambiarContrasenha" element={<UsuarioSuccess modulo="¡Actualización exitosa!" detalle="Tu contraseña fue actualizada correctamente" route="/usuario/"/>} />
+                        <Route path="successCambiarNotificaciones" element={<UsuarioSuccess modulo="¡Actualización exitosa!" detalle="Tus notificaciones fueron actualizadas correctamente" route="/usuario/"/>} />
                         <Route path="sistema" element={<ConfigSistema />} />
                         <Route path="membresias" element={<Membresias />} />
                         <Route path="historial-pagos" element={<HistorialPagos />} />
@@ -207,7 +210,7 @@ createRoot(document.getElementById("root")!).render(
                   <Route path="successCrear" element={<UsuarioSuccess modulo="¡Médico creado correctamente!" detalle="El médico fue creado correctamente" route="/admin/personalMedico"/>} />
                   <Route path="successEditar" element={<UsuarioSuccess modulo="¡Médico modificado correctamente!" detalle="El médico fue modificado correctamente" route="/admin/personalMedico" />} />
                 </Route>
-                <Route path="calificaciones">
+                <Route path="testimonios">
                   <Route index element={<CalificacionesPage />} />
                   <Route path="crear" element={<CrearUsuario />} />
                 </Route>
@@ -233,6 +236,8 @@ createRoot(document.getElementById("root")!).render(
               </Route>
             </Route>
             <Route path="/example" element={<Example />} />
+
+
             <Route path="/trash" element={<App />} />
             <Route path="*" element={<Page404 />} />
           </Routes>

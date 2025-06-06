@@ -81,23 +81,23 @@ function LocalesForms({title, subtitle, nombre, setNombre = () =>{}, telefono, s
 
         <div className="grid grid-cols-2 gap-8 items-center w-full">
             <div className="col-span-1 flex flex-col gap-4">
-                <InputLabel placeholder="Ingrese el nombre" label="Nombre *" htmlFor="nombre" value={nombre} onChange={(e) => setNombre(e.target.value)} disabled={readOnly} />
-                <InputLabel placeholder="Ingrese el telefono" label="Telefono *" htmlFor="nombre" value={telefono} onChange={(e) => setTelefono(e.target.value)} disabled={readOnly} />
+                <InputLabel placeholder="Ingrese el nombre" label="Nombre" htmlFor="nombre" value={nombre} required={true && !readOnly} onChange={(e) => setNombre(e.target.value)} disabled={readOnly} />
+                <InputLabel placeholder="Ingrese el telefono" label="Telefono" htmlFor="nombre" value={telefono} required={true && !readOnly} onChange={(e) => setTelefono(e.target.value)} disabled={readOnly} />
             </div>
             <div className="col-span-1 flex flex-col gap-4">
-                <InputLabel placeholder="Ingrese la dirección" label="Dirección *" htmlFor="nombre" value={direccion} onChange={(e) => setDireccion(e.target.value)} disabled={readOnly} />
-                <InputLabel placeholder="Ingrese el tipo de servicio" label="Tipo *" htmlFor="tipo" value={tipo} onChange={(e) => setTipo(e.target.value)} disabled={readOnly} />
+                <InputLabel placeholder="Ingrese la dirección" label="Dirección" htmlFor="nombre" value={direccion} required={true && !readOnly} onChange={(e) => setDireccion(e.target.value)} disabled={readOnly} />
+                <InputLabel placeholder="Ingrese el tipo de servicio" label="Tipo" htmlFor="tipo" value={tipo} required={true && !readOnly} onChange={(e) => setTipo(e.target.value)} disabled={readOnly} />
             </div>
         </div>
 
         <div className="flex flex-col gap-16 mt-4 mb-12">
             <div className="w-full h-48 rounded-md flex flex-col items-center justify-center cursor-pointer">
-                <InputLabel type="text" placeholder="Ingrese la descripción" htmlFor="text" label="Descripción" value={descripcion} disabled={readOnly} className="w-full h-full" onChange={(e) => setDescripcion(e.target.value)}/>
+                <InputLabel type="text" placeholder="Ingrese la descripción" htmlFor="text" label="Descripción" value={descripcion} disabled={readOnly} required={true && !readOnly} className="w-full h-full" onChange={(e) => setDescripcion(e.target.value)}/>
             </div>
         </div>
 
         <div className="mt-6">
-            <p className="font-semibold mb-2">{readOnly ? "Servicio" : "Seleccione el servicio" } asociado al local:</p>
+            <p className="font-semibold mb-2">{readOnly ? "Servicio" : "Seleccione el servicio" } asociado al local: {!readOnly && <span className="text-red-500">*</span>} </p>
             <div className="bg-gray-100 p-4 rounded-md">
             {serviciosDisponibles.map((servicio) => (
             <div key={servicio.idServicio} className="flex items-center space-x-2">

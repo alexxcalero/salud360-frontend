@@ -178,13 +178,13 @@ function ComunidadForm({
       <h2 className="text-lg text-gray-700 mb-6">{subtitle}</h2>
 
       <div className="grid grid-cols-1 gap-4">
-        <InputLabel label="Nombre *" htmlFor="nombre" value={nombre} onChange={(e) => setNombre(e.target.value)} disabled={readOnly} />
-        <InputLabel label="Descripción *" htmlFor="descripcion" value={descripcion} onChange={(e) => setDescripcion(e.target.value)} disabled={readOnly} />
-        <InputLabel label="Propósito *" htmlFor="proposito" value={proposito} onChange={(e) => setProposito(e.target.value)} disabled={readOnly} />
+        <InputLabel label="Nombre" htmlFor="nombre" value={nombre} required={true && !readOnly} onChange={(e) => setNombre(e.target.value)} disabled={readOnly} />
+        <InputLabel label="Descripción" htmlFor="descripcion" value={descripcion} required={true && !readOnly} onChange={(e) => setDescripcion(e.target.value)} disabled={readOnly} />
+        <InputLabel label="Propósito" htmlFor="proposito" value={proposito} required={true && !readOnly} onChange={(e) => setProposito(e.target.value)} disabled={readOnly} />
       </div>
 
       <div className="mt-6">
-        <p className="font-semibold mb-2">Seleccione los servicios que ofrece su comunidad:</p>
+        <p className="font-semibold mb-2">Seleccione los servicios que ofrece su comunidad: {!readOnly && <span className="text-red-500">*</span>} </p>
         <div className="bg-gray-100 p-4 rounded-md space-y-2">
           {serviciosDisponibles.map((servicio) => (
             <div key={servicio.idServicio} className="flex items-center space-x-2">
@@ -204,7 +204,7 @@ function ComunidadForm({
 
       <div className="mt-6">
         <div className="flex justify-between items-center mb-2">
-          <p className="font-medium">Añada las membresías asociadas a la comunidad</p>
+          <p className="font-medium">Añada las membresías asociadas a la comunidad: {!readOnly && <span className="text-red-500">*</span>} </p>
           {!readOnly && (
             <button
               type="button"

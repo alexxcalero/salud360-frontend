@@ -1,0 +1,15 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+.textarea {
+    &::-webkit-scrollbar {
+      width: 4px;
+      margin-right: 4px;
+    }
+    &::-webkit-scrollbar-track {
+      @apply bg-transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+      @apply bg-neutral-500 rounded-full;
+    }
+}

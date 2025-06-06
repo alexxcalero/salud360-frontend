@@ -6,28 +6,34 @@ interface Props {
   htmlFor: string
   label: string
   value: string
+  required?: boolean
   onChange: React.ChangeEventHandler<HTMLSelectElement>
-  options: { value: string; label: string }[]
+  options: { value: string; content: string }[]
 }
 
-function SelectIconLabel({ icon, htmlFor, label, value, onChange, options }: Props) {
+function SelectIconLabel({ icon, htmlFor, label, value, required, onChange, options }: Props) {
   return (
     <div>
-      <Label htmlFor={htmlFor}>{label}</Label>
+      <Label htmlFor={htmlFor} required={required}>{label}</Label>
       <div className="relative flex items-center">
-        <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
+        <div className="absolute left-3 top-1/2 -translate-y-1/2">
           {icon}
         </div>
+
         <select
           id={htmlFor}
           name={htmlFor}
           value={value}
           onChange={onChange}
-          className="w-full pl-10 pr-4 py-2 border-[#6A6262] border-2 rounded-[5px] py-2.45 px-4"
+          className="w-full pl-9 pr-4 py-2 border-[#6A6262] border-2 rounded-[5px] px-4"
         >
+          <option value="" disabled hidden>
+            Escoge una opción
+          </option>
+
           {options.map((opt) => (
             <option key={opt.value} value={opt.value}>
-              {opt.label}
+              {opt.content}
             </option>
           ))}
         </select>

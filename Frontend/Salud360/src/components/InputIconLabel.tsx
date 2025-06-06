@@ -9,13 +9,14 @@ interface Props{
     label: React.ReactNode;
     value?: string;
     disabled?: boolean;
+    required?: boolean;
     onChange?: React.ChangeEventHandler<HTMLInputElement>
 }
 
-function InputIconLabel({icon, type= "text", placeholder="", htmlFor, label, value, disabled, onChange}: Props){
+function InputIconLabel({icon, type= "text", placeholder="", htmlFor, label, value, disabled, required, onChange}: Props){
     return(
         <div>
-            <Label htmlFor={htmlFor}> {label} </Label>
+            <Label htmlFor={htmlFor} required={required}> {label} </Label>
             <InputIcon icon={icon} placeholder={placeholder} type={type} value={value} disabled={disabled} onChange={onChange}></InputIcon>
         </div>
     );

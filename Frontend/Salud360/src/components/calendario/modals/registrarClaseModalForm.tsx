@@ -1,6 +1,5 @@
 import Input from "@/components/input/Input";
 import { CalendarInput } from "@/components/input/CalendarInput";
-import SelectLabel from "@/components/SelectLabel";
 import {
   Dialog,
   DialogClose,
@@ -17,6 +16,7 @@ import { useFetchHandler } from "@/hooks/useFetchHandler";
 import { useInternalModals } from "@/hooks/useInternalModals";
 import { localType } from "@/schemas/local";
 import { postClaseAPI } from "@/services/clasesAdmin.service";
+import TextAreaInput from "@/components/input/TextAreaInput";
 
 const RegistrarClaseModalForm = ({
   open,
@@ -120,7 +120,7 @@ const RegistrarClaseModalForm = ({
                 value={nombre}
                 setValue={setNombre}
               />
-              <Input
+              <TextAreaInput
                 name="description"
                 placeholder="Descripcion..."
                 label="Descripcion"
