@@ -6,11 +6,12 @@ import AccesoRapido from "@/components/usuario/AccesoRapido";
 import { Link } from "react-router";
 import axios from "axios";
 import useUsuarioForm from "@/hooks/useUsuarioForm";
+import CardLanding from "@/components/landing/CardLanding";
 
 function Inicio(){
 
     const {usuario, loading} = useContext(AuthContext)
-    const [comunidadRandom, setComunidadRandom] = useState([]);
+    const [comunidadRandom, setComunidadRandom] = useState<any>([]);
       
     if (loading || !usuario) return null;
 
@@ -52,7 +53,7 @@ function Inicio(){
                 setComunidadRandom(res.data);
                 console.log("*********Comunidad aleatoria:", res.data);
             })
-            .catch(err => console.error("Error cargando usuarios", err));
+            .catch(err => console.error("Error cargando comunidad random", err));
     }
 
     const fetchUsuario = () => {
@@ -130,10 +131,10 @@ function Inicio(){
                 
                 <div className="w-full grid grid-cols-2 border border-gray-300">
                     <div className=" flex flex-col gap-4 p-8">
-                        <div className="text-left">
+                        <div className="">
                             <h2>Datos personales:</h2>
                         </div>
-                        <div className="w-full flex flex-row justify-start items-center gap-4 bg-gray-50 border border-[#2A86FF] rounded-sm p-4">
+                        <div className="w-full h-[460px] flex flex-row justify-start items-center gap-4 bg-gray-50 border border-[#2A86FF] rounded-sm p-4">
                             <div>
                                 {fotoPerfil ? (
                                 <img
@@ -145,7 +146,7 @@ function Inicio(){
                                 <User color="black" className="w-24 h-24 border border-[#2A86FF] rounded-full"/>
                                 }
                             </div>
-                            <div className="flex flex-col gap-3 items-start">
+                            <div className="flex flex-col gap-3 items-start ">
                                 <div className="flex flex-row gap-4 items-center">
                                     <h3>{nombres} {apellidos}</h3>
                                     <Link to={"configuracion"}><Pencil className="text-[#2A86FF]"/></Link>
@@ -167,8 +168,14 @@ function Inicio(){
                         </div>
                     </div>
                     <div className=" flex flex-col gap-4 p-8">
-                        <div className="text-left">
+                        <div className="">
                             <h2>Te recomendamos:</h2>
+                        </div>
+                        <div className="flex mx-auto border border-[#2A86FF] rounded-sm ">
+                            <CardLanding id={comunidadRandom.idComunidad} 
+                            image={"https://png.pngtree.com/png-clipart/20201224/ourmid/pngtree-panda-bamboo-bamboo-shoots-simple-strokes-cartoon-with-pictures-small-fresh-png-image_2625172.jpg"} 
+                            title={comunidadRandom.nombre} 
+                            subtitle={comunidadRandom.descripcion}/>
                         </div>
                     </div>
                 </div>

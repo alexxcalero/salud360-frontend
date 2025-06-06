@@ -114,9 +114,6 @@ export default function RegisterForm() {
         setShowModalValidacion(true);
         return;
     }
-    
-    setLoading(true)
-    console.log("Formulario enviado:", formData)
 
     if (formData.correo !== formData.confirmarCorreo) {
       createToast("error", {
@@ -135,9 +132,8 @@ export default function RegisterForm() {
     }
 
     
-
-
-
+    setLoading(true)
+    console.log("Formulario a enviar:", formData)
 
     // conexión a axios
     try {
