@@ -9,22 +9,26 @@ import { cn } from "@/lib/utils";
 
 interface Props<Data> {
   inicioSemana: DateTime;
-  blankTileAction?: (_: DateTime) => void;
-  metadata: {
-    card: (_: Data) => ReactNode;
-    equalFunc: (_: Data, _2: DateTime) => boolean;
-  };
+  getDate?: (_: DateTime) => void;
+  getCalendarData?: (_: Data) => void;
   data: Data[];
+  getDateFromData: (d: Data) => DateTime | undefined;
+  getHourRangeFromData: (d: Data) => [DateTime, DateTime] | undefined;
+  card: (_: Data, _2?: (_: Data) => void) => ReactNode;
 }
 
 function CalendarioSemanal<Data>({
   inicioSemana,
-  blankTileAction,
-  metadata,
   data,
+  getDate,
+  getCalendarData,
+  getDateFromData,
+  getHourRangeFromData,
+  card,
 }: Props<Data>) {
-  const dias = Array.from({ length: 7 }, (_, i) =>
-    inicioSemana.plus({ days: i })
+  const dias = useMemo<DateTime[]>(
+    () => Array.from({ length: 7 }, (_, i) => inicioSemana.plus({ days: i })),
+    []
   );
   const horasSemana = useMemo<DateTime[][]>(() => {
     const tmp = [];
@@ -47,125 +51,155 @@ function CalendarioSemanal<Data>({
   }, []);
 
   return (
-    <>
-      <table className="w-full grid grid-cols-[50px_repeat(7,1fr)_50px] border-collapse">
-        <thead className="border-b-1 border-neutral-400 py-3 grid grid-cols-subgrid col-span-full">
-          <tr className="grid grid-cols-subgrid col-span-full">
-            <th></th>
-            {dias.map((dia, index) => (
-              <th
+    <div className="w-full grid border-collapse grid-rows-[auto_minmax(0,1fr)] h-full max-h-full min-h-0 min-w-0">
+      {/* ============================================= */}
+      {/* Numeración de calendario */}
+      {/* ============================================= */}
+      <div className="py-3 grid grid-cols-[50px_repeat(7,1fr)_50px] min-h-0">
+        <div></div>
+        {dias.map((dia, index) => (
+          <div
+            key={index}
+            className="text-center group"
+            data-active={dia.hasSame(DateTime.now(), "day")}
+          >
+            <span className="text-label-large font-normal text-neutral-700 group-data-[active=true]:text-blue-500">
+              {dia.toFormat("ccc", { locale: "es" }).toUpperCase()}
+            </span>
+            <br />
+            <div className=" mx-auto w-[2rem] h-[2rem] text-body-medium text-neutral-900 font-medium group-data-[active=true]:text-white group-data-[active=true]:bg-blue-500 rounded-full aspect-1/1">
+              {dia.toFormat("dd")}
+            </div>
+          </div>
+        ))}
+      </div>
+      {/* ============================================= */}
+      {/* Grilla de calenario */}
+      {/* ============================================= */}
+      <div className="grid grid-cols-[50px_repeat(7,1fr)_50px] grid-rows-[25px_repeat(24,58px)_25px] relative min-h-0 h-full overflow-y-scroll min-w-0">
+        {/* Datos mostrados en position: absolute */}
+        <div className="absolute top-0 left-0 bottom-0 right-0 z-10 pointer-events-none">
+          {data
+            .map(
+              (d) =>
+                [d, getDateFromData(d), getHourRangeFromData(d)] as [
+                  Data,
+                  DateTime,
+                  [DateTime, DateTime]
+                ]
+            )
+            .filter(
+              ([_, fecha, range]) => fecha !== undefined && range !== undefined
+            )
+            .map(
+              ([d, fecha, range]) =>
+                [
+                  d,
+                  Math.floor(
+                    fecha.diff(inicioSemana, ["days", "months", "years"]).days
+                  ),
+                  DateTime.fromObject({
+                    hour: range[0].hour,
+                    minute: range[0].minute,
+                  }).diff(DateTime.fromObject({ hour: 0, minute: 0 }), [
+                    "hours",
+                    "days",
+                    "months",
+                    "years",
+                  ]).hours,
+                  DateTime.fromObject({
+                    hour: range[1].hour,
+                    minute: range[1].minute,
+                  }).diff(
+                    DateTime.fromObject({
+                      hour: range[0].hour,
+                      minute: range[0].minute,
+                    }),
+                    ["hours", "days", "months", "years"]
+                  ).hours,
+                ] as [Data, number, number, number]
+            )
+            .map(([d, diffDays, diffInitialHour, diffFinalHour], index) => (
+              <div
+                className={cn(
+                  "flex w-[calc(calc(100%-100px)/7)] p-1 absolute pointer-events-auto"
+                )}
+                style={{
+                  height: `${58 * diffFinalHour}px`,
+                  top: `calc(calc(58px * ${diffInitialHour}) + 25px)`,
+                  left: `calc(calc(calc(calc(100% - 100px) / 7) * ${diffDays}) + 50px)`,
+                }}
                 key={index}
-                className="text-center group"
-                data-active={dia.hasSame(DateTime.now(), "day")}
               >
-                <span className="text-label-large font-normal text-neutral-700 group-data-[active=true]:text-blue-500">
-                  {dia.toFormat("ccc", { locale: "es" }).toUpperCase()}
-                </span>
-                <br />
-                <div className=" mx-auto w-[2rem] h-[2rem] text-body-medium text-neutral-900 font-medium group-data-[active=true]:text-white group-data-[active=true]:bg-blue-500 rounded-full aspect-1/1">
-                  {dia.toFormat("dd")}
-                </div>
-              </th>
+                {card(d, getCalendarData)}
+              </div>
             ))}
-            <th></th>
-          </tr>
-        </thead>
-        <tbody className="grid grid-cols-subgrid col-span-full grid-rows-[25px] auto-rows-[120px]">
-          <tr className="grid grid-cols-subgrid col-span-full">
-            <td className="border-1 border-neutral-300 "></td>
-            <td className="border-1 border-neutral-300 "></td>
-            <td className="border-1 border-neutral-300 "></td>
-            <td className="border-1 border-neutral-300 "></td>
-            <td className="border-1 border-neutral-300 "></td>
-            <td className="border-1 border-neutral-300 "></td>
-            <td className="border-1 border-neutral-300 "></td>
-            <td className="border-1 border-neutral-300 "></td>
-            <td className="border-1 border-neutral-300 "></td>
-          </tr>
-          {/* Recorrer por horas */}
-          {horasSemana.map((horaDias, index) => (
-            <tr key={index} className="grid grid-cols-subgrid col-span-full">
-              <td className="border-1 border-neutral-300 text-right text-label-medium flex items-start justify-end pr-1">
-                {horaDias[0].toFormat("h a")}
-              </td>
-              {/* Recorrer por dìas de la semana */}
-              {horaDias.map((dia, index) => {
-                const virtualElems = data.filter((elem) =>
-                  metadata.equalFunc(elem, dia)
-                );
-                const futuro = dia >= DateTime.now();
-                // const virtualClases = clases.filter(
-                //   (elem) =>
-                //     elem.fecha.hasSame(dia, "day") &&
-                //     elem.fecha.hasSame(dia, "month") &&
-                //     elem.fecha.hasSame(dia, "year") &&
-                //     elem.horaInicio.hour <= hora &&
-                //     hora <= elem.horaFin.hour
-                // );
-                return (
-                  <td
-                    key={index}
-                    className="text-center group border-1 border-neutral-300"
-                  >
-                    <div
-                      className={cn(
-                        "w-full h-full relative",
-                        !futuro && "bg-neutral-50"
-                      )}
-                    >
-                      {virtualElems.length !== 0 ? (
-                        <div className="flex max-w-full max-h-full p-2 relative">
-                          {virtualElems.map((d, index) => (
-                            <div
-                              key={index}
-                              className="absolute top-2 left-2 right-2 bottom-2"
-                            >
-                              {metadata.card(d)}
-                            </div>
-                          ))}
-                        </div>
-                      ) : (
-                        <>
-                          {futuro && blankTileAction && (
-                            <Tooltip key={index}>
-                              <TooltipTrigger asChild>
-                                <button
-                                  className="w-full h-full"
-                                  onClick={() => {
-                                    blankTileAction?.(dia);
-                                  }}
-                                ></button>
-                              </TooltipTrigger>
-                              <TooltipContent>
-                                <p>Haz click para registrar</p>
-                              </TooltipContent>
-                            </Tooltip>
-                          )}
-                        </>
-                      )}
-                    </div>
-                  </td>
-                );
-              })}
-              <td className="border-1 border-neutral-300"></td>
-            </tr>
-          ))}
-        </tbody>
-        <tfoot className="grid grid-cols-subgrid col-span-full grid-rows-[25px]">
-          <tr className="grid grid-cols-subgrid col-span-full">
-            <td className="border-1 border-neutral-300 "></td>
-            <td className="border-1 border-neutral-300 "></td>
-            <td className="border-1 border-neutral-300 "></td>
-            <td className="border-1 border-neutral-300 "></td>
-            <td className="border-1 border-neutral-300 "></td>
-            <td className="border-1 border-neutral-300 "></td>
-            <td className="border-1 border-neutral-300 "></td>
-            <td className="border-1 border-neutral-300 "></td>
-            <td className="border-1 border-neutral-300 "></td>
-          </tr>
-        </tfoot>
-      </table>
-    </>
+        </div>
+        {/* Calendario estático */}
+
+        <div className="grid grid-cols-subgrid col-span-full">
+          {/* Limite superior */}
+          <div className="border-1 border-neutral-300 "></div>
+          <div className="border-1 border-neutral-300 "></div>
+          <div className="border-1 border-neutral-300 "></div>
+          <div className="border-1 border-neutral-300 "></div>
+          <div className="border-1 border-neutral-300 "></div>
+          <div className="border-1 border-neutral-300 "></div>
+          <div className="border-1 border-neutral-300 "></div>
+          <div className="border-1 border-neutral-300 "></div>
+          <div className="border-1 border-neutral-300 "></div>
+        </div>
+        {/* Recorrer por horas */}
+        {horasSemana.map((horaDias, index) => (
+          <div key={index} className="grid grid-cols-subgrid col-span-full">
+            <div className="border-1 border-neutral-300 text-right text-label-medium flex items-start justify-end pr-1">
+              {horaDias[0].toFormat("h a")}
+            </div>
+            {/* Recorrer por dìas de la semana */}
+            {horaDias
+              .map((dia) => [dia, dia >= DateTime.now()] as [DateTime, boolean])
+              .map(([dia, futuro], index) => (
+                <div
+                  key={index}
+                  className={cn(
+                    "w-full h-full relative text-center group border-1 border-neutral-300 bg-white",
+                    !futuro && "bg-neutral-100"
+                  )}
+                >
+                  {futuro && getDate && (
+                    <Tooltip key={index}>
+                      <TooltipTrigger asChild>
+                        <button
+                          className="w-full h-full"
+                          onClick={() => {
+                            getDate(dia);
+                          }}
+                        ></button>
+                      </TooltipTrigger>
+                      <TooltipContent className="pointer-events-none">
+                        <p>Haz click</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  )}
+                </div>
+              ))}
+            <div className="border-1 border-neutral-300"></div>
+          </div>
+        ))}
+        <div className="grid grid-cols-subgrid col-span-full grid-rows-[25px]">
+          {/* Limite inferior */}
+          <div className="border-1 border-neutral-300 "></div>
+          <div className="border-1 border-neutral-300 "></div>
+          <div className="border-1 border-neutral-300 "></div>
+          <div className="border-1 border-neutral-300 "></div>
+          <div className="border-1 border-neutral-300 "></div>
+          <div className="border-1 border-neutral-300 "></div>
+          <div className="border-1 border-neutral-300 "></div>
+          <div className="border-1 border-neutral-300 "></div>
+          <div className="border-1 border-neutral-300 "></div>
+        </div>
+      </div>
+    </div>
   );
 }
 

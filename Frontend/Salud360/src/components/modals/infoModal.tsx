@@ -1,6 +1,12 @@
 import Button from "@/components/Button";
-import { Dialog, DialogContent, DialogClose } from "@/components/ui/dialog";
-import { TriangleAlert } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogClose,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import { Info } from "lucide-react";
 
 interface Props {
   title?: string;
@@ -12,7 +18,7 @@ interface Props {
   setOpen: (_: boolean) => void;
 }
 
-function AlertModal({
+function InfoModal({
   title = "",
   description = "",
   buttonLabel = "Eliminar",
@@ -22,21 +28,25 @@ function AlertModal({
   setOpen,
 }: Props) {
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent>
+    <Dialog
+      open={open}
+      onOpenChange={setOpen}
+      aria-describedby="Modal de éxito"
+    >
+      <DialogContent aria-describedby="Modal de información">
         <div className="max-w-md w-full text-center">
           {/* Icono de advertencia */}
           <div className="flex justify-center mb-4">
-            <div className="bg-yellow-500 rounded-full w-16 h-16 flex items-center justify-center">
-              <TriangleAlert color="white" size={36} strokeWidth={2} />
+            <div className="bg-blue-500 rounded-full w-16 h-16 flex items-center justify-center">
+              <Info color="white" size={36} strokeWidth={2} />
             </div>
           </div>
 
           {/* Mensaje principal */}
-          <h2 className="text-2xl font-bold mb-2">{title}</h2>
+          <DialogTitle className="text-2xl font-bold mb-2">{title}</DialogTitle>
 
           {/* Detalle del elemento */}
-          <p className="mb-6">{description}</p>
+          <DialogDescription className="mb-6">{description}</DialogDescription>
 
           {/* Botones */}
           <div className="flex space-x-3 justify-center">
@@ -51,7 +61,6 @@ function AlertModal({
               </Button>
             </DialogClose>
             <Button
-              variant="danger"
               onClick={() => {
                 onConfirm?.().then((r) => setOpen(r));
               }}
@@ -65,4 +74,4 @@ function AlertModal({
   );
 }
 
-export default AlertModal;
+export default InfoModal;

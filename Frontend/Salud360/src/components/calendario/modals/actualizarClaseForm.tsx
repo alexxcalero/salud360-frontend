@@ -12,10 +12,12 @@ import { useToasts } from "@/hooks/ToastContext";
 import { DateTime } from "luxon";
 import { FormEvent, useState } from "react";
 import Button from "@/components/Button";
-import { putCitaMedicaAPI } from "@/services/citasMedicasAdmin.service";
 import { useFetchHandler } from "@/hooks/useFetchHandler";
 import { useInternalModals } from "@/hooks/useInternalModals";
 import { claseDTOType } from "@/schemas/clase";
+import { DialogDescription } from "@radix-ui/react-dialog";
+import { putClaseAPI } from "@/services/clasesAdmin.service";
+import TextAreaInput from "@/components/input/TextAreaInput";
 
 const ActualizarClaseModalForm = ({
   open,
@@ -30,16 +32,18 @@ const ActualizarClaseModalForm = ({
 }) => {
   const { reload } = useInternalModals();
 
-  const [horaInicio, setHoraInicio] = useState(clase.horaInicio?.toFormat("T"));
-  const [horaFin, setHoraFin] = useState(clase.horaFin?.toFormat("T"));
+  const [horaInicio, setHoraInicio] = useState(
+    clase.horaInicio?.toFormat("T") ?? ""
+  );
+  const [horaFin, setHoraFin] = useState(clase.horaFin?.toFormat("T") ?? "");
 
   const [dateInput, setDateInput] = useState<DateTime>(
     clase.fecha ?? DateTime.now()
   );
 
-  const [nombre, setNombre] = useState("");
-  const [descripcion, setDescripcion] = useState("");
-  const [capacidad, setCapacidad] = useState("");
+  const [nombre, setNombre] = useState(clase.nombre ?? "");
+  const [descripcion, setDescripcion] = useState(clase.descripcion ?? "");
+  const [capacidad, setCapacidad] = useState(clase.capacidad?.toString() ?? "");
 
   const [estadoInput, setEstadoInput] = useState<string>(clase.estado ?? "");
 
@@ -48,6 +52,41 @@ const ActualizarClaseModalForm = ({
 
   const submitHanlder = async (e: FormEvent) => {
     e.preventDefault();
+
+    if (
+      (dateInput
+        ?.set({
+          hour: DateTime.fromISO(horaInicio).hour,
+          minute: DateTime.fromISO(horaInicio).minute,
+        })
+        .diff(DateTime.now()).milliseconds ?? 0) < 0
+    ) {
+      createToast("error", {
+        title: "Error al ingresar la fecha",
+        description: "La fecha no puede ser pasada",
+      });
+      return;
+    }
+
+    const diferenciaDeHoras = DateTime.fromISO(horaFin).diff(
+      DateTime.fromISO(horaInicio),
+      ["hour", "day", "month", "year"]
+    ).hours;
+    if (diferenciaDeHoras < 0) {
+      createToast("error", {
+        title: "Error al ingressar horas",
+        description: "La hora final no debe ir antes que hora de inicio",
+      });
+      return;
+    }
+    if (diferenciaDeHoras < 0.5) {
+      createToast("error", {
+        title: "Error al ingressar horas",
+        description:
+          "Las horas deben estar separadas por, al menos, 30 minutos",
+      });
+      return;
+    }
 
     const uploadData = {
       idClase: clase.idClase,
@@ -68,7 +107,7 @@ const ActualizarClaseModalForm = ({
     };
 
     fetch(async () => {
-      await putCitaMedicaAPI(uploadData);
+      await putClaseAPI(uploadData);
       setOpen(false);
       onCreate?.();
       createToast("success", { title: "Cita actualizada correctamente" });
@@ -82,7 +121,7 @@ const ActualizarClaseModalForm = ({
           <form action="" onSubmit={submitHanlder}>
             <DialogTitle>Actualizar cita médica</DialogTitle>
             <div className="my-4 flex flex-col gap-4">
-              <p>Para: {clase.nombre}</p>
+              <DialogDescription>Para: {clase.nombre}</DialogDescription>
 
               <Input
                 name="nombre"
@@ -92,7 +131,7 @@ const ActualizarClaseModalForm = ({
                 value={nombre}
                 setValue={setNombre}
               />
-              <Input
+              <TextAreaInput
                 name="description"
                 placeholder="Descripcion..."
                 label="Descripcion"
@@ -155,7 +194,7 @@ const ActualizarClaseModalForm = ({
               <DialogClose asChild>
                 <Button variant="outline">Cancelar</Button>
               </DialogClose>
-              <Button type="submit">Registrar</Button>
+              <Button type="submit">Acturalizar</Button>
             </DialogFooter>
           </form>
         </DialogContent>

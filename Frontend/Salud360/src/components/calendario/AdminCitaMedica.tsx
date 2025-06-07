@@ -1,9 +1,9 @@
 import { Pencil, Trash } from "lucide-react";
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 
 import { extenedCitaMedicaType } from "@/schemas/citaMedica";
 import Button from "../Button";
@@ -12,25 +12,30 @@ import {
   deleteCitaMedicaAPI,
   reactivarCitaMedicaAPI,
 } from "@/services/citasMedicasAdmin.service";
-import ActualizarCitaModalForm from "./modals/actualizarCitaModalForm";
 import { useInternalModals } from "@/hooks/useInternalModals";
+import BaseCard from "./cards/BaseCard";
 
 export function AdminCitaMedicaCard({
   citaMedica,
+  update,
 }: {
   citaMedica: extenedCitaMedicaType;
+  update: (_: extenedCitaMedicaType) => void;
 }) {
   const { callAlertDialog, callErrorDialog, callSuccessDialog } = useDialog();
-  const { activeModal, setActiveModal, reload } = useInternalModals();
+  const { reload } = useInternalModals();
   return (
     <>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <div
-            className={`w-full group p-2 gap-3 flex flex-col border-l-6 rounded-sm border-blue-500 bg-blue-700/10 text-blue-700 hover:shadow-md hover:shadow-blue-300 ${
-              !citaMedica.activo &&
-              "border-neutral-500 bg-neutral-700/10 text-neutral-700 hover:shadow-neutral-300"
-            }`}
+      <HoverCard openDelay={300}>
+        <HoverCardTrigger asChild>
+          <BaseCard
+            color="blue"
+            active={citaMedica.activo}
+            estado={citaMedica.estado}
+            date={citaMedica.fecha?.set({
+              hour: citaMedica.horaInicio?.hour,
+              minute: citaMedica.horaInicio?.minute,
+            })}
           >
             <div className="flex items-center justify-between">
               <span className="use-label-large font-semibold">
@@ -40,14 +45,14 @@ export function AdminCitaMedicaCard({
             <span className="use-label-large font-medium text-left">
               {citaMedica.servicio?.nombre}
             </span>
-          </div>
-        </TooltipTrigger>
-        <TooltipContent className="w-max">
+          </BaseCard>
+        </HoverCardTrigger>
+        <HoverCardContent className="w-max">
           <div className="p-2">
             <div className="flex gap-4 mb-2">
               {citaMedica.activo && (
                 <>
-                  <Button onClick={() => setActiveModal?.("actualizarCita")}>
+                  <Button onClick={() => update(citaMedica)}>
                     <Pencil size={16} color="white" /> Editar
                   </Button>
 
@@ -123,17 +128,8 @@ export function AdminCitaMedicaCard({
               - {citaMedica.horaFin?.toFormat("TTTT", { locale: "es" })}
             </p>
           </div>
-        </TooltipContent>
-      </Tooltip>
-      {citaMedica.activo && (
-        <ActualizarCitaModalForm
-          open={activeModal === "actualizarCita"}
-          setOpen={(b) =>
-            b ? setActiveModal?.("actualizarCita") : setActiveModal?.("")
-          }
-          citaMedica={citaMedica}
-        />
-      )}
+        </HoverCardContent>
+      </HoverCard>
     </>
   );
 }

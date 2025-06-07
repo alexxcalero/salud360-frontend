@@ -1,5 +1,10 @@
 import Button from "@/components/Button";
-import { Dialog, DialogContent } from "../ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "../ui/dialog";
 
 interface Props {
   title?: string;
@@ -28,10 +33,10 @@ function ErrorModal({
           </div>
 
           {/* Mensaje principal */}
-          <h2 className="text-2xl font-bold mb-2">{title}</h2>
+          <DialogTitle className="text-2xl font-bold mb-2">{title}</DialogTitle>
 
           {/* Detalle del elemento */}
-          <p className="mb-6">{description}</p>
+          <DialogDescription className="mb-6">{description}</DialogDescription>
 
           {/* Botones */}
           <div className="flex justify-center space-y-3">

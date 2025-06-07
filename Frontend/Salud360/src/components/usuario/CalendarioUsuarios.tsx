@@ -1,161 +1,115 @@
-import { InternalModalsProvider } from "@/hooks/useInternalModals";
 import Calendario from "../calendario/Calendario";
 import { reservaType } from "@/schemas/reserva";
 import { DateTime } from "luxon";
+import { ReservaCard } from "../calendario/reservaCard";
 import { useContext, useEffect, useState } from "react";
-import { useFetchHandler } from "@/hooks/useFetchHandler";
-import { getAllUserReservas } from "@/services/reservas.service";
 import { AuthContext } from "@/hooks/AuthContext";
+import { getAllClienteReservasAPI } from "@/services/cliente.service";
+import { Switch } from "../ui/switch";
+import Select from "../Select";
+import { medicoType } from "@/schemas/medico";
+import ToggleGroup from "../input/ToggleGroup";
+import { useFetchHandler } from "@/hooks/useFetchHandler";
+import { getMedicos } from "@/services/medico.service";
 
 const CalendarioUsuarios = () => {
-  return (
-    <>
-      <InternalModalsProvider>
-        <CalendarioUsuariosWrapped />
-      </InternalModalsProvider>
-    </>
-  );
-};
+  const { usuario } = useContext(AuthContext);
 
-const CalendarioUsuariosWrapped = () => {
-  const [reservas, setReservas] = useState<reservaType[]>([]);
+  const [medicos, setMedicos] = useState<medicoType[]>([]);
+  const [medicoSeleccionado, setMedicoSeleccionado] = useState<string>("");
+
+  const [act, setAct] = useState<string[]>(["citaMedica", "clase"]);
+  const [showCancelados, setShowCancelados] = useState(true);
+
   const { fetch } = useFetchHandler();
-  const useAuthContext = useContext(AuthContext);
-
   useEffect(() => {
     fetch(async () => {
-      if (useAuthContext === null) return;
-      const data = await getAllUserReservas(useAuthContext.usuario.idCliente);
-      setReservas(data);
+      setMedicos(await getMedicos());
     });
   }, []);
-
   return (
     <>
       <Calendario<reservaType>
-        rangeDaysFilterFunc={(d0: DateTime, df: DateTime, r) =>
-          Boolean(
-            (r.citaMedica !== undefined &&
-              r.citaMedica !== null &&
-              r.citaMedica.fecha !== undefined &&
-              r.citaMedica.fecha !== null &&
-              d0 <= r.citaMedica.fecha &&
-              r.citaMedica.fecha <= df) ||
-              (r.clase !== undefined &&
-                r.clase !== null &&
-                r.clase.fecha !== undefined &&
-                r.clase.fecha !== null &&
-                d0 <= r.clase.fecha &&
-                r.clase.fecha <= df)
-          )
+        getDateFromData={(d) => d.clase?.fecha ?? d.citaMedica?.fecha}
+        getHourRangeFromData={(d) =>
+          d.clase
+            ? ([d.clase.horaInicio, d.clase.horaFin] as [DateTime, DateTime])
+            : d.citaMedica
+            ? ([d.citaMedica.horaInicio, d.citaMedica.horaFin] as [
+                DateTime,
+                DateTime
+              ])
+            : undefined
         }
-        data={reservas}
-        metadata={{
-          day: {
-            card: (d) => (
-              <div>
-                {d.comunidad?.nombre}
-                {d.citaMedica && (
-                  <div>
-                    {d.citaMedica.medico?.nombres}{" "}
-                    {d.citaMedica.medico?.apellidos} -{" "}
-                    {d.citaMedica.medico?.especialidad}
-                  </div>
-                )}
-                {d.clase && (
-                  <div>
-                    {d.clase.nombre} - {d.clase.capacidad}
-                  </div>
-                )}
-              </div>
-            ),
-            equalFunc: (data, fecha: DateTime) =>
-              Boolean(
-                data.clase &&
-                  data.clase.fecha?.hasSame(fecha, "day") &&
-                  data.clase.fecha?.hasSame(fecha, "month") &&
-                  data.clase.fecha?.hasSame(fecha, "year") &&
-                  data.clase.horaInicio?.hasSame(fecha, "hour")
-              ) ||
-              Boolean(
-                data.citaMedica &&
-                  data.citaMedica.fecha?.hasSame(fecha, "day") &&
-                  data.citaMedica.fecha?.hasSame(fecha, "month") &&
-                  data.citaMedica.fecha?.hasSame(fecha, "year") &&
-                  data.citaMedica.horaInicio?.hasSame(fecha, "hour")
-              ),
-          },
-          week: {
-            card: (d) => (
-              <div>
-                {d.comunidad?.nombre}
-                {d.citaMedica && (
-                  <div>
-                    {d.citaMedica.medico?.nombres}{" "}
-                    {d.citaMedica.medico?.apellidos} -{" "}
-                    {d.citaMedica.medico?.especialidad}
-                  </div>
-                )}
-                {d.clase && (
-                  <div>
-                    {d.clase.nombre} - {d.clase.capacidad}
-                  </div>
-                )}
-              </div>
-            ),
-            equalFunc: (data, fecha: DateTime) =>
-              Boolean(
-                data.clase &&
-                  data.clase.fecha?.hasSame(fecha, "day") &&
-                  data.clase.fecha?.hasSame(fecha, "month") &&
-                  data.clase.fecha?.hasSame(fecha, "year") &&
-                  (data.clase.horaInicio?.hour ?? Infinity) >= fecha.hour &&
-                  (data.clase.horaInicio?.hour ?? Infinity) < fecha.hour + 1
-              ) ||
-              Boolean(
-                data.citaMedica &&
-                  data.citaMedica.fecha?.hasSame(fecha, "day") &&
-                  data.citaMedica.fecha?.hasSame(fecha, "month") &&
-                  data.citaMedica.fecha?.hasSame(fecha, "year") &&
-                  (data.citaMedica.horaInicio?.hour ?? Infinity) >=
-                    fecha.hour &&
-                  (data.citaMedica.horaInicio?.hour ?? Infinity) <
-                    fecha.hour + 1
-              ),
-          },
-          month: {
-            card: (d) => (
-              <div>
-                {d.comunidad?.nombre}
-                {d.citaMedica && (
-                  <div>
-                    {d.citaMedica.medico?.nombres}{" "}
-                    {d.citaMedica.medico?.apellidos} -{" "}
-                    {d.citaMedica.medico?.especialidad}
-                  </div>
-                )}
-                {d.clase && (
-                  <div>
-                    {d.clase.nombre} - {d.clase.capacidad}
-                  </div>
-                )}
-              </div>
-            ),
-            equalFunc: (data, fecha: DateTime) =>
-              Boolean(
-                data.clase &&
-                  data.clase.fecha?.hasSame(fecha, "day") &&
-                  data.clase.fecha?.hasSame(fecha, "month") &&
-                  data.clase.fecha?.hasSame(fecha, "year")
-              ) ||
-              Boolean(
-                data.citaMedica &&
-                  data.citaMedica.fecha?.hasSame(fecha, "day") &&
-                  data.citaMedica.fecha?.hasSame(fecha, "month") &&
-                  data.citaMedica.fecha?.hasSame(fecha, "year")
-              ),
-          },
+        cards={{
+          day: (d) => <ReservaCard reserva={d} />,
+          week: (d) => <ReservaCard reserva={d} />,
+          month: (d) => <ReservaCard reserva={d} />,
         }}
+        fetchData={async () => {
+          const reservas = await getAllClienteReservasAPI(
+            usuario.idCliente as number
+          );
+          return reservas ?? [];
+        }}
+        filterFuncs={[
+          (d) => {
+            if (d.estado === "Cancelada" && !showCancelados) return false;
+
+            if (d.citaMedica && !act.includes("citaMedica")) return false;
+            if (d.clase && !act.includes("clase")) return false;
+
+            if (
+              medicoSeleccionado &&
+              d.citaMedica &&
+              d.citaMedica.medico?.idMedico?.toString() !== medicoSeleccionado
+            )
+              return false;
+
+            return true;
+          },
+        ]}
+        filterContent={
+          <div>
+            <div className="flex flex-col">
+              <strong>Mostrar canceladas</strong>
+              <Switch
+                checked={showCancelados}
+                onCheckedChange={setShowCancelados}
+              />
+            </div>
+
+            <div className="mt-4">
+              <strong>Seleccionar por medico</strong>
+              <Select
+                options={medicos.map((med) => ({
+                  value: med.idMedico?.toString() ?? "",
+                  content: `${med.nombres} ${med.apellidos} - ${med.especialidad}`,
+                }))}
+                value={medicoSeleccionado}
+                onChange={setMedicoSeleccionado}
+              />
+            </div>
+            <div className="mt-4">
+              <strong>Tipo de actividad</strong>
+              <ToggleGroup
+                type="multiple"
+                options={[
+                  {
+                    value: "citaMedica",
+                    content: "Cita medica",
+                  },
+                  {
+                    value: "clase",
+                    content: "Clase",
+                  },
+                ]}
+                value={act}
+                onValueChange={setAct}
+              />
+            </div>
+          </div>
+        }
       />
     </>
   );

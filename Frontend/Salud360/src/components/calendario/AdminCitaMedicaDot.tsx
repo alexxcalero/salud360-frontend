@@ -24,7 +24,7 @@ const AdminCitaMedicaDot = ({
   const { activeModal, setActiveModal, reload } = useInternalModals();
   return (
     <>
-      <HoverCard openDelay={200}>
+      <HoverCard openDelay={300}>
         <HoverCardTrigger asChild>
           <div
             className={cn(

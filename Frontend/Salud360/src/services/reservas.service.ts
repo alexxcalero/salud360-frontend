@@ -2,8 +2,11 @@ import { reservaSchema } from "@/schemas/reserva";
 import { baseAPI } from "./baseAPI";
 import { z } from "zod";
 
-export const postReservarAPI = async (data: any) =>
-  baseAPI.post("/reservas", data);
+export const postReservarAPI = async (data: any) => {
+  const response = await baseAPI.post("/reservas", data);
+  if (200 > response.status || response.status >= 300) return false;
+  return true;
+};
 
 export const getReservaByIdAPI = async (idReserva: number) => {
   const response = await baseAPI.get(`/reservas/${idReserva}`);

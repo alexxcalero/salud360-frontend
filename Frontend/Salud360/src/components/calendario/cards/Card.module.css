@@ -1,0 +1,75 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+.card {
+  @apply w-full h-full rounded-sm bg-white;
+  @apply hover:outline-4 hover:outline-gray-300;
+  
+  & > div {
+    @apply p-2 gap-1 flex flex-col border-l-6 rounded-sm w-full h-full overflow-y-scroll;
+    @apply border-gray-500 bg-gray-700/10 text-gray-700;
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+    &::-webkit-scrollbar-track {
+      @apply bg-transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+      @apply bg-black rounded-full;
+    }
+  }
+
+  /* Pink mode */
+  &.pink {
+    @apply hover:outline-pink-300;
+    & > div {
+      &::-webkit-scrollbar-thumb {
+        @apply bg-pink-500;
+      }
+      @apply border-pink-500 bg-pink-700/10 text-pink-700;
+    }
+  }
+
+  /* Blue mode */
+  &.blue {
+    @apply hover:outline-blue-300;
+    & > div {
+      &::-webkit-scrollbar-thumb {
+        @apply bg-blue-500;
+      }
+      @apply border-blue-500 bg-blue-700/10 text-blue-700;
+    }
+  }
+
+  &.green {
+    @apply hover:outline-green-300;
+    & > div {
+      &::-webkit-scrollbar-thumb {
+        @apply bg-green-500;
+      }
+      @apply border-green-500 bg-green-700/10 text-green-700;
+    }
+  }
+
+  &.red {
+    @apply hover:outline-red-300;
+    & > div {
+      &::-webkit-scrollbar-thumb {
+        @apply bg-red-500;
+      }
+      @apply border-red-500 bg-red-700/10 text-red-700;
+    }
+  }
+
+  /* Neutral mode */
+  &.neutral {
+    @apply hover:outline-neutral-300;
+    & > div {
+      &::-webkit-scrollbar-thumb {
+        @apply bg-neutral-500;
+      }
+      @apply hover:outline-neutral-300;
+      @apply border-neutral-500 bg-neutral-700/10 text-neutral-700;
+    }
+  }
+}

@@ -13,18 +13,23 @@ import {
   deleteClaseAPI,
   reactivarClaseAPI,
 } from "@/services/clasesAdmin.service";
-import ActualizarClaseModalForm from "./modals/actualizarClaseForm";
 
-const AdminClaseDot = ({ clase }: { clase: claseDTOType }) => {
+const AdminClaseDot = ({
+  clase,
+  update,
+}: {
+  clase: claseDTOType;
+  update: (_: claseDTOType) => void;
+}) => {
   const { callAlertDialog, callErrorDialog, callSuccessDialog } = useDialog();
-  const { activeModal, setActiveModal, reload } = useInternalModals();
+  const { reload } = useInternalModals();
   return (
     <>
-      <HoverCard openDelay={200}>
+      <HoverCard openDelay={300}>
         <HoverCardTrigger asChild>
           <div
             className={cn(
-              "bg-blue-500 h-4 w-4 rounded-full",
+              "bg-pink-500 h-4 w-4 rounded-full",
               !clase.activo && "bg-neutral-500"
             )}
           ></div>
@@ -51,7 +56,7 @@ const AdminClaseDot = ({ clase }: { clase: claseDTOType }) => {
             <div className="flex gap-4 mb-2">
               {clase.activo && (
                 <>
-                  <Button onClick={() => setActiveModal?.("actualizarCita")}>
+                  <Button onClick={() => update(clase)}>
                     <Pencil size={16} color="white" /> Editar
                   </Button>
 
@@ -117,15 +122,6 @@ const AdminClaseDot = ({ clase }: { clase: claseDTOType }) => {
           </div>
         </HoverCardContent>
       </HoverCard>
-      {clase.activo && (
-        <ActualizarClaseModalForm
-          open={activeModal === "actualizarCita"}
-          setOpen={(b) =>
-            b ? setActiveModal?.("actualizarCita") : setActiveModal?.("")
-          }
-          clase={clase}
-        />
-      )}
     </>
   );
 };
