@@ -1,7 +1,7 @@
 import HeroDetalleComunidad from "@/components/landing/HeroDetalleComunidad";
 import heroImage from "@/assets/heroComunidades.png"
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router";
 import { useComunidad } from "@/hooks/ComunidadContext";
 import DAB from "@/assets/DAB.jpg";
@@ -16,6 +16,8 @@ import CarrouselMedicos from "@/components/usuario/CarrouselMedicos";
 
 function DetalleComunidad(){
     const {comunidad} = useComunidad();
+
+    const [especialidad, setEspecialidad] = useState("__all__");
   
     const optionsSelect = [
       { value: "Hombre", content: "Hombre" },
@@ -32,24 +34,44 @@ function DetalleComunidad(){
     //console.log("Los serviciosConLocales son:", serviciosConLocales)
     //console.log("Tiene locales? Es:", tieneLocales)
 
-    const medicos: any[] = [];
-    comunidad.servicios.forEach((servicio: any) => {
-      if (servicio.citasMedicas && servicio.citasMedicas.length > 0) {
-        servicio.citasMedicas.forEach((cita: any) => {
-          if (cita.medico) {
-            // Verifica que no esté repetido por ID
-            const yaExiste = medicos.some((m) => m.idMedico === cita.medico.idMedico);
-            if (!yaExiste) {
-              medicos.push(cita.medico);
+    const medicos = useMemo(() => {
+      const lista: any[] = [];
+      comunidad.servicios.forEach((servicio: any) => {
+        if (servicio.citasMedicas && servicio.citasMedicas.length > 0) {
+          servicio.citasMedicas.forEach((cita: any) => {
+            if (cita.medico) {
+              const yaExiste = lista.some((m) => m.idMedico === cita.medico.idMedico);
+              if (!yaExiste) {
+                lista.push(cita.medico);
+              }
             }
-          }
-        });
-      }
-    });
+          });
+        }
+      });
+      return lista;
+    }, [comunidad]);
 
     const tieneMedicos = medicos.length > 0
     console.log("Los medicos son:", medicos)
     console.log("Tiene medicos? Es:", tieneMedicos)
+
+    const opcionesEspecialidades = Array.from(
+      new Set(medicos.map((m) => m.especialidad))).map(
+        (esp) => ({
+          value: esp,
+          content: esp
+        })
+    );
+
+    const especialidades = [
+      {value: "__all__", content: "Todas las especialidades"},
+      ...opcionesEspecialidades
+    ];
+    
+    const medicosFiltrados = useMemo(() => {
+      if (especialidad === "__all__") return medicos;
+      return medicos.filter((m) => m.especialidad === especialidad);
+    }, [especialidad, medicos]);
 
     return (
       <section className="flex flex-col mt-32 gap-32 px-32 mx-auto justify-center">
@@ -66,13 +88,17 @@ function DetalleComunidad(){
 
         {tieneMedicos &&
           <>
-            <section className="flex flex-col gap-16">
+            <section className="flex flex-col gap-8">
               <div className="text-left flex flex-col gap-2">
                 <h3>Solicita ayuda de nuestros especialistas</h3>
                 <hr className="border border-gray-500"/>
               </div>
               
-              <CarrouselMedicos medicos={medicos}/>
+              <div className="w-[600px]">
+                <SelectLabel options={especialidades} placeholder="Seleccione una especialdiad" htmlFor="text" label="Especialidades" value={especialidad} onChange={(e) => setEspecialidad(e)}/>
+              </div>
+
+              <CarrouselMedicos medicos={medicosFiltrados}/>
             </section>
           </>
         }
