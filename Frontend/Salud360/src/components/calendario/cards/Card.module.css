@@ -1,5 +1,4 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@import "@/index.css";
 
 .card {
   @apply w-full h-full rounded-sm bg-white;
