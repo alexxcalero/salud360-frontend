@@ -15,8 +15,9 @@ import { getMedicos } from "@/services/medico.service";
 const CalendarioUsuarios = () => {
   const { usuario } = useContext(AuthContext);
 
-  const [medicos, setMedicos] = useState<medicoType[]>([]);
-  const [medicoSeleccionado, setMedicoSeleccionado] = useState<string>("");
+  const [especialidades, setEspecialidades] = useState<string[]>([]);
+  const [especialidadSeleccionada, setEspecialidadSeleccionada] =
+    useState<string>("");
 
   const [act, setAct] = useState<string[]>(["citaMedica", "clase"]);
   const [showCancelados, setShowCancelados] = useState(true);
@@ -24,7 +25,11 @@ const CalendarioUsuarios = () => {
   const { fetch } = useFetchHandler();
   useEffect(() => {
     fetch(async () => {
-      setMedicos(await getMedicos());
+      const data = await getMedicos();
+      const data2 = Array.from(
+        new Set(data.map((med) => med.especialidad ?? ""))
+      );
+      setEspecialidades(data2);
     });
   }, []);
   return (
@@ -60,9 +65,9 @@ const CalendarioUsuarios = () => {
             if (d.clase && !act.includes("clase")) return false;
 
             if (
-              medicoSeleccionado &&
+              especialidadSeleccionada !== "" &&
               d.citaMedica &&
-              d.citaMedica.medico?.idMedico?.toString() !== medicoSeleccionado
+              d.citaMedica.medico?.especialidad !== especialidadSeleccionada
             )
               return false;
 
@@ -80,14 +85,14 @@ const CalendarioUsuarios = () => {
             </div>
 
             <div className="mt-4">
-              <strong>Seleccionar por medico</strong>
+              <strong>Seleccionar por especialidad</strong>
               <Select
-                options={medicos.map((med) => ({
-                  value: med.idMedico?.toString() ?? "",
-                  content: `${med.nombres} ${med.apellidos} - ${med.especialidad}`,
+                options={especialidades.map((esp) => ({
+                  value: esp,
+                  content: esp,
                 }))}
-                value={medicoSeleccionado}
-                onChange={setMedicoSeleccionado}
+                value={especialidadSeleccionada}
+                onChange={setEspecialidadSeleccionada}
               />
             </div>
             <div className="mt-4">
