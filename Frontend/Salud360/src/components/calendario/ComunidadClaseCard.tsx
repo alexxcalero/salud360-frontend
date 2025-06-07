@@ -14,6 +14,7 @@ import { useContext } from "react";
 import { AuthContext } from "@/hooks/AuthContext";
 import { useParams } from "react-router";
 import { useToasts } from "@/hooks/ToastContext";
+import { useInternalModals } from "@/hooks/useInternalModals";
 
 export function ComunidadClaseCard({ clase }: { clase: claseDTOType }) {
   const {
@@ -25,6 +26,7 @@ export function ComunidadClaseCard({ clase }: { clase: claseDTOType }) {
   const { usuario } = useContext(AuthContext);
   const { id } = useParams();
   const { createToast } = useToasts();
+  const { reload } = useInternalModals();
   return (
     <>
       <HoverCard openDelay={300}>
@@ -80,11 +82,12 @@ export function ComunidadClaseCard({ clase }: { clase: claseDTOType }) {
                           },
                         });
 
-                        if (result)
+                        if (result) {
                           callSuccessDialog({
                             title: "Cita reservada correctamente",
                           });
-                        else
+                          reload();
+                        } else
                           callErrorDialog({
                             title:
                               "la cita no pudo ser reservada correctamente",

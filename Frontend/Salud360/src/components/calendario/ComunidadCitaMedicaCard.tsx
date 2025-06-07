@@ -14,6 +14,7 @@ import { useContext } from "react";
 import { AuthContext } from "@/hooks/AuthContext";
 import { useParams } from "react-router";
 import { useToasts } from "@/hooks/ToastContext";
+import { useInternalModals } from "@/hooks/useInternalModals";
 
 export function ComunidadCitaMedicaCard({
   citaMedica,
@@ -30,11 +31,7 @@ export function ComunidadCitaMedicaCard({
   const { usuario } = useContext(AuthContext);
   const { id } = useParams();
 
-  console.group("Datos para reserva");
-  console.log(citaMedica);
-  console.log(id);
-  console.log(usuario);
-  console.groupEnd();
+  const { reload } = useInternalModals();
   return (
     <>
       <HoverCard openDelay={300}>
@@ -89,11 +86,12 @@ export function ComunidadCitaMedicaCard({
                           },
                         });
 
-                        if (result)
+                        if (result) {
                           callSuccessDialog({
                             title: "Cita reservada correctamente",
                           });
-                        else
+                          reload();
+                        } else
                           callErrorDialog({
                             title:
                               "la cita no pudo ser reservada correctamente",
@@ -137,6 +135,7 @@ export function ComunidadCitaMedicaCard({
                         });
                         return true;
                       }
+                      reload();
                       // const result = await deleteReservaAPI(citaMedica.);
 
                       // if (result)
