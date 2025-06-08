@@ -20,7 +20,7 @@ export function LoadingContext({ children }: { children: ReactNode }) {
   return (
     <loadingContext.Provider value={{ loading, setLoading }}>
       {loading && (
-        <div className="fixed top-0 left-0 right-0 bottom-0 backdrop-blur-md flex justify-center items-center z-50">
+        <div className="fixed top-0 left-0 right-0 bottom-0 backdrop-blur-md flex justify-center items-center z-50 bg-white/70">
           <Spinner />
         </div>
       )}
