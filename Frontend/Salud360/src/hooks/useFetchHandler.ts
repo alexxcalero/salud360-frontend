@@ -20,13 +20,13 @@ export function useFetchHandler() {
             if (error.response) {
               // El servidor respondió con un código fuera del rango 2xx
               createToast("error", {
-                title: `${error.response.status} ${error.message}`,
-                description: `${error.response.data}`,
+                title: `${error.response.data.status} ${error.response.data.error}`,
+                description: `${error.response.data.message ?? error.message}`,
               });
             } else if (error.request) {
               // No hubo respuesta del servidor
               createToast("error", {
-                title: `(${error.status}) Error`,
+                title: `${error.status} Error`,
                 description: `${error.message}`,
               });
             } else {
