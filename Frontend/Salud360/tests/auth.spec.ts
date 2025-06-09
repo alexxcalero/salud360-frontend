@@ -9,7 +9,7 @@ test.describe("Testing para formularios", () => {
   test("Registro", async ({ page }) => {
     const registrarBtn = page.getByRole("link", { name: "Registrate" });
     await expect(registrarBtn).toBeVisible();
-    registrarBtn.click();
+    await registrarBtn.click();
 
     await expect(page.getByRole("heading", { name: "REGISTRO" })).toBeVisible();
 
@@ -26,8 +26,9 @@ test.describe("Testing para formularios", () => {
     const contrasenia = page.locator('[name="contraseña"]');
     const confirmarContrasenia = page.locator('[name="confirmarContraseña"]');
 
-    await nombresInput.fill(faker.person.firstName("female"));
-    await apellidosInput.fill(faker.person.lastName("female"));
+    const generoOpciones = faker.helpers.arrayElement(["male", "female"]);
+    await nombresInput.fill(faker.person.firstName(generoOpciones));
+    await apellidosInput.fill(faker.person.lastName(generoOpciones));
     await fechaNacimiento.fill(
       faker.date
         .birthdate({ min: 18, max: 65, mode: "age" })
@@ -40,7 +41,9 @@ test.describe("Testing para formularios", () => {
     );
     await genero.click();
     await expect(genero).toBeVisible();
-    await genero.selectOption({ label: "Femenino" });
+    await genero.selectOption({
+      label: generoOpciones === "male" ? "Masculino" : "Femenino",
+    });
     await telefono.fill(
       faker.number.int({ min: 100000000, max: 999999999 }).toString()
     );
@@ -52,18 +55,6 @@ test.describe("Testing para formularios", () => {
     await contrasenia.fill(contraFakeData);
     await confirmarContrasenia.fill(contraFakeData);
 
-    await expect(nombresInput).toBeVisible();
-    await expect(apellidosInput).toBeVisible();
-    await expect(fechaNacimiento).toBeVisible();
-    await expect(tipoDocumento).toBeVisible();
-    await expect(numeroDocumento).toBeVisible();
-    await expect(genero).toBeVisible();
-    await expect(telefono).toBeVisible();
-    await expect(lugarResidencia).toBeVisible();
-    await expect(correo).toBeVisible();
-    await expect(contrasenia).toBeVisible();
-    await expect(confirmarContrasenia).toBeVisible();
-
     const submitBtn = page.getByRole("button", {
       name: "Registrarse",
       exact: true,
@@ -73,5 +64,53 @@ test.describe("Testing para formularios", () => {
     await expect(
       page.getByRole("heading", { name: "¡Felicidades!" })
     ).toBeVisible();
+  });
+
+  test("Login usuario", async ({ page }) => {
+    const loginBtn = page.getByRole("link", { name: /Iniciar Sesi[oó]n/ });
+    await expect(loginBtn).toBeVisible();
+    await loginBtn.click();
+
+    await expect(
+      page.getByRole("heading", { name: "INICIAR SESIÓN" })
+    ).toBeVisible();
+
+    const correo = page.locator('[name="correo"]');
+    const contrasenia = page.locator('[name="contraseña"]');
+
+    await correo.fill("usuario@hotmail.com");
+    await contrasenia.fill("usuario123");
+
+    const submitBtn = page.getByRole("button", {
+      name: "Iniciar Sesión",
+      exact: true,
+    });
+    await submitBtn.click();
+
+    await expect(page).toHaveTitle(/Bienvenido/);
+  });
+
+  test("Login admin", async ({ page }) => {
+    const loginBtn = page.getByRole("link", { name: /Iniciar Sesi[oó]n/ });
+    await expect(loginBtn).toBeVisible();
+    await loginBtn.click();
+
+    await expect(
+      page.getByRole("heading", { name: "INICIAR SESIÓN" })
+    ).toBeVisible();
+
+    const correo = page.locator('[name="correo"]');
+    const contrasenia = page.locator('[name="contraseña"]');
+
+    await correo.fill("fabianmr2806@hotmail.com");
+    await contrasenia.fill("admin123");
+
+    const submitBtn = page.getByRole("button", {
+      name: "Iniciar Sesión",
+      exact: true,
+    });
+    await submitBtn.click();
+
+    await expect(page).toHaveTitle(/Administración/);
   });
 });
