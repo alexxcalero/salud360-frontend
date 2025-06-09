@@ -49,7 +49,7 @@ function DetalleComunidad(){
 
     //console.log("Membresía 2:", membresias);
 
-    servicios.map((servicio: any, i: number) => (
+    servicios.map((servicio: any, _: number) => (
         console.log("LA DESCRIPCIÓN es:", servicio.descripcion)
     ))
 
@@ -61,10 +61,15 @@ function DetalleComunidad(){
         window.scrollTo(0, 0); //Para que apenas cargue aparezca en el tope de la página.
     }, []);
 
+    useEffect(() => {
+        document.title = `Detalle de la comunidad ${comunidad.nombre}`
+    }, [comunidad])
+
     const navigate = useNavigate();
 
     return(
         <div>
+            <title>Detalle de la comunidad</title>
             <HeroDetalleComunidad image={heroImage} title={comunidad.nombre}/>
             
             <section className="flex flex-col gap-32 my-32">

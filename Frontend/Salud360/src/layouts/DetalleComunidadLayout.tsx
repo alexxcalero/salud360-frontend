@@ -40,6 +40,7 @@ function DetalleComunidadLayout(){
     return(
         
         <section>
+            <title>Detalle comunidad</title>
             <HeroDetalleComunidad image={heroImage} title={comunidad.nombre}/>
             <DetalleComunidadNavbar/>
             <Outlet />

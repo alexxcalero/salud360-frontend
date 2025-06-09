@@ -28,7 +28,7 @@ function Comunidades(){
 
     return(
         <section className="flex flex-col gap-16">
-
+            <title>Mis comunidades</title>
             <div className="flex flex-row justify-between items-center py-8 px-32 ">
                 <h1>Mis comunidades</h1>
                 {tieneComunidades && <div>

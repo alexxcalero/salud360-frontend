@@ -219,7 +219,7 @@ function InicioPerfil() {
 
   return (
     <div className="flex flex-col p-8">
-
+      <title>Perfil de usuario</title>
       <section className="flex gap-4 mb-8">
           <figure className="relative group">
             {fotoPerfil ? (

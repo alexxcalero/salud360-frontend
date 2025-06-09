@@ -1,3 +1,4 @@
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import CardLanding from "./CardLanding";
 
 interface Props{
@@ -20,7 +21,7 @@ function CarrouselLanding({module, currentIndex, cardWidth, xMargin, visibleCoun
             disabled={currentIndex === 0}
             className={`w-10 h-10 p-2 ${showButton == true ? "text-white bg-[#2A86FF]" : "text-[#2A86FF] bg-white"} rounded-full disabled:opacity-50 ${!(currentIndex === 0) && 'cursor-pointer'}`}
             >
-            ←
+            <ChevronLeft />
             </button>
 
             <div className="relative w-[1088px] overflow-hidden">
@@ -49,7 +50,7 @@ function CarrouselLanding({module, currentIndex, cardWidth, xMargin, visibleCoun
             disabled={currentIndex + visibleCount  >= totalSize}
             className={`w-10 h-10 p-2 ${showButton == true ? "text-white bg-[#2A86FF]" : "text-[#2A86FF] bg-white"} rounded-full disabled:opacity-50 ${!(currentIndex + visibleCount  >= totalSize) && 'cursor-pointer'}`}
             >
-            →
+            <ChevronRight />
             </button>
                 
 

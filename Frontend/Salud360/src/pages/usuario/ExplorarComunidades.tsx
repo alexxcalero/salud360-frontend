@@ -28,7 +28,7 @@ function ExplorarComunidades(){
 
     return(
         <section className="flex flex-col gap-16">
-
+            <title>Explorar comunidades</title>
             <div className="w-full flex flex-col gap-4 justify-center p-8">
                 <h1>Explorar Comunidades</h1>
                 <hr/>

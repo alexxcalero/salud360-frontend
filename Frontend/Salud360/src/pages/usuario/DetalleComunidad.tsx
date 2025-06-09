@@ -75,7 +75,7 @@ function DetalleComunidad(){
 
     return (
       <section className="flex flex-col mt-32 gap-32 px-32 mx-auto justify-center">
-
+        <title>Detalle comunidad</title>
         <div className="flex flex-col gap-8">
           <h1>{comunidad.descripcion}</h1>
           <h2>{comunidad.proposito}</h2>
