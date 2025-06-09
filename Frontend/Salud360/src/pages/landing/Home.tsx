@@ -1,5 +1,4 @@
 import Hero from "@/components/landing/Hero";
-import UnderConstruction from "../UnderConstruction";
 import ListaComunidades from "@/components/landing/ListaComunidades";
 import ListaLocales from "@/components/landing/ListaLocales";
 import { useEffect } from "react";
@@ -12,6 +11,7 @@ function Home(){
 
     return (
         <div>
+            <title>Salud 360</title>
             <Hero/>
 
             <section className="flex flex-col gap-8">
