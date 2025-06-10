@@ -121,10 +121,12 @@ function CalendarioWrapped<Data>({
   );
 
   const [createDate, setCreateDate] = useState<DateTime | undefined>();
-  const getDate = useCallback((date: DateTime) => {
-    setCreateDate(date);
-    if (RegisterForm) setActiveModal?.("registrar");
-  }, []);
+  const getDate = RegisterForm
+    ? useCallback((date: DateTime) => {
+        setCreateDate(date);
+        setActiveModal?.("registrar");
+      }, [])
+    : undefined;
   const getCalendarData = useCallback((data: Data) => {
     setSelectionedData(data);
     if (RegisterForm) setActiveModal?.("actualizar");
@@ -195,7 +197,7 @@ function CalendarioWrapped<Data>({
               inicioSemana={rangeDays.initial}
               card={cards.week}
               data={filteredData}
-              getDate={RegisterForm ? getDate : undefined}
+              getDate={getDate}
               getCalendarData={getCalendarData}
               getRangeDateFromData={getRangeDateFromData}
             />
@@ -206,7 +208,7 @@ function CalendarioWrapped<Data>({
               dia={rangeDays.initial}
               card={cards.day}
               getRangeDateFromData={getRangeDateFromData}
-              getDate={RegisterForm ? getDate : undefined}
+              getDate={getDate}
               getCalendarData={getCalendarData}
               data={filteredData}
             />
@@ -219,7 +221,7 @@ function CalendarioWrapped<Data>({
               finMes={rangeDays.final}
               card={cards.month}
               getRangeDateFromData={getRangeDateFromData}
-              getDate={RegisterForm ? getDate : undefined}
+              getDate={getDate}
               getCalendarData={getCalendarData}
               data={filteredData}
             />
@@ -230,9 +232,11 @@ function CalendarioWrapped<Data>({
             <RegisterForm
               key={`${activeModal}-registrar`}
               open={activeModal === "registrar"}
-              setOpen={(b) =>
-                b ? setActiveModal?.("registrar") : setActiveModal?.("")
-              }
+              setOpen={useCallback(
+                (b) =>
+                  b ? setActiveModal?.("registrar") : setActiveModal?.(""),
+                []
+              )}
               date={createDate}
             />,
             document.body

@@ -9,7 +9,8 @@ import { medicoType } from "@/schemas/medico";
 import { getAllCitasMedicasAPI } from "@/services/citasMedicasAdmin.service";
 import { getMedicos } from "@/services/medico.service";
 import { CircleDot } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { DateTime } from "luxon";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import colors from "tailwindcss/colors";
 
 export default function RegistrarCitaMedicasPage() {
@@ -21,6 +22,46 @@ export default function RegistrarCitaMedicasPage() {
   );
 
   const { fetch } = useFetchHandler();
+
+  const registrar = useCallback(
+    ({
+      open,
+      setOpen,
+      date,
+    }: {
+      open: boolean;
+      setOpen: (_: boolean) => void;
+      date?: DateTime;
+    }) =>
+      medicoSeleccionado && (
+        <RegistrarCitaModalForm
+          open={open}
+          setOpen={setOpen}
+          date={date}
+          medico={medicoSeleccionado}
+        />
+      ),
+    [medicoSeleccionado]
+  );
+
+  const actualizar = useCallback(
+    ({
+      open,
+      setOpen,
+      data,
+    }: {
+      open: boolean;
+      setOpen: (_: boolean) => void;
+      data: citaMedicaType;
+    }) => (
+      <ActualizarCitaModalForm
+        open={open}
+        setOpen={setOpen}
+        citaMedica={data}
+      />
+    ),
+    []
+  );
 
   // const [showDeactivated, setShowDeactivated] = useState(false);
 
@@ -113,21 +154,8 @@ export default function RegistrarCitaMedicasPage() {
               // filterFuncs={[
               //   (d) => (showDeactivated ? true : Boolean(d.activo)),
               // ]}
-              RegisterForm={({ open, setOpen, date }) => (
-                <RegistrarCitaModalForm
-                  open={open}
-                  setOpen={setOpen}
-                  date={date}
-                  medico={medicoSeleccionado}
-                />
-              )}
-              ActualizarForm={({ open, setOpen, data }) => (
-                <ActualizarCitaModalForm
-                  open={open}
-                  setOpen={setOpen}
-                  citaMedica={data}
-                />
-              )}
+              RegisterForm={registrar}
+              ActualizarForm={actualizar}
             />
           </div>
         ) : (

@@ -12,7 +12,7 @@ import { getAllClasesAPI } from "@/services/clasesAdmin.service";
 import { getAllLocalesAPI } from "@/services/locales.service";
 import { CircleDot } from "lucide-react";
 import { DateTime } from "luxon";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import colors from "tailwindcss/colors";
 
 export default function ClasesPage() {
@@ -34,6 +34,42 @@ export default function ClasesPage() {
       setLocales(data);
     });
   }, []);
+
+  const registrar = useCallback(
+    ({
+      open,
+      setOpen,
+      date,
+    }: {
+      open: boolean;
+      setOpen: (_: boolean) => void;
+      date?: DateTime;
+    }) =>
+      localSeleccionado && (
+        <RegistrarClaseModalForm
+          open={open}
+          setOpen={setOpen}
+          date={date}
+          local={localSeleccionado}
+        />
+      ),
+    [localSeleccionado]
+  );
+
+  const actualizar = useCallback(
+    ({
+      open,
+      setOpen,
+      data,
+    }: {
+      open: boolean;
+      setOpen: (_: boolean) => void;
+      data: claseDTOType;
+    }) => (
+      <ActualizarClaseModalForm open={open} setOpen={setOpen} clase={data} />
+    ),
+    []
+  );
 
   return (
     <>
@@ -67,17 +103,18 @@ export default function ClasesPage() {
                   ) ?? []
                 }
                 fetchDataDependences={[localSeleccionado]}
-                getDateFromData={(d) =>
+                getRangeDateFromData={(d) =>
                   d.fecha && d.horaFin && d.horaInicio
-                    ? d.fecha.set({
-                        hour: d.horaInicio.hour,
-                        minute: d.horaInicio.minute,
-                      })
-                    : undefined
-                }
-                getHourRangeFromData={(d) =>
-                  d.fecha && d.horaFin && d.horaInicio
-                    ? ([d.horaInicio, d.horaFin] as [DateTime, DateTime])
+                    ? ([
+                        d.fecha.set({
+                          hour: d.horaInicio.hour,
+                          minute: d.horaInicio.minute,
+                        }),
+                        d.fecha.set({
+                          hour: d.horaFin.hour,
+                          minute: d.horaFin.minute,
+                        }),
+                      ] as [DateTime, DateTime])
                     : undefined
                 }
                 cards={{
@@ -104,21 +141,8 @@ export default function ClasesPage() {
                 filterFuncs={[
                   (d) => (showDeactivated ? true : Boolean(d.activo)),
                 ]}
-                RegisterForm={({ open, setOpen, date }) => (
-                  <RegistrarClaseModalForm
-                    open={open}
-                    setOpen={setOpen}
-                    date={date}
-                    local={localSeleccionado}
-                  />
-                )}
-                ActualizarForm={({ open, setOpen, data }) => (
-                  <ActualizarClaseModalForm
-                    open={open}
-                    setOpen={setOpen}
-                    clase={data}
-                  />
-                )}
+                RegisterForm={registrar}
+                ActualizarForm={actualizar}
               />
             </>
           ) : (
