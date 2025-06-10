@@ -134,6 +134,7 @@ const ActualizarCitaModalForm = ({
                 name="dia"
                 label="Fecha"
                 required={true}
+                format="DDDD"
               />
 
               <SelectLabel

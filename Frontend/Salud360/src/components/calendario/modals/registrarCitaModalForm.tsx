@@ -145,6 +145,7 @@ const RegistrarCitaModalForm = ({
                 value={dateInput}
                 setValue={setDateInput}
                 name="dia"
+                format="DDDD"
                 label="Fecha"
                 required={true}
               />
