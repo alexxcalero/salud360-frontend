@@ -13,7 +13,7 @@ import { useToasts } from "@/hooks/ToastContext";
 import { medicoType } from "@/schemas/medico";
 import { extendedServicioType } from "@/schemas/servicio";
 import { DateTime } from "luxon";
-import { FormEvent, use, useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import Button from "@/components/Button";
 import { getServiciosAPI } from "@/services/servicio.service";
 import { postCitaMedicaAPI } from "@/services/citasMedicasAdmin.service";
