@@ -42,6 +42,7 @@ const PasswordInput = (props: Props) => {
         leftIcon={<Lock />}
         rightIcon={
           <button
+            type="button"
             className="h-min"
             onClick={(e) => togglePasswordVisibility(e)}
           >
