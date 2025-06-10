@@ -17,9 +17,19 @@ const CalendarioComunidad = ({
   return (
     <>
       <Calendario<comunidadHorarioType>
-        getDateFromData={(d) => d.fecha ?? undefined}
-        getHourRangeFromData={(d) =>
-          d.horaInicio && d.horaFin ? [d.horaInicio, d.horaFin] : undefined
+        getRangeDateFromData={(d) =>
+          d.fecha && d.horaInicio && d.horaFin
+            ? [
+                d.fecha.set({
+                  hour: d.horaInicio.hour,
+                  minute: d.horaInicio.minute,
+                }),
+                d.fecha.set({
+                  hour: d.horaFin.hour,
+                  minute: d.horaFin.minute,
+                }),
+              ]
+            : undefined
         }
         cards={{
           day: (d) => (
