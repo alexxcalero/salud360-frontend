@@ -7,12 +7,11 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
   color: "blue" | "pink" | "green" | "red";
   active?: boolean;
-  estado?: string;
   date?: DateTime;
 }
 
 const BaseCard = forwardRef<HTMLDivElement, Props>(
-  ({ children, active = true, date, estado, color, ...props }, ref) => {
+  ({ children, active = true, date, color, ...props }, ref) => {
     return (
       <div
         ref={ref}
@@ -20,7 +19,6 @@ const BaseCard = forwardRef<HTMLDivElement, Props>(
         className={cn(
           styles["card"],
           styles[color],
-          estado === "Reservada" && styles["green"],
           date !== undefined && date < DateTime.now() && styles["neutral"],
           !active && styles["neutral"],
           props.className

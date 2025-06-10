@@ -31,9 +31,14 @@ export function AdminClaseCard({
       <HoverCard openDelay={300}>
         <HoverCardTrigger asChild>
           <BaseCard
-            color="pink"
+            color={
+              clase.estado === "Disponible"
+                ? "pink"
+                : clase.estado === "Completa"
+                ? "green"
+                : "red"
+            }
             active={clase.activo ?? false}
-            estado={clase.estado ?? undefined}
             date={clase.fecha?.set({
               hour: clase.horaInicio?.hour,
               minute: clase.horaInicio?.minute,

@@ -37,9 +37,14 @@ export function ComunidadCitaMedicaCard({
       <HoverCard openDelay={300}>
         <HoverCardTrigger asChild>
           <BaseCard
-            color="blue"
+            color={
+              citaMedica.estado === "Disponible"
+                ? "blue"
+                : citaMedica.estado === "Reservada"
+                ? "green"
+                : "red"
+            }
             active={citaMedica.activo}
-            estado={citaMedica.estado}
             date={citaMedica.fecha?.set({
               hour: citaMedica.horaInicio?.hour,
               minute: citaMedica.horaInicio?.minute,

@@ -32,7 +32,6 @@ export function ReservaCard({ reserva }: { reserva: reservaType }) {
         <HoverCardTrigger asChild>
           <BaseCard
             color={reserva.estado === "Reservada" ? "green" : "red"}
-            estado={reserva.estado ?? undefined}
             date={
               reserva.citaMedica?.fecha?.set({
                 hour: reserva.citaMedica?.horaInicio?.hour,

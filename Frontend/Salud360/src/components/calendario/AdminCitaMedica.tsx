@@ -34,9 +34,14 @@ export function AdminCitaMedicaCard({
         <HoverCardTrigger asChild>
           {!collapsed ? (
             <BaseCard
-              color="blue"
+              color={
+                citaMedica.estado === "Disponible"
+                  ? "blue"
+                  : citaMedica.estado === "Reservada"
+                  ? "green"
+                  : "red"
+              }
               active={citaMedica.activo}
-              estado={citaMedica.estado}
               date={citaMedica.fecha?.set({
                 hour: citaMedica.horaInicio?.hour,
                 minute: citaMedica.horaInicio?.minute,
@@ -77,7 +82,15 @@ export function AdminCitaMedicaCard({
               </div>
               <div>
                 <strong role="heading">Detalles de la cita médica</strong>
-                <span className="ml-2 bg-blue-500 px-2 py-1 text-label-medium text-white rounded-full font-semibold select-none">
+                <span
+                  className={cn(
+                    "ml-2 bg-blue-500 px-2 py-1 rounded-full font-semibold select-none",
+                    citaMedica.estado === "Reservada" && "bg-green-500",
+                    citaMedica.estado === "Finalizada" && "bg-red-500",
+                    "use-label-small",
+                    "text-white"
+                  )}
+                >
                   {citaMedica.estado ?? "ESTADO NO ESPECIFICADO"}
                 </span>
                 <p className="mt-2">
@@ -101,10 +114,23 @@ export function AdminCitaMedicaCard({
                   </span>
                 </p>
               </div>
+              {citaMedica.cliente && (
+                <div className="bg-green-200 border-1 border-green-600 rounded-md p-4 mt-4">
+                  <strong className="text-green-800">
+                    Cita ya reservada por:
+                  </strong>
+                  <p className="text-green-600">
+                    {citaMedica.cliente?.nombres}{" "}
+                    {citaMedica.cliente?.apellidos}
+                    <br />
+                    {citaMedica.cliente?.correo}
+                  </p>
+                </div>
+              )}
             </div>
 
             <div className="flex gap-4 mt-2">
-              {citaMedica.activo && (
+              {citaMedica.activo && citaMedica.estado !== "Finalizada" && (
                 <>
                   <Button onClick={() => update(citaMedica)}>
                     <Pencil size={16} color="white" /> Editar
@@ -139,7 +165,8 @@ export function AdminCitaMedicaCard({
                   </Button>
                 </>
               )}
-              {!citaMedica.activo && (
+              {/* No se si dejar el reactivar, pq al final se acumularía en el calendario */}
+              {/* {!citaMedica.activo && (
                 <div className="p-2">
                   <Button
                     onClick={() =>
@@ -169,7 +196,7 @@ export function AdminCitaMedicaCard({
                     Reactivar
                   </Button>
                 </div>
-              )}
+              )} */}
             </div>
           </div>
         </HoverCardContent>

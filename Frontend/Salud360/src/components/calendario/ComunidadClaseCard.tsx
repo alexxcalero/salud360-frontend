@@ -33,9 +33,14 @@ export function ComunidadClaseCard({ clase }: { clase: claseDTOType }) {
         <HoverCardTrigger asChild>
           {/* Esto es por un problema del backend */}
           <BaseCard
-            color="pink"
+            color={
+              clase.estado === "Disponible"
+                ? "blue"
+                : clase.estado === "Reservada"
+                ? "green"
+                : "red"
+            }
             active={clase.activo ?? true}
-            estado={clase.estado ?? undefined}
             date={clase.fecha?.set({
               hour: clase.horaInicio?.hour,
               minute: clase.horaInicio?.minute,
