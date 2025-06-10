@@ -40,7 +40,7 @@ function AdminLayout() {
 
   //REALICÉ UN CAMBIO PARA EL QUE FONDO ESTÉ MEJOR
   return (
-    <div className="min-w-[100dvw] min-h-[100dvh] grid grid-cols-[350px_minmax(0,1fr)] grid-rows-1 bg-white place-items-stretch">
+    <div className="max-w-full max-h-full grid grid-cols-[350px_minmax(0,1fr)] grid-rows-1 bg-white place-items-stretch">
       <Sidebar active={active} />
       <Outlet />
     </div>

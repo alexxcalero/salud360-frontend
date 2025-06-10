@@ -44,7 +44,7 @@ function Sidebar({ active = 0 }: { active: number }) {
   const navigate = useNavigate();
 
   return (
-    <div className="bg-brand-primary">
+    <div className="bg-brand-primary sticky left-0 top-0 h-dvh">
       <section className="mb-[20px] border-b-1 border-blue-900  p-[20px] flex items-center gap-[10px]">
         {/*<img
           src="/img/mono/medico.png"
