@@ -14,13 +14,17 @@ import {
 } from "@/services/citasMedicasAdmin.service";
 import { useInternalModals } from "@/hooks/useInternalModals";
 import BaseCard from "./cards/BaseCard";
+import Time from "../time";
+import { cn } from "@/lib/utils";
 
 export function AdminCitaMedicaCard({
   citaMedica,
   update,
+  collapsed,
 }: {
   citaMedica: extenedCitaMedicaType;
   update: (_: extenedCitaMedicaType) => void;
+  collapsed?: boolean;
 }) {
   const { callAlertDialog, callErrorDialog, callSuccessDialog } = useDialog();
   const { reload } = useInternalModals();
@@ -28,28 +32,70 @@ export function AdminCitaMedicaCard({
     <>
       <HoverCard openDelay={300}>
         <HoverCardTrigger asChild>
-          <BaseCard
-            color="blue"
-            active={citaMedica.activo}
-            estado={citaMedica.estado}
-            date={citaMedica.fecha?.set({
-              hour: citaMedica.horaInicio?.hour,
-              minute: citaMedica.horaInicio?.minute,
-            })}
-          >
-            <div className="flex items-center justify-between">
-              <span className="use-label-large font-semibold">
-                {citaMedica.medico?.especialidad}
+          {!collapsed ? (
+            <BaseCard
+              color="blue"
+              active={citaMedica.activo}
+              estado={citaMedica.estado}
+              date={citaMedica.fecha?.set({
+                hour: citaMedica.horaInicio?.hour,
+                minute: citaMedica.horaInicio?.minute,
+              })}
+            >
+              <span className="use-label-medium text-left">
+                {citaMedica.horaInicio?.toFormat("T")} -{" "}
+                {citaMedica.horaFin?.toFormat("T")}
               </span>
-            </div>
-            <span className="use-label-large font-medium text-left">
-              {citaMedica.servicio?.nombre}
-            </span>
-          </BaseCard>
+              <div className="flex items-center justify-between">
+                <span className="use-label-large font-semibold text-left">
+                  {citaMedica.medico?.especialidad}
+                </span>
+              </div>
+              <span className="use-label-large font-medium text-left">
+                {citaMedica.servicio?.nombre}
+              </span>
+            </BaseCard>
+          ) : (
+            <div
+              className={cn(
+                "bg-blue-500 h-4 w-4 rounded-full hover:bg-blue-300 transition-colors duration-150 ease-out",
+                !citaMedica.activo && "bg-neutral-500"
+              )}
+            ></div>
+          )}
         </HoverCardTrigger>
         <HoverCardContent className="w-max">
           <div className="p-2">
-            <div className="flex gap-4 mb-2">
+            <div>
+              <div>
+                <strong role="heading">Detalles de la cita médica</strong>
+                <span className="ml-2 bg-blue-500 px-2 py-1 text-label-medium text-white rounded-full font-semibold select-none">
+                  {citaMedica.estado ?? "ESTADO NO ESPECIFICADO"}
+                </span>
+                <p className="mt-2">
+                  {citaMedica.fecha?.toFormat("DDDD", { locale: "es" })}
+                  <br />
+                  <Time type="time" dateTime={citaMedica.horaInicio} /> -{" "}
+                  <Time type="time" dateTime={citaMedica.horaFin} />
+                </p>
+              </div>
+              <div className="mt-2">
+                <strong>Médico</strong>
+                <p>
+                  Dr(a):{" "}
+                  <span className="text-neutral-600">
+                    {citaMedica.medico?.nombres} {citaMedica.medico?.apellidos}
+                  </span>
+                  <br />
+                  Especialidad:{" "}
+                  <span className="text-neutral-600">
+                    {citaMedica.medico?.especialidad}
+                  </span>
+                </p>
+              </div>
+            </div>
+
+            <div className="flex gap-4 mt-2">
               {citaMedica.activo && (
                 <>
                   <Button onClick={() => update(citaMedica)}>
@@ -117,16 +163,6 @@ export function AdminCitaMedicaCard({
                 </div>
               )}
             </div>
-            <p>
-              <span className="text-lg">
-                {citaMedica.fecha?.toFormat("DDDD", { locale: "es" })}
-              </span>
-              <br />
-              {citaMedica.horaInicio?.toFormat("TTTT", {
-                locale: "es",
-              })}{" "}
-              - {citaMedica.horaFin?.toFormat("TTTT", { locale: "es" })}
-            </p>
           </div>
         </HoverCardContent>
       </HoverCard>

@@ -1,5 +1,4 @@
 import { AdminCitaMedicaCard } from "@/components/calendario/AdminCitaMedica";
-import AdminCitaMedicaDot from "@/components/calendario/AdminCitaMedicaDot";
 import Calendario from "@/components/calendario/Calendario";
 import ActualizarCitaModalForm from "@/components/calendario/modals/actualizarCitaModalForm";
 import RegistrarCitaModalForm from "@/components/calendario/modals/registrarCitaModalForm";
@@ -82,7 +81,14 @@ export default function RegistrarCitaMedicasPage() {
                   g ? (
                     <AdminCitaMedicaCard citaMedica={d} update={g} />
                   ) : undefined,
-                month: (d) => <AdminCitaMedicaDot citaMedica={d} />,
+                month: (d, g) =>
+                  g ? (
+                    <AdminCitaMedicaCard
+                      collapsed={true}
+                      citaMedica={d}
+                      update={g}
+                    />
+                  ) : undefined,
               }}
               filterContent={
                 <div>
