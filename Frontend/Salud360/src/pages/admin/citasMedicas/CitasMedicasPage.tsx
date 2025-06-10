@@ -3,7 +3,6 @@ import Calendario from "@/components/calendario/Calendario";
 import ActualizarCitaModalForm from "@/components/calendario/modals/actualizarCitaModalForm";
 import RegistrarCitaModalForm from "@/components/calendario/modals/registrarCitaModalForm";
 import SelectLabel from "@/components/SelectLabel";
-import { Switch } from "@/components/ui/switch";
 import { useFetchHandler } from "@/hooks/useFetchHandler";
 import { citaMedicaType } from "@/schemas/citaMedica";
 import { medicoType } from "@/schemas/medico";
@@ -23,7 +22,7 @@ export default function RegistrarCitaMedicasPage() {
 
   const { fetch } = useFetchHandler();
 
-  const [showDeactivated, setShowDeactivated] = useState(false);
+  // const [showDeactivated, setShowDeactivated] = useState(false);
 
   useEffect(() => {
     fetch(async () => {
@@ -58,10 +57,18 @@ export default function RegistrarCitaMedicasPage() {
         {medicoSeleccionado !== undefined ? (
           <div className="px-2 min-h-0 min-w-0">
             <Calendario<citaMedicaType>
-              getDateFromData={(d) => d.fecha}
-              getHourRangeFromData={(d) =>
-                d.horaInicio && d.horaFin
-                  ? [d.horaInicio, d.horaFin]
+              getRangeDateFromData={(d) =>
+                d.horaInicio && d.horaFin && d.fecha
+                  ? [
+                      d.fecha.set({
+                        hour: d.horaInicio.hour,
+                        minute: d.horaInicio.minute,
+                      }),
+                      d.fecha.set({
+                        hour: d.horaFin.hour,
+                        minute: d.horaFin.minute,
+                      }),
+                    ]
                   : undefined
               }
               fetchData={async () =>
@@ -90,22 +97,22 @@ export default function RegistrarCitaMedicasPage() {
                     />
                   ) : undefined,
               }}
-              filterContent={
-                <div>
-                  <div>
-                    <span className="mr-4">Mostrar desactivados</span>
-                    <Switch
-                      checked={showDeactivated}
-                      onCheckedChange={() => {
-                        setShowDeactivated((prev) => !prev);
-                      }}
-                    />
-                  </div>
-                </div>
-              }
-              filterFuncs={[
-                (d) => (showDeactivated ? true : Boolean(d.activo)),
-              ]}
+              // filterContent={
+              //   <div>
+              //     <div>
+              //       <span className="mr-4">Mostrar desactivados</span>
+              //       <Switch
+              //         checked={showDeactivated}
+              //         onCheckedChange={() => {
+              //           setShowDeactivated((prev) => !prev);
+              //         }}
+              //       />
+              //     </div>
+              //   </div>
+              // }
+              // filterFuncs={[
+              //   (d) => (showDeactivated ? true : Boolean(d.activo)),
+              // ]}
               RegisterForm={({ open, setOpen, date }) => (
                 <RegistrarCitaModalForm
                   open={open}

@@ -9,8 +9,7 @@ interface Props<Data> {
   getDate?: (_: DateTime) => void;
   getCalendarData?: (_: Data) => void;
   data: Data[];
-  getDateFromData: (d: Data) => DateTime | undefined;
-  getHourRangeFromData: (d: Data) => [DateTime, DateTime] | undefined;
+  getRangeDateFromData: (d: Data) => [DateTime, DateTime] | undefined;
   card: (_: Data, _2?: (_: Data) => void) => ReactNode;
 }
 
@@ -18,8 +17,7 @@ function CalendarioMensual<Data>({
   mes,
   inicioMes,
   finMes,
-  getDateFromData,
-  getHourRangeFromData,
+  getRangeDateFromData,
   getCalendarData,
   getDate,
   data,
@@ -62,22 +60,12 @@ function CalendarioMensual<Data>({
             <div key={i} className="grid grid-cols-subgrid col-span-full">
               {_dias.map((dia, index) => {
                 const virtual = data.filter((elem) => {
-                  const fecha = getDateFromData(elem);
-                  const rango = getHourRangeFromData(elem);
+                  const rango = getRangeDateFromData(elem);
 
-                  if (fecha === undefined || rango === undefined) return false;
-
-                  const fecha0 = fecha.set({
-                    hour: rango[0].hour,
-                    minute: rango[0].minute,
-                  });
-                  const fechaf = fecha.set({
-                    hour: rango[1].hour,
-                    minute: rango[1].minute,
-                  });
+                  if (rango === undefined) return false;
 
                   return (
-                    dia.startOf("day") < fecha0 && fechaf < dia.endOf("day")
+                    dia.startOf("day") < rango[0] && rango[1] < dia.endOf("day")
                   );
                 });
                 return (

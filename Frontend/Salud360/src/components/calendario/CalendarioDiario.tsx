@@ -7,8 +7,7 @@ interface Props<Data> {
   getDate?: (_: DateTime) => void;
   getCalendarData?: (_: Data) => void;
   data: Data[];
-  getDateFromData: (d: Data) => DateTime | undefined;
-  getHourRangeFromData: (d: Data) => [DateTime, DateTime] | undefined;
+  getRangeDateFromData: (d: Data) => [DateTime, DateTime] | undefined;
   card: (_: Data, _2?: (_: Data) => void) => ReactNode;
 }
 
@@ -17,7 +16,7 @@ function CalendarioDiario<Data>({
   data,
   getDate,
   getCalendarData,
-  getHourRangeFromData,
+  getRangeDateFromData,
   card,
 }: Props<Data>) {
   const inicioDia = DateTime.local().startOf("day"); // o cualquier otro día específico
@@ -56,38 +55,31 @@ function CalendarioDiario<Data>({
         <div className="grid grid-cols-[50px_1fr_50px] grid-rows-[25px_repeat(24,58px)_25px] relative min-h-0 h-full overflow-y-scroll min-w-0">
           {/* Datos mostrados en position: absolute */}
           <div className="absolute top-0 left-0 bottom-0 right-0 z-10 pointer-events-none">
-            {data
-              .map(
-                (d) =>
-                  [d, getHourRangeFromData(d)] as [Data, [DateTime, DateTime]]
-              )
-              .filter(([_, range]) => range !== undefined)
-              .map(
-                ([d, range]) =>
-                  [
-                    d,
-                    DateTime.fromObject({
-                      hour: range[0].hour,
-                      minute: range[0].minute,
-                    }).diff(DateTime.fromObject({ hour: 0, minute: 0 }), [
-                      "hours",
-                      "days",
-                      "months",
-                      "years",
-                    ]).hours,
-                    DateTime.fromObject({
-                      hour: range[1].hour,
-                      minute: range[1].minute,
-                    }).diff(
-                      DateTime.fromObject({
-                        hour: range[0].hour,
-                        minute: range[0].minute,
-                      }),
-                      ["hours", "days", "months", "years"]
-                    ).hours,
-                  ] as [Data, number, number]
-              )
-              .map(([d, diffInitialHour, diffFinalHour], index) => (
+            {data.map((d, index) => {
+              const rango = getRangeDateFromData(d);
+              if (rango === undefined) return;
+
+              const diffInitialHour = DateTime.fromObject({
+                hour: rango[0].hour,
+                minute: rango[0].minute,
+              }).diff(DateTime.fromObject({ hour: 0, minute: 0 }), [
+                "hours",
+                "days",
+                "months",
+                "years",
+              ]).hours;
+              const diffFinalHour = DateTime.fromObject({
+                hour: rango[1].hour,
+                minute: rango[1].minute,
+              }).diff(
+                DateTime.fromObject({
+                  hour: rango[0].hour,
+                  minute: rango[0].minute,
+                }),
+                ["hours", "days", "months", "years"]
+              ).hours;
+
+              return (
                 <div
                   className={cn(
                     "flex w-[calc(calc(100%-100px)/7)] p-1 absolute pointer-events-auto"
@@ -101,7 +93,8 @@ function CalendarioDiario<Data>({
                 >
                   {card(d, getCalendarData)}
                 </div>
-              ))}
+              );
+            })}
           </div>
           {/* Calendario estático */}
 
