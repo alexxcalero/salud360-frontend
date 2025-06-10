@@ -5,6 +5,7 @@ import ReporteLocalForm from "@/components/admin/reportes/ReporteLocalForm";
 import { FileText } from "lucide-react";
 import InputIconLabelEdit from "@/components/InputIconLabelEdit";
 import InputLabel from "@/components/InputLabel";
+import TextAreaInput from "@/components/input/TextAreaInput";
 
 export default function ReportePanel() {
   const [tabActivo, setTabActivo] = useState("usuarios");
@@ -26,9 +27,7 @@ export default function ReportePanel() {
   return (
     <div className="">
       <div className="flex flex-col gap-16 mt-4 mb-12">
-            <div className="w-full h-48 rounded-md flex flex-col items-center justify-center cursor-pointer">
-                <InputLabel type="text" placeholder="Ingrese la descripción" htmlFor="text" label="Descripción" value={descripcion} disabled={readOnly} className="w-full h-full" onChange={(e) => setDescripcion(e.target.value)}/>
-            </div>
+        <TextAreaInput required={true} name="text" label="Descripción" value={descripcion} onChange={(e) => setDescripcion(e.target.value)} disabled={readOnly} reserveSpace={true} placeholder="Ingrese la descripción" />
         </div>
       {/* Tabs */}
       <div className="border-b mb-6">
