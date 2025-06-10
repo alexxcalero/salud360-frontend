@@ -1,6 +1,5 @@
 import { DateTime } from "luxon";
 import { ReactNode, useMemo } from "react";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { cn } from "@/lib/utils";
 
 interface Props<Data> {
@@ -127,25 +126,16 @@ function CalendarioDiario<Data>({
                 <div
                   key={index}
                   className={cn(
-                    "w-full h-full relative text-center group border-1 border-neutral-300 bg-white",
-                    !futuro && "bg-neutral-100"
+                    "w-full h-full relative text-center group border-1 border-neutral-300 bg-white transition-colors duration-150 ease-out",
+                    !futuro && "bg-neutral-100",
+                    futuro && getDate && "hover:bg-neutral-300"
                   )}
                 >
                   {futuro && getDate && (
-                    <Tooltip key={index}>
-                      <TooltipTrigger asChild>
-                        <button
-                          className="w-full h-full"
-                          onClick={() => {
-                            console.log(dia);
-                            getDate(dia);
-                          }}
-                        ></button>
-                      </TooltipTrigger>
-                      <TooltipContent className="pointer-events-none">
-                        <p>Haz click</p>
-                      </TooltipContent>
-                    </Tooltip>
+                    <button
+                      className="w-full h-full"
+                      onClick={() => getDate(dia)}
+                    ></button>
                   )}
                 </div>
                 <div className="border-1 border-neutral-300"></div>
