@@ -68,6 +68,14 @@ export function AdminCitaMedicaCard({
           <div className="p-2">
             <div>
               <div>
+                <span className="text-label-small">
+                  Fecha creación:{" "}
+                  {citaMedica.fechaCreacion?.toFormat("DDDD - HH:mm", {
+                    locale: "es",
+                  })}
+                </span>
+              </div>
+              <div>
                 <strong role="heading">Detalles de la cita médica</strong>
                 <span className="ml-2 bg-blue-500 px-2 py-1 text-label-medium text-white rounded-full font-semibold select-none">
                   {citaMedica.estado ?? "ESTADO NO ESPECIFICADO"}

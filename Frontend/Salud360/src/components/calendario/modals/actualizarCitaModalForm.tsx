@@ -1,6 +1,5 @@
 import Input from "@/components/input/Input";
 import { CalendarInput } from "@/components/input/CalendarInput";
-import SelectLabel from "@/components/SelectLabel";
 import {
   Dialog,
   DialogClose,
@@ -42,9 +41,9 @@ const ActualizarCitaModalForm = ({
     citaMedica.fecha ?? DateTime.now()
   );
 
-  const [estadoInput, setEstadoInput] = useState<string>(
-    citaMedica.estado ?? ""
-  );
+  // const [estadoInput, setEstadoInput] = useState<string>(
+  //   citaMedica.estado ?? ""
+  // );
 
   const { fetch } = useFetchHandler();
   const { createToast } = useToasts();
@@ -92,7 +91,7 @@ const ActualizarCitaModalForm = ({
       horaInicio: horaInicio,
       horaFin: horaFin,
       fecha: dateInput.toISODate(),
-      estado: estadoInput,
+      estado: citaMedica.estado,
       activo: citaMedica.activo,
       fechaCrecion: citaMedica.fechaCreacion,
       fechaDesactivacion: citaMedica.fechaDesactivacion,
@@ -137,7 +136,7 @@ const ActualizarCitaModalForm = ({
                 format="DDDD"
               />
 
-              <SelectLabel
+              {/* <SelectLabel
                 htmlFor="estado"
                 label="Seleccione el estado de la cita *"
                 placeholder="Seleccione un estado"
@@ -147,7 +146,7 @@ const ActualizarCitaModalForm = ({
                   { value: "Disponible", content: "Disponible" },
                   { value: "Cancelada", content: "Cancelada" },
                 ]}
-              />
+              /> */}
 
               <div className="flex gap-2">
                 <Input
