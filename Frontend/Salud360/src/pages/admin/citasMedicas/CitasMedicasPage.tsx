@@ -35,6 +35,7 @@ export default function RegistrarCitaMedicasPage() {
 
   return (
     <>
+      <title>Citas médicas</title>
       <div className="grid grid-rows-[auto_1fr] min-h-0 min-w-0 gap-2">
         <div className="w-full px-8 py-8 text-left">
           <h1 className="text-4xl font-bold mb-2">Citas médicas</h1>

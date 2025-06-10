@@ -2,6 +2,7 @@ import { useLoading } from "@/hooks/LoadingContext";
 import { useToasts } from "@/hooks/ToastContext";
 import axios from "axios";
 import { useCallback } from "react";
+import { ZodError } from "zod";
 
 export function useFetchHandler() {
   const { setLoading } = useLoading();
@@ -37,7 +38,6 @@ export function useFetchHandler() {
               });
             }
           } else if (error instanceof Error) {
-            console.log(error);
             createToast("error", {
               title: "Error",
               description: error.message,

@@ -11,9 +11,9 @@ import {
 } from "@/components/ui/dialog";
 import { useToasts } from "@/hooks/ToastContext";
 import { medicoType } from "@/schemas/medico";
-import { servicioType } from "@/schemas/servicio";
+import { extendedServicioType } from "@/schemas/servicio";
 import { DateTime } from "luxon";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, use, useEffect, useState } from "react";
 import Button from "@/components/Button";
 import { getServiciosAPI } from "@/services/servicio.service";
 import { postCitaMedicaAPI } from "@/services/citasMedicasAdmin.service";
@@ -33,7 +33,7 @@ const RegistrarCitaModalForm = ({
   medico: medicoType;
   onCreate?: () => void;
 }) => {
-  const [servicios, setServicios] = useState<servicioType[]>([]);
+  const [servicios, setServicios] = useState<extendedServicioType[]>([]);
   const [servicioInput, setServicioInput] = useState("");
 
   const [horaInicio, setHoraInicio] = useState(date?.toFormat("T") ?? "");
@@ -137,8 +137,8 @@ const RegistrarCitaModalForm = ({
                 value={servicioInput}
                 onChange={setServicioInput}
                 options={servicios.map((s) => ({
-                  value: s.idServicio.toString(),
-                  content: s.nombre,
+                  value: s.idServicio?.toString() ?? "",
+                  content: s.nombre ?? "",
                 }))}
               />
               <CalendarInput

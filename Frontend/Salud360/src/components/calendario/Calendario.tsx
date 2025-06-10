@@ -19,6 +19,7 @@ import {
 } from "@/hooks/useInternalModals";
 import { useFetchHandler } from "@/hooks/useFetchHandler";
 import Spinner from "../Spinner";
+import { createPortal } from "react-dom";
 
 export default function Calendario<Data>(props: Props<Data>) {
   return (
@@ -244,26 +245,31 @@ function CalendarioWrapped<Data>({
             />
           )}
         </div>
-        {RegisterForm && (
-          <RegisterForm
-            key={`${activeModal}-registrar`}
-            open={activeModal === "registrar"}
-            setOpen={(b) =>
-              b ? setActiveModal?.("registrar") : setActiveModal?.("")
-            }
-            date={createDate}
-          />
-        )}
-        {ActualizarForm && selectionesData && (
-          <ActualizarForm
-            key={`${activeModal}-actualizar`}
-            open={activeModal === "actualizar"}
-            setOpen={(b) =>
-              b ? setActiveModal?.("actualizar") : setActiveModal?.("")
-            }
-            data={selectionesData}
-          />
-        )}
+        {RegisterForm &&
+          createPortal(
+            <RegisterForm
+              key={`${activeModal}-registrar`}
+              open={activeModal === "registrar"}
+              setOpen={(b) =>
+                b ? setActiveModal?.("registrar") : setActiveModal?.("")
+              }
+              date={createDate}
+            />,
+            document.body
+          )}
+        {ActualizarForm &&
+          selectionesData &&
+          createPortal(
+            <ActualizarForm
+              key={`${activeModal}-actualizar`}
+              open={activeModal === "actualizar"}
+              setOpen={(b) =>
+                b ? setActiveModal?.("actualizar") : setActiveModal?.("")
+              }
+              data={selectionesData}
+            />,
+            document.body
+          )}
       </div>
     </>
   );
