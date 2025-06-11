@@ -6,8 +6,7 @@ interface Props<Data> {
   inicioMes: DateTime;
   finMes: DateTime;
   mes: number;
-  getDate?: (_: DateTime) => void;
-  getCalendarData?: (_: Data) => void;
+  registerEnabled?: boolean;
   data: Data[];
   getRangeDateFromData: (d: Data) => [DateTime, DateTime] | undefined;
   card: (_: Data, _2?: (_: Data) => void) => ReactNode;
@@ -18,8 +17,6 @@ function CalendarioMensual<Data>({
   inicioMes,
   finMes,
   getRangeDateFromData,
-  getCalendarData,
-  getDate,
   data,
   card,
 }: Props<Data>) {
@@ -86,7 +83,7 @@ function CalendarioMensual<Data>({
                     </div>
                     <div className="flex flex-wrap gap-2">
                       {virtual.map((d, index) => (
-                        <div key={index}>{card(d, getCalendarData)}</div>
+                        <div key={index}>{card(d)}</div>
                       ))}
                     </div>
                   </div>

@@ -79,7 +79,9 @@ export default function RegistrarCitaMedicasPage() {
         <div className="w-full flex flex-col gap-4 px-8 py-8 text-left">
           <div>
             <h1 className="text-4xl font-bold mb-2">Citas médicas</h1>
-            <h2 className="text-lg text-gray-700 mb-2">Seleccione un médico para crear y editar citas</h2>
+            <h2 className="text-lg text-gray-700 mb-2">
+              Seleccione un médico para crear y editar citas
+            </h2>
           </div>
           <div className="self-stretch">
             <SelectLabel
@@ -125,22 +127,11 @@ export default function RegistrarCitaMedicasPage() {
               }
               fetchDataDependences={[medicoSeleccionado]}
               cards={{
-                day: (d, g) =>
-                  g ? (
-                    <AdminCitaMedicaCard citaMedica={d} update={g} />
-                  ) : undefined,
-                week: (d, g) =>
-                  g ? (
-                    <AdminCitaMedicaCard citaMedica={d} update={g} />
-                  ) : undefined,
-                month: (d, g) =>
-                  g ? (
-                    <AdminCitaMedicaCard
-                      collapsed={true}
-                      citaMedica={d}
-                      update={g}
-                    />
-                  ) : undefined,
+                day: (d) => <AdminCitaMedicaCard citaMedica={d} />,
+                week: (d) => <AdminCitaMedicaCard citaMedica={d} />,
+                month: (d) => (
+                  <AdminCitaMedicaCard collapsed={true} citaMedica={d} />
+                ),
               }}
               // filterContent={
               //   <div>
@@ -155,9 +146,7 @@ export default function RegistrarCitaMedicasPage() {
               //     </div>
               //   </div>
               // }
-              // filterFuncs={[
-              //   (d) => (showDeactivated ? true : Boolean(d.activo)),
-              // ]}
+              filterFuncs={[(d) => Boolean(d.activo)]}
               RegisterForm={registrar}
               ActualizarForm={actualizar}
             />

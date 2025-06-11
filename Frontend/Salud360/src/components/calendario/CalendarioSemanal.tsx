@@ -1,11 +1,11 @@
 import { DateTime } from "luxon";
 import { ReactNode, useMemo } from "react";
 import { cn } from "@/lib/utils";
+import { useInternalModals } from "@/hooks/useInternalModals";
 
 interface Props<Data> {
   inicioSemana: DateTime;
-  getDate?: (_: DateTime) => void;
-  getCalendarData?: (_: Data) => void;
+  registerEnabled?: boolean;
   data: Data[];
   getRangeDateFromData: (d: Data) => [DateTime, DateTime] | undefined;
   card: (_: Data, _2?: (_: Data) => void) => ReactNode;
@@ -14,11 +14,11 @@ interface Props<Data> {
 function CalendarioSemanal<Data>({
   inicioSemana,
   data,
-  getDate,
-  getCalendarData,
+  registerEnabled = false,
   getRangeDateFromData,
   card,
 }: Props<Data>) {
+  const { setSelectedDateTime, setActiveModal } = useInternalModals();
   const dias = useMemo<DateTime[]>(
     () => Array.from({ length: 7 }, (_, i) => inicioSemana.plus({ days: i })),
     []
@@ -111,7 +111,7 @@ function CalendarioSemanal<Data>({
                 }}
                 key={index}
               >
-                {card(d, getCalendarData)}
+                {card(d)}
               </div>
             );
           })}
@@ -145,13 +145,16 @@ function CalendarioSemanal<Data>({
                   className={cn(
                     "w-full h-full relative text-center group border-1 border-neutral-300 bg-white transition-colors duration-150 ease-out",
                     !futuro && "bg-neutral-100",
-                    futuro && getDate && "hover:bg-neutral-300"
+                    futuro && registerEnabled && "hover:bg-neutral-300"
                   )}
                 >
-                  {futuro && getDate && (
+                  {futuro && registerEnabled && (
                     <button
                       className="w-full h-full"
-                      onClick={() => getDate(dia)}
+                      onClick={() => {
+                        setActiveModal?.("registrar");
+                        setSelectedDateTime(dia);
+                      }}
                     ></button>
                   )}
                 </div>

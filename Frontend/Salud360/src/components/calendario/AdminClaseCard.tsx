@@ -17,15 +17,14 @@ import Time from "../time";
 
 export function AdminClaseCard({
   clase,
-  update,
   collapsed,
 }: {
   clase: claseDTOType;
-  update: (_: claseDTOType) => void;
   collapsed?: boolean;
 }) {
   const { callAlertDialog, callErrorDialog, callSuccessDialog } = useDialog();
   const { reload } = useInternalModals();
+  const { setSelectedData, setActiveModal } = useInternalModals();
 
   return (
     <>
@@ -116,7 +115,12 @@ export function AdminClaseCard({
                 )}
               </div>
               <div className="flex gap-4 mt-2">
-                <Button onClick={() => update(clase)}>
+                <Button
+                  onClick={() => {
+                    setActiveModal?.("actualizar");
+                    setSelectedData(clase);
+                  }}
+                >
                   <Pencil size={16} color="white" /> Editar
                 </Button>
 

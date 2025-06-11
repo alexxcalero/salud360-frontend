@@ -16,15 +16,14 @@ import { cn } from "@/lib/utils";
 
 export function AdminCitaMedicaCard({
   citaMedica,
-  update,
   collapsed,
 }: {
   citaMedica: extenedCitaMedicaType;
-  update: (_: extenedCitaMedicaType) => void;
   collapsed?: boolean;
 }) {
   const { callAlertDialog, callErrorDialog, callSuccessDialog } = useDialog();
   const { reload } = useInternalModals();
+  const { setSelectedData, setActiveModal } = useInternalModals();
   return (
     <>
       <HoverCard openDelay={300}>
@@ -123,7 +122,12 @@ export function AdminCitaMedicaCard({
               <div className="flex gap-4 mt-2">
                 {citaMedica.activo && citaMedica.estado !== "Finalizada" && (
                   <>
-                    <Button onClick={() => update(citaMedica)}>
+                    <Button
+                      onClick={() => {
+                        setActiveModal?.("actualizar");
+                        setSelectedData(citaMedica);
+                      }}
+                    >
                       <Pencil size={16} color="white" /> Editar
                     </Button>
 

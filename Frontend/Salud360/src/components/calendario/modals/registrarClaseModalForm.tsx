@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { useToasts } from "@/hooks/ToastContext";
 import { DateTime } from "luxon";
-import { FormEvent, useState } from "react";
+import { FormEvent, useMemo, useState } from "react";
 import Button from "@/components/Button";
 import { useFetchHandler } from "@/hooks/useFetchHandler";
 import { useInternalModals } from "@/hooks/useInternalModals";
@@ -38,8 +38,11 @@ const RegistrarClaseModalForm = ({
   const [capacidad, setCapacidad] = useState("");
 
   const [horaInicio, setHoraInicio] = useState(date?.toFormat("T") ?? "");
-  const [horaFin, setHoraFin] = useState(
-    date?.plus({ hour: 1 }).toFormat("T") ?? ""
+  const horaFin = useMemo(
+    () =>
+      DateTime.fromFormat(horaInicio, "T").plus({ hour: 1 }).toFormat("T") ??
+      "00:00",
+    [horaInicio]
   );
 
   const [dateInput, setDateInput] = useState<DateTime>(date ?? DateTime.now());
@@ -176,7 +179,8 @@ const RegistrarClaseModalForm = ({
                   required={true}
                   placeholder="Hora fin"
                   value={horaFin}
-                  setValue={setHoraFin}
+                  setValue={() => {}}
+                  disabled={true}
                   label="Hora fin"
                   type="time"
                 />

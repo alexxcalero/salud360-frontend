@@ -21,28 +21,18 @@ import { useFetchHandler } from "@/hooks/useFetchHandler";
 import Spinner from "../Spinner";
 import { createPortal } from "react-dom";
 
-export default function Calendario<Data>(props: Props<Data>) {
-  return (
-    <Suspense
-      fallback={
-        <div>
-          <Spinner />
-        </div>
-      }
-    >
-      <InternalModalsProvider>
-        <CalendarioWrapped<Data> {...props} />
-      </InternalModalsProvider>
-    </Suspense>
-  );
-}
+/*
+ * ===================================
+ * Tipos de datos
+ * ===================================
+ */
 
 interface Props<Data> {
   fechaSemana?: DateTime;
   cards: {
-    day: (_: Data, _2?: (_: Data) => void) => ReactNode;
-    week: (_: Data, _2?: (_: Data) => void) => ReactNode;
-    month: (_: Data, _2?: (_: Data) => void) => ReactNode;
+    day: (_: Data) => ReactNode;
+    week: (_: Data) => ReactNode;
+    month: (_: Data) => ReactNode;
   };
   filterContent?: ReactNode;
   filterFuncs?: ((d: Data) => boolean)[];
@@ -61,6 +51,34 @@ interface Props<Data> {
   fetchDataDependences?: any[];
 }
 
+/*
+ * ===================================
+ * Calendar: context
+ * ===================================
+ */
+
+export default function Calendario<Data>(props: Props<Data>) {
+  return (
+    <Suspense
+      fallback={
+        <div>
+          <Spinner />
+        </div>
+      }
+    >
+      <InternalModalsProvider>
+        <CalendarioWrapped<Data> {...props} />
+      </InternalModalsProvider>
+    </Suspense>
+  );
+}
+
+/*
+ * ===================================
+ * Calendar
+ * ===================================
+ */
+
 function CalendarioWrapped<Data>({
   fechaSemana = DateTime.now(),
   cards,
@@ -72,10 +90,8 @@ function CalendarioWrapped<Data>({
   fetchData,
   fetchDataDependences = [],
 }: Props<Data>) {
-  const { activeModal, setActiveModal, reloadState } = useInternalModals();
-
   const [data, setData] = useState<Data[]>([]);
-  const [selectionesData, setSelectionedData] = useState<Data>();
+  // const [selectionesData, setSelectionedData] = useState<Data>();
 
   const [periodo, setPeriodo] = useState<"week" | "day" | "month">("week");
   const [targetDay, setTargetDay] = useState<DateTime>(
@@ -120,17 +136,25 @@ function CalendarioWrapped<Data>({
     [periodo]
   );
 
-  const [createDate, setCreateDate] = useState<DateTime | undefined>();
-  const getDate = RegisterForm
-    ? useCallback((date: DateTime) => {
-        setCreateDate(date);
-        setActiveModal?.("registrar");
-      }, [])
-    : undefined;
-  const getCalendarData = useCallback((data: Data) => {
-    setSelectionedData(data);
-    if (RegisterForm) setActiveModal?.("actualizar");
-  }, []);
+  // const [createDate, setCreateDate] = useState<DateTime | undefined>();
+  // const getDate = RegisterForm
+  //   ? useCallback((date: DateTime) => {
+  //       setCreateDate(date);
+  //       setActiveModal?.("registrar");
+  //     }, [])
+  //   : undefined;
+  // const getCalendarData = useCallback((data: Data) => {
+  //   setSelectionedData(data);
+  //   if (RegisterForm) setActiveModal?.("actualizar");
+  // }, []);
+
+  const {
+    activeModal,
+    setActiveModal,
+    reloadState,
+    selectedData,
+    selectedDateTime,
+  } = useInternalModals();
 
   const { fetch } = useFetchHandler();
   useEffect(() => {
@@ -197,8 +221,7 @@ function CalendarioWrapped<Data>({
               inicioSemana={rangeDays.initial}
               card={cards.week}
               data={filteredData}
-              getDate={getDate}
-              getCalendarData={getCalendarData}
+              registerEnabled={Boolean(RegisterForm)}
               getRangeDateFromData={getRangeDateFromData}
             />
           )}
@@ -208,8 +231,7 @@ function CalendarioWrapped<Data>({
               dia={rangeDays.initial}
               card={cards.day}
               getRangeDateFromData={getRangeDateFromData}
-              getDate={getDate}
-              getCalendarData={getCalendarData}
+              registerEnabled={Boolean(RegisterForm)}
               data={filteredData}
             />
           )}
@@ -221,36 +243,27 @@ function CalendarioWrapped<Data>({
               finMes={rangeDays.final}
               card={cards.month}
               getRangeDateFromData={getRangeDateFromData}
-              getDate={getDate}
-              getCalendarData={getCalendarData}
+              registerEnabled={Boolean(RegisterForm)}
               data={filteredData}
             />
           )}
         </div>
-        {RegisterForm &&
-          createPortal(
-            <RegisterForm
-              key={`${activeModal}-registrar`}
-              open={activeModal === "registrar"}
-              setOpen={useCallback(
-                (b) =>
-                  b ? setActiveModal?.("registrar") : setActiveModal?.(""),
-                []
-              )}
-              date={createDate}
-            />,
-            document.body
-          )}
-        {ActualizarForm &&
-          selectionesData &&
+        {selectedDateTime && RegisterForm && (
+          <RegisterForm
+            key={`${activeModal}-registrar`}
+            open={activeModal === "registrar"}
+            setOpen={(b) => setActiveModal?.(b ? "registrar" : "")}
+            date={selectedDateTime}
+          />
+        )}
+        {selectedData &&
+          ActualizarForm &&
           createPortal(
             <ActualizarForm
               key={`${activeModal}-actualizar`}
               open={activeModal === "actualizar"}
-              setOpen={(b) =>
-                b ? setActiveModal?.("actualizar") : setActiveModal?.("")
-              }
-              data={selectionesData}
+              setOpen={(b) => setActiveModal?.(b ? "actualizar" : "")}
+              data={selectedData}
             />,
             document.body
           )}
