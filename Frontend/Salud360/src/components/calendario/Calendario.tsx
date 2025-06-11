@@ -19,6 +19,7 @@ import {
 } from "@/hooks/useInternalModals";
 import { useFetchHandler } from "@/hooks/useFetchHandler";
 import Spinner from "../Spinner";
+import { createPortal } from "react-dom";
 
 export default function Calendario<Data>(props: Props<Data>) {
   return (
@@ -45,8 +46,7 @@ interface Props<Data> {
   };
   filterContent?: ReactNode;
   filterFuncs?: ((d: Data) => boolean)[];
-  getDateFromData: (d: Data) => DateTime | undefined;
-  getHourRangeFromData: (d: Data) => [DateTime, DateTime] | undefined;
+  getRangeDateFromData: (d: Data) => [DateTime, DateTime] | undefined;
   RegisterForm?: (_: {
     open: boolean;
     setOpen: (_: boolean) => void;
@@ -66,8 +66,7 @@ function CalendarioWrapped<Data>({
   cards,
   filterContent,
   filterFuncs,
-  getDateFromData,
-  getHourRangeFromData,
+  getRangeDateFromData,
   RegisterForm,
   ActualizarForm,
   fetchData,
@@ -93,29 +92,14 @@ function CalendarioWrapped<Data>({
 
   const filteredData = useMemo<Data[]>(() => {
     return data
-      .map(
-        (d) =>
-          [d, getDateFromData(d), getHourRangeFromData(d)] as [
-            Data,
-            DateTime,
-            [DateTime, DateTime]
-          ]
-      )
+      .map((d) => [d, getRangeDateFromData(d)] as [Data, [DateTime, DateTime]])
+      .filter(([_, rango]) => rango !== undefined && rango !== null)
       .filter(
-        ([_, fecha, rango]) =>
-          fecha !== undefined &&
-          rango !== undefined &&
-          fecha !== null &&
-          rango !== null
+        ([_, rango]) =>
+          rango[0] >= rangeDays.initial.startOf("day") &&
+          rango[1] <= rangeDays.final.endOf("day")
       )
-      .filter(
-        ([_, fecha, rango]) =>
-          fecha.set({ hour: rango[0].hour, minute: rango[0].minute }) >=
-            rangeDays.initial.startOf("day") &&
-          fecha.set({ hour: rango[1].hour, minute: rango[1].minute }) <=
-            rangeDays.final.endOf("day")
-      )
-      .map(([d, _, _2]) => d)
+      .map(([d, _]) => d)
       .filter((d) => filterFuncs?.every((f) => f(d)) ?? true);
   }, [rangeDays, data]);
 
@@ -137,10 +121,12 @@ function CalendarioWrapped<Data>({
   );
 
   const [createDate, setCreateDate] = useState<DateTime | undefined>();
-  const getDate = useCallback((date: DateTime) => {
-    setCreateDate(date);
-    if (RegisterForm) setActiveModal?.("registrar");
-  }, []);
+  const getDate = RegisterForm
+    ? useCallback((date: DateTime) => {
+        setCreateDate(date);
+        setActiveModal?.("registrar");
+      }, [])
+    : undefined;
   const getCalendarData = useCallback((data: Data) => {
     setSelectionedData(data);
     if (RegisterForm) setActiveModal?.("actualizar");
@@ -211,10 +197,9 @@ function CalendarioWrapped<Data>({
               inicioSemana={rangeDays.initial}
               card={cards.week}
               data={filteredData}
-              getDate={RegisterForm ? getDate : undefined}
+              getDate={getDate}
               getCalendarData={getCalendarData}
-              getDateFromData={getDateFromData}
-              getHourRangeFromData={getHourRangeFromData}
+              getRangeDateFromData={getRangeDateFromData}
             />
           )}
           {periodo === "day" && (
@@ -222,9 +207,8 @@ function CalendarioWrapped<Data>({
               key={rangeDays.initial.toISO()}
               dia={rangeDays.initial}
               card={cards.day}
-              getDateFromData={getDateFromData}
-              getHourRangeFromData={getHourRangeFromData}
-              getDate={RegisterForm ? getDate : undefined}
+              getRangeDateFromData={getRangeDateFromData}
+              getDate={getDate}
               getCalendarData={getCalendarData}
               data={filteredData}
             />
@@ -236,34 +220,40 @@ function CalendarioWrapped<Data>({
               inicioMes={rangeDays.initial}
               finMes={rangeDays.final}
               card={cards.month}
-              getDateFromData={getDateFromData}
-              getHourRangeFromData={getHourRangeFromData}
-              getDate={RegisterForm ? getDate : undefined}
+              getRangeDateFromData={getRangeDateFromData}
+              getDate={getDate}
               getCalendarData={getCalendarData}
               data={filteredData}
             />
           )}
         </div>
-        {RegisterForm && (
-          <RegisterForm
-            key={`${activeModal}-registrar`}
-            open={activeModal === "registrar"}
-            setOpen={(b) =>
-              b ? setActiveModal?.("registrar") : setActiveModal?.("")
-            }
-            date={createDate}
-          />
-        )}
-        {ActualizarForm && selectionesData && (
-          <ActualizarForm
-            key={`${activeModal}-actualizar`}
-            open={activeModal === "actualizar"}
-            setOpen={(b) =>
-              b ? setActiveModal?.("actualizar") : setActiveModal?.("")
-            }
-            data={selectionesData}
-          />
-        )}
+        {RegisterForm &&
+          createPortal(
+            <RegisterForm
+              key={`${activeModal}-registrar`}
+              open={activeModal === "registrar"}
+              setOpen={useCallback(
+                (b) =>
+                  b ? setActiveModal?.("registrar") : setActiveModal?.(""),
+                []
+              )}
+              date={createDate}
+            />,
+            document.body
+          )}
+        {ActualizarForm &&
+          selectionesData &&
+          createPortal(
+            <ActualizarForm
+              key={`${activeModal}-actualizar`}
+              open={activeModal === "actualizar"}
+              setOpen={(b) =>
+                b ? setActiveModal?.("actualizar") : setActiveModal?.("")
+              }
+              data={selectionesData}
+            />,
+            document.body
+          )}
       </div>
     </>
   );

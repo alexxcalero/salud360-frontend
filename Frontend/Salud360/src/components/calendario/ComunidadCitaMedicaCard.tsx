@@ -15,11 +15,15 @@ import { AuthContext } from "@/hooks/AuthContext";
 import { useParams } from "react-router";
 import { useToasts } from "@/hooks/ToastContext";
 import { useInternalModals } from "@/hooks/useInternalModals";
+import Time from "../time";
+import { cn } from "@/lib/utils";
 
 export function ComunidadCitaMedicaCard({
   citaMedica,
+  collapsed = false,
 }: {
   citaMedica: extenedCitaMedicaType;
+  collapsed?: boolean;
 }) {
   const {
     callInfoDialog,
@@ -37,16 +41,26 @@ export function ComunidadCitaMedicaCard({
       <HoverCard openDelay={300}>
         <HoverCardTrigger asChild>
           <BaseCard
-            color="blue"
+            collapsed={collapsed}
+            color={
+              citaMedica.estado === "Disponible"
+                ? "blue"
+                : citaMedica.estado === "Reservada"
+                ? "green"
+                : "red"
+            }
             active={citaMedica.activo}
-            estado={citaMedica.estado}
             date={citaMedica.fecha?.set({
               hour: citaMedica.horaInicio?.hour,
               minute: citaMedica.horaInicio?.minute,
             })}
           >
+            <span className="use-label-medium text-left">
+              {citaMedica.horaInicio?.toFormat("T")} -{" "}
+              {citaMedica.horaFin?.toFormat("T")}
+            </span>
             <div className="flex items-center justify-between">
-              <span className="use-label-large font-semibold">
+              <span className="use-label-large font-semibold text-left">
                 {citaMedica.medico?.especialidad}
               </span>
             </div>
@@ -58,7 +72,44 @@ export function ComunidadCitaMedicaCard({
         <HoverCardContent className="w-max">
           {citaMedica.estado !== "Reservada" && (
             <div className="p-2">
-              <div className="flex gap-4 mb-2">
+              <div>
+                <div>
+                  <strong role="heading">Detalles de la cita médica</strong>
+                  <span
+                    className={cn(
+                      "ml-2 bg-blue-500 px-2 py-1 rounded-full font-semibold select-none",
+                      citaMedica.estado === "Reservada" && "bg-green-500",
+                      citaMedica.estado === "Finalizada" && "bg-red-500",
+                      "use-label-small",
+                      "text-white"
+                    )}
+                  >
+                    {citaMedica.estado ?? "ESTADO NO ESPECIFICADO"}
+                  </span>
+                  <p className="mt-2">
+                    {citaMedica.fecha?.toFormat("DDDD", { locale: "es" })}
+                    <br />
+                    <Time type="time" dateTime={citaMedica.horaInicio} /> -{" "}
+                    <Time type="time" dateTime={citaMedica.horaFin} />
+                  </p>
+                </div>
+                <div className="mt-2">
+                  <strong>Médico</strong>
+                  <p>
+                    Dr(a):{" "}
+                    <span className="text-neutral-600">
+                      {citaMedica.medico?.nombres}{" "}
+                      {citaMedica.medico?.apellidos}
+                    </span>
+                    <br />
+                    Especialidad:{" "}
+                    <span className="text-neutral-600">
+                      {citaMedica.medico?.especialidad}
+                    </span>
+                  </p>
+                </div>
+              </div>
+              <div className="flex gap-4 mt-2">
                 <Button
                   onClick={() => {
                     callInfoDialog({
@@ -104,16 +155,6 @@ export function ComunidadCitaMedicaCard({
                   <Ticket /> Reservar
                 </Button>
               </div>
-              <p>
-                <span className="text-lg">
-                  {citaMedica.fecha?.toFormat("DDDD", { locale: "es" })}
-                </span>
-                <br />
-                {citaMedica.horaInicio?.toFormat("TTTT", {
-                  locale: "es",
-                })}{" "}
-                - {citaMedica.horaFin?.toFormat("TTTT", { locale: "es" })}
-              </p>
             </div>
           )}
 

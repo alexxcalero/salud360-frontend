@@ -148,7 +148,7 @@ createRoot(document.getElementById("root")!).render(
             {/*3. Sección de Admin */} {/*id de Roles permitidos: Admin (1) */}
             <Route path="/admin" element={<ProtectedRoute allowedRules={[1]}/>}>
               <Route element={<AdminLayout />}>
-                <Route index element={<div></div>} />
+                <Route index element={<DashboardPage />} />
                 {" "}
                 {/* ESTO ES PARA LA PANTALLAS DE ROLES Y PERMISOS*/}
                 {/* Ejemplo de ruta anidada con un layout */}

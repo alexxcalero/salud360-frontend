@@ -1,10 +1,5 @@
 import { DateTime } from "luxon";
 import { ReactNode, useMemo } from "react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
 interface Props<Data> {
@@ -12,8 +7,7 @@ interface Props<Data> {
   getDate?: (_: DateTime) => void;
   getCalendarData?: (_: Data) => void;
   data: Data[];
-  getDateFromData: (d: Data) => DateTime | undefined;
-  getHourRangeFromData: (d: Data) => [DateTime, DateTime] | undefined;
+  getRangeDateFromData: (d: Data) => [DateTime, DateTime] | undefined;
   card: (_: Data, _2?: (_: Data) => void) => ReactNode;
 }
 
@@ -22,8 +16,7 @@ function CalendarioSemanal<Data>({
   data,
   getDate,
   getCalendarData,
-  getDateFromData,
-  getHourRangeFromData,
+  getRangeDateFromData,
   card,
 }: Props<Data>) {
   const dias = useMemo<DateTime[]>(
@@ -79,47 +72,34 @@ function CalendarioSemanal<Data>({
       <div className="grid grid-cols-[50px_repeat(7,1fr)_50px] grid-rows-[25px_repeat(24,58px)_25px] relative min-h-0 h-full overflow-y-scroll min-w-0">
         {/* Datos mostrados en position: absolute */}
         <div className="absolute top-0 left-0 bottom-0 right-0 z-10 pointer-events-none">
-          {data
-            .map(
-              (d) =>
-                [d, getDateFromData(d), getHourRangeFromData(d)] as [
-                  Data,
-                  DateTime,
-                  [DateTime, DateTime]
-                ]
-            )
-            .filter(
-              ([_, fecha, range]) => fecha !== undefined && range !== undefined
-            )
-            .map(
-              ([d, fecha, range]) =>
-                [
-                  d,
-                  Math.floor(
-                    fecha.diff(inicioSemana, ["days", "months", "years"]).days
-                  ),
-                  DateTime.fromObject({
-                    hour: range[0].hour,
-                    minute: range[0].minute,
-                  }).diff(DateTime.fromObject({ hour: 0, minute: 0 }), [
-                    "hours",
-                    "days",
-                    "months",
-                    "years",
-                  ]).hours,
-                  DateTime.fromObject({
-                    hour: range[1].hour,
-                    minute: range[1].minute,
-                  }).diff(
-                    DateTime.fromObject({
-                      hour: range[0].hour,
-                      minute: range[0].minute,
-                    }),
-                    ["hours", "days", "months", "years"]
-                  ).hours,
-                ] as [Data, number, number, number]
-            )
-            .map(([d, diffDays, diffInitialHour, diffFinalHour], index) => (
+          {data.map((d, index) => {
+            const rango = getRangeDateFromData(d);
+            if (rango === undefined) return;
+
+            const diffDays = Math.floor(
+              rango[0].diff(inicioSemana, ["days", "months", "years"]).days
+            );
+            const diffInitialHour = DateTime.fromObject({
+              hour: rango[0].hour,
+              minute: rango[0].minute,
+            }).diff(DateTime.fromObject({ hour: 0, minute: 0 }), [
+              "hours",
+              "days",
+              "months",
+              "years",
+            ]).hours;
+            const diffFinalHour = DateTime.fromObject({
+              hour: rango[1].hour,
+              minute: rango[1].minute,
+            }).diff(
+              DateTime.fromObject({
+                hour: rango[0].hour,
+                minute: rango[0].minute,
+              }),
+              ["hours", "days", "months", "years"]
+            ).hours;
+
+            return (
               <div
                 className={cn(
                   "flex w-[calc(calc(100%-100px)/7)] p-1 absolute pointer-events-auto"
@@ -133,7 +113,8 @@ function CalendarioSemanal<Data>({
               >
                 {card(d, getCalendarData)}
               </div>
-            ))}
+            );
+          })}
         </div>
         {/* Calendario estático */}
 
@@ -162,24 +143,16 @@ function CalendarioSemanal<Data>({
                 <div
                   key={index}
                   className={cn(
-                    "w-full h-full relative text-center group border-1 border-neutral-300 bg-white",
-                    !futuro && "bg-neutral-100"
+                    "w-full h-full relative text-center group border-1 border-neutral-300 bg-white transition-colors duration-150 ease-out",
+                    !futuro && "bg-neutral-100",
+                    futuro && getDate && "hover:bg-neutral-300"
                   )}
                 >
                   {futuro && getDate && (
-                    <Tooltip key={index}>
-                      <TooltipTrigger asChild>
-                        <button
-                          className="w-full h-full"
-                          onClick={() => {
-                            getDate(dia);
-                          }}
-                        ></button>
-                      </TooltipTrigger>
-                      <TooltipContent className="pointer-events-none">
-                        <p>Haz click</p>
-                      </TooltipContent>
-                    </Tooltip>
+                    <button
+                      className="w-full h-full"
+                      onClick={() => getDate(dia)}
+                    ></button>
                   )}
                 </div>
               ))}

@@ -12,7 +12,7 @@ function UsuarioNavbar() {
   ];
   
   return (
-    <header className="fixed top-0 left-0 w-full bg-[#2A86FF] py-5 z-100"> {/*El z-10 es para que nada le pase por encima. Puede ser cualquier número alto.*/}
+    <header className="sticky top-0 left-0 w-full bg-[#2A86FF] py-5 z-100"> {/*El z-10 es para que nada le pase por encima. Puede ser cualquier número alto.*/}
           <nav>
               <div className="grid grid-cols-12 gap-6 items-center">
                   <div className="col-span-3 px-8">

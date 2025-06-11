@@ -23,6 +23,7 @@ export default function SuccessRegisterPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+      <title>Cuenta creada</title>
       < SuccessRegisterForm/>        
     </div>
   )

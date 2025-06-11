@@ -11,6 +11,7 @@ function SobreNosotros(){
     
     return(
         <div>
+            <title>Sobre Nosotros</title>
             <HeroSobreNosotros/>
             <div className="flex flex-col gap-8 my-32">
                 <QuienesSomos/>

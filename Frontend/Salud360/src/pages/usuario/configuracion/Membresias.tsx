@@ -91,6 +91,7 @@ const Membresias = () => {
 
   return (
     <div className="p-8">
+      <title>Membresías</title>
       <h1 className="text-left mb-4">Membresías</h1>
       <ul className="flex flex-col gap-4">
         {items.map(

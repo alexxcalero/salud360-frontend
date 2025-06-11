@@ -14,6 +14,7 @@ function Comunidades(){
 
     return (
         <div>
+            <title>Lista de comunidades</title>
             <HeroComunidades/>
             <section className="flex flex-col gap-32 my-32">
                 <section id="sobreLasComunidades" className="bg-white scroll-mt-18">

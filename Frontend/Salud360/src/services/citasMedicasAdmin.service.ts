@@ -46,15 +46,11 @@ export const reactivarCitaMedicaAPI = async (idCitaMedica: number) => {
 
 export const getAllCitasMedicasAPI = async () => {
   const response = await baseAPI.get(`/citas-medicas`);
-  console.log(response.data);
-  const parsed = z.array(extendedCitaMedicaSchema).safeParse(response.data);
 
-  if (!parsed.success) {
-    console.log("Errores:");
-    console.log(parsed.error.format());
-  }
+  const parsed = z.array(extendedCitaMedicaSchema).parse(response.data);
+  console.log(parsed);
 
   if (response.status !== 200) throw new Error("Respuesta inválida de la API");
 
-  return parsed.data;
+  return parsed;
 };
