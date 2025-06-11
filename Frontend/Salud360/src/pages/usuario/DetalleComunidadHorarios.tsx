@@ -4,7 +4,7 @@ import { useParams } from "react-router";
 function DetalleComunidadHorario() {
   const { id } = useParams();
   return (
-    <section>
+    <section className="w-full px-8 py-8">
       <title>Horarios de comunidad</title>
       <CalendarioComunidad
         id={Number(id)}

@@ -73,8 +73,11 @@ export default function ClasesPage() {
   return (
     <>
       <div className="grid grid-rows-[auto_1fr] min-h-0 min-w-0 gap-2">
-        <div className="w-full px-8 py-8 text-left">
-          <h1 className="text-4xl font-bold mb-2">Clases</h1>
+        <div className="w-full flex flex-col gap-4 px-8 py-8 text-left">
+          <div>
+            <h1 className="text-4xl font-bold mb-2">Clases</h1>
+            <h2 className="text-lg text-gray-700 mb-2">Seleccione un local para crear y editar clases</h2>
+          </div>
           <div className="self-stretch">
             <SelectLabel
               htmlFor="local"
@@ -88,9 +91,10 @@ export default function ClasesPage() {
               }))}
             />
           </div>
+          <hr className="border mt-4" />
         </div>
 
-        <div className="px-2 min-h-0 min-w-0">
+        <div className="px-8 min-h-0 min-w-0">
           {localSeleccionado !== undefined ? (
             <>
               <Calendario<claseDTOType>
