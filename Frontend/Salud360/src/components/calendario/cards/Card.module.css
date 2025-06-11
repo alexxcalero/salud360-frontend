@@ -60,6 +60,17 @@
     }
   }
 
+  &.gray {
+    @apply hover:outline-gray-300;
+    & > div {
+      &::-webkit-scrollbar-thumb {
+        @apply bg-gray-500;
+      }
+      @apply hover:outline-gray-300;
+      @apply border-gray-500 bg-gray-700/10 text-gray-700;
+    }
+  }
+
   /* Neutral mode */
   &.neutral {
     @apply hover:outline-neutral-300;
@@ -90,6 +101,10 @@
 
   &.red {
     @apply bg-red-500 hover:bg-red-300;
+  }
+
+  &.gray {
+    @apply bg-gray-500 hover:bg-gray-300;
   }
 
   &.neutral {
