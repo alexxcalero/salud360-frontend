@@ -16,12 +16,13 @@ interface Props {
     placeholder?: string;
     value?: string;
     disabled?: boolean
+    required?: boolean
     onChange?: (value: string) => void;
 }
 
-function Select({options, placeholder="Selecciona una opción", value="", disabled=false, onChange = () => {}}: Props){
+function Select({options, placeholder="Selecciona una opción", value="", disabled=false, onChange = () => {}, required = false}: Props){
     return(
-        <ShadSelect value={value} onValueChange={onChange}>
+        <ShadSelect value={value} onValueChange={onChange} required={required}>
             <SelectTrigger disabled={disabled} className="border-[#6A6262] border-2 rounded-[5px] py-5 px-4 w-full">
                 <SelectValue placeholder={placeholder} />
             </SelectTrigger>

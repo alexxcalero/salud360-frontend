@@ -60,6 +60,13 @@ const RegistrarCitaModalForm = ({
   const submitHanlder = async (e: FormEvent) => {
     e.preventDefault();
 
+    if (servicioInput === "") {
+      createToast("error", {
+        title: "Seleccione un servicio",
+      });
+      return;
+    }
+
     if (
       dateInput &&
       dateInput.set({
@@ -140,7 +147,7 @@ const RegistrarCitaModalForm = ({
     <>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
-          <form action="" onSubmit={submitHanlder}>
+          <form onSubmit={submitHanlder}>
             <DialogTitle>Registrar cita médica</DialogTitle>
             <DialogDescription>Llena el formulario </DialogDescription>
             <div className="my-4 flex flex-col gap-4">
@@ -150,7 +157,7 @@ const RegistrarCitaModalForm = ({
               </p>
               <SelectLabel
                 htmlFor="servicio"
-                label="Seleccione servicio *"
+                label="Seleccione servicio"
                 placeholder="Seleccione servicio"
                 value={servicioInput}
                 onChange={setServicioInput}
@@ -158,6 +165,7 @@ const RegistrarCitaModalForm = ({
                   value: s.idServicio?.toString() ?? "",
                   content: s.nombre ?? "",
                 }))}
+                required={true}
               />
               <CalendarInput
                 value={dateInput}
