@@ -1,7 +1,6 @@
 import Button from "@/components/Button";
 import MethodCard from "@/components/usuario/config/CardMetodoPago";
 import { AuthContext } from "@/hooks/AuthContext";
-import { useUsuario } from "@/hooks/useUsuario";
 import useUsuarioForm from "@/hooks/useUsuarioForm";
 import axios from "axios";
 import { useContext, useEffect } from "react";
