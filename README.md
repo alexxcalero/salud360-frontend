@@ -48,5 +48,9 @@ Ahora si se pueden realizar tests
   ```bash
   npx playwright screenshot [url] [path del archivo a crear]
   ```
+- Grabar macros:
+  ```bash
+  npx playwright codegen [url]
+  ```
 
 > Más información en: https://playwright.dev/docs/test-cli
