@@ -8,10 +8,29 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   color: "blue" | "pink" | "green" | "red";
   active?: boolean;
   date?: DateTime;
+  collapsed?: boolean;
 }
 
 const BaseCard = forwardRef<HTMLDivElement, Props>(
-  ({ children, active = true, date, color, ...props }, ref) => {
+  (
+    { children, active = true, date, color, collapsed = false, ...props },
+    ref
+  ) => {
+    if (collapsed)
+      return (
+        <div
+          ref={ref}
+          {...props}
+          className={cn(
+            styles["collapsed-card"],
+            styles[color],
+            (!active || (date !== undefined && date < DateTime.now())) &&
+              styles["neutral"],
+            props.className
+          )}
+        ></div>
+      );
+
     return (
       <div
         ref={ref}
@@ -19,8 +38,8 @@ const BaseCard = forwardRef<HTMLDivElement, Props>(
         className={cn(
           styles["card"],
           styles[color],
-          date !== undefined && date < DateTime.now() && styles["neutral"],
-          !active && styles["neutral"],
+          (!active || (date !== undefined && date < DateTime.now())) &&
+            styles["neutral"],
           props.className
         )}
       >

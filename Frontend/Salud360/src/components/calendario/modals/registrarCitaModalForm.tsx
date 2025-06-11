@@ -58,6 +58,19 @@ const RegistrarCitaModalForm = ({
     e.preventDefault();
 
     if (
+      dateInput &&
+      dateInput.set({
+        hour: DateTime.fromISO(horaInicio).hour,
+        minute: DateTime.fromISO(horaInicio).minute,
+      }) < DateTime.now()
+    ) {
+      createToast("error", {
+        title: "La fecha debe ser posterior al presente",
+      });
+      return;
+    }
+
+    if (
       (date
         ?.set({
           hour: DateTime.fromISO(horaInicio).hour,

@@ -35,3 +35,12 @@ export const getAllClasesByComunityAPI = async (idComunidad: number) => {
 
   return parsed.data?.filter((c) => c !== undefined);
 };
+
+export const getAllUserReservasByComunity = async (idCliente: number) => {
+  const response = await baseAPI.get(`/cliente/${idCliente}/reservas`);
+  const parsed = z
+    .array(comunidadHorarioSchema)
+    // @ts-ignore
+    .parse(response.data.map((c) => ({ ...c, tipo: "reserva" })));
+  return parsed;
+};

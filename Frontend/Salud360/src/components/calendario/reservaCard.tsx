@@ -15,7 +15,13 @@ import { useToasts } from "@/hooks/ToastContext";
 import { reservaType } from "@/schemas/reserva";
 import { useInternalModals } from "@/hooks/useInternalModals";
 
-export function ReservaCard({ reserva }: { reserva: reservaType }) {
+export function ReservaCard({
+  reserva,
+  collapsed = false,
+}: {
+  reserva: reservaType;
+  collapsed?: boolean;
+}) {
   const {
     callInfoDialog,
     callSuccessDialog,
@@ -31,7 +37,8 @@ export function ReservaCard({ reserva }: { reserva: reservaType }) {
       <HoverCard openDelay={300}>
         <HoverCardTrigger asChild>
           <BaseCard
-            color={reserva.estado === "Reservada" ? "green" : "red"}
+            collapsed={collapsed}
+            color={reserva.estado === "Confirmada" ? "green" : "red"}
             date={
               reserva.citaMedica?.fecha?.set({
                 hour: reserva.citaMedica?.horaInicio?.hour,
@@ -59,7 +66,7 @@ export function ReservaCard({ reserva }: { reserva: reservaType }) {
           </BaseCard>
         </HoverCardTrigger>
         <HoverCardContent className="w-max">
-          {reserva.estado === "Reservada" && (
+          {reserva.estado === "Confirmada" && (
             <div className="p-2">
               <Button
                 variant="danger"

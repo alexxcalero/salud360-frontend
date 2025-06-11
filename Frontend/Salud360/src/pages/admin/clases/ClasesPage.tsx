@@ -1,5 +1,4 @@
 import { AdminClaseCard } from "@/components/calendario/AdminClaseCard";
-import AdminClaseDot from "@/components/calendario/AdminClaseDot";
 import Calendario from "@/components/calendario/Calendario";
 import ActualizarClaseModalForm from "@/components/calendario/modals/actualizarClaseForm";
 import RegistrarClaseModalForm from "@/components/calendario/modals/registrarClaseModalForm";
@@ -123,7 +122,9 @@ export default function ClasesPage() {
                   week: (d, g) =>
                     g ? <AdminClaseCard clase={d} update={g} /> : undefined,
                   month: (d, g) =>
-                    g ? <AdminClaseDot clase={d} update={g} /> : undefined,
+                    g ? (
+                      <AdminClaseCard clase={d} update={g} collapsed={true} />
+                    ) : undefined,
                 }}
                 filterContent={
                   <div>
