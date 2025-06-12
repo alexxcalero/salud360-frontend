@@ -11,8 +11,8 @@ import Input from "./input/Input"
 import MailInput from "./input/MailInput"
 import PasswordInput from "./input/PasswordInput"
 import axios from "axios"
-import { FaGenderless } from "react-icons/fa"
 import ModalValidacion from "./ModalValidacion"
+import { Link } from "react-router-dom"
 
 
 export default function RegisterForm() {
@@ -85,7 +85,7 @@ export default function RegisterForm() {
       return false;
     }
 
-    if (!formData.tipoDocumento || formData.tipoDocumento === 0) {
+    if (!formData.tipoDocumento || formData.tipoDocumento === "") {
       setMensajeValidacion("Debe seleccionar un tipo de documento.");
       setShowModalValidacion(true);
       return false;
@@ -248,6 +248,15 @@ export default function RegisterForm() {
 
       <PasswordInput name="contraseña" placeholder="***********" label="Contraseña" defaultValue={formData.contraseña} onChange={handleChange} required={true} />
       <PasswordInput name="confirmarContraseña" placeholder="***********" label="Confirmar contraseña" defaultValue={formData.contraseña} onChange={handleChange} required={true} />
+
+      <div className="text-sm">
+        <span>¿Ya tienes una cuenta?</span>{" "}
+        <Link to={`/IniciarSesionUsuario`}>
+          <span className="text-blue-500 hover:underline">
+            Inicia sesión aquí
+          </span>
+        </Link>
+      </div>
 
       <Button type="submit" className="w-full mt-4">
         Registrarse

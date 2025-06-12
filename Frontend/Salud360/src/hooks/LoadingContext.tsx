@@ -1,5 +1,4 @@
 import Spinner from "@/components/Spinner";
-import { cn } from "@/lib/utils";
 import {
   createContext,
   ReactNode,
@@ -26,9 +25,9 @@ export function LoadingContext({ children }: { children: ReactNode }) {
 
   const setLoading = useCallback((show: boolean) => {
     if (!loadingNodeRef.current) return;
-
-    if (show) loadingNodeRef.current.classList.add("flex");
-    else loadingNodeRef.current.classList.remove("flex");
+    
+    if (show) loadingNodeRef.current.style.display = "flex";
+    else loadingNodeRef.current.style.display = "none";
   }, []);
 
   const isLoading = useCallback(
@@ -40,10 +39,7 @@ export function LoadingContext({ children }: { children: ReactNode }) {
     <loadingContext.Provider value={{ isLoading, setLoading }}>
       <div
         ref={loadingNodeRef}
-        className={cn(
-          "fixed top-0 left-0 right-0 bottom-0 backdrop-blur-md justify-center items-center z-50 bg-white/70",
-          "hidden"
-        )}
+        className={"fixed top-0 left-0 right-0 bottom-0 backdrop-blur-md justify-center items-center z-50 bg-white/70 hidden"}
       >
         <Spinner />
       </div>
