@@ -13,6 +13,7 @@ import ModalExito from "@/components/ModalExito";
 const ConfigSistema = () => {
 
   const [showModalExito, setShowModalExito] = useState(false);
+
   const { usuario, loading } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -144,6 +145,7 @@ const ConfigSistema = () => {
   const handleAbrirModal = () => setShowModal(true);
   const handleCerrarModal = () => setShowModal(false);
   const [modalExitoTexto, setModalExitoTexto] = useState("");
+  const [modalExitoTipo, setModalExitoTipo] = useState("");
 
   const handleActualizarNotificaciones = async () => {
     console.log("notiCorreo:", notiPorCorreo, "notiSMS:", notiPorSMS, "notiWhatsApp:", notiPorWhatsApp);
@@ -178,8 +180,9 @@ const ConfigSistema = () => {
         }
       );
 
-      setShowModalExito(true);
+      setModalExitoTipo("notificaciones");  // Establece el tipo de modal
       setModalExitoTexto("¡Notificaciones actualizadas correctamente!");
+      setShowModalExito(true);
     }
     catch (err) {
       console.error("Error al editar notificacion:", err);
@@ -218,6 +221,7 @@ const ConfigSistema = () => {
         headers: { "Content-Type": "application/json" },
       });
 
+      setModalExitoTipo("metodoPago");  // Establece el tipo de modal
       setShowModalExito(true);
 
       // Limpiar los campos del formulario después de agregar el método de pago
@@ -383,12 +387,12 @@ const ConfigSistema = () => {
         </>
       )}
 
-      {showModalExito && (
+      {showModalExito && modalExitoTipo === "metodoPago" && (
         <>
           <div className="fixed inset-0 bg-black/60 z-40" />
           <div className="fixed inset-0 z-50 flex items-center justify-center">
             <ModalExito
-              modulo="Método de Pago agregado correctamente!"
+              modulo="Método de Pago agregado correctamente!"  // El mensaje de éxito del método de pago
               detalle="El Método de Pago fue agregado correctamente"
               onConfirm={() => {
                 setShowModalExito(false);
@@ -399,12 +403,12 @@ const ConfigSistema = () => {
         </>
       )}
 
-      {showModalExito && (
+      {showModalExito && modalExitoTipo === "notificaciones" && (
         <>
           <div className="fixed inset-0 bg-black/60 z-40" />
           <div className="fixed inset-0 z-50 flex items-center justify-center">
             <ModalExito
-              modulo={modalExitoTexto}  // Mostrar el texto del éxito
+              modulo={modalExitoTexto}  // El mensaje de notificación
               detalle="Tus notificaciones han sido actualizadas con éxito."
               onConfirm={() => setShowModalExito(false)}  // Cerrar el modal cuando se confirme
             />
