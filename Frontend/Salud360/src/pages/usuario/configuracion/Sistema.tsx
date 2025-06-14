@@ -122,9 +122,12 @@ const ConfigSistema = () => {
 
     // Validar que la fecha de vencimiento no sea menor que el año actual
     const fechaVencimiento = new Date(newCard.fechaVencimiento);
-    const currentYear = new Date().getFullYear();
+    const [year, month] = newCard.fechaVencimiento.split("-").map(Number);
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth() + 1; // getMonth() es base 0
 
-    if (fechaVencimiento.getFullYear() < currentYear) {
+    if (year < currentYear || (year === currentYear && month < currentMonth)) {
       setMensajeError("La tarjeta está vencida.");
       setShowModalValidacion(true);
       return false;
@@ -197,7 +200,7 @@ const ConfigSistema = () => {
     setIsLoading(true); // Establece el estado de carga
 
     try {
-      const vencimientoISO = new Date(newCard.fechaVencimiento).toISOString();
+      const vencimientoISO = new Date(`${newCard.fechaVencimiento}-01`).toISOString();
       const data = {
         tipo: newCard.method,
         ncuenta: newCard.numero,
@@ -353,7 +356,7 @@ const ConfigSistema = () => {
               />
               <label>Fecha de vencimiento:</label>
               <input
-                type="text"
+                type="month"
                 value={newCard.fechaVencimiento}
                 onChange={(e) => setNewCard({ ...newCard, fechaVencimiento: e.target.value })}
                 className="w-full p-2 border rounded"
