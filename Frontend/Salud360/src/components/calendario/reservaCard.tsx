@@ -67,7 +67,44 @@ export function ReservaCard({
         </HoverCardTrigger>
         <HoverCardContent className="w-max">
           {reserva.estado === "Confirmada" && (
-            <div className="p-2">
+
+            
+            <div className="p-2 flex flex-col gap-2">
+
+              {/* mOSTRAR DESCRIPCIÓN SI TIENE */}
+              {reserva.descripcion && (
+                <p className="mb-2 text-sm text-gray-700">
+                  <strong>Descripción médica:</strong> {reserva.descripcion}
+                </p>
+              )}
+
+                {/* BOTON DE DESCARGA DE ARCHIVO SI SUBIO UNO */}
+              {reserva.nombreArchivo ? (
+              <Button
+                variant="primary"
+                className="mt-2"
+                onClick={async () => {
+                  try {
+                    const res = await fetch(
+                      `/api/reservas/archivo-url/${reserva.nombreArchivo}`
+                    );
+                    const url = await res.text();
+                    window.open(url, "_blank");
+                  } catch (e) {
+                    console.error("Error al obtener el archivo:", e);
+                    callErrorDialog({ title: "No se pudo abrir el archivo." });
+                  }
+                }}
+              >
+                Descargar archivo médico
+              </Button>
+            ) : (
+              <p className="mt-2 text-sm text-gray-600">
+                No se adjuntó ningún archivo médico.
+              </p>
+            )}
+
+
               <Button
                 variant="danger"
                 onClick={() => {
@@ -106,8 +143,13 @@ export function ReservaCard({
                 }}
               >
                 <Ban /> Cancelar Reserva
+              
               </Button>
+              
+
+            
             </div>
+            
           )}
           {reserva.estado === "Cancelada" && (
             <div className="p-2">
