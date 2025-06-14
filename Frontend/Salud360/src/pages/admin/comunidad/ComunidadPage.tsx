@@ -64,6 +64,7 @@ function ComunidadPage() {
     { label: "Descripción", className: "w-1/4 text-left" },
     { label: "Propósito", className: "w-1/4 text-left" },
     { label: "Servicios", className: "w-20" },
+    { label: "Cant. Usuarios", className: "w-24 text-center" },
     { label: "Status", className: "w-1/6 " },
     { label: "Acciones", className: "w-24 text-center" },
   ];
@@ -105,6 +106,7 @@ function ComunidadPage() {
       ),
       className: "w-20",
     },
+    { content: comunidad.cantMiembros ?? 0, className: "w-24 text-center" },
     {
       content: (
         <span className={`px-2 py-1 rounded text-xs font-medium ${
