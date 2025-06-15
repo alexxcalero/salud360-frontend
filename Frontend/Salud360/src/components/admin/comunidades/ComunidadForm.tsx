@@ -238,7 +238,15 @@ function ComunidadForm({
                     <input type="text" value={m.nombre} onChange={(e) => handleChangeMembresia(index, "nombre", e.target.value)} className="border p-1 rounded w-full" disabled={readOnly} />
                   </td>
                   <td className="p-2">
-                    <input type="text" value={m.tipo} onChange={(e) => handleChangeMembresia(index, "tipo", e.target.value)} className="border p-1 rounded w-full" disabled={readOnly} />
+                    <select
+                      value={m.tipo}
+                      onChange={(e) => handleChangeMembresia(index, "tipo", e.target.value)}
+                      className="border p-1 rounded w-full"
+                      disabled={readOnly}
+                    >
+                      <option value="Mensual">Mensual</option>
+                      <option value="Anual">Anual</option>
+                    </select>
                   </td>
                   <td className="p-2">
                     <select value={m.conTope ? "true" : "false"} onChange={(e) => handleChangeMembresia(index, "conTope", e.target.value === "true")} className="border p-1 rounded w-full" disabled={readOnly}>
@@ -247,10 +255,30 @@ function ComunidadForm({
                     </select>
                   </td>
                   <td className="p-2">
-                    <input type="number" value={m.cantUsuarios} min={0} onChange={(e) => handleChangeMembresia(index, "cantUsuarios", Math.max(0, parseInt(e.target.value)))} className="border p-1 rounded w-full" disabled={readOnly} />
+                    <input
+                      type="number"
+                      value={m.cantUsuarios ?? 0}
+                      readOnly
+                      disabled
+                      className="border p-1 rounded w-full bg-gray-100 text-gray-600 cursor-not-allowed"
+                    />
                   </td>
                   <td className="p-2">
-                    <input type="number" value={m.conTope ? m.maxReservas ?? "" : ""} min={0} onChange={(e) => handleChangeMembresia(index, "maxReservas", e.target.value === "" ? "" : Math.max(0, parseInt(e.target.value)))} className="border p-1 rounded w-full" disabled={readOnly || !m.conTope} />
+                    <input
+                      type="number"
+                      value={m.conTope ? m.maxReservas ?? "" : ""}
+                      min={0}
+                      onChange={(e) =>
+                        handleChangeMembresia(
+                          index,
+                          "maxReservas",
+                          e.target.value === "" ? "" : Math.max(0, parseInt(e.target.value))
+                        )
+                      }
+                      className={`border p-1 rounded w-full ${!m.conTope ? "bg-gray-100 text-gray-600 cursor-not-allowed" : ""}`}
+                      readOnly={!m.conTope}
+                      disabled={readOnly || !m.conTope}
+                    />
                   </td>
                   <td className="p-2">
                     <input type="number" value={m.precio} min={0} onChange={(e) => handleChangeMembresia(index, "precio", Math.max(0, parseFloat(e.target.value)))} className="border p-1 rounded w-full" disabled={readOnly} />

@@ -1,8 +1,15 @@
 import Spinner from "@/components/Spinner";
-import { createContext, ReactNode, useContext, useState } from "react";
+import { cn } from "@/lib/utils";
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useContext,
+  useRef,
+} from "react";
 
 interface Context {
-  loading: boolean;
+  isLoading: () => boolean;
   setLoading: (_: boolean) => void;
 }
 
@@ -15,15 +22,31 @@ export function useLoading() {
 }
 
 export function LoadingContext({ children }: { children: ReactNode }) {
-  const [loading, setLoading] = useState(false);
+  const loadingNodeRef = useRef<HTMLDivElement>(null);
+
+  const setLoading = useCallback((show: boolean) => {
+    if (!loadingNodeRef.current) return;
+
+    if (show) loadingNodeRef.current.classList.add("flex");
+    else loadingNodeRef.current.classList.remove("flex");
+  }, []);
+
+  const isLoading = useCallback(
+    () => Boolean(loadingNodeRef.current?.classList.contains("flex")),
+    []
+  );
 
   return (
-    <loadingContext.Provider value={{ loading, setLoading }}>
-      {loading && (
-        <div className="fixed top-0 left-0 right-0 bottom-0 backdrop-blur-md flex justify-center items-center z-50">
-          <Spinner />
-        </div>
-      )}
+    <loadingContext.Provider value={{ isLoading, setLoading }}>
+      <div
+        ref={loadingNodeRef}
+        className={cn(
+          "fixed top-0 left-0 right-0 bottom-0 backdrop-blur-md justify-center items-center z-50 bg-white/70",
+          "hidden"
+        )}
+      >
+        <Spinner />
+      </div>
       {children}
     </loadingContext.Provider>
   );

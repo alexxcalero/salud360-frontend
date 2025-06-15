@@ -1,17 +1,16 @@
 import { AdminCitaMedicaCard } from "@/components/calendario/AdminCitaMedica";
-import AdminCitaMedicaDot from "@/components/calendario/AdminCitaMedicaDot";
 import Calendario from "@/components/calendario/Calendario";
 import ActualizarCitaModalForm from "@/components/calendario/modals/actualizarCitaModalForm";
 import RegistrarCitaModalForm from "@/components/calendario/modals/registrarCitaModalForm";
 import SelectLabel from "@/components/SelectLabel";
-import { Switch } from "@/components/ui/switch";
 import { useFetchHandler } from "@/hooks/useFetchHandler";
 import { citaMedicaType } from "@/schemas/citaMedica";
 import { medicoType } from "@/schemas/medico";
 import { getAllCitasMedicasAPI } from "@/services/citasMedicasAdmin.service";
 import { getMedicos } from "@/services/medico.service";
 import { CircleDot } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { DateTime } from "luxon";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import colors from "tailwindcss/colors";
 
 export default function RegistrarCitaMedicasPage() {
@@ -24,7 +23,47 @@ export default function RegistrarCitaMedicasPage() {
 
   const { fetch } = useFetchHandler();
 
-  const [showDeactivated, setShowDeactivated] = useState(false);
+  const registrar = useCallback(
+    ({
+      open,
+      setOpen,
+      date,
+    }: {
+      open: boolean;
+      setOpen: (_: boolean) => void;
+      date?: DateTime;
+    }) =>
+      medicoSeleccionado && (
+        <RegistrarCitaModalForm
+          open={open}
+          setOpen={setOpen}
+          date={date}
+          medico={medicoSeleccionado}
+        />
+      ),
+    [medicoSeleccionado]
+  );
+
+  const actualizar = useCallback(
+    ({
+      open,
+      setOpen,
+      data,
+    }: {
+      open: boolean;
+      setOpen: (_: boolean) => void;
+      data: citaMedicaType;
+    }) => (
+      <ActualizarCitaModalForm
+        open={open}
+        setOpen={setOpen}
+        citaMedica={data}
+      />
+    ),
+    []
+  );
+
+  // const [showDeactivated, setShowDeactivated] = useState(false);
 
   useEffect(() => {
     fetch(async () => {
@@ -35,6 +74,7 @@ export default function RegistrarCitaMedicasPage() {
 
   return (
     <>
+      <title>Citas médicas</title>
       <div className="grid grid-rows-[auto_1fr] min-h-0 min-w-0 gap-2">
         <div className="w-full flex flex-col gap-4 px-8 py-8 text-left">
           <div>
@@ -62,10 +102,18 @@ export default function RegistrarCitaMedicasPage() {
         {medicoSeleccionado !== undefined ? (
           <div className="px-8 min-h-0 min-w-0">
             <Calendario<citaMedicaType>
-              getDateFromData={(d) => d.fecha}
-              getHourRangeFromData={(d) =>
-                d.horaInicio && d.horaFin
-                  ? [d.horaInicio, d.horaFin]
+              getRangeDateFromData={(d) =>
+                d.horaInicio && d.horaFin && d.fecha
+                  ? [
+                      d.fecha.set({
+                        hour: d.horaInicio.hour,
+                        minute: d.horaInicio.minute,
+                      }),
+                      d.fecha.set({
+                        hour: d.horaFin.hour,
+                        minute: d.horaFin.minute,
+                      }),
+                    ]
                   : undefined
               }
               fetchData={async () =>
@@ -85,39 +133,33 @@ export default function RegistrarCitaMedicasPage() {
                   g ? (
                     <AdminCitaMedicaCard citaMedica={d} update={g} />
                   ) : undefined,
-                month: (d) => <AdminCitaMedicaDot citaMedica={d} />,
-              }}
-              filterContent={
-                <div>
-                  <div>
-                    <span className="mr-4">Mostrar desactivados</span>
-                    <Switch
-                      checked={showDeactivated}
-                      onCheckedChange={() => {
-                        setShowDeactivated((prev) => !prev);
-                      }}
+                month: (d, g) =>
+                  g ? (
+                    <AdminCitaMedicaCard
+                      collapsed={true}
+                      citaMedica={d}
+                      update={g}
                     />
-                  </div>
-                </div>
-              }
-              filterFuncs={[
-                (d) => (showDeactivated ? true : Boolean(d.activo)),
-              ]}
-              RegisterForm={({ open, setOpen, date }) => (
-                <RegistrarCitaModalForm
-                  open={open}
-                  setOpen={setOpen}
-                  date={date}
-                  medico={medicoSeleccionado}
-                />
-              )}
-              ActualizarForm={({ open, setOpen, data }) => (
-                <ActualizarCitaModalForm
-                  open={open}
-                  setOpen={setOpen}
-                  citaMedica={data}
-                />
-              )}
+                  ) : undefined,
+              }}
+              // filterContent={
+              //   <div>
+              //     <div>
+              //       <span className="mr-4">Mostrar desactivados</span>
+              //       <Switch
+              //         checked={showDeactivated}
+              //         onCheckedChange={() => {
+              //           setShowDeactivated((prev) => !prev);
+              //         }}
+              //       />
+              //     </div>
+              //   </div>
+              // }
+              // filterFuncs={[
+              //   (d) => (showDeactivated ? true : Boolean(d.activo)),
+              // ]}
+              RegisterForm={registrar}
+              ActualizarForm={actualizar}
             />
           </div>
         ) : (

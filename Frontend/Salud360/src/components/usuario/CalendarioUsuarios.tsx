@@ -7,7 +7,6 @@ import { AuthContext } from "@/hooks/AuthContext";
 import { getAllClienteReservasAPI } from "@/services/cliente.service";
 import { Switch } from "../ui/switch";
 import Select from "../Select";
-import { medicoType } from "@/schemas/medico";
 import ToggleGroup from "../input/ToggleGroup";
 import { useFetchHandler } from "@/hooks/useFetchHandler";
 import { getMedicos } from "@/services/medico.service";
@@ -35,15 +34,29 @@ const CalendarioUsuarios = () => {
   return (
     <>
       <Calendario<reservaType>
-        getDateFromData={(d) => d.clase?.fecha ?? d.citaMedica?.fecha}
-        getHourRangeFromData={(d) =>
+        getRangeDateFromData={(d) =>
           d.clase
-            ? ([d.clase.horaInicio, d.clase.horaFin] as [DateTime, DateTime])
+            ? ([
+                d.clase?.fecha?.set({
+                  hour: d.clase?.horaInicio?.hour,
+                  minute: d.clase?.horaInicio?.minute,
+                }),
+                d?.clase.fecha?.set({
+                  hour: d.clase?.horaFin?.hour,
+                  minute: d.clase?.horaFin?.minute,
+                }),
+              ] as [DateTime, DateTime])
             : d.citaMedica
-            ? ([d.citaMedica.horaInicio, d.citaMedica.horaFin] as [
-                DateTime,
-                DateTime
-              ])
+            ? ([
+                d.citaMedica?.fecha?.set({
+                  hour: d.citaMedica?.horaInicio?.hour,
+                  minute: d.citaMedica?.horaInicio?.minute,
+                }),
+                d?.citaMedica.fecha?.set({
+                  hour: d.citaMedica?.horaFin?.hour,
+                  minute: d.citaMedica?.horaFin?.minute,
+                }),
+              ] as [DateTime, DateTime])
             : undefined
         }
         cards={{

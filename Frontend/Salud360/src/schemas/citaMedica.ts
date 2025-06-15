@@ -37,6 +37,9 @@ export const extendedCitaMedicaSchema = citaMedicaSchema.extend({
   medico: z.lazy(() => medicoSchema.optional().nullable()),
   cliente: z.lazy(() => clienteSchema.optional().nullable()),
   servicio: z.lazy(() => servicioSchema.optional().nullable()),
+  descripcion: z.string().optional().nullable(),
+  nombreArchivo: z.string().optional().nullable(),
+  
 });
 
 export const citaMedicaVistaUsuarioSchema = citaMedicaSchema.extend({

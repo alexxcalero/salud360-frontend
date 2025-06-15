@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { useToasts } from "@/hooks/ToastContext";
 import { medicoType } from "@/schemas/medico";
-import { servicioType } from "@/schemas/servicio";
+import { extendedServicioType } from "@/schemas/servicio";
 import { DateTime } from "luxon";
 import { FormEvent, useEffect, useState } from "react";
 import Button from "@/components/Button";
@@ -33,7 +33,7 @@ const RegistrarCitaModalForm = ({
   medico: medicoType;
   onCreate?: () => void;
 }) => {
-  const [servicios, setServicios] = useState<servicioType[]>([]);
+  const [servicios, setServicios] = useState<extendedServicioType[]>([]);
   const [servicioInput, setServicioInput] = useState("");
 
   const [horaInicio, setHoraInicio] = useState(date?.toFormat("T") ?? "");
@@ -56,6 +56,19 @@ const RegistrarCitaModalForm = ({
 
   const submitHanlder = async (e: FormEvent) => {
     e.preventDefault();
+
+    if (
+      dateInput &&
+      dateInput.set({
+        hour: DateTime.fromISO(horaInicio).hour,
+        minute: DateTime.fromISO(horaInicio).minute,
+      }) < DateTime.now()
+    ) {
+      createToast("error", {
+        title: "La fecha debe ser posterior al presente",
+      });
+      return;
+    }
 
     if (
       (date
@@ -137,14 +150,15 @@ const RegistrarCitaModalForm = ({
                 value={servicioInput}
                 onChange={setServicioInput}
                 options={servicios.map((s) => ({
-                  value: s.idServicio.toString(),
-                  content: s.nombre,
+                  value: s.idServicio?.toString() ?? "",
+                  content: s.nombre ?? "",
                 }))}
               />
               <CalendarInput
                 value={dateInput}
                 setValue={setDateInput}
                 name="dia"
+                format="DDDD"
                 label="Fecha"
                 required={true}
               />

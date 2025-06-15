@@ -13,6 +13,7 @@ export interface TextAreaInputProps {
   className?: string;
   value?: string;
   setValue?: (_: string) => void;
+  reserveSpace?: boolean;
 }
 
 const TextAreaInput = ({
@@ -26,6 +27,7 @@ const TextAreaInput = ({
   required,
   value: argValue,
   setValue: argSetValue,
+  reserveSpace = false,
 }: TextAreaInputProps) => {
   const [value, setValue] =
     argValue !== undefined && argSetValue !== undefined
@@ -59,8 +61,9 @@ const TextAreaInput = ({
           name={name}
           placeholder={placeholder}
           className={cn(
-            "px-0 w-full [field-sizing:content] border-0 outline-none max-h-24 focus:ring-0 focus:border-0 active:border-0 focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none focus-visible:ring-0",
-            styles["textarea"]
+            "px-0 w-full [field-sizing:content] border-0 outline-none max-h-33 focus:ring-0 focus:border-0 active:border-0 focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none focus-visible:ring-0",
+            styles["textarea"],
+            reserveSpace && "h-30"
           )}
           value={value}
           required={required}

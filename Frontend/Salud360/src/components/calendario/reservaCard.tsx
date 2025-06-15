@@ -15,7 +15,13 @@ import { useToasts } from "@/hooks/ToastContext";
 import { reservaType } from "@/schemas/reserva";
 import { useInternalModals } from "@/hooks/useInternalModals";
 
-export function ReservaCard({ reserva }: { reserva: reservaType }) {
+export function ReservaCard({
+  reserva,
+  collapsed = false,
+}: {
+  reserva: reservaType;
+  collapsed?: boolean;
+}) {
   const {
     callInfoDialog,
     callSuccessDialog,
@@ -31,8 +37,8 @@ export function ReservaCard({ reserva }: { reserva: reservaType }) {
       <HoverCard openDelay={300}>
         <HoverCardTrigger asChild>
           <BaseCard
-            color={reserva.estado === "Reservada" ? "green" : "red"}
-            estado={reserva.estado ?? undefined}
+            collapsed={collapsed}
+            color={reserva.estado === "Confirmada" ? "green" : "red"}
             date={
               reserva.citaMedica?.fecha?.set({
                 hour: reserva.citaMedica?.horaInicio?.hour,
@@ -60,8 +66,45 @@ export function ReservaCard({ reserva }: { reserva: reservaType }) {
           </BaseCard>
         </HoverCardTrigger>
         <HoverCardContent className="w-max">
-          {reserva.estado === "Reservada" && (
-            <div className="p-2">
+          {reserva.estado === "Confirmada" && (
+
+            
+            <div className="p-2 flex flex-col gap-2">
+
+              {/* mOSTRAR DESCRIPCIÓN SI TIENE */}
+              {reserva.descripcion && (
+                <p className="mb-2 text-sm text-gray-700">
+                  <strong>Descripción médica:</strong> {reserva.descripcion}
+                </p>
+              )}
+
+                {/* BOTON DE DESCARGA DE ARCHIVO SI SUBIO UNO */}
+              {reserva.nombreArchivo ? (
+              <Button
+                variant="primary"
+                className="mt-2"
+                onClick={async () => {
+                  try {
+                    const res = await fetch(
+                      `/api/reservas/archivo-url/${reserva.nombreArchivo}`
+                    );
+                    const url = await res.text();
+                    window.open(url, "_blank");
+                  } catch (e) {
+                    console.error("Error al obtener el archivo:", e);
+                    callErrorDialog({ title: "No se pudo abrir el archivo." });
+                  }
+                }}
+              >
+                Descargar archivo médico
+              </Button>
+            ) : (
+              <p className="mt-2 text-sm text-gray-600">
+                No se adjuntó ningún archivo médico.
+              </p>
+            )}
+
+
               <Button
                 variant="danger"
                 onClick={() => {
@@ -100,8 +143,13 @@ export function ReservaCard({ reserva }: { reserva: reservaType }) {
                 }}
               >
                 <Ban /> Cancelar Reserva
+              
               </Button>
+              
+
+            
             </div>
+            
           )}
           {reserva.estado === "Cancelada" && (
             <div className="p-2">

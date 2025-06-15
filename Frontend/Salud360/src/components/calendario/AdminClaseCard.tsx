@@ -4,10 +4,7 @@ import Button from "../Button";
 import { useDialog } from "@/hooks/dialogContext";
 import { useInternalModals } from "@/hooks/useInternalModals";
 import { claseDTOType } from "@/schemas/clase";
-import {
-  deleteClaseAPI,
-  reactivarClaseAPI,
-} from "@/services/clasesAdmin.service";
+import { deleteClaseAPI } from "@/services/clasesAdmin.service";
 
 import BaseCard from "./cards/BaseCard";
 import {
@@ -15,13 +12,17 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
+import { cn } from "@/lib/utils";
+import Time from "../time";
 
 export function AdminClaseCard({
   clase,
   update,
+  collapsed,
 }: {
   clase: claseDTOType;
   update: (_: claseDTOType) => void;
+  collapsed?: boolean;
 }) {
   const { callAlertDialog, callErrorDialog, callSuccessDialog } = useDialog();
   const { reload } = useInternalModals();
@@ -31,31 +32,90 @@ export function AdminClaseCard({
       <HoverCard openDelay={300}>
         <HoverCardTrigger asChild>
           <BaseCard
-            color="pink"
-            active={clase.activo ?? false}
-            estado={clase.estado ?? undefined}
+            collapsed={collapsed}
+            color={
+              clase.estado === "Disponible"
+                ? "pink"
+                : clase.estado === "Reservada"
+                ? "green"
+                : "red"
+            }
+            active={clase.activo ?? undefined}
             date={clase.fecha?.set({
               hour: clase.horaInicio?.hour,
               minute: clase.horaInicio?.minute,
             })}
           >
+            <span className="use-label-medium text-left">
+              {clase.horaInicio?.toFormat("T")} - {clase.horaFin?.toFormat("T")}
+            </span>
             <div className="flex items-center justify-between">
-              <span className="use-label-large font-semibold">
+              <span className="use-label-large font-semibold text-left">
                 {clase.nombre}
               </span>
             </div>
             <span className="use-label-large font-medium text-left">
-              {clase.horaInicio?.toFormat("T")} {clase.horaFin?.toFormat("T")}
+              {clase.local?.nombre}: {clase.local?.direccion}
             </span>
           </BaseCard>
         </HoverCardTrigger>
-        {clase.activo && (
-          <HoverCardContent
-            className="w-max"
-            aria-describedby="Actualizar clase"
-          >
+        <HoverCardContent className="w-max">
+          {clase.activo && (
             <div className="p-2">
-              <div className="flex gap-4 mb-2">
+              <div>
+                <div>
+                  <span className="text-label-small">
+                    Fecha creación:{" "}
+                    {clase.fechaCreacion?.toFormat("DDDD - HH:mm", {
+                      locale: "es",
+                    })}
+                  </span>
+                </div>
+                <div>
+                  <strong role="heading">Detalles de la clase</strong>
+                  <span
+                    className={cn(
+                      "ml-2 bg-blue-500 px-2 py-1 rounded-full font-semibold select-none",
+                      clase.estado === "Reservada" && "bg-green-500",
+                      clase.estado === "Finalizada" && "bg-red-500",
+                      "use-label-small",
+                      "text-white"
+                    )}
+                  >
+                    {clase.estado ?? "ESTADO NO ESPECIFICADO"}
+                  </span>
+                  <p className="mt-2">
+                    {clase.fecha?.toFormat("DDDD", { locale: "es" })}
+                    <br />
+                    <Time
+                      type="time"
+                      dateTime={clase.horaInicio ?? undefined}
+                    />{" "}
+                    - <Time type="time" dateTime={clase.horaFin ?? undefined} />
+                  </p>
+                </div>
+                <div className="mt-2">
+                  <strong>Local</strong>
+                  <p>
+                    <span className="text-neutral-600">
+                      {clase.local?.nombre}: {clase.local?.direccion}
+                    </span>
+                  </p>
+                </div>
+                {clase.cliente && (
+                  <div className="bg-green-200 border-1 border-green-600 rounded-md p-4 mt-4">
+                    <strong className="text-green-800">
+                      Clase ya reservada por:
+                    </strong>
+                    <p className="text-green-600">
+                      {clase.cliente?.nombres} {clase.cliente?.apellidos}
+                      <br />
+                      {clase.cliente?.correo}
+                    </p>
+                  </div>
+                )}
+              </div>
+              <div className="flex gap-4 mt-2">
                 <Button onClick={() => update(clase)}>
                   <Pencil size={16} color="white" /> Editar
                 </Button>
@@ -86,20 +146,10 @@ export function AdminClaseCard({
                   <Trash size={16} color="white" /> Eliminar
                 </Button>
               </div>
-              <p>
-                <span className="text-lg">
-                  {clase.fecha?.toFormat("DDDD", { locale: "es" })}
-                </span>
-                <br />
-                {clase.horaInicio?.toFormat("TTTT", {
-                  locale: "es",
-                })}{" "}
-                - {clase.horaFin?.toFormat("TTTT", { locale: "es" })}
-              </p>
             </div>
-          </HoverCardContent>
-        )}
-        {!clase.activo && (
+          )}
+        </HoverCardContent>
+        {/* {!clase.activo && (
           <HoverCardContent className="w-max">
             <div className="p-2">
               <Button
@@ -129,7 +179,7 @@ export function AdminClaseCard({
               </Button>
             </div>
           </HoverCardContent>
-        )}
+        )} */}
       </HoverCard>
     </>
   );

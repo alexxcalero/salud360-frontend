@@ -123,6 +123,7 @@ function Inicio(){
 
     return (
         <section className="flex flex-col gap-16">
+            <title>Bienvenido</title>
 
             <div>
                 <div className=" p-8">

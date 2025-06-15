@@ -46,15 +46,19 @@ export const reactivarCitaMedicaAPI = async (idCitaMedica: number) => {
 
 export const getAllCitasMedicasAPI = async () => {
   const response = await baseAPI.get(`/citas-medicas`);
-  console.log(response.data);
-  const parsed = z.array(extendedCitaMedicaSchema).safeParse(response.data);
 
-  if (!parsed.success) {
-    console.log("Errores:");
-    console.log(parsed.error.format());
-  }
+  const parsed = z.array(extendedCitaMedicaSchema).parse(response.data);
+  console.log(parsed);
 
   if (response.status !== 200) throw new Error("Respuesta inválida de la API");
 
-  return parsed.data;
+  return parsed;
 };
+
+//Para la descarga de archivos
+export async function obtenerURLDescargaArchivo(nombreArchivo: string): Promise<string> {
+  const response = await fetch(`/api/archivo/descargar/${nombreArchivo}`);
+  if (!response.ok) throw new Error("No se pudo obtener la URL de descarga.");
+  const data = await response.json();
+  return data.url;
+}

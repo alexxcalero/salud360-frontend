@@ -33,9 +33,8 @@ function LandingLayout(){
 
 
     return (
-        <div className="min-w-[100dvw] min-h-[100dvh]">
+        <div className="max-w-full max-h-full">
             <LandingNavbar/>
-            <div className="mt-18"></div> {/*Estamos colocando el navbar como fijo, y siempre que hacemos eso tapa el contenido de debajo. Para revertirlo colocamos este div (para que "empuje" hacia arriba el navbar) */}
             <Outlet/>
             <LandingFooter/>
         </div>

@@ -101,6 +101,7 @@ const HistorialPagos = () => {
 
   return (
     <div className="p-8">
+      <title>Historial de pagos</title>
       <h1 className="text-left mb-4">Historial de pagos</h1>
       <ul className="flex flex-col gap-4">
         {items.map(

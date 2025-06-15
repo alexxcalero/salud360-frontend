@@ -8,11 +8,9 @@ import {
   MapPin,
   Puzzle,
   PersonStanding,
-  IdCard,
   Clock,
-  Lock,
-  ScrollText,
   BarChart,
+  LogOut,
 } from "lucide-react";
 
 import Edge from "@/assets/edge.svg";
@@ -20,6 +18,10 @@ import colors from "tailwindcss/colors";
 import { Link, useNavigate } from "react-router";
 //useNavigate para poder darle click al modulo del sidebar y que vaya. Lo estoy colocando dentro del map del ul
 import logo from "@/assets/logo.png";
+import Button from "../Button";
+import { useContext } from "react";
+import { AuthContext } from "@/hooks/AuthContext";
+import { useToasts } from "@/hooks/ToastContext";
 
 const routes = [
   "dashboard",
@@ -36,22 +38,26 @@ const routes = [
   "auditorias",
   "reportes",
   "clases",
-  "citasMedicas"
+  "citasMedicas",
 ];
 
 function Sidebar({ active = 0 }: { active: number }) {
-
   const navigate = useNavigate();
 
+  const { logout } = useContext(AuthContext);
+  const { createToast } = useToasts();
+
   return (
-    <div className="bg-brand-primary">
+    <div className="bg-brand-primary sticky left-0 top-0 h-dvh flex flex-col">
       <section className="mb-[20px] border-b-1 border-blue-900  p-[20px] flex items-center gap-[10px]">
         {/*<img
           src="/img/mono/medico.png"
           alt=""
           className="aspect-1/1 h-[36px]"
         />{" "}*/}
-        <Link to="/"><img src={logo} alt="Logo" className="cursor-pointer"/></Link>
+        <Link to="/">
+          <img src={logo} alt="Logo" className="cursor-pointer" />
+        </Link>
         <h2 className="font-semibold text-white">Administración</h2>
       </section>
 
@@ -73,7 +79,6 @@ function Sidebar({ active = 0 }: { active: number }) {
           [Clock, "Clases"],
           [BriefcaseMedical, "Citas Médicas"],
         ].map(([Icon, label], index) => (
-
           <li
             key={index} // Como react hincha las bolas con eso del key
             onClick={() => navigate(routes[index])}
@@ -104,6 +109,21 @@ function Sidebar({ active = 0 }: { active: number }) {
           </li>
         ))}
       </ul>
+
+      <section className="justify-self-end self-start mt-auto p-8 pl-[20px]">
+        <Button
+          variant="white"
+          onClick={() => {
+            logout();
+            createToast("success", {
+              title: "Sesión cerrada correctamente",
+            });
+          }}
+        >
+          <LogOut />
+          Cerrar sesión
+        </Button>
+      </section>
     </div>
   );
 }

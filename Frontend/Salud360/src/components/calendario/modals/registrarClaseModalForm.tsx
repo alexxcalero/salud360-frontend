@@ -50,6 +50,19 @@ const RegistrarClaseModalForm = ({
   const submitHanlder = async (e: FormEvent) => {
     e.preventDefault();
 
+    if (
+      dateInput &&
+      dateInput.set({
+        hour: DateTime.fromISO(horaInicio).hour,
+        minute: DateTime.fromISO(horaInicio).minute,
+      }) < DateTime.now()
+    ) {
+      createToast("error", {
+        title: "La fecha debe ser posterior al presente",
+      });
+      return;
+    }
+
     const diferenciaDeHoras = DateTime.fromISO(horaFin).diff(
       DateTime.fromISO(horaInicio),
       ["hour", "day", "month", "year"]
@@ -127,6 +140,7 @@ const RegistrarClaseModalForm = ({
                 required={true}
                 value={descripcion}
                 setValue={setDescripcion}
+                reserveSpace={true}
               />
               <Input
                 name="capacidad"
@@ -144,6 +158,7 @@ const RegistrarClaseModalForm = ({
                 name="dia"
                 label="Fecha"
                 required={true}
+                format="DDDD"
               />
 
               <div className="flex gap-2">

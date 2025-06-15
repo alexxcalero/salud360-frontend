@@ -1,6 +1,5 @@
-import { ReactNode } from "react";
 import Button from "../Button";
-import { useNavigate } from "react-router";
+import { Link } from "react-router";
 
 interface Props{
     id: string;
@@ -11,10 +10,6 @@ interface Props{
 }
 
 function CardLanding({id, image, title, subtitle, showButton=true}: Props){
-
-    const navigate = useNavigate();
-    console.log("El id es:", id)
-
     return(
         <div className="w-[330px] h-[460px] grid grid-rows-2 rounded-sm border shadow-xl">
             <div className="row-span-1">
@@ -24,7 +19,11 @@ function CardLanding({id, image, title, subtitle, showButton=true}: Props){
                 <p className="font-bold">{title}</p>
                 <p>{subtitle}</p>
                 <div className="inline-block w-32">
-                    {showButton && <Button size="lg" className="w-full" onClick={() => navigate(`comunidades/detalle/${id}`)}>Explorar más</Button>}
+                    {showButton &&
+                        <Link to={`/comunidades/detalle/${id}`}>
+                            <Button size="lg" className="w-full">Explorar más</Button>
+                        </Link>
+                    }
                 </div>
             </div>
             

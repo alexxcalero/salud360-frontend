@@ -72,3 +72,27 @@
     }
   }
 }
+
+.collapsed-card {
+  @apply h-4 w-4 rounded-full bg-gray-500 hover:bg-gray-300 transition-colors duration-150 ease-out;
+
+  &.pink {
+    @apply bg-pink-500 hover:bg-pink-300;
+  }
+
+  &.blue {
+    @apply bg-blue-500 hover:bg-blue-300;
+  }
+
+  &.green {
+    @apply bg-green-500 hover:bg-green-300;
+  }
+
+  &.red {
+    @apply bg-red-500 hover:bg-red-300;
+  }
+
+  &.neutral {
+    @apply bg-neutral-500 hover:bg-neutral-300;
+  }
+}

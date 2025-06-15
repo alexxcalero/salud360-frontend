@@ -8,37 +8,60 @@ import {
 import { extenedCitaMedicaType } from "@/schemas/citaMedica";
 import Button from "../Button";
 import { useDialog } from "@/hooks/dialogContext";
-import {
-  deleteCitaMedicaAPI,
-  reactivarCitaMedicaAPI,
-} from "@/services/citasMedicasAdmin.service";
+import { deleteCitaMedicaAPI , obtenerURLDescargaArchivo } from "@/services/citasMedicasAdmin.service";
 import { useInternalModals } from "@/hooks/useInternalModals";
 import BaseCard from "./cards/BaseCard";
+import Time from "../time";
+import { cn } from "@/lib/utils";
 
 export function AdminCitaMedicaCard({
   citaMedica,
   update,
+  collapsed,
 }: {
   citaMedica: extenedCitaMedicaType;
   update: (_: extenedCitaMedicaType) => void;
+  collapsed?: boolean;
 }) {
   const { callAlertDialog, callErrorDialog, callSuccessDialog } = useDialog();
   const { reload } = useInternalModals();
+
+const handleDescargarArchivo = async () => {
+    try {
+      if (!citaMedica.nombreArchivo) return;
+      const url = await obtenerURLDescargaArchivo(citaMedica.nombreArchivo);
+      window.open(url, "_blank");
+    } catch (e) {
+      console.error("Error al obtener el archivo:", e);
+      callErrorDialog({ title: "No se pudo abrir el archivo." });
+    }
+  };
+
   return (
     <>
       <HoverCard openDelay={300}>
         <HoverCardTrigger asChild>
           <BaseCard
-            color="blue"
+            collapsed={collapsed}
+            color={
+              citaMedica.estado === "Disponible"
+                ? "blue"
+                : citaMedica.estado === "Reservada"
+                ? "green"
+                : "red"
+            }
             active={citaMedica.activo}
-            estado={citaMedica.estado}
             date={citaMedica.fecha?.set({
               hour: citaMedica.horaInicio?.hour,
               minute: citaMedica.horaInicio?.minute,
             })}
           >
+            <span className="use-label-medium text-left">
+              {citaMedica.horaInicio?.toFormat("T")} -{" "}
+              {citaMedica.horaFin?.toFormat("T")}
+            </span>
             <div className="flex items-center justify-between">
-              <span className="use-label-large font-semibold">
+              <span className="use-label-large font-semibold text-left">
                 {citaMedica.medico?.especialidad}
               </span>
             </div>
@@ -47,45 +70,130 @@ export function AdminCitaMedicaCard({
             </span>
           </BaseCard>
         </HoverCardTrigger>
-        <HoverCardContent className="w-max">
-          <div className="p-2">
-            <div className="flex gap-4 mb-2">
-              {citaMedica.activo && (
-                <>
-                  <Button onClick={() => update(citaMedica)}>
-                    <Pencil size={16} color="white" /> Editar
-                  </Button>
-
-                  <Button
-                    variant="danger"
-                    onClick={() =>
-                      callAlertDialog({
-                        title: "¿Estás seguro que quieres eliminar esto?",
-                        onConfirm: async () => {
-                          if (!citaMedica.idCitaMedica) return false;
-                          const response = await deleteCitaMedicaAPI(
-                            citaMedica.idCitaMedica
-                          );
-                          if (response) {
-                            callSuccessDialog({
-                              title: "La cita fue eliminada con exito",
-                            });
-                            reload();
-                            return false;
-                          }
-                          callErrorDialog({
-                            title: "No se pudo eliminar la cita",
-                          });
-                          return true;
-                        },
-                      })
-                    }
+        {citaMedica.activo && (
+          <HoverCardContent className="w-max">
+            <div className="p-2">
+              <div>
+                <div>
+                  <span className="text-label-small">
+                    Fecha creación:{" "}
+                    {citaMedica.fechaCreacion?.toFormat("DDDD - HH:mm", {
+                      locale: "es",
+                    })}
+                  </span>
+                </div>
+                <div>
+                  <strong role="heading">Detalles de la cita médica</strong>
+                  <span
+                    className={cn(
+                      "ml-2 bg-blue-500 px-2 py-1 rounded-full font-semibold select-none",
+                      citaMedica.estado === "Reservada" && "bg-green-500",
+                      citaMedica.estado === "Finalizada" && "bg-red-500",
+                      "use-label-small",
+                      "text-white"
+                    )}
                   >
-                    <Trash size={16} color="white" /> Eliminar
-                  </Button>
-                </>
-              )}
-              {!citaMedica.activo && (
+                    {citaMedica.estado ?? "ESTADO NO ESPECIFICADO"}
+                  </span>
+                  <p className="mt-2">
+                    {citaMedica.fecha?.toFormat("DDDD", { locale: "es" })}
+                    <br />
+                    <Time type="time" dateTime={citaMedica.horaInicio} /> -{" "}
+                    <Time type="time" dateTime={citaMedica.horaFin} />
+                  </p>
+                </div>
+                <div className="mt-2">
+                  <strong>Médico</strong>
+                  <p>
+                    Dr(a):{" "}
+                    <span className="text-neutral-600">
+                      {citaMedica.medico?.nombres}{" "}
+                      {citaMedica.medico?.apellidos}
+                    </span>
+                    <br />
+                    Especialidad:{" "}
+                    <span className="text-neutral-600">
+                      {citaMedica.medico?.especialidad}
+                    </span>
+                  </p>
+                </div>
+                {citaMedica.cliente && (
+                  <div className="bg-green-200 border-1 border-green-600 rounded-md p-4 mt-4">
+                    <strong className="text-green-800">
+                      Cita ya reservada por:
+                    </strong>
+                    <p className="text-green-600">
+                      {citaMedica.cliente?.nombres}{" "}
+                      {citaMedica.cliente?.apellidos}
+                      <br />
+                      {citaMedica.cliente?.correo}
+                    </p>
+
+                    {citaMedica.nombreArchivo && (
+                      <p className="text-sm text-gray-700 mb-2 break-all">
+                        <strong>Archivo adjunto:</strong>{" "}
+                        {citaMedica.nombreArchivo.split("_").slice(1).join("_")}
+                      </p>
+                    )}
+
+                    {citaMedica.descripcion?.trim() ? (
+                      <p className="text-sm text-gray-700 mb-2">
+                        <strong>Descripción médica:</strong> {citaMedica.descripcion}
+                      </p>
+                    ) : null}
+
+
+                    {citaMedica.nombreArchivo ? (
+                    <Button className="mt-3" onClick={handleDescargarArchivo}>
+                      Descargar archivo médico
+                    </Button>
+                  ) : (
+                    <p className="text-sm mt-2 text-gray-600">
+                      No se adjuntó ningún archivo.
+                    </p>
+                  )}
+                  </div>
+                )}
+              </div>
+
+              <div className="flex gap-4 mt-2">
+                {citaMedica.activo && citaMedica.estado !== "Finalizada" && (
+                  <>
+                    <Button onClick={() => update(citaMedica)}>
+                      <Pencil size={16} color="white" /> Editar
+                    </Button>
+
+                    <Button
+                      variant="danger"
+                      onClick={() =>
+                        callAlertDialog({
+                          title: "¿Estás seguro que quieres eliminar esto?",
+                          onConfirm: async () => {
+                            if (!citaMedica.idCitaMedica) return false;
+                            const response = await deleteCitaMedicaAPI(
+                              citaMedica.idCitaMedica
+                            );
+                            if (response) {
+                              callSuccessDialog({
+                                title: "La cita fue eliminada con exito",
+                              });
+                              reload();
+                              return false;
+                            }
+                            callErrorDialog({
+                              title: "No se pudo eliminar la cita",
+                            });
+                            return true;
+                          },
+                        })
+                      }
+                    >
+                      <Trash size={16} color="white" /> Eliminar
+                    </Button>
+                  </>
+                )}
+                {/* No se si dejar el reactivar, pq al final se acumularía en el calendario */}
+                {/* {!citaMedica.activo && (
                 <div className="p-2">
                   <Button
                     onClick={() =>
@@ -115,20 +223,11 @@ export function AdminCitaMedicaCard({
                     Reactivar
                   </Button>
                 </div>
-              )}
+              )} */}
+              </div>
             </div>
-            <p>
-              <span className="text-lg">
-                {citaMedica.fecha?.toFormat("DDDD", { locale: "es" })}
-              </span>
-              <br />
-              {citaMedica.horaInicio?.toFormat("TTTT", {
-                locale: "es",
-              })}{" "}
-              - {citaMedica.horaFin?.toFormat("TTTT", { locale: "es" })}
-            </p>
-          </div>
-        </HoverCardContent>
+          </HoverCardContent>
+        )}
       </HoverCard>
     </>
   );
