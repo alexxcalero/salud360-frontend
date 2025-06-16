@@ -24,7 +24,7 @@ import RolesPage from "./pages/admin/roles/RolesPage";
 import MembresiasPage from "./pages/admin/membresias/MembresiasPage";
 import LocalesPage from "./pages/admin/locales/LocalesPage";
 import PersonalMedicoPage from "./pages/admin/personalMedico/PersonalMedicoPage";
-import CalificacionesPage from "./pages/admin/calificaciones/CalificacionesPage";
+import TestiomoniosPage from "./pages/admin/testimonios/TestimoniosPage";
 import LogsPage from "./pages/admin/logs/LogsPage";
 import AuditoriasPage from "./pages/admin/auditoria/AuditoriasPage";
 import ReportesPage from "./pages/admin/reportes/ReportesPage";
@@ -80,6 +80,7 @@ import DetalleLocal from "./pages/admin/locales/DetalleLocal";
 import EditarLocal from "./pages/admin/locales/EditarLocal";
 import EditarServicio from "./pages/admin/servicios/EditarServicio";
 import CitasMedicasPage from "./pages/admin/citasMedicas/CitasMedicasPage";
+import DetalleTestimonio from "./pages/admin/testimonios/DetalleTestimonio";
 
 const CLIENT_ID =
   "442103352631-urj3v36db8bhki2cg4vu6c2q404dkko7.apps.googleusercontent.com";
@@ -211,8 +212,8 @@ createRoot(document.getElementById("root")!).render(
                   <Route path="successEditar" element={<UsuarioSuccess modulo="¡Médico modificado correctamente!" detalle="El médico fue modificado correctamente" route="/admin/personalMedico" />} />
                 </Route>
                 <Route path="testimonios">
-                  <Route index element={<CalificacionesPage />} />
-                  <Route path="crear" element={<CrearUsuario />} />
+                  <Route index element={<TestiomoniosPage />} />
+                  <Route path="detalle/:id" element={<DetalleTestimonio />} />
                 </Route>
                 <Route path="logs">
                   <Route index element={<LogsPage />} />
