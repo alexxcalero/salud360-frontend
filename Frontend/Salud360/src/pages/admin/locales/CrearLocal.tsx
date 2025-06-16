@@ -18,6 +18,7 @@ function CrearLocal(){
         direccion, setDireccion,
         tipo, setTipo,
         servicios, setServicios,
+        aforo, setAforo,
         setLocalAPI
     } = useLocalForm();
 
@@ -73,6 +74,8 @@ function CrearLocal(){
         }
 
         try {
+
+            setAforo(0);
             // 🔍 Validar si ya existe un local con ese nombre y servicio
             const { data: existe } = await axios.get(
                 "http://localhost:8080/api/locales/validar-existencia",
@@ -101,6 +104,7 @@ function CrearLocal(){
                     descripcion,
                     direccion,
                     telefono,
+                    aforo,
                     tipoServicio: tipo,
                     servicio: { idServicio: servicios },
                 },
