@@ -54,3 +54,11 @@ export const getAllCitasMedicasAPI = async () => {
 
   return parsed;
 };
+
+//Para la descarga de archivos
+export async function obtenerURLDescargaArchivo(nombreArchivo: string): Promise<string> {
+  const response = await fetch(`/api/archivo/descargar/${nombreArchivo}`);
+  if (!response.ok) throw new Error("No se pudo obtener la URL de descarga.");
+  const data = await response.json();
+  return data.url;
+}

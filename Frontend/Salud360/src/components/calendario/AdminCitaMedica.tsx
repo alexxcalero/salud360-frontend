@@ -8,7 +8,10 @@ import {
 import { extenedCitaMedicaType } from "@/schemas/citaMedica";
 import Button from "../Button";
 import { useDialog } from "@/hooks/dialogContext";
-import { deleteCitaMedicaAPI } from "@/services/citasMedicasAdmin.service";
+import {
+  deleteCitaMedicaAPI,
+  obtenerURLDescargaArchivo,
+} from "@/services/citasMedicasAdmin.service";
 import { useInternalModals } from "@/hooks/useInternalModals";
 import BaseCard from "./cards/BaseCard";
 import Time from "../time";
@@ -24,6 +27,18 @@ export function AdminCitaMedicaCard({
   const { callAlertDialog, callErrorDialog, callSuccessDialog } = useDialog();
   const { reload } = useInternalModals();
   const { setSelectedData, setActiveModal } = useInternalModals();
+
+  const handleDescargarArchivo = async () => {
+    try {
+      if (!citaMedica.nombreArchivo) return;
+      const url = await obtenerURLDescargaArchivo(citaMedica.nombreArchivo);
+      window.open(url, "_blank");
+    } catch (e) {
+      console.error("Error al obtener el archivo:", e);
+      callErrorDialog({ title: "No se pudo abrir el archivo." });
+    }
+  };
+
   return (
     <>
       <HoverCard openDelay={300}>
@@ -115,6 +130,30 @@ export function AdminCitaMedicaCard({
                       <br />
                       {citaMedica.cliente?.correo}
                     </p>
+
+                    {citaMedica.nombreArchivo && (
+                      <p className="text-sm text-gray-700 mb-2 break-all">
+                        <strong>Archivo adjunto:</strong>{" "}
+                        {citaMedica.nombreArchivo.split("_").slice(1).join("_")}
+                      </p>
+                    )}
+
+                    {citaMedica.descripcion?.trim() ? (
+                      <p className="text-sm text-gray-700 mb-2">
+                        <strong>Descripción médica:</strong>{" "}
+                        {citaMedica.descripcion}
+                      </p>
+                    ) : null}
+
+                    {citaMedica.nombreArchivo ? (
+                      <Button className="mt-3" onClick={handleDescargarArchivo}>
+                        Descargar archivo médico
+                      </Button>
+                    ) : (
+                      <p className="text-sm mt-2 text-gray-600">
+                        No se adjuntó ningún archivo.
+                      </p>
+                    )}
                   </div>
                 )}
               </div>

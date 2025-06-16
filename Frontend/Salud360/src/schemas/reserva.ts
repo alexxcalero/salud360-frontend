@@ -34,6 +34,9 @@ export const reservaSchema = z.object({
     .lazy(() => comunidadSchema.optional().nullable())
     .optional()
     .nullable(),
+  //Para la descarga de arcchivos
+  descripcion: z.string().optional().nullable(),
+  nombreArchivo: z.string().optional().nullable(),
 });
 
 export type reservaType = z.infer<typeof reservaSchema>;

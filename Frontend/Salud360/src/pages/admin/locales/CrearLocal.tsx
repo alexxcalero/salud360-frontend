@@ -67,47 +67,62 @@ function CrearLocal(){
     }
 
     
-    const handleCrearLocal = async() => {
-
+    const handleCrearLocal = async () => {
         if (!validarCampos()) {
-            setShowModalValidacion(true);
             return;
         }
 
+        try {
+            // 🔍 Validar si ya existe un local con ese nombre y servicio
+            const { data: existe } = await axios.get(
+                "http://localhost:8080/api/locales/validar-existencia",
+                {
+                    params: {
+                        nombre: nombre,
+                        idServicio: servicios
+                    },
+                    auth: {
+                        username: "admin",
+                        password: "admin123"
+                    }
+                }
+            );
 
-        console.log("El contenido de los servicios a enviar es:", servicios)
-        try{
-            const response = await axios.post("http://localhost:8080/api/locales", 
+            if (existe) {
+                setMensajeValidacion("Ya existe un local con ese nombre para el servicio seleccionado.");
+                setShowModalValidacion(true);
+                return;
+            }
+
+            // ✅ Si no existe, procede a crear el local
+            await axios.post("http://localhost:8080/api/locales",
                 {
                     nombre,
                     descripcion,
                     direccion,
                     telefono,
                     tipoServicio: tipo,
-                    //servicio: servicios.map(id => ({idServicio: id})),
                     servicio: { idServicio: servicios },
                 },
-                {  
+                {
                     auth: {
                         username: "admin",
                         password: "admin123"
                     },
                     headers: {
                         "Content-Type": "application/json",
-                      },
-                }
-            );
+                    }
+                });
 
-            console.log("A punto de navegar a successCrear")
             navigate("/admin/locales/successCrear", {
                 state: { created: true }
             });
-        }
-        catch(err){
+        } catch (err) {
             console.error("Error al crear local:", err);
-            alert("Hubo un error al crear el local");
+            setMensajeValidacion("Hubo un error al crear el local.");
+            setShowModalValidacion(true);
         }
-    }
+    };
 
     return(
         <>
