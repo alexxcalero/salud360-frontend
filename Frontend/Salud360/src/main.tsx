@@ -81,6 +81,8 @@ import EditarLocal from "./pages/admin/locales/EditarLocal";
 import EditarServicio from "./pages/admin/servicios/EditarServicio";
 import CitasMedicasPage from "./pages/admin/citasMedicas/CitasMedicasPage";
 import DetalleTestimonio from "./pages/admin/testimonios/DetalleTestimonio";
+import SeleccionarTipo from "./pages/admin/usuarios/SeleccionarTipo";
+import CrearAdmin from "./pages/admin/usuarios/CrearAdmin";
 
 const CLIENT_ID =
   "442103352631-urj3v36db8bhki2cg4vu6c2q404dkko7.apps.googleusercontent.com";
@@ -197,9 +199,17 @@ createRoot(document.getElementById("root")!).render(
                 </Route>
                 <Route path="usuarios">
                   <Route index element={<UsuariosPage />} />
-                  <Route path="crear" element={<CrearUsuario />} />
+                  {/*<Route path="crear" element={<CrearUsuario />} />*/}
+                  <Route path="crear">
+                    <Route index element={<SeleccionarTipo />}/>
+                    <Route path="usuario" element={<CrearUsuario />} />
+                    <Route path="admin" element={<CrearAdmin />} />
+                  </Route>
+
+
                   <Route path="detalle/:id" element={<DetalleUsuario />} />
                   <Route path="editar/:id" element={<EditarUsuario />} />
+                  <Route path="successCrearAdmin" element={<UsuarioSuccess modulo="¡Administrador creado correctamente!" detalle="El usuario administrador fue creado correctamente"/>} />
                   <Route path="successCrear" element={<UsuarioSuccess modulo="¡Usuario creado correctamente!" detalle="El usuario fue creado correctamente" />} />
                   <Route path="successEditar" element={<UsuarioSuccess modulo="¡Usuario modificado correctamente!" detalle="El usuario fue modificado correctamente" />} />
                 </Route>

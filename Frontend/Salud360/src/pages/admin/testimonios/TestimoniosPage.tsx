@@ -57,7 +57,7 @@ function CalificacionesPage() {
 
     const handleEliminarTestimonio = (): void => {
         //console.log("El id del testimonio a eliminar es:", testimonioSeleccionado)
-        axios.delete(`http://localhost:8080/api/admin/clientes/${testimonioSeleccionado.idTestimonio}`)
+        axios.delete(`http://localhost:8080/api/testimonios/${testimonioSeleccionado.idTestimonio}`)
         .then(() => {
         setShowModalExito(true);
         setShowModalError(false)
@@ -67,7 +67,7 @@ function CalificacionesPage() {
 
     const handleReactivarTestimonio = (): void => {
         //console.log("El id del usuario a reactivar es:", testimonioSeleccionado.idTestimonio)
-        axios.put(`http://localhost:8080/api/admin/clientes/${testimonioSeleccionado.idTestimonio}/reactivar`)
+        axios.put(`http://localhost:8080/api/testimonios/${testimonioSeleccionado.idTestimonio}/reactivar`)
         .then(() => {
         setShowModalExito(true);
         setShowModalError(false)
@@ -82,7 +82,7 @@ function CalificacionesPage() {
         { label: "Comentario", className: "w-1/3 text-left" },
         { label: "Calificación", className: "w-1/6 text-left" },
         { label: "Fecha de Creación", className: "w-1/6 text-left" },
-        { label: "Estado", className: "w-1/6 text-left" },
+        { label: "Status", className: "w-1/6 text-left" },
         { label: "Actions", className: "w-24 text-center" },
     ];
 
