@@ -45,7 +45,7 @@ function CardLocal({local}: Props){
         />
       </div>
       <div
-        className={`flex flex-col gap-16 m-8 py-8 pr-8 bg-gray-50 border border-[#2A86FF] rounded-xl justify-center
+        className={`flex flex-col gap-16 m-8 py-8 pr-8 bg-gray-50 border-2 border-[#2A86FF] rounded-xl justify-center
             ${isLaptop ? 'w-[650px] h-[450px] pl-64' : 'pl-144'}`
         }
       >

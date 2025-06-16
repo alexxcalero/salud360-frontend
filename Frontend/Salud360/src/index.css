@@ -197,8 +197,11 @@
   .use-label-small {
     @apply font-light text-label-small/tight;
   }
-
   input {
     @apply border-0 bg-neutral-100 h-[44px] rounded-[8px] px-[10px] text-neutral-800;
   }
+  .clip-half {
+    clip-path: inset(0 50% 0 0); /* Mostrar solo la mitad izquierda */
+  }
+
 }

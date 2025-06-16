@@ -11,6 +11,7 @@ import UnderConstruction from "../UnderConstruction";
 import CarrouselLocales from "@/components/usuario/CarrouselLocales";
 import CardLocal from "@/components/usuario/CardLocal";
 import CarrouselMedicos from "@/components/usuario/CarrouselMedicos";
+import TestimonioCard from "@/components/usuario/TestimonioCard";
 //No funciona: //import PANDA from "https://png.pngtree.com/png-clipart/20201224/ourmid/pngtree-panda-bamboo-bamboo-shoots-simple-strokes-cartoon-with-pictures-small-fresh-png-image_2625172.jpg"
 
 
@@ -25,7 +26,7 @@ function DetalleComunidad(){
       { value: "Rodrigo Roller", content: "Rodrigo Roller" },
     ];
 
-    console.log(comunidad)
+    console.log("$$$:", comunidad)
 
     const serviciosConLocales = comunidad.servicios.filter(
       (servicio: any) => servicio.locales && servicio.locales.length > 0
@@ -33,6 +34,11 @@ function DetalleComunidad(){
     const tieneLocales = serviciosConLocales.length > 0
     //console.log("Los serviciosConLocales son:", serviciosConLocales)
     //console.log("Tiene locales? Es:", tieneLocales)
+
+    const testimonios = comunidad.testimonios;
+    const tieneTestimonios = testimonios.length > 0
+    //console.log("Los testimonios son:", testimonios)
+    //console.log("Tiene testimonios? Es:", tieneTestimonios)
 
     const medicos = useMemo(() => {
       const lista: any[] = [];
@@ -110,6 +116,11 @@ function DetalleComunidad(){
           </div>
           <div className="my-32">
             <UnderConstruction/>
+            {tieneTestimonios && 
+              testimonios.map((testimonio: any) => (
+                <TestimonioCard/>
+              ))
+            }
           </div>
         </section>
 
