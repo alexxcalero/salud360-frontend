@@ -1,17 +1,28 @@
+import { IComunidad } from "@/models/comunidad";
 import { IMembresia } from "@/models/membresia";
-import { baseAPI } from "@/services/baseAPI";
 
-export const setPendingMembership = async (idMembresia: number) => {
-  const data = (await baseAPI.get(`/membresias/${idMembresia}`))
-    .data as IMembresia;
-  localStorage.setItem("current_membership", JSON.stringify(data));
+export const setPendingMembership = (
+  comunidad: IComunidad,
+  membresia: IMembresia
+) => {
+  localStorage.setItem("targeted_community", JSON.stringify(comunidad));
+  localStorage.setItem("targeted_membership", JSON.stringify(membresia));
 };
 
-export const getPendingMembership = () =>
-  JSON.parse(
-    localStorage.getItem("current_membership") ?? "null"
+export const getPendingMembership = () => {
+  const comunidad = JSON.parse(
+    localStorage.getItem("targeted_community") ?? "null"
+  ) as IComunidad | null;
+  const membresia = JSON.parse(
+    localStorage.getItem("targeted_membership") ?? "null"
   ) as IMembresia | null;
+  return {
+    comunidad,
+    membresia,
+  };
+};
 
 export const clearPendingMembership = () => {
-  localStorage.setItem("current_membership", "null");
+  localStorage.setItem("targeted_community", "null");
+  localStorage.setItem("targeted_membership", "null");
 };
