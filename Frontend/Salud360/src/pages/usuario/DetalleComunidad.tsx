@@ -11,13 +11,21 @@ import UnderConstruction from "../UnderConstruction";
 import CarrouselLocales from "@/components/usuario/CarrouselLocales";
 import CardLocal from "@/components/usuario/CardLocal";
 import CarrouselMedicos from "@/components/usuario/CarrouselMedicos";
-import TestimonioCard from "@/components/usuario/TestimonioCard";
+import CarrouselTestimonios from "@/components/usuario/CarrouselTestimonios";
+import ModalTestimonio from "@/components/modals/ModalTestimonio";
+import { crearTestimonio } from "@/services/testimonioService";
+import { useContext } from "react";
+import { AuthContext } from "@/hooks/AuthContext";
+import SuccessModal from "@/components/modals/successModal";
+
 //No funciona: //import PANDA from "https://png.pngtree.com/png-clipart/20201224/ourmid/pngtree-panda-bamboo-bamboo-shoots-simple-strokes-cartoon-with-pictures-small-fresh-png-image_2625172.jpg"
 
 
 function DetalleComunidad(){
     const {comunidad} = useComunidad();
-
+    const { usuario } = useContext(AuthContext);
+  
+    const [showSuccess, setShowSuccess] = useState(false);
     const [especialidad, setEspecialidad] = useState("__all__");
   
     const optionsSelect = [
@@ -39,6 +47,7 @@ function DetalleComunidad(){
     const tieneTestimonios = testimonios.length > 0
     //console.log("Los testimonios son:", testimonios)
     //console.log("Tiene testimonios? Es:", tieneTestimonios)
+    const [showModalTestimonio, setShowModalTestimonio] = useState(false);
 
     const medicos = useMemo(() => {
       const lista: any[] = [];
@@ -80,6 +89,7 @@ function DetalleComunidad(){
     }, [especialidad, medicos]);
 
     return (
+    <>  
       <section className="flex flex-col mt-32 gap-32 px-32 mx-auto justify-center">
         <title>Detalle comunidad</title>
         <div className="flex flex-col gap-8">
@@ -115,16 +125,60 @@ function DetalleComunidad(){
             <hr className="border border-gray-500"/>
           </div>
           <div className="my-32">
-            <UnderConstruction/>
-            {tieneTestimonios && 
-              testimonios.map((testimonio: any) => (
-                <TestimonioCard/>
-              ))
+            {tieneTestimonios &&
+              <div className="flex gap-6 flex-wrap justify-center">
+                {tieneTestimonios && (
+                  <CarrouselTestimonios
+                    testimonios={testimonios}
+                    onAddClick={() => setShowModalTestimonio(true)}
+                  />
+                )}
+              </div>
             }
           </div>
         </section>
 
       </section>
+      {showModalTestimonio && (
+        <ModalTestimonio
+          onClose={() => setShowModalTestimonio(false)}
+          onSubmit={async (comentario, calificacion) => {
+            try {
+              console.log("Enviando testimonio:", {
+                comentario,
+                calificacion,
+                idComunidad: comunidad.idComunidad ,
+                autor: { idCliente: usuario.idCliente }
+              });
+
+              await crearTestimonio({
+                comentario,
+                calificacion,
+                idComunidad: comunidad.idComunidad,
+                autor: {
+                  idCliente: usuario.idCliente,
+                },
+              });
+              setShowModalTestimonio(false);
+              setShowSuccess(true);
+            } catch (err) {
+              alert("Ocurrió un error al guardar tu testimonio");
+              console.error(err);
+            }
+          }}
+        />
+      )}
+      {showSuccess && (
+        <SuccessModal
+          open={showSuccess}
+          setOpen={setShowSuccess}
+          title="¡Testimonio enviado!"
+          description="Gracias por compartir tu experiencia con la comunidad."
+          onConfirm={() => window.location.reload()} // o refetch si usas context
+        />
+      )}
+
+    </>
     );  
 }
 
