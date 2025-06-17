@@ -103,6 +103,22 @@ const HistorialPagos = () => {
     <div className="p-8">
       <title>Historial de pagos</title>
       <h1 className="text-left mb-4">Historial de pagos</h1>
+
+      <div className="bg-gray-50 p-4 border rounded mb-6">
+  <h4 className="text-sm font-medium text-gray-700 mb-2">Resumen de pagos por método</h4>
+  <div className="text-sm text-gray-800 space-y-1">
+    <div className="flex justify-between">
+      <span>VISA •••• 5678</span>
+      <span className="font-semibold">S/ 350.00</span>
+    </div>
+    <div className="flex justify-between">
+      <span>Yape</span>
+      <span className="font-semibold">S/ 120.00</span>
+    </div>
+  </div>
+</div>
+
+
       <ul className="flex flex-col gap-4">
         {items.map(
           (
