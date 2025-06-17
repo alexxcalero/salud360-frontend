@@ -2,7 +2,6 @@ import DetallesMembresia from "@/components/usuario/membresia/DetallesMembresia"
 import MetodoPlin from "@/components/usuario/membresia/metodos/MetodoPlin";
 import MetodoTarjeta from "@/components/usuario/membresia/metodos/MetodoTarjeta";
 import MetodoYape from "@/components/usuario/membresia/metodos/MetodoYape";
-import SeleccionarMetodo from "@/components/usuario/membresia/SeleccionarMetodo";
 import { IComunidad } from "@/models/comunidad";
 import { IMembresia } from "@/models/membresia";
 import { useState } from "react";
@@ -23,7 +22,9 @@ const PasarelaPagoPage = () => {
     membresia: membresiaParam,
     metodo,
     mediosDePagoSeleccionado,
+    tipo,
   } = location.state as {
+    tipo: "nuevo" | "guardado";
     comunidad?: IComunidad;
     membresia?: IMembresia;
     metodo?: string;
@@ -51,6 +52,9 @@ const PasarelaPagoPage = () => {
         </div>
         <div className="w-[1px] h-full bg-neutral-300"></div>
 
+        {tipo === "guardado" && (
+          <MetodoTarjeta comunidad={comunidad} membresia={membresia} />
+        )}
         {metodo === "tarjeta" && (
           <MetodoTarjeta comunidad={comunidad} membresia={membresia} />
         )}

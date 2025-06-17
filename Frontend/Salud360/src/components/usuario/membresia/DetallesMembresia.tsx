@@ -37,7 +37,7 @@ const DetallesMembresia = ({
           if (!comunidad.membresias) return;
           setMembresia(
             comunidad.membresias?.find(
-              (m) => m.idMembresia?.toString() === selectInput
+              (m) => m.idMembresia?.toString() === val
             ) ?? comunidad.membresias[0]
           );
           setSelectInput(val);

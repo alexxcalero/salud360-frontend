@@ -73,7 +73,7 @@ export const claseDTOSchema = z.object({
     .nullable(),
   local: z.lazy(() => localSchema.optional().nullable()),
   reservas: z.lazy(() => z.array(reservaSchema).optional().nullable()),
-  cliente: z.lazy(() => clienteSchema.optional().nullable()),
+  clientes: z.lazy(() => z.array(clienteSchema).optional().nullable()),
 });
 
 export const claseResumenDTOSchema = z.object({

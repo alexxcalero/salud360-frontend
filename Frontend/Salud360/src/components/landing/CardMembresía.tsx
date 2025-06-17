@@ -7,9 +7,14 @@ import { setPendingMembership } from "@/lib/pendingMembership";
 interface Props {
   comunidad: IComunidad;
   membresia: IMembresia;
+  to?: string;
 }
 
-function CardMembresia({ membresia, comunidad }: Props) {
+function CardMembresia({
+  membresia,
+  comunidad,
+  to = "/RegistroUsuario",
+}: Props) {
   const navigate = useNavigate();
 
   return (
@@ -28,7 +33,7 @@ function CardMembresia({ membresia, comunidad }: Props) {
           className="mx-2"
           onClick={() => {
             setPendingMembership(comunidad, membresia);
-            navigate("/RegistroUsuario");
+            navigate(to, { state: { membresia, comunidad } });
           }}
         >
           SUSCRÍBETE HOY

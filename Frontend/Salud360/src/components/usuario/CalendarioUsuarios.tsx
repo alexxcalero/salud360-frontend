@@ -89,27 +89,8 @@ const CalendarioUsuarios = () => {
         ]}
         filterContent={
           <div>
-            <div className="flex flex-col">
-              <strong>Mostrar canceladas</strong>
-              <Switch
-                checked={showCancelados}
-                onCheckedChange={setShowCancelados}
-              />
-            </div>
-
-            <div className="mt-4">
-              <strong>Seleccionar por especialidad</strong>
-              <Select
-                options={especialidades.map((esp) => ({
-                  value: esp,
-                  content: esp,
-                }))}
-                value={especialidadSeleccionada}
-                onChange={setEspecialidadSeleccionada}
-              />
-            </div>
-            <div className="mt-4">
-              <strong>Tipo de actividad</strong>
+            <div className="my-4">
+              Tipo de actividad
               <ToggleGroup
                 type="multiple"
                 options={[
@@ -124,6 +105,25 @@ const CalendarioUsuarios = () => {
                 ]}
                 value={act}
                 onValueChange={setAct}
+              />
+            </div>
+            <div className="flex flex-col">
+              <span>Mostrar canceladas</span>
+              <Switch
+                checked={showCancelados}
+                onCheckedChange={setShowCancelados}
+              />
+            </div>
+
+            <div className="mt-4">
+              <span>Seleccionar por especialidad</span>
+              <Select
+                options={especialidades.map((esp) => ({
+                  value: esp,
+                  content: esp,
+                }))}
+                value={especialidadSeleccionada}
+                onChange={setEspecialidadSeleccionada}
               />
             </div>
           </div>

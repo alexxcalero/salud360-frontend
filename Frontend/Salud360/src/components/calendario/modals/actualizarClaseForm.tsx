@@ -45,7 +45,7 @@ const ActualizarClaseModalForm = ({
   const [descripcion, setDescripcion] = useState(clase.descripcion ?? "");
   const [capacidad, setCapacidad] = useState(clase.capacidad?.toString() ?? "");
 
-  const [estadoInput, setEstadoInput] = useState<string>(clase.estado ?? "");
+  // const [estadoInput, setEstadoInput] = useState<string>(clase.estado ?? "");
 
   const { fetch } = useFetchHandler();
   const { createToast } = useToasts();
@@ -96,15 +96,17 @@ const ActualizarClaseModalForm = ({
       cantAsistentes: clase.cantAsistentes,
       horaInicio: horaInicio,
       horaFin: horaFin,
-      fechaCreacion: clase.fechaCreacion,
-      fechaDesactivacion: clase.fechaDesactivacion,
+      fechaCreacion: clase.fechaCreacion?.toISO(),
+      fechaDesactivacion: clase.fechaDesactivacion?.toISO(),
       activo: clase.activo,
       fecha: dateInput.toISODate(),
-      estado: estadoInput,
+      estado: clase.estado,
       local: clase.local,
-      cliente: clase.cliente,
-      reservas: clase.reservas,
+      clientes: clase.clientes ?? [],
+      reservas: clase.reservas ?? [],
     };
+
+    console.log(uploadData);
 
     fetch(async () => {
       await putClaseAPI(uploadData);
@@ -157,7 +159,7 @@ const ActualizarClaseModalForm = ({
                 required={true}
               />
 
-              <SelectLabel
+              {/* <SelectLabel
                 htmlFor="estado"
                 label="Seleccione el estado de la cita *"
                 placeholder="Seleccione un estado"
@@ -167,7 +169,7 @@ const ActualizarClaseModalForm = ({
                   { value: "Disponible", content: "Disponible" },
                   { value: "Cancelada", content: "Cancelada" },
                 ]}
-              />
+              /> */}
 
               <div className="flex gap-2">
                 <Input

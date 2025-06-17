@@ -3,6 +3,7 @@ import Calendario from "@/components/calendario/Calendario";
 import ActualizarCitaModalForm from "@/components/calendario/modals/actualizarCitaModalForm";
 import RegistrarCitaModalForm from "@/components/calendario/modals/registrarCitaModalForm";
 import SelectLabel from "@/components/SelectLabel";
+import { Switch } from "@/components/ui/switch";
 import { useFetchHandler } from "@/hooks/useFetchHandler";
 import { citaMedicaType } from "@/schemas/citaMedica";
 import { medicoType } from "@/schemas/medico";
@@ -63,7 +64,7 @@ export default function RegistrarCitaMedicasPage() {
     []
   );
 
-  // const [showDeactivated, setShowDeactivated] = useState(false);
+  const [showDeactivated, setShowDeactivated] = useState(false);
 
   useEffect(() => {
     fetch(async () => {
@@ -133,20 +134,20 @@ export default function RegistrarCitaMedicasPage() {
                   <AdminCitaMedicaCard collapsed={true} citaMedica={d} />
                 ),
               }}
-              // filterContent={
-              //   <div>
-              //     <div>
-              //       <span className="mr-4">Mostrar desactivados</span>
-              //       <Switch
-              //         checked={showDeactivated}
-              //         onCheckedChange={() => {
-              //           setShowDeactivated((prev) => !prev);
-              //         }}
-              //       />
-              //     </div>
-              //   </div>
-              // }
-              filterFuncs={[(d) => Boolean(d.activo)]}
+              filterContent={
+                <div>
+                  <div>
+                    <span className="mr-4">Mostrar desactivados</span>
+                    <Switch
+                      checked={showDeactivated}
+                      onCheckedChange={() => {
+                        setShowDeactivated((prev) => !prev);
+                      }}
+                    />
+                  </div>
+                </div>
+              }
+              filterFuncs={[(d) => Boolean(showDeactivated || d.activo)]}
               RegisterForm={registrar}
               ActualizarForm={actualizar}
             />

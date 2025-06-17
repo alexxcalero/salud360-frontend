@@ -2,7 +2,14 @@ import Mastercard from "@/assets/method-mastercard.svg";
 import Visa from "@/assets/method-visa.svg";
 import Chip from "@/assets/tarjeta-design/chip.svg";
 import FondoTarjeta1 from "@/assets/tarjeta-design/tarjeta1.svg";
+import FondoTarjeta2 from "@/assets/tarjeta-design/tarjeta2.svg";
+import FondoTarjeta3 from "@/assets/tarjeta-design/tarjeta3.svg";
+import FondoTarjeta4 from "@/assets/tarjeta-design/tarjeta4.svg";
+import FondoTarjeta5 from "@/assets/tarjeta-design/tarjeta5.svg";
+import FondoTarjeta6 from "@/assets/tarjeta-design/tarjeta6.svg";
+import { Shuffle } from "lucide-react";
 import { DateTime } from "luxon";
+import { useState } from "react";
 
 const TarjetaSkeleton = ({
   numero,
@@ -19,8 +26,25 @@ const TarjetaSkeleton = ({
       : /^4/.test(numero)
       ? "visa"
       : "unknown";
+  const selectRandomBgImage = () =>
+    [
+      FondoTarjeta1,
+      FondoTarjeta2,
+      FondoTarjeta3,
+      FondoTarjeta4,
+      FondoTarjeta5,
+      FondoTarjeta6,
+    ][Math.floor(Math.random() * 6)];
+
+  const [bgImage, setBgImage] = useState(selectRandomBgImage());
   return (
-    <div>
+    <div className="relative">
+      <button
+        onClick={() => setBgImage(selectRandomBgImage())}
+        className="bg-white border-1 border-neutral-300 p-1 rounded-full hover:bg-neutral-100 text-neutral-700 transition-all duration-150 ease-out absolute bottom-0 right-[-30px] z-50"
+      >
+        <Shuffle size={14} />
+      </button>
       <section
         className="relative transform-3d z-2 group h-46 aspect-16/9 text-white"
         id="tarjeta"
@@ -30,7 +54,7 @@ const TarjetaSkeleton = ({
           id="delantera"
         >
           <img
-            src={FondoTarjeta1}
+            src={bgImage}
             alt="Fondo de tarjeta delantera"
             className="absolute top-0 left-0 right-0 bottom-0 z-[-1] object-cover w-full h-full"
           />
@@ -71,18 +95,26 @@ const TarjetaSkeleton = ({
                 <p className="text-neutral-300 text-label-large">
                   Nombre Tarjeta
                 </p>
-                <p className="nombre">{nombre}</p>
+                <p className="nombre line-clamp-1 max-w-38 text-ellipsis">
+                  {nombre.length !== 0 ? nombre : "Jhon Doe"}
+                </p>
               </div>
 
               <div className="text-left" id="expiracion">
                 <p className="text-neutral-300 text-label-large">Expiracion</p>
                 <p className="expiracion">
                   <span className="mes">
-                    {exp?.toFormat("MM", { locale: "es" }) ?? "MM"}
+                    {exp?.toFormat("MM", { locale: "es" }) !==
+                    "Invalid DateTime"
+                      ? exp?.toFormat("MM", { locale: "es" })
+                      : "MM"}
                   </span>{" "}
                   /{" "}
                   <span className="year">
-                    {exp?.toFormat("yy", { locale: "es" }) ?? "AA"}
+                    {exp?.toFormat("yy", { locale: "es" }) !==
+                    "Invalid DateTime"
+                      ? exp?.toFormat("yy", { locale: "es" })
+                      : "AA"}
                   </span>
                 </p>
               </div>
@@ -95,7 +127,7 @@ const TarjetaSkeleton = ({
           id="trasera"
         >
           <img
-            src={FondoTarjeta1}
+            src={bgImage}
             alt="Fondo de tarjeta delantera"
             className="absolute top-0 left-0 right-0 bottom-0 z-[-1] object-cover w-full h-full"
           />

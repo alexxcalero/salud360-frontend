@@ -165,6 +165,7 @@ const SeleccionarMetodo = ({
 
             navigate(`/usuario/pasarela-pagos/pago`, {
               state: {
+                tipo: activeOption,
                 comunidad,
                 membresia,
                 metodo: tipoDePago.current,

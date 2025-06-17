@@ -18,8 +18,8 @@ const CardMembresiaAdvertencia = ({
   const location = useLocation();
   const localStorageData = getPendingMembership();
 
-  const comunidad = localStorageData.comunidad ?? location.state.comunidad;
-  const membresia = localStorageData.membresia ?? location.state.membresia;
+  const comunidad = localStorageData.comunidad ?? location.state?.comunidad;
+  const membresia = localStorageData.membresia ?? location.state?.membresia;
 
   const [selfDestruct, setSelfDestruct] = useState(false);
   const { callAlertDialog } = useDialog();
