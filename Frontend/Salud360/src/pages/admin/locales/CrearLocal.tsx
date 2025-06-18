@@ -22,8 +22,10 @@ function CrearLocal(){
         setLocalAPI
     } = useLocalForm();
 
+    //Para la imagen
+    const [imagenFile, setImagenFile] = useState<File | null>(null);
 
-    
+
 //VALIDACIONES DE CAMPOS 
     const validarCampos = (): boolean => {
         const soloLetras = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
@@ -72,6 +74,29 @@ function CrearLocal(){
         if (!validarCampos()) {
             return;
         }
+            
+
+        //Para la imagen
+        let nombreArchivo = null;
+        if (imagenFile) {
+            const formData = new FormData();
+            formData.append("archivo", imagenFile);
+        try {
+            const res = await axios.post("http://localhost:8080/api/archivo", formData, {
+            auth: {
+                username: "admin",
+                password: "admin123"
+            }
+            });
+            nombreArchivo = res.data.nombreArchivo;
+        } catch (error) {
+            console.error("Error al subir imagen:", error);
+            setMensajeValidacion("No se pudo subir la imagen.");
+            setShowModalValidacion(true);
+            return;
+        }
+        }
+        
 
         try {
 
@@ -107,6 +132,7 @@ function CrearLocal(){
                     aforo,
                     tipoServicio: tipo,
                     servicio: { idServicio: servicios },
+                    imagen: nombreArchivo
                 },
                 {
                     auth: {
@@ -149,6 +175,7 @@ function CrearLocal(){
                 readOnly={false}
                 onSubmit={handleCrearLocal}
                 buttonText="Crear Local"
+                onImagenSeleccionada={(file) => setImagenFile(file)}
             />
         </div>
         {showModalValidacion && (

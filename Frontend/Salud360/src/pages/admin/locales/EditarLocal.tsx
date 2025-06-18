@@ -13,7 +13,10 @@ function EditarLocal(){
     const [showModalValidacion, setShowModalValidacion] = useState(false);
     const [mensajeValidacion, setMensajeValidacion] = useState("");
 
-
+    //Para la imagen actual y nueva
+    const [imagenFile, setImagenFile] = useState<File | null>(null);
+    const [imagenActual, setImagenActual] = useState<string | null>(null);
+    
     const {
         nombre, setNombre,
         telefono, setTelefono,
@@ -39,6 +42,7 @@ function EditarLocal(){
             console.log("Servicio:", res.data);
             console.log("idServicio:", res.data.servicio.idServicio);
             setLoading(false);
+            setImagenActual(res.data.imagen); //Para que no se loquee si no se sube imagen
             //setServiciosSeleccionados([res.data.servicio.idServicio]);
           })
           .catch(err => {
@@ -103,8 +107,29 @@ function EditarLocal(){
             setShowModalValidacion(true);
             return;
         }
-
         console.log("El contenido de los servicios a enviar es:", servicios)
+        //Para la imagen:
+        let nombreArchivo = imagenActual;
+
+        if (imagenFile) {
+        const formData = new FormData();
+        formData.append("archivo", imagenFile);
+        try {
+            const res = await axios.post("http://localhost:8080/api/archivo", formData, {
+            auth: {
+                username: "admin",
+                password: "admin123"
+            }
+            });
+            nombreArchivo = res.data.nombreArchivo;
+        } catch (error) {
+            console.error("Error al subir imagen:", error);
+            setMensajeValidacion("No se pudo subir la imagen.");
+            setShowModalValidacion(true);
+            return;
+        }
+        }
+        
         try{
             const response = await axios.put(`http://localhost:8080/api/locales/${id}`, 
                 {
@@ -115,6 +140,7 @@ function EditarLocal(){
                     tipoServicio: tipo,
                     //servicio: servicios.map(id => ({idServicio: id})),
                     servicio: { idServicio: servicios },
+                    imagen: nombreArchivo
                 },
                 {  
                     auth: {
@@ -158,6 +184,8 @@ function EditarLocal(){
                 readOnly={false}
                 onSubmit={handleEditarLocal}
                 buttonText="Guardar"
+                imagenActual={imagenActual}
+                onImagenSeleccionada={(file) => setImagenFile(file)}
             />
         </div>
         {showModalValidacion && (

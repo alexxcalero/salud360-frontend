@@ -1,25 +1,45 @@
 import { useDropzone } from 'react-dropzone';
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 
-function DropImage(){
-    const onDrop = useCallback((acceptedFiles: File[]) => {
-        console.log('Archivo cargado:', acceptedFiles[0]);
-    }, []);
 
-    const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, accept: {'image/*': [] }});
-
-    return(
-        <div {...getRootProps()} className="w-full h-48 border-dashed border-2 border-gray-300 rounded-md flex flex-col items-center justify-center cursor-pointer text-gray-500">
-            <input {...getInputProps()} />
-            {isDragActive ? (<p>Suelta la imagen aquí...</p>) 
-            : 
-            (<><p>📎 Arrastra una imagen aquí o haz clic para buscar</p>
-                <span className="text-sm text-gray-400">Formatos: JPG, PNG, etc.</span>
-                </>
-            )}
-        </div>
-    );
-
+interface DropImageProps {
+  onFileSelect: (file: File) => void;
+  previewUrl?: string; // nueva prop para mostrar imagen inicial
 }
+
+function DropImage({ onFileSelect, previewUrl }: DropImageProps) {
+  const [preview, setPreview] = useState<string | null>(previewUrl || null);
+
+  const handleDrop = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setPreview(URL.createObjectURL(file));
+      onFileSelect(file);
+    }
+  };
+
+  useEffect(() => {
+    if (previewUrl) {
+      setPreview(previewUrl);
+    }
+  }, [previewUrl]);
+
+  return (
+    <div className="border border-dashed rounded-md p-4 w-full h-64 flex items-center justify-center bg-white">
+      <label className="cursor-pointer text-gray-500">
+        <input type="file" accept="image/*" className="hidden" onChange={handleDrop} />
+        {preview ? (
+          <img src={preview} alt="Preview" className="max-h-48 w-auto object-contain rounded-md"/>
+        ) : (
+          <>
+            <p>📎 Arrastra una imagen aquí o haz clic para buscar</p>
+            <span className="text-sm text-gray-400">Formatos: JPG, PNG, etc.</span>
+          </>
+        )}
+      </label>
+    </div>
+  );
+}
+
 
 export default DropImage;

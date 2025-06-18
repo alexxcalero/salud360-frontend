@@ -37,11 +37,11 @@ function CardLocal({local}: Props){
 
     return (
     <div className={`h-[600px] relative flex flex-row justify-center items-center ${isLaptop ? 'w-[900px]' : 'w-[1500px]'}`}>
-      <div className={`absolute top-1/2 -translate-y-1/2 ${isLaptop ? 'left-[100px]' : 'left-[200px]'} `}>
+      <div className={`absolute top-1/2 -translate-y-1/2 ${isLaptop ? 'left-[140px]' : 'left-[280px]'} `}>
         <img
-          src={DAB}
-          alt=""
-          className={`object-cover shadow-xl ${isLaptop && 'w-[200px]'}`}
+          src={local.imagen ? `http://localhost:8080/api/archivo/${local.imagen}` : "/placeholder.png"}
+          alt={`Imagen del local ${local.nombre}`}
+          className={`w-120 h-90 object-cover rounded-md shadow-xl ${isLaptop && 'w-70 h-40'}`}
         />
       </div>
       <div
