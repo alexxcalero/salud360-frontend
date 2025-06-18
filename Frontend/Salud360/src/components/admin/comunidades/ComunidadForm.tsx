@@ -2,9 +2,10 @@ import InputLabel from "@/components/InputLabel";
 import Button from "@/components/Button";
 import Checkbox from "@/components/Checkbox";
 import { useNavigate } from "react-router";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import ModalError from "@/components/ModalError";
 import ModalValidacion from "@/components/ModalValidacion";
+import DropImage from "@/components/DropImage";
 
 interface Servicio {
   idServicio: number;
@@ -46,6 +47,10 @@ interface Props {
   imagen: File | null;
   setImagen: (file: File | null) => void;
   readOnly?: boolean;
+
+  //Para la imagen
+    onImagenSeleccionada?: (file: File) => void;
+    imagenActual?: string | null;
 }
 
 function ComunidadForm({
@@ -68,10 +73,23 @@ function ComunidadForm({
   setNuevasMembresias,
   imagen,
   setImagen,
-  readOnly = false
+  readOnly = false,onImagenSeleccionada = () => {},imagenActual = null
 }: Props) {
 
   const navigate = useNavigate();
+
+  //PARA LA IMAGEN RELACIONAD AL LOCAL
+      const [imagenSeleccionada, setImagenSeleccionada] = useState<File | null>(null); 
+      const imagenInputRef = useRef<HTMLInputElement>(null); 
+      
+      const handleImagenChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (file) {
+        setImagenSeleccionada(file); 
+        onImagenSeleccionada(file); 
+      }
+      };
+
   //const [nuevasMembresias, setNuevasMembresias] = useState<Item[]>([]);
   const textoValido = (texto: string) => /^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9 ,.;-]*$/.test(texto);
 
@@ -319,29 +337,19 @@ function ComunidadForm({
         </div>
       </div>
 
-      <div className="mt-6">
-        <p className="font-medium mb-2">Seleccione una imagen de perfil</p>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(e) => setImagen(e.target.files?.[0] || null)}
-          className="border p-2"
-          disabled={readOnly}
-        />
+      
 
-        {imagen && (
-          <div className="mt-4">
-            <p className="text-sm text-gray-600 mb-1">Vista previa:</p>
-            <img
-              src={URL.createObjectURL(imagen)}
-              alt="Vista previa"
-              className="w-32 h-32 object-cover rounded border"
-            />
-          </div>
-        )}
-      </div>
-
-
+      <div className="my-6">
+                  {!readOnly && (
+                  <DropImage
+                      onFileSelect={(file) => {
+                      setImagenSeleccionada(file);
+                      onImagenSeleccionada?.(file);
+                      }}
+                      previewUrl={imagenSeleccionada? URL.createObjectURL(imagenSeleccionada): imagenActual || undefined}/>
+                  )}
+              </div>
+              
       <div className="flex flex-row justify-between">
         <Button variant="primary" size="lg" className="my-4" onClick={() => navigate(-1)}>Volver</Button>
         {!readOnly && (

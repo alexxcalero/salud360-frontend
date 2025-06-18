@@ -65,7 +65,7 @@ function Comunidades(){
                     <div className="col-span-1">
                         <CardExplorarComunidades key={comunidad.idComunidad}
                         id={comunidad.idComunidad}
-                        image={"https://png.pngtree.com/png-clipart/20201224/ourmid/pngtree-panda-bamboo-bamboo-shoots-simple-strokes-cartoon-with-pictures-small-fresh-png-image_2625172.jpg"}
+                        image={comunidad.imagen}
                         title={comunidad.nombre} 
                         subtitle={comunidad.descripcion}
                         isMiComunidad={true} 
