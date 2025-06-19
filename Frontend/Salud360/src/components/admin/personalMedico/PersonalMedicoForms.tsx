@@ -41,14 +41,19 @@ interface Props{
     readOnly?: boolean;
     onSubmit?: () => void;
     buttonText?: string;
+
+    //Para la imagen
+    onImagenSeleccionada?: (file: File) => void;
+    imagenActual?: string | null;
 }
 
 function PersonalMedicoForms({title="", subtitle="", nombres, setNombres = () =>{}, apellidos, setApellidos = () =>{}, tipoDoc, setTipoDoc = () =>{}, DNI, setDNI  = () =>{}, 
     especialidad, setEspecialidad  = () =>{}, genero, setGenero  = () =>{}, descripcion, setDescripcion = () =>{}, 
-    readOnly = false, onSubmit = () =>{}, buttonText}: Props){
+    readOnly = false, onSubmit = () =>{}, buttonText, onImagenSeleccionada = () => {},imagenActual = null}: Props){
     
     const [tipoDocumentos, setTipoDocumentos] = useState([]);
-    //const [tipoDocumentos, setTipoDocumentos] = useState([]);
+    const [imagenSeleccionada, setImagenSeleccionada] = useState<File | null>(null);
+    
     const navigate = useNavigate();
 
     //Llamada TipoDocumentos
@@ -111,7 +116,18 @@ function PersonalMedicoForms({title="", subtitle="", nombres, setNombres = () =>
                     <div className="w-full h-48 rounded-md flex flex-col items-center justify-center cursor-pointer">
                         <InputLabel type="text" placeholder="Ingrese la descripción" htmlFor="text" label="Descripción" value={descripcion} disabled={readOnly} className="w-full h-full" required={true && !readOnly} onChange={(e) => setDescripcion(e.target.value)}/>
                     </div>
-                    {!readOnly && <DropImage/>}
+                    
+            <div className="my-6">
+                  {!readOnly && (
+                  <DropImage
+                    onFileSelect={(file) => {setImagenSeleccionada(file);onImagenSeleccionada?.(file);}}
+                    previewUrl={imagenSeleccionada ? URL.createObjectURL(imagenSeleccionada): imagenActual? 
+                        `http://localhost:8080/api/archivo/${imagenActual}` : undefined }
+                    />
+                  )}
+              </div>
+
+                    
                 </div>
 
                 <div className="flex flex-row justify-between">

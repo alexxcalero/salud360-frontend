@@ -12,6 +12,8 @@ function CrearMedico() {
 
   const [showModalValidacion, setShowModalValidacion] = useState(false);
   const [mensajeValidacion, setMensajeValidacion] = useState("");
+  //Para la imagen
+    const [imagenFile, setImagenFile] = useState<File | null>(null);
 
   const {
     nombres,
@@ -98,10 +100,33 @@ function CrearMedico() {
             setShowModalValidacion(true);
             return;
     }
+    
+
+    let nombreArchivo = null;
+
+      if (imagenFile) {
+        const formData = new FormData();
+        formData.append("archivo", imagenFile);
+
+        try {
+          const res = await axios.post("http://localhost:8080/api/archivo", formData, {
+            auth: {
+              username: "admin",
+              password: "admin123"
+            }
+          });
+          nombreArchivo = res.data.nombreArchivo;
+        } catch (error) {
+          console.error("Error al subir imagen:", error);
+          alert("No se pudo subir la imagen.");
+          return;
+        }
+      }
+
 
     try {
       const sexo = genero;
-
+      console.log("Nombre de la imagen subida:", nombreArchivo);
       const response = await axios.post(
         "http://localhost:8080/api/admin/medicos",
         {
@@ -111,9 +136,11 @@ function CrearMedico() {
           sexo,
           especialidad,
           descripcion,
+          fotoPerfil: nombreArchivo ?? null,
           tipoDocumento: {
             idTipoDocumento: tipoDoc,
           }
+          
         },
         {
           auth: {
@@ -161,6 +188,7 @@ function CrearMedico() {
         onSubmit={handleCrearMedico}
         buttonText="Crear Medico"
         readOnly={false}
+        onImagenSeleccionada={(file) => setImagenFile(file)}
       />
 
       
