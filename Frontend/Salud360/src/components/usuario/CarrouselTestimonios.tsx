@@ -4,10 +4,14 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface Props {
   testimonios: any[];
+  usuario?: { idCliente?: number };
   onAddClick?: () => void;
+  onEdit?: (testimonio: any) => void;
+  onDelete?: (id: number) => void;
 }
 
-function CarrouselTestimonios({ testimonios, onAddClick }: Props) {
+
+function CarrouselTestimonios({ testimonios, usuario, onEdit, onDelete, onAddClick }: Props) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const cardWidth = 330;
   const xMargin = 20;
@@ -47,7 +51,12 @@ function CarrouselTestimonios({ testimonios, onAddClick }: Props) {
           >
             {testimonios.map((t) => (
               <div key={t.idTestimonio} className="shrink-0 mx-[10px]" style={{ width: `${cardWidth}px` }}>
-                <TestimonioCard testimonio={t} />
+                <TestimonioCard
+                  testimonio={t}
+                  usuario={usuario}
+                  onEdit={onEdit}
+                  onDelete={onDelete}
+                />
               </div>
             ))}
 
@@ -76,6 +85,9 @@ function CarrouselTestimonios({ testimonios, onAddClick }: Props) {
         )}
       </div>
     </section>
+    
+
+    
   );
 }
 
