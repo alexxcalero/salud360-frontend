@@ -16,6 +16,7 @@ function DetalleLocal(){
         direccion, setDireccion,
         tipo, setTipo,
         servicios, setServicios,
+        aforo, setAforo,
         setLocalAPI
     } = useLocalForm();
     
@@ -57,6 +58,7 @@ function DetalleLocal(){
                 direccion={direccion}
                 tipo={tipo}
                 servicios={servicios}
+                aforo={aforo}
                 readOnly={true}
                 buttonText="Crear Servicio"
             />

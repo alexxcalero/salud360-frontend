@@ -25,10 +25,14 @@ interface Props{
     readOnly?: boolean;
     onSubmit?: () => void;
     buttonText?: string;
+
+    onImagenSeleccionada?: (file: File) => void; 
+    imagenSeleccionada?: File | null; 
+    imagenActual?: string | null; 
 }
 
 function ServiciosForm({title, subtitle, nombre, setNombre = () =>{}, descripcion, setDescripcion = () =>{},
-    tipo, setTipo = () =>{}, locales=null, setLocales = () => {}, readOnly = false, onSubmit = () =>{}, buttonText}: Props){
+    tipo, setTipo = () =>{}, locales=null, setLocales = () => {}, readOnly = false, onSubmit = () =>{}, buttonText,onImagenSeleccionada,imagenSeleccionada,imagenActual  }: Props){
 
     const [localesDisponibles, setLocalesDisponibles] = useState([]);
 
@@ -97,7 +101,14 @@ function ServiciosForm({title, subtitle, nombre, setNombre = () =>{}, descripcio
         }
 
 
-       <div className="my-6">{!readOnly && <DropImage/>}</div>
+       <div className="my-6">
+        {!readOnly && (
+          <DropImage
+            onFileSelect={(file) => onImagenSeleccionada?.(file)} // 🆕
+            previewUrl={imagenSeleccionada? URL.createObjectURL(imagenSeleccionada): imagenActual || undefined } 
+          />
+        )}
+      </div>
 
         {!readOnly && (
             <div className="flex gap-4 mt-6">

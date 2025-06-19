@@ -5,6 +5,8 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { NavLink } from "react-router";
 import { AlertTriangle } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
+import { p } from "node_modules/react-router/dist/development/lib-B8x_tOvL.d.mts";
 
 export interface MembresiaResumenDTO {
   idMembresia: number;
@@ -35,8 +37,6 @@ function Comunidades(){
     //const [comunidades, setComunidades] = useState([]);
     const {usuario, logout, loading} = useContext(AuthContext);
     const [afiliaciones, setAfiliaciones] = useState<AfiliacionResumenDTO[]>([]);
-      
-
     if (loading || !usuario) return null;
 
     const id = usuario.idUsuario;
@@ -46,6 +46,9 @@ function Comunidades(){
     const comunidades = usuario.comunidades;
     console.log("Las comunidades del usuario son:", comunidades)
     const tieneComunidades = comunidades.length !== 0
+    const tieneInactivas = false;
+
+    const [activo, setActivo] = useState(false);
 
     useEffect(() => {
         window.scrollTo(0, 0); //Para que apenas cargue aparezca en el tope de la página.
@@ -68,10 +71,22 @@ function Comunidades(){
             <title>Mis comunidades</title>
             <div className="flex flex-row justify-between items-center py-8 px-32 ">
                 <h1>Mis comunidades</h1>
-                {tieneComunidades && <div>
-                    <p>Activas</p>
-                    {/*Tengo que instalar el switch de shadcn pero el p$%@ npm no me deja. Será para luego */}
-                </div>}
+                {tieneComunidades && 
+                    <div className="flex flex-row justify-around gap-4">
+                        {
+                            tieneInactivas &&
+                            <>
+                            {activo ?
+                                <p>Activas</p>
+                                :
+                                <p>Inactivas</p>
+                            }
+                            
+                            <Switch checked={activo} onCheckedChange={setActivo}/>
+                            </>
+                        }
+                        {/*Tengo que instalar el switch de shadcn pero el p$%@ npm no me deja. Será para luego */}
+                    </div>}
                 <NavLink to="/usuario/comunidades/explorarComunidades"><Button size="lg" className="w-64">Explorar Más</Button></NavLink>
             </div>
 
@@ -90,8 +105,8 @@ function Comunidades(){
                     <div className="col-span-1" key={comunidad.idComunidad}>
                     <CardMisComunidades
                         id={comunidad.idComunidad}
-                        image={"https://png.pngtree.com/png-clipart/20201224/ourmid/pngtree-panda-bamboo-bamboo-shoots-simple-strokes-cartoon-with-pictures-small-fresh-png-image_2625172.jpg"}
-                        title={comunidad.nombre}
+                        image={comunidad.imagen}
+                        title={comunidad.nombre} 
                         subtitle={comunidad.descripcion}
                         afiliacion={afiliacion}
                         isMiComunidad={true}

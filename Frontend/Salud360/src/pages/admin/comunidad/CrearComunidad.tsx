@@ -24,7 +24,10 @@ function CrearComunidad() {
     proposito, setProposito,
     servicios, setServicios
   } = useComunidadForm();
-
+  //Para la imagen
+    const [imagenFile, setImagenFile] = useState<File | null>(null);
+  
+    
   const [membresias, setMembresias] = useState<any[]>([]);
   const [membresiasSeleccionadas, setMembresiasSeleccionadas] = useState<number[]>([]);
 
@@ -32,7 +35,6 @@ function CrearComunidad() {
   const [localesSeleccionados, setLocalesSeleccionados] = useState<number[]>([]);
 
   const [serviciosDisponibles, setServiciosDisponibles] = useState<any[]>([]);
-  const [imagen, setImagen] = useState<File | null>(null);
 
   // ✅ Aquí se mantiene el estado de membresías nuevas y se pasa correctamente al form
   const [nuevasMembresias, setNuevasMembresias] = useState<Item[]>([]);
@@ -60,6 +62,27 @@ function CrearComunidad() {
 
       console.log("Las membresias a enviar son:", nuevasMembresias)      
 
+      let nombreArchivo = null;
+
+      if (imagenFile) {
+        const formData = new FormData();
+        formData.append("archivo", imagenFile);
+
+        try {
+          const res = await axios.post("http://localhost:8080/api/archivo", formData, {
+            auth: {
+              username: "admin",
+              password: "admin123"
+            }
+          });
+          nombreArchivo = res.data.nombreArchivo;
+        } catch (error) {
+          console.error("Error al subir imagen:", error);
+          alert("No se pudo subir la imagen.");
+          return;
+        }
+      }
+
       const requestBody = {
         nombre,
         activo: true,
@@ -67,7 +90,7 @@ function CrearComunidad() {
         proposito,
         membresias: nuevasMembresias,
         servicios: servicios.map(id => ({ idServicio: id })),
-        imagen: imagen ?? null, // si no hay imagen, enviamos null (o puedes omitir este campo si no aplica)
+        imagen: nombreArchivo,
       };
 
       console.log("Enviando datos de comunidad:", requestBody);
@@ -122,10 +145,10 @@ function CrearComunidad() {
         localesDisponibles={locales}
         localesSeleccionados={localesSeleccionados}
         setLocalesSeleccionados={setLocalesSeleccionados}
-        imagen={imagen}
-        setImagen={setImagen}
+        
         onSubmit={handleCrearComunidad}
         buttonText="Crear comunidad"
+        onImagenSeleccionada={(file) => setImagenFile(file)}
       />
     </div>
   );

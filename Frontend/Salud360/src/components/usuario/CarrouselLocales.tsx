@@ -1,6 +1,7 @@
 
 import { useState } from "react";
 import CardLocal from "./CardLocal";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface Props{
     locales: any;
@@ -33,7 +34,7 @@ function CarrouselLocales({locales}: any){
             <div className="flex justify-between items-center px-32">
                 <button onClick={handlePrev} disabled={currentIndex === 0}
                 className={`w-10 h-10 p-2 ${"text-white bg-[#2A86FF]"} rounded-full disabled:opacity-50 ${!(currentIndex === 0) && 'cursor-pointer'}`}>
-                    ←
+                    <ChevronLeft />
                 </button>
 
                 <div className="overflow-hidden w-full max-w-[1520px] mx-auto">
@@ -61,7 +62,7 @@ function CarrouselLocales({locales}: any){
                     disabled={currentIndex >= locales.length - 1}
                     className={`w-10 h-10 p-2 ${"text-white bg-[#2A86FF]"} rounded-full disabled:opacity-50 ${!(currentIndex >= totalSize) && 'cursor-pointer'}`}
                 >
-                    →
+                    <ChevronRight />
                 </button>
             </div>
         </section>

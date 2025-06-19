@@ -16,7 +16,7 @@ function Button({children, size="sm", variant = "primary", className="", type="b
         primary: "bg-[#2A86FF] text-white hover:bg-blue-600",
         outline: "bg-black text-white hover:bg-gray-700",
         //outline: "border border-[#2A86FF] text-[#2A86FF] hover:bg-blue-50",
-        danger: "bg-red-500 text-white hover:bg-red-600",
+        danger: "bg-red-500 text-white hover:bg-red-700",
         white: "bg-white text-[#2A86FF] border border-[#2A86FF] hover:bg-gray-100"
     }
     const sizes ={

@@ -7,6 +7,7 @@ function useLocalForm(){
     const [direccion, setDireccion] = useState("");
     const [tipo, setTipo] = useState("");
     const [servicios, setServicios] = useState<number | null>(null);
+    const [aforo, setAforo] = useState<number>(0);
     
     const setLocalAPI = (local: any) => {
         setNombre(local.nombre || "");
@@ -16,6 +17,7 @@ function useLocalForm(){
         setTipo(local.tipoServicio || "");
         //setServicios((local.servicio || []).map((s: any) => s.idServicio));
         setServicios(local.servicio?.idServicio || null);
+        setAforo(local.aforo || 0);
     }
 
     return{
@@ -25,6 +27,7 @@ function useLocalForm(){
         direccion, setDireccion,
         tipo, setTipo,
         servicios, setServicios,
+        aforo, setAforo,
         setLocalAPI
   };
 }
