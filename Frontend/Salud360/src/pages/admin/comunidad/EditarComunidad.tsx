@@ -16,6 +16,10 @@ function EditarComunidad() {
     servicios, setServicios
   } = useComunidadForm();
 
+  //Para la imagen actual y nueva
+    const [imagenFile, setImagenFile] = useState<File | null>(null);
+    const [imagenActual, setImagenActual] = useState<string | null>(null);
+    
   const [membresias, setMembresias] = useState<any[]>([]);
   const [membresiasSeleccionadas, setMembresiasSeleccionadas] = useState<number[]>([]);
   const [locales, setLocales] = useState<any[]>([]);
@@ -56,6 +60,7 @@ function EditarComunidad() {
         setMembresias(membresiasRes.data);
         setLocales(localesRes.data);
         setLoading(false);
+        setImagenActual(comunidad.imagen || null);
       } catch (error) {
         console.error("Error al cargar datos de comunidad:", error);
         setLoading(false);
@@ -67,13 +72,31 @@ function EditarComunidad() {
 
   const handleEditarComunidad = async () => {
     try {
+      let nombreArchivo = imagenActual;
+
+      if (imagenFile) {
+        const formData = new FormData();
+        formData.append("archivo", imagenFile);
+
+        try {
+          const res = await axios.post("http://localhost:8080/api/archivo", formData, {
+            auth: { username: "admin", password: "admin123" }
+          });
+          nombreArchivo = res.data.nombreArchivo;
+        } catch (error) {
+          console.error("Error al subir imagen:", error);
+          alert("No se pudo subir la imagen.");
+          return;
+        }
+      }
+
       const payload = {
         nombre,
         descripcion,
         proposito,
         membresias: nuevasMembresias,
         servicios: servicios.map(id => ({ idServicio: id })),
-        //imagen: imagen ?? null, // si no hay imagen, enviamos null (o puedes omitir este campo si no aplica)
+        imagen: nombreArchivo
       };
 
       const response = await axios.put(`http://localhost:8080/api/comunidades/${id}`, payload, {
@@ -123,8 +146,10 @@ function EditarComunidad() {
         localesDisponibles={locales}
         localesSeleccionados={localesSeleccionados}
         setLocalesSeleccionados={setLocalesSeleccionados}
-        imagen={null}
-        setImagen={() => {}}
+        imagen={imagenFile}
+        setImagen={setImagenFile}
+        imagenActual={imagenActual}
+        onImagenSeleccionada={(file) => setImagenFile(file)}
         onSubmit={handleEditarComunidad}
         buttonText="Guardar cambios"
       />

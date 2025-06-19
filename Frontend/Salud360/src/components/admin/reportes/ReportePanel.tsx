@@ -9,15 +9,16 @@ import TextAreaInput from "@/components/input/TextAreaInput";
 
 export default function ReportePanel() {
   const [tabActivo, setTabActivo] = useState("usuarios");
-  const [descripcion, setDescripcion] = useState("");
   const readOnly = false; 
 
   const [formData, setFormData] = useState({
     fechaInicio: "",
     fechaFin: "",
     servicio: "",
-    local: ""
+    local: "",
+    descripcion: ""
   });
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -26,9 +27,18 @@ export default function ReportePanel() {
 
   return (
     <div className="">
-      <div className="flex flex-col gap-16 mt-4 mb-12">
-        <TextAreaInput required={true} name="text" label="Descripción" value={descripcion} onChange={(e) => setDescripcion(e.target.value)} disabled={readOnly} reserveSpace={true} placeholder="Ingrese la descripción" />
-        </div>
+      <div className="flex flex-col gap-16 mt-4 mb-12">        
+          <TextAreaInput
+            required={true}
+            name="descripcion"
+            label="Descripción"
+            value={formData.descripcion}
+            onChange={handleChange}
+            disabled={readOnly}
+            reserveSpace={true}
+            placeholder="Ingrese la descripción"
+          />
+      </div>
       {/* Tabs */}
       <div className="border-b mb-6">
         <nav className="flex space-x-4">

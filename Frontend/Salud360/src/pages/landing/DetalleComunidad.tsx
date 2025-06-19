@@ -39,9 +39,20 @@ function DetalleComunidad(){
       .catch(err => console.error("Error cargando comunidad", err));
     }
 
+    
     useEffect(() => {
         fetchComunidad();
     }, []);
+
+    const imagen = comunidad.imagen;
+
+  const imagenFinal =
+    imagen && (imagen.startsWith("http") || imagen.startsWith("data:"))
+      ? imagen
+      : imagen
+        ? `http://localhost:8080/api/archivo/${imagen}`
+        : "https://png.pngtree.com/png-clipart/20201224/ourmid/pngtree-panda-bamboo-bamboo-shoots-simple-strokes-cartoon-with-pictures-small-fresh-png-image_2625172.jpg";
+
 
     //console.log("Comunidad:", comunidad);
     console.log("Servicios de la comunidad:", servicios);
@@ -70,7 +81,7 @@ function DetalleComunidad(){
     return(
         <div>
             <title>Detalle de la comunidad</title>
-            <HeroDetalleComunidad image={heroImage} title={comunidad.nombre}/>
+            <HeroDetalleComunidad image={imagenFinal} title={comunidad.nombre}/>
             
             <section className="flex flex-col gap-32 my-32">
                 <section className="bg-white">
@@ -97,23 +108,32 @@ function DetalleComunidad(){
                 <section className="bg-white">
                     <div className="flex flex-col gap-8">
                         <h1>NUESTROS SERVICIOS</h1>
-                        {servicios.map((servicio: any, i: number) => (
+                        {servicios.map((servicio: any, i: number) => {
+                        const imagenServicio =
+                            servicio.imagen
+                            ? servicio.imagen.startsWith("http") || servicio.imagen.startsWith("data:")
+                                ? servicio.imagen
+                                : `http://localhost:8080/api/archivo/${servicio.imagen}`
+                            : "https://png.pngtree.com/png-clipart/20201224/ourmid/pngtree-panda-bamboo-bamboo-shoots-simple-strokes-cartoon-with-pictures-small-fresh-png-image_2625172.jpg";
+
+                        return (
                             <div key={servicio.idServicio}>
-                                {i % 2 === 0 ? (
+                            {i % 2 === 0 ? (
                                 <ImageSectionLeft
-                                    image={Imagen}
-                                    h1={servicio.nombre}
-                                    h3={servicio.descripcion}
+                                image={imagenServicio}
+                                h1={servicio.nombre}
+                                h3={servicio.descripcion}
                                 />
-                                ) : (
+                            ) : (
                                 <ImageSectionRight
-                                    image={Imagen}
-                                    h1={servicio.nombre}
-                                    h3={servicio.descripcion}
+                                image={imagenServicio}
+                                h1={servicio.nombre}
+                                h3={servicio.descripcion}
                                 />
-                                )}
+                            )}
                             </div>
-                        ))}
+                        );
+                        })}
                     </div>
                 </section>
 

@@ -67,7 +67,7 @@ function CalificacionesPage() {
 
     const handleReactivarTestimonio = (): void => {
         //console.log("El id del usuario a reactivar es:", testimonioSeleccionado.idTestimonio)
-        axios.put(`http://localhost:8080/api/testimonios/${testimonioSeleccionado.idTestimonio}/reactivar`)
+        axios.put(`http://localhost:8080/api/testimonios/reactivar/${testimonioSeleccionado.idTestimonio}`)
         .then(() => {
         setShowModalExito(true);
         setShowModalError(false)

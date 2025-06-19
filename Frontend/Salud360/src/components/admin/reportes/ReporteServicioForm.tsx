@@ -1,5 +1,6 @@
 import InputIconLabelEdit from "@/components/InputIconLabelEdit"
 import SelectIconLabel from "@/components/SelectIconLabel"
+import SelectIconLabelNum from "@/components/SelectIconLabelNum"
 import { Calendar } from "lucide-react"
 import { FaBuilding } from "react-icons/fa";
 import Button from "@/components/Button";
@@ -10,14 +11,14 @@ interface Props {
   data: {
     fechaInicio: string;
     fechaFin: string;
-    local: string;
+    idlocal: number;
     descripcion: string;
   };
   onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
 }
 
 export default function ReporteServicioForm({ data, onChange }: Props) {
-  const [locales, setLocales] = useState<{ value: string; label: string }[]>([]);
+  const [locales, setLocales] = useState<{ value: number; label: string }[]>([]);
 
   useEffect(() => {
     const fetchLocales = async () => {
@@ -25,8 +26,8 @@ export default function ReporteServicioForm({ data, onChange }: Props) {
         const res = await axios.get("http://localhost:8080/api/locales", {
           auth: { username: "admin", password: "admin123" }
         });
-        const opciones = res.data.map((l: any) => ({ value: l.idLocal, label: l.nombre }));
-        setLocales([{ value: "", label: "Elige una opcion" }, ...opciones]);
+        const opciones = res.data.map((l: any) => ({ value: l.idLocal, content: l.nombre }));
+        setLocales([{ value: "", content: "Elige una opción" }, ...opciones]);
       } catch (err) {
         console.error("Error cargando locales", err);
       }
@@ -40,7 +41,7 @@ export default function ReporteServicioForm({ data, onChange }: Props) {
         fechaInicio: data.fechaInicio,
         descripcion: data.descripcion,
         fechaFin: data.fechaFin,
-        local: data.local
+        local: data.idlocal
       }, {
         auth: {
           username: "admin",
@@ -82,12 +83,6 @@ export default function ReporteServicioForm({ data, onChange }: Props) {
         icon={<Calendar className="w-5 h-5" />} htmlFor="fechaFin"
         type="date" label="Fecha fin"
         value={data.fechaFin} onChange={onChange}
-      />
-      <SelectIconLabel
-        icon={<FaBuilding className="w-5 h-5" />} htmlFor="local"
-        label="Locales"
-        value={data.local} onChange={onChange}
-        options={locales}
       />
       <div className="col-span-2 flex justify-end mt-4">
         <Button type="button" onClick={handleGenerarReporte}>

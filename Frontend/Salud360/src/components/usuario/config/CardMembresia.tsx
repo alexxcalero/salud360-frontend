@@ -11,46 +11,57 @@ const CardMembresia = ({
   comunidad: string;
   precio: number;
   fechaRenovacion: string;
-  state: "idle" | "suspended" | "canceled";
+  state: "Activa" | "Suspendida" | "Cancelada";
   selected?: boolean;
 }) => {
+
+
+
+
+
+  console.log("Dentro del card el precio es:", precio)
+
   return (
     <div
       data-state={state}
-      className={`group rounded-md shadow-md p-4 bg-white data-[state='canceled']:bg-neutral-200 flex items-center justify-between ${
-        selected && "border-1 border-blue-500"
-      }
+      className={`group rounded-md shadow-md p-8 bg-white data-[state='canceled']:bg-neutral-200 flex items-center justify-between ${selected && "border-1 border-blue-500"
+        }
       `}
     >
-      <div>
-        <span className="text-neutral-800 mr-2 group-data-[state='canceled']:text-neutral-500">
-          {comunidad}
-        </span>
-        <span className="bg-blue-500 group-data-[state='canceled']:bg-neutral-600 text-white px-2 py-[2px] rounded-full use-label-large mr-2">
-          s/.{" "}
-          {precio.toLocaleString("es-PE", {
-            maximumFractionDigits: 2,
-            minimumFractionDigits: 2,
-          })}
-        </span>
-        <div className="inline-block">
-          {state === "idle" && (
-            <span className="bg-green-500 text-white px-2 py-[2px] rounded-full use-label-large">
-              Activa
-            </span>
-          )}
-          {state === "suspended" && (
-            <span className="bg-yellow-500 text-white px-2 py-[2px] rounded-full use-label-large">
-              Suspendida
-            </span>
-          )}
-          {state === "canceled" && (
-            <span className="bg-red-500 text-white px-2 py-[2px] rounded-full use-label-large">
-              Cancelada
-            </span>
-          )}
+      <div className="flex flex-col">
+
+        <div className="flex flex-row items-center gap-4">
+          <h3 className="text-neutral-800 mr-2 group-data-[state='canceled']:text-neutral-500">
+            {comunidad}
+          </h3>
+          <p className="bg-blue-500 group-data-[state='canceled']:bg-neutral-600 text-lg font-bold text-white px-2 py-2 rounded-sm use-label-large mr-2">
+            s/.{" "}
+            {precio.toLocaleString("es-PE", {
+              maximumFractionDigits: 2,
+              minimumFractionDigits: 2,
+            })}
+          </p>
+          <div className="inline-block">
+            {state === "Activa" && (
+              <p className="bg-green-500 text-lg font-bold text-white px-2 py-2 rounded-sm use-label-large">
+                Activa
+              </p>
+            )}
+            {state === "Suspendida" && (
+              <p className="bg-yellow-500 text-lg font-bold text-white px-2 py-2 rounded-sm use-label-large">
+                Suspendida
+              </p>
+            )}
+            {state === "Cancelada" && (
+              <p className="bg-red-500 text-lg font-bold text-white px-2 py-2 rounded-sm use-label-large">
+                Cancelada
+              </p>
+            )}
+          </div>
         </div>
-        <span className="text-left text-sm text-neutral-600 group-data-[state='canceled']:text-neutral-400 block mt-2">
+
+
+        <p className="text-left text-md text-neutral-600 group-data-[state='canceled']:text-neutral-400 block mt-2">
           Fecha de renovación:{" "}
           <time
             dateTime={fechaRenovacion}
@@ -58,37 +69,39 @@ const CardMembresia = ({
           >
             {fechaRenovacion}
           </time>
-        </span>
+        </p>
+
+
       </div>
 
-      <div>
-        {state === "idle" && (
+      <div className="flex flex-row gap-4">
+        {state === "Activa" && (
           <>
-            <Button size="sm" className="mr-2 rounded-full">
+            <Button size="lg" className="mr-2 rounded-sm">
               <Info />
               Detalles
             </Button>
-            <Button variant="danger" size="sm" className="mr-2 rounded-full">
+            <Button variant="danger" size="lg" className="mr-2 rounded-sm">
               <CircleMinus />
               Suspender
             </Button>
-            <Button variant="danger" size="sm" className="mr-2 rounded-full">
+            <Button variant="danger" size="lg" className="mr-2 rounded-sm">
               <Ban />
               Cancelar
             </Button>
           </>
         )}
-        {state === "suspended" && (
+        {state === "Suspendida" && (
           <>
-            <Button size="sm" className="mr-2 rounded-full">
+            <Button size="lg" className="mr-2 rounded-sm">
               <Info />
               Detalles
             </Button>
-            <Button size="sm" className="mr-2 rounded-full">
+            <Button size="lg" className="mr-2 rounded-sm">
               <Plus />
               Reactivar
             </Button>
-            <Button variant="danger" size="sm" className="mr-2 rounded-full">
+            <Button variant="danger" size="lg" className="mr-2 rounded-sm">
               <Ban />
               Cancelar
             </Button>

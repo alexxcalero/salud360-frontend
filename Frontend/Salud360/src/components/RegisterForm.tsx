@@ -13,7 +13,7 @@ import PasswordInput from "./input/PasswordInput"
 import axios from "axios"
 import { FaGenderless } from "react-icons/fa"
 import ModalValidacion from "./ModalValidacion"
-
+import { jwtDecode } from "jwt-decode";
 
 export default function RegisterForm() {
   const [formData, setFormData] = useState({
@@ -205,14 +205,63 @@ export default function RegisterForm() {
 
   //Uso de Google OAuth
   const registerGoogle = useGoogleLogin({
-    onSuccess: (tokenResponse) => {
-      console.log("Registro con Google OK:", tokenResponse)
-      // Aquí debemos jwtDecode para extraer el token que envia google
+    onSuccess: async (tokenResponse) => {
+      try {
+        console.log("Registro con Google OK:", tokenResponse);
+
+        // 1. Decodificamos el token para obtener los datos
+        const decoded: any = jwtDecode(tokenResponse.access_token);
+        console.log("Decoded Google token:", decoded);
+
+        // 2. Armar el objeto con los datos necesarios
+        const datosGoogle = {
+          nombres: decoded.given_name || "",
+          apellidos: decoded.family_name || "",
+          correo: decoded.email,
+          contrasenha: "GOOGLE_AUTH",
+          sexo: "No especificado",
+          telefono: "",
+          fechaNacimiento: "",
+          direccion: "",
+          numeroDocumento: "00000000",
+          tipoDocumento: {
+            idTipoDocumento: "1",
+          },
+        };
+
+        setLoading(true);
+        await axios.post("http://localhost:8080/api/autenticacion/google", {
+          correo: decoded.email,
+          nombres: decoded.given_name,
+          apellidos: decoded.family_name
+        });
+        createToast("success", {
+          title: "Registro con Google exitoso",
+          description: "Redirigiendo...",
+        });
+
+        navigate("/RegistroExitoso", {
+          state: { created: true },
+        });
+      } catch (error) {
+        console.error("Error al registrar con Google:", error);
+        createToast("error", {
+          title: "Error en registro con Google",
+          description: "Inténtalo nuevamente.",
+        });
+      } finally {
+        setLoading(false);
+      }
     },
     onError: () => {
-      console.error("Error al registrarse con Google")
-    }
-  })
+      console.error("Error al registrarse con Google");
+      createToast("error", {
+        title: "Fallo el inicio con Google",
+        description: "Intenta otra vez.",
+      });
+    },
+  });
+
 
   const navigate = useNavigate()
   

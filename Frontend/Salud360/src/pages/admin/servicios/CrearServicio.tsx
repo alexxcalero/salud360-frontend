@@ -12,6 +12,10 @@ function CrearServicio(){
     const [showModalValidacion, setShowModalValidacion] = useState(false);
     const [mensajeValidacion, setMensajeValidacion] = useState("");
 
+    //Para la imagen
+    const [imagenFile, setImagenFile] = useState<File | null>(null); 
+    const [imagenSeleccionada, setImagenSeleccionada] = useState<File | null>(null); 
+
     const {
         nombre, setNombre,
         descripcion, setDescripcion,
@@ -55,12 +59,36 @@ function CrearServicio(){
         }
 
         console.log("El contenido de los locales a enviar es:", locales)
+
+        //PARA IMAGEN IGUALMENTE
+        let nombreArchivo = null;
+        
+              if (imagenFile) {
+                const formData = new FormData();
+                formData.append("archivo", imagenFile);
+        
+                try {
+                  const res = await axios.post("http://localhost:8080/api/archivo", formData, {
+                    auth: {
+                      username: "admin",
+                      password: "admin123"
+                    }
+                  });
+                  nombreArchivo = res.data.nombreArchivo;
+                } catch (error) {
+                  console.error("Error al subir imagen:", error);
+                  alert("No se pudo subir la imagen.");
+                  return;
+                }
+              }
+        
         try{
             const response = await axios.post("http://localhost:8080/api/servicios", 
                 {
                     nombre,
                     descripcion,
                     tipo,
+                    imagen: nombreArchivo 
                 },
                 {  
                     auth: {
@@ -101,6 +129,12 @@ function CrearServicio(){
                 readOnly={false}
                 onSubmit={handleCrearServicio}
                 buttonText="Crear Servicio"
+                onImagenSeleccionada={(file) => {
+            setImagenSeleccionada(file); 
+            setImagenFile(file);        
+          }}
+          imagenSeleccionada={imagenSeleccionada} 
+          imagenActual={null} 
             />
         </div>
         {showModalValidacion && (
