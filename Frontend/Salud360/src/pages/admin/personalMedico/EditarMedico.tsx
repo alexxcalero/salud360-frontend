@@ -15,6 +15,9 @@ function EditarMedico() {
   const [showModalValidacion, setShowModalValidacion] = useState(false);
   const [mensajeValidacion, setMensajeValidacion] = useState("");
 
+  //Para la imagen actual y nueva
+    const [imagenFile, setImagenFile] = useState<File | null>(null);
+    const [imagenActual, setImagenActual] = useState<string | null>(null);
 
   const {
     nombres,
@@ -53,7 +56,10 @@ function EditarMedico() {
       .then((res) => {
         console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
         setMedicoAPI(res.data);
+        setImagenActual(res.data.fotoPerfil || null);
+
         console.log("Medico:", res.data);
+        
         setLoading(false);
       })
       .catch((err) => {
@@ -126,6 +132,27 @@ function EditarMedico() {
             return;
     }
 
+
+    let nombreArchivo = imagenActual;
+
+      if (imagenFile) {
+        const formData = new FormData();
+        formData.append("archivo", imagenFile);
+
+        try {
+          const res = await axios.post("http://localhost:8080/api/archivo", formData, {
+            auth: { username: "admin", password: "admin123" }
+          });
+          nombreArchivo = res.data.nombreArchivo;
+        } catch (error) {
+          console.error("Error al subir imagen:", error);
+          alert("No se pudo subir la imagen.");
+          return;
+        }
+      }
+
+
+
     try {
       const sexo = genero;
 
@@ -138,6 +165,7 @@ function EditarMedico() {
           sexo,
           especialidad,
           descripcion,
+          fotoPerfil: nombreArchivo ?? null,
           tipoDocumento: {
             idTipoDocumento: tipoDoc,
           }
@@ -183,6 +211,8 @@ function EditarMedico() {
       setDescripcion={setDescripcion}
       onSubmit={handleEditarMedico}
       buttonText="Guardar"
+      imagenActual={imagenActual}
+        onImagenSeleccionada={(file) => setImagenFile(file)}
       readOnly={false}
     />
     {showModalValidacion && (
