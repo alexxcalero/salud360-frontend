@@ -11,7 +11,7 @@ import { useToasts } from "@/hooks/ToastContext";
 import { citaMedicaType } from "@/schemas/citaMedica";
 import { postergarCitaMedicaQuery } from "@/services/calendarioUsuario.service";
 import { FormEvent } from "react";
-
+//<li>Hora: {citaMedica.hora.toFormat("t", { locale: "es" })}</li> linea 52
 const PostergarCitaModal = ({
   citaMedica,
   open,
@@ -47,9 +47,9 @@ const PostergarCitaModal = ({
             <p>La cita que desea postergar, atualmente se dará para fecha:</p>
             <ul className="pl-6 list-disc">
               <li>
-                Dia: {citaMedica.fecha.toFormat("DDDD", { locale: "es" })}
+                Dia: {citaMedica.fecha?.toFormat("DDDD", { locale: "es" })}
               </li>
-              <li>Hora: {citaMedica.hora.toFormat("t", { locale: "es" })}</li>
+              <li>Hora: {citaMedica.horaInicio?.toFormat("t")} - {citaMedica.horaFin?.toFormat("t")}</li>
             </ul>
             {/** Inputs */}
             <div className="flex justify-end items-center gap-4">

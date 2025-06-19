@@ -10,10 +10,10 @@ function DetalleServicio(){
     const {id} = useParams();
 
     const {
-        nombre, setNombre,
-        descripcion, setDescripcion,
-        tipo, setTipo,
-        locales, setLocales,
+        nombre, //setNombre,
+        descripcion, //setDescripcion,
+        tipo, //setTipo,
+        //locales, setLocales,
         setServicioAPI
     } = useServicioForms();
 

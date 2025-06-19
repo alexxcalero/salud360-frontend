@@ -1,27 +1,27 @@
 import Button from "@/components/Button";
-import Input from "@/components/input/Input";
-import PasswordInput from "@/components/input/PasswordInput";
+//import Input from "@/components/input/Input";
+//import PasswordInput from "@/components/input/PasswordInput";
 import { AuthContext } from "@/hooks/AuthContext";
-import { useUsuario } from "@/hooks/useUsuario";
+//import { useUsuario } from "@/hooks/useUsuario";
 import {
-  Calendar,
-  ChevronDown,
-  Mail,
-  MapPin,
+  //Calendar,
+  //ChevronDown,
+  //Mail,
+  //MapPin,
   Pen,
-  Phone,
+  //Phone,
   User,
 } from "lucide-react";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom"; // Asegúrate de tener esto bien configurado
 import axios from "axios";
 import { useEffect, useState } from "react";
-import SelectLabel from "@/components/SelectLabel";
+//import SelectLabel from "@/components/SelectLabel";
 import useUsuarioForm from "@/hooks/useUsuarioForm";
-import InputLabel from "@/components/InputLabel";
-import InputIconLabel from "@/components/InputIconLabel";
+//import InputLabel from "@/components/InputLabel";
+//import InputIconLabel from "@/components/InputIconLabel";
 import PerfilForms from "@/components/landing/PerfilForms";
-import { useParams } from "react-router";
+//import { useParams } from "react-router";
 import PerfilPasswordForms from "@/components/usuario/PerfilPasswordForms";
 import ModalValidacion from "@/components/ModalValidacion";
 
@@ -59,7 +59,7 @@ function InicioPerfil() {
         correo, setCorreo,
         genero, setGenero,
         fechaNacimiento, setFechaNacimiento,
-        contrasenha, setContrasenha,
+        contrasenha, //setContrasenha,
         setUsuarioAPI
     } = useUsuarioForm();
 
@@ -139,7 +139,7 @@ function InicioPerfil() {
       return false;
     }
 
-    if (!tipoDoc || tipoDoc === 0) {
+    if (!tipoDoc || tipoDoc.trim() === "") {
       setMensajeValidacion("Debe seleccionar un tipo de documento.");
       setShowModalValidacion(true);
       return false;

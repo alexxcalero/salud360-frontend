@@ -3,7 +3,7 @@ import Button from "@/components/Button";
 import Checkbox from "@/components/Checkbox";
 import { useNavigate } from "react-router";
 import { useState } from "react";
-import ModalError from "@/components/ModalError";
+//import ModalError from "@/components/ModalError";
 import ModalValidacion from "@/components/ModalValidacion";
 
 interface Servicio {
@@ -58,9 +58,9 @@ function ComunidadForm({
   setServiciosSeleccionados,
   onSubmit = () => {},
   buttonText = "Crear comunidad",
-  membresiasDisponibles,
-  membresiasSeleccionadas,
-  setMembresiasSeleccionadas,
+  //membresiasDisponibles,
+  //membresiasSeleccionadas,
+  //setMembresiasSeleccionadas,
   localesDisponibles,
   localesSeleccionados,
   setLocalesSeleccionados,

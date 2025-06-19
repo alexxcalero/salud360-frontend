@@ -2,7 +2,7 @@ import ServiciosForm from "@/components/admin/servicios/ServiciosForm";
 import useServicioForms from "@/hooks/useServicioForms";
 import axios from "axios";
 import ModalValidacion from "@/components/ModalValidacion";
-import  { useState, useEffect } from "react";
+import  { useState } from "react";
 import { useNavigate } from "react-router";
 
 function CrearServicio(){
@@ -16,15 +16,15 @@ function CrearServicio(){
         nombre, setNombre,
         descripcion, setDescripcion,
         tipo, setTipo,
-        locales, setLocales,
-        setServicioAPI
+        locales, setLocales
+        //setServicioAPI
     } = useServicioForms();
 
 
     //VALIDACIONES DE CAMPOS 
     const validarCampos = (): boolean => {
-    const soloLetras = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
-    const soloNumeros = /^[0-9]+$/;
+    //const soloLetras = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
+    //const soloNumeros = /^[0-9]+$/;
 
     if (!nombre || nombre.trim() === "") {
       setMensajeValidacion("El nombre del servicio no debe estar vacíos.");
@@ -56,7 +56,7 @@ function CrearServicio(){
 
         console.log("El contenido de los locales a enviar es:", locales)
         try{
-            const response = await axios.post("http://localhost:8080/api/servicios", 
+            await axios.post("http://localhost:8080/api/servicios", 
                 {
                     nombre,
                     descripcion,

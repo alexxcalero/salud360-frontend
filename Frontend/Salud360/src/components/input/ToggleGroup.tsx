@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+//import { useState } from "react";
 
-interface SingleProps {
+/*interface SingleProps {
   type: "single";
   value?: string;
   onValueChange?: (value: string) => void;
@@ -9,7 +9,7 @@ interface SingleProps {
     value: string;
     conten: string;
   }[];
-}
+}*/
 interface MultipleProps {
   type: "multiple";
   value: string[];
@@ -21,8 +21,8 @@ interface MultipleProps {
 }
 
 type Props = MultipleProps;
-
-const ToggleGroup = ({ type, value, onValueChange, options }: Props) => {
+//rb type,
+const ToggleGroup = ({  value, onValueChange, options }: Props) => {
   const toggleValue = (v: string) => {
     if (value.includes(v)) {
       onValueChange(value.filter((item) => item !== v));

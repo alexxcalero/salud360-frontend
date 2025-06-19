@@ -1,6 +1,6 @@
 import  { useEffect, useState} from "react";
 import axios from "axios";
-import CardLanding from "./CardLanding";
+//import CardLanding from "./CardLanding";
 import CarrouselLanding from "./CarrouselLanding";
 
 function ListaLocales(){

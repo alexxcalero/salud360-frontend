@@ -23,7 +23,7 @@ export function ReservaCard({
   collapsed?: boolean;
 }) {
   const {
-    callInfoDialog,
+    //callInfoDialog,
     callSuccessDialog,
     callErrorDialog,
     callAlertDialog,

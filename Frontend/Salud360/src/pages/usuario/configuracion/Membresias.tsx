@@ -1,25 +1,28 @@
 import Spinner from "@/components/Spinner";
 import CardMembresia from "@/components/usuario/config/CardMembresia";
 import { AuthContext } from "@/hooks/AuthContext";
-import useInfiniteScroll from "@/hooks/useInfiniteScroll";
+import { Afiliacion } from "@/services/afiliacionService";
+//import useInfiniteScroll from "@/hooks/useInfiniteScroll";
 import axios from "axios";
 import { AlertTriangle } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 
-interface MembresiaFake {
+/*interface MembresiaFake {
   comunidad: string;
   precio: number;
   fechaRenovacion: string;
   state: "idle" | "suspended" | "canceled";
   selected: boolean;
-}
+}*/
 
 const Membresias = () => {
 
-  const [afiliaciones, setAfiliaciones] = useState([]);
+  const [afiliaciones, setAfiliaciones] = useState<Afiliacion[]>([]);
+
+
   const [waiting, setWaiting] = useState(true);
 
-  const { usuario, logout, loading } = useContext(AuthContext);
+  const { usuario, loading } = useContext(AuthContext);
 
   if (loading || !usuario) return null;
 
@@ -91,14 +94,16 @@ const Membresias = () => {
           {(tieneAfiliaciones) ? (
             <>
               <ul className="flex flex-col gap-4">
-                <li key={1}>
-                  <CardMembresia
-                    comunidad="Comunidad FAKE"
-                    precio={afiliaciones.membresia?.precio as number}
-                    fechaRenovacion={formatFechaMasUnMes(afiliaciones.membresia?.fechaCreacion) as string}
-                    state={afiliaciones.estado as "idle" | "suspended" | "canceled"}
-                  />
-                </li>
+                {afiliaciones.map((afiliacion, index) => (
+                  <li key={index}>
+                    <CardMembresia
+                      comunidad="Comunidad X"
+                      precio={afiliacion.membresia?.precio}
+                      fechaRenovacion={formatFechaMasUnMes(afiliacion.membresia?.fechaCreacion)}
+                      state={afiliacion.estado as "Activa" | "Suspendida" | "Cancelada"}
+                    />
+                  </li>
+                ))}
               </ul>
 
               <div className="mt-4 w-full flex justify-center">

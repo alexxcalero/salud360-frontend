@@ -1,7 +1,7 @@
 import LocalesForms from "@/components/admin/locales/LocalesForms";
 import useLocalForm from "@/hooks/useLocalForm";
 import ModalValidacion from "@/components/ModalValidacion";
-import  { useState, useEffect } from "react";
+import  { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";
 
@@ -18,15 +18,15 @@ function CrearLocal(){
         direccion, setDireccion,
         tipo, setTipo,
         servicios, setServicios,
-        aforo, setAforo,
-        setLocalAPI
+        aforo, setAforo
+        //setLocalAPI
     } = useLocalForm();
 
 
     
 //VALIDACIONES DE CAMPOS 
     const validarCampos = (): boolean => {
-        const soloLetras = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
+        //const soloLetras = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
         const soloNumeros = /^[0-9]+$/;
 
         if (!nombre || nombre.trim() === "") {

@@ -30,7 +30,7 @@ export function ComunidadCitaMedicaCard({
   collapsed?: boolean;
 }) {
   const {
-    callInfoDialog,
+    //callInfoDialog,
     callSuccessDialog,
     callErrorDialog,
     callAlertDialog,
@@ -196,7 +196,8 @@ export function ComunidadCitaMedicaCard({
                 </p>
               {/* Botón para descargar archivo médico */}
               {citaMedica.nombreArchivo ? (
-                <Button variant="secondary" onClick={handleDescargarArchivo}>
+                //cambie secondary por white
+                <Button variant="white" onClick={handleDescargarArchivo}>
                   Descargar archivo médico
                 </Button>
               ) : (

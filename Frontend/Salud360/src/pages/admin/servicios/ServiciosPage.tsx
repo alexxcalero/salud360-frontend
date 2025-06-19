@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Search, Filter, UserPlus, Info, Pencil, Trash2, RotateCcw, FolderPlus } from "lucide-react";
+import { Search,  Info, Pencil, Trash2, RotateCcw, FolderPlus } from "lucide-react";
 import { useNavigate } from "react-router";
 
 import InputIcon from "@/components/InputIcon";
@@ -10,13 +10,22 @@ import axios from "axios";
 import ModalError from "@/components/ModalError";
 import ModalExito from "@/components/ModalExito";
 
+export interface Servicio {
+  idServicio: number;
+  nombre: string;
+  descripcion: string;
+  tipo: string;
+  activo: boolean;
+}
+
 function ServiciosPage() {
   const [selectAll, setSelectAll] = useState(false);
-  const [servicios, setServicios] = useState([]);
+  const [servicios, setServicios] = useState<Servicio[]>([]);
+
   const [servicioSeleccionado, setServicioSeleccionado] = useState<any>();
   const [showModalExito, setShowModalExito] = useState(false);
   const [showModalError, setShowModalError] = useState(false);
-  const [search, setSearch] = useState("");
+  //const [search, setSearch] = useState("");
   const [paginaActual, setPaginaActual] = useState(1);
 
   const fetchServicios = () => {

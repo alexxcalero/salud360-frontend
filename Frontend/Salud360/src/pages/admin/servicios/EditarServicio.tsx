@@ -20,7 +20,7 @@ function EditarServicio(){
         nombre, setNombre,
         descripcion, setDescripcion,
         tipo, setTipo,
-        locales, setLocales,
+        locales, //setLocales,
         setServicioAPI
     } = useServicioForms();
 
@@ -51,8 +51,8 @@ function EditarServicio(){
 
     //VALIDACIONES DE CAMPOS 
     const validarCampos = (): boolean => {
-    const soloLetras = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
-    const soloNumeros = /^[0-9]+$/;
+    //const soloLetras = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
+    //const soloNumeros = /^[0-9]+$/;
 
     if (!nombre || nombre.trim() === "") {
       setMensajeValidacion("El nombre del servicio no debe estar vacíos.");
@@ -86,7 +86,7 @@ function EditarServicio(){
 
         console.log("El contenido de los locales a enviar es:", locales)
         try{
-            const response = await axios.put(`http://localhost:8080/api/servicios/${id}`, 
+            await axios.put(`http://localhost:8080/api/servicios/${id}`, 
                 {
                     nombre,
                     descripcion,

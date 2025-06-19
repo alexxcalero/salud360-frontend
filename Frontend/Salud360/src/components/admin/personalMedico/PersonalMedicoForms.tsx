@@ -1,16 +1,16 @@
 import Button from "@/components/Button";
 import DropImage from "@/components/DropImage";
-import FormContainer from "@/components/FormContainer";
-import InputIconLabel from "@/components/InputIconLabel";
+//import FormContainer from "@/components/FormContainer";
+//import InputIconLabel from "@/components/InputIconLabel";
 import InputLabel from "@/components/InputLabel";
 import SelectLabel from "@/components/SelectLabel";
 import axios from "axios";
-import { Mail, Phone } from "lucide-react";
+//import { Mail, Phone } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
-import { Input as ShadInput} from "@/components/ui/input";
-import { Label as ShadLabel} from "@/components/ui/label";
+//import { Input as ShadInput} from "@/components/ui/input";
+//import { Label as ShadLabel} from "@/components/ui/label";
 
 interface Props{
 

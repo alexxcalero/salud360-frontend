@@ -9,8 +9,8 @@ interface Props{
     showButton?: boolean;
     isMiComunidad?: boolean;
 }
-
-function CardExplorarComunidades({id, image, title, subtitle, showButton=true, isMiComunidad=false}: Props){
+//mb r  showButton=true
+function CardExplorarComunidades({id, image, title, subtitle, isMiComunidad=false}: Props){
 
     const navigate = useNavigate();
 

@@ -1,6 +1,5 @@
 import CardExplorarComunidades from "@/components/usuario/CardExplorarComunidades";
 import axios from "axios";
-import { Section } from "lucide-react";
 import { useEffect, useState } from "react";
 
 function ExplorarComunidades(){

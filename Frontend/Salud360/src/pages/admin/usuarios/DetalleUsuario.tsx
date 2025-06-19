@@ -32,16 +32,16 @@ function DetalleUsuario(){
     const {id} = useParams();
 
     const {
-        nombres, setNombres,
-        apellidos, setApellidos,
-        tipoDoc, setTipoDoc,
-        DNI, setDNI,
-        telefono, setTelefono,
-        direccion, setDireccion,
-        correo, setCorreo,
-        genero, setGenero,
-        fechaNacimiento, setFechaNacimiento,
-        contrasenha, setContrasenha,
+        nombres,// setNombres,
+        apellidos, //setApellidos,
+        tipoDoc, //setTipoDoc,
+        DNI, //setDNI,
+        telefono,// setTelefono,
+        direccion, //setDireccion,
+        correo,// setCorreo,
+        genero, //setGenero,
+        fechaNacimiento, //setFechaNacimiento,
+        //contrasenha, setContrasenha,
         setUsuarioAPI
     } = useUsuarioForm();
 

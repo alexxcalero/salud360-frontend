@@ -1,5 +1,5 @@
 import InputIconLabelEdit from "@/components/InputIconLabelEdit"
-import SelectIconLabel from "@/components/SelectIconLabel"
+//import SelectIconLabel from "@/components/SelectIconLabel"
 import SelectIconLabelNum from "@/components/SelectIconLabelNum"
 import { Calendar } from "lucide-react"
 import { FaBuilding } from "react-icons/fa";
@@ -18,7 +18,7 @@ interface Props {
 }
 
 export default function ReporteServicioForm({ data, onChange }: Props) {
-  const [locales, setLocales] = useState<{ value: number; label: string }[]>([]);
+  const [locales, setLocales] = useState<{ value: number; content: string }[]>([]);
 
   useEffect(() => {
     const fetchLocales = async () => {

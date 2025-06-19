@@ -25,18 +25,18 @@ function EditarMedico() {
     setTipoDoc,
     DNI,
     setDNI,
-    telefono,
-    setTelefono,
+    //telefono,
+    //setTelefono,
     especialidad,
     setEspecialidad,
-    correo,
-    setCorreo,
+    //correo,
+    //setCorreo,
     genero,
     setGenero,
-    fechaNacimiento,
-    setFechaNacimiento,
-    contrasenha,
-    setContrasenha,
+    //fechaNacimiento,
+    //setFechaNacimiento,
+    //contrasenha,
+    //setContrasenha,
     descripcion,
     setDescripcion,
     setMedicoAPI,
@@ -102,8 +102,8 @@ function EditarMedico() {
       setShowModalValidacion(true);
       return false;
     }
-
-    if (!tipoDoc || tipoDoc === 0) {
+    //mod b t
+    if (!tipoDoc || tipoDoc.trim() === "") {
       setMensajeValidacion("Debe seleccionar un tipo de documento.");
       setShowModalValidacion(true);
       return false;
@@ -128,8 +128,8 @@ function EditarMedico() {
 
     try {
       const sexo = genero;
-
-      const response = await axios.put(
+      //mb response
+      await axios.put(
         `http://localhost:8080/api/admin/medicos/${id}`,
         {
           nombres,

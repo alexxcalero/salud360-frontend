@@ -2,9 +2,9 @@ import { useState } from "react";
 import ReporteUsuarioForm from "@/components/admin/reportes/ReporteUsuarioForm";
 import ReporteServicioForm from "@/components/admin/reportes/ReporteServicioForm";
 import ReporteLocalForm from "@/components/admin/reportes/ReporteLocalForm";
-import { FileText } from "lucide-react";
-import InputIconLabelEdit from "@/components/InputIconLabelEdit";
-import InputLabel from "@/components/InputLabel";
+//import { FileText } from "lucide-react";
+//import InputIconLabelEdit from "@/components/InputIconLabelEdit";
+//import InputLabel from "@/components/InputLabel";
 import TextAreaInput from "@/components/input/TextAreaInput";
 
 export default function ReportePanel() {
@@ -14,16 +14,22 @@ export default function ReportePanel() {
   const [formData, setFormData] = useState({
     fechaInicio: "",
     fechaFin: "",
-    servicio: "",
-    local: "",
+    idservicio: 0,
+    idlocal: 0,
     descripcion: ""
   });
 
+  //Se cambio por el de abajo
+  /*const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };*/
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<any>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
+
 
   return (
     <div className="">

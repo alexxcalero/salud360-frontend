@@ -19,7 +19,7 @@ function CalendarioMensual<Data>({
   finMes,
   getRangeDateFromData,
   getCalendarData,
-  getDate,
+  //getDate,
   data,
   card,
 }: Props<Data>) {

@@ -9,7 +9,8 @@ const meta: Meta<typeof PasswordInput> = {
     placeholder: {
       description: "Texto que indica que acción realizar",
     },
-    idName: {
+    //Se cambio idName por name
+    name: {
       description:
         "Identificador del input; además que también funciona como nombre de form-data. *Servirá para el label también*",
     },
@@ -42,7 +43,8 @@ type Story = StoryObj<typeof PasswordInput>;
 export const Default: Story = {
   args: {
     placeholder: "Ingrese su contrasenha aquí",
-    idName: "contrasenha",
+    //se cambio el idname por name
+    name: "contrasenha",
     label: "Contraseña",
     defaultValue: "CuevaChad123",
     className: "",

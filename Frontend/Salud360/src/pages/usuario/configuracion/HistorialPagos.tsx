@@ -1,24 +1,24 @@
 import Spinner from "@/components/Spinner";
 import CardHistorialPago from "@/components/usuario/config/CardHistorialPago";
 import { AuthContext } from "@/hooks/AuthContext";
-import useInfiniteScroll from "@/hooks/useInfiniteScroll";
+//import useInfiniteScroll from "@/hooks/useInfiniteScroll";
 import axios from "axios";
 import { AlertTriangle } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 
-interface HistorialPagoFake {
+/*interface HistorialPagoFake {
   identificadorTransaccion: string;
   nombreComunidad: string;
   precio: number;
   fechaPago: string;
-}
+}*/
 
 const HistorialPagos = () => {
 
   const [pagos, setPagos] = useState([]);
   const [waiting, setWaiting] = useState(true);
 
-  const {usuario, logout, loading} = useContext(AuthContext);
+  const {usuario,  loading} = useContext(AuthContext);
 
   if (loading || !usuario) return null;
 
@@ -98,9 +98,9 @@ const HistorialPagos = () => {
                   (pagos: any, index) => (
                     <li key={index}>
                       <CardHistorialPago
-                        identificadorTransaccion={pago.idPago as string}
+                        identificadorTransaccion={pagos.idPago as string}
                         nombreComunidad={"Messi"}
-                        precio={pago.monto as number}
+                        precio={pagos.monto as number}
                         fechaPago={formatFechaMasUnMes(pagos.fechaPago) as string}
                       />
                     </li>

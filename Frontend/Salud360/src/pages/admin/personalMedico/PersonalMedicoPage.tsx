@@ -1,7 +1,7 @@
-import UnderConstruction from "@/pages/UnderConstruction";
+//import UnderConstruction from "@/pages/UnderConstruction";
 import  { useState, useEffect } from "react";
 import axios from "axios";
-import { Search, Info, Trash2, Pencil, Filter, UserPlus, RotateCcw } from "lucide-react";
+import { Search, Info, Trash2, Pencil,  UserPlus, RotateCcw } from "lucide-react";
 import { useNavigate } from "react-router";
 import { useLocation } from "react-router";
 
@@ -12,9 +12,20 @@ import ButtonIcon from "@/components/ButtonIcon";
 import ModalExito from "@/components/ModalExito";
 import ModalError from "@/components/ModalError";
 
+interface Medico {
+  idMedico: number;
+  nombres: string;
+  apellidos: string;
+  especialidad: string;
+  descripcion: string;
+  activo: boolean;
+  fotoPerfil?: string;
+}
+
+
 function PersonalMedicoPage() {
   const [selectAll, setSelectAll] = useState(false);
-  const [medicos, setMedicos] = useState([]);
+  const [medicos, setMedicos] = useState<Medico[]>([]);
   const [especialidadesUnicas, setEspecialidadesUnicas] = useState<string[]>([]);
   const [especialidadSeleccionada, setEspecialidadSeleccionada] = useState("");
   const [medicoSeleccionado, setMedicoSeleccionado] = useState<any>();
@@ -36,7 +47,7 @@ function PersonalMedicoPage() {
       .then((res) => {
         setMedicos(res.data);
         const especialidades = [...new Set(res.data.map((m: any) => m.especialidad).filter(Boolean))];
-        setEspecialidadesUnicas(especialidades);
+        setEspecialidadesUnicas(especialidades.filter((e): e is string => typeof e === "string"));//modificado b
       })
       .catch((err) => console.error("Error cargando médicos", err));
   };

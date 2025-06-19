@@ -1,20 +1,20 @@
 import Button from "@/components/Button";
 import CardExplorarComunidades from "@/components/usuario/CardExplorarComunidades";
 import { AuthContext } from "@/hooks/AuthContext";
-import axios from "axios";
+//import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { NavLink } from "react-router";
 import { AlertTriangle } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
-import { p } from "node_modules/react-router/dist/development/lib-B8x_tOvL.d.mts";
+//import { p } from "node_modules/react-router/dist/development/lib-B8x_tOvL.d.mts";
 
 function Comunidades(){
     
     //const [comunidades, setComunidades] = useState([]);
-    const {usuario, logout, loading} = useContext(AuthContext);
+    const {usuario, loading} = useContext(AuthContext);
     if (loading || !usuario) return null;
 
-    const id = usuario.idUsuario;
+    //const id = usuario.idUsuario;
 
     //setComunidades(usuario.comunidades)
     

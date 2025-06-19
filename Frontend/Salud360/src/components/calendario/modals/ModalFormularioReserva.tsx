@@ -97,7 +97,8 @@ const ModalFormularioReserva = ({onClose,  onSubmit,}: {
 
           <DialogFooter className="pt-4 gap-2">
             <Button
-              variant="secondary"
+              //cambie secondary por white
+              variant="white"
               onClick={onClose}
               className="w-full sm:w-auto"
             >

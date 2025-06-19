@@ -1,7 +1,7 @@
 import  { useEffect, useState} from "react";
 import axios from "axios";
-import CardLanding from "./CardLanding";
-import { Carrot, ChartArea } from "lucide-react";
+//import CardLanding from "./CardLanding";
+//import { Carrot, ChartArea } from "lucide-react";
 import CarrouselLanding from "./CarrouselLanding";
 
 function ListaComunidades(){

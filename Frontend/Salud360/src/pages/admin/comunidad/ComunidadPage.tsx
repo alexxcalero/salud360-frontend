@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Filter, UserPlus, Pencil, Trash2, Info, Search, RotateCcw, FolderPlus } from "lucide-react";
+import {  Pencil, Trash2, Info, Search, RotateCcw, FolderPlus } from "lucide-react";
 import { useNavigate } from "react-router";
 import axios from "axios";
 
@@ -9,7 +9,7 @@ import TableHeader from "@/components/admin/TableHeader";
 import TableBody from "@/components/admin/TableBody";
 import ModalExito from "@/components/ModalExito";
 import ModalError from "@/components/ModalError";
-import ModalRestauracion from "@/components/ModalRestauracion";
+//import ModalRestauracion from "@/components/ModalRestauracion";
 
 function ComunidadPage() {
   const [selectAll, setSelectAll] = useState(false);
@@ -17,7 +17,8 @@ function ComunidadPage() {
   const [comunidadSeleccionada, setComunidadSeleccionada] = useState<any>();
   const [showModalExito, setShowModalExito] = useState(false);
   const [showModalError, setShowModalError] = useState(false);
-  const [showModalRestauracion, setShowModalRestauracion] = useState(false);
+  
+  //const [showModalRestauracion, setShowModalRestauracion] = useState(false);
   const [paginaActual, setPaginaActual] = useState(1);
 
   const navigate = useNavigate();

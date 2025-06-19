@@ -1,5 +1,5 @@
 import { AuthContext } from "@/hooks/AuthContext";
-import UnderConstruction from "../UnderConstruction";
+
 import { useContext, useEffect, useState } from "react";
 import { User, Pencil, IdCard, PersonStanding, Settings, CreditCard, Calendar  } from "lucide-react";
 import AccesoRapido from "@/components/usuario/AccesoRapido";
@@ -19,20 +19,20 @@ function Inicio(){
     //const tieneComunidades = usuario.comunidades.length !== 0
 
     const {
-        nombres, setNombres,
-        apellidos, setApellidos,
-        tipoDoc, setTipoDoc,
-        DNI: numeroDocumento, setDNI,
-        telefono, setTelefono,
-        direccion, setDireccion,
-        correo, setCorreo,
-        genero: sexo, setGenero,
-        fechaNacimiento: rawFechaNacimiento, setFechaNacimiento,
-        contrasenha, setContrasenha,
-        fechaCreacion: rawFechaCreacion, setFechaCreacion,
-        fotoPerfil, setFotoPerfil,
-        nombreTipoDoc: tipoDocumento, setNombreTipoDoc,
-        comunidades, setComunidades,
+        nombres, //setNombres,
+        apellidos, //setApellidos,
+        //tipoDoc, setTipoDoc,
+        DNI: numeroDocumento, //setDNI,
+        telefono,// setTelefono,
+        //direccion, setDireccion,
+        correo, //setCorreo,
+        genero: sexo, //setGenero,
+        fechaNacimiento: rawFechaNacimiento, //setFechaNacimiento,
+        //contrasenha, setContrasenha,
+        fechaCreacion: rawFechaCreacion, //setFechaCreacion,
+        fotoPerfil, //setFotoPerfil,
+        nombreTipoDoc: tipoDocumento, //setNombreTipoDoc,
+        comunidades, //setComunidades,
         setUsuarioAPI
     } = useUsuarioForm();
 

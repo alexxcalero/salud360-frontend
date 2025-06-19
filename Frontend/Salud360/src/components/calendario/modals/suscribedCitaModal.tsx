@@ -5,7 +5,8 @@ import { citaMedicaType } from "@/schemas/citaMedica";
 import { Ban, CalendarClock } from "lucide-react";
 import PostergarCitaModal from "./postergarCitaModal";
 import { useState } from "react";
-
+//agregado ? linea 26 27
+//<li>Hora: {citaMedica.hora?.toFormat("t", { locale: "es" })}</li> linea 34
 const SuscribedCitaModal = ({
   citaMedica,
   open,
@@ -22,15 +23,17 @@ const SuscribedCitaModal = ({
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <DialogTitle>
-            Detalles de su cita con el/la Dr(a). {citaMedica.medico.apellidos}{" "}
-            en la especialidad {citaMedica.medico.especialidad}
+            Detalles de su cita con el/la Dr(a). {citaMedica.medico?.apellidos}{" "}
+            en la especialidad {citaMedica.medico?.especialidad}
           </DialogTitle>
           <p>
             <ul className="list-disc pl-6">
               <li>
-                Dia: {citaMedica.fecha.toFormat("DDDD", { locale: "es" })}
+                Dia: {citaMedica.fecha?.toFormat("DDDD", { locale: "es" })}
               </li>
-              <li>Hora: {citaMedica.hora.toFormat("t", { locale: "es" })}</li>
+              <li>
+                Hora: {citaMedica.horaInicio?.toFormat("t", { locale: "es" })} - {citaMedica.horaFin?.toFormat("t", { locale: "es" })}
+              </li>
             </ul>
           </p>
           <div className="flex gap-4 mt-2">

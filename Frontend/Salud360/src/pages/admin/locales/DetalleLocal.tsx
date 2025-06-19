@@ -10,13 +10,13 @@ function DetalleLocal(){
     const {id} = useParams();
 
     const {
-        nombre, setNombre,
-        telefono, setTelefono,
-        descripcion, setDescripcion,
-        direccion, setDireccion,
-        tipo, setTipo,
-        servicios, setServicios,
-        aforo, setAforo,
+        nombre,// setNombre,
+        telefono, //setTelefono,
+        descripcion, //setDescripcion,
+        direccion, //setDireccion,
+        tipo, //setTipo,
+        servicios, //setServicios,
+        aforo, //setAforo,
         setLocalAPI
     } = useLocalForm();
     

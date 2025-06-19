@@ -1,7 +1,7 @@
 import ReportePanel from "@/components/admin/reportes/ReportePanel"
-import { Navigate } from "react-router";
-import { AuthContext } from "@/hooks/AuthContext";
-import { useContext, useEffect } from "react"
+//import { Navigate } from "react-router";
+//import { AuthContext } from "@/hooks/AuthContext";
+//import { useContext, useEffect } from "react"
 
 export default function ReportesPage() {
   return (

@@ -2,13 +2,13 @@ import { Mail, MapPin, Phone } from "lucide-react";
 import InputIconLabel from "../InputIconLabel";
 import InputLabel from "../InputLabel";
 import SelectLabel from "../SelectLabel";
-import PasswordInput from "../input/PasswordInput";
+
 import Button from "../Button";
-import { useNavigate } from "react-router";
-import { useContext, useEffect, useState } from "react";
+
+import {  useEffect, useState } from "react";
 import axios from "axios";
-import DropImage from "../DropImage";
-import { AuthContext } from "@/hooks/AuthContext";
+
+
 
 
 interface Props{
@@ -49,14 +49,14 @@ interface Props{
 
 
 function PerfilForms({nombres, setNombres = () =>{}, apellidos, setApellidos = () =>{}, tipoDoc, setTipoDoc = () =>{}, DNI, setDNI  = () =>{}, telefono, setTelefono  = () =>{}, correo, setCorreo  = () =>{}, 
-    direccion, setDireccion  = () =>{}, genero, setGenero  = () =>{}, fechaNacimiento, setFechaNacimiento  = () =>{}, contrasenha, setContrasenha  = () =>{}, onSubmit = () =>{}}: Props){
+    direccion, setDireccion  = () =>{}, genero, setGenero  = () =>{}, fechaNacimiento, setFechaNacimiento  = () =>{}, contrasenha, onSubmit = () =>{}}: Props){
 
-    const {logout} = useContext(AuthContext)
+    //const {logout} = useContext(AuthContext)
 
     
     const [tipoDocumentos, setTipoDocumentos] = useState([]);
     //const [tipoDocumentos, setTipoDocumentos] = useState([]);
-    const navigate = useNavigate();
+    //const navigate = useNavigate();
 
     //Llamada TipoDocumentos
     const fetchTipoDocumentos = () => {
@@ -89,16 +89,16 @@ function PerfilForms({nombres, setNombres = () =>{}, apellidos, setApellidos = (
         { value: "Femenino", content: "Femenino" }
     ]
 
-    var readOnlyContrasenha;
+    
 
 
     if (contrasenha !== undefined){
       console.log("Estamos en el if:", contrasenha === undefined)
-      readOnlyContrasenha = false 
+       
     }
     else{
       console.log("Estamos en el else:", contrasenha === undefined)
-      readOnlyContrasenha = true;
+      
       contrasenha = "xxxxxxxx";
     }
 

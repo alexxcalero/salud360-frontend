@@ -1,6 +1,5 @@
 import Button from "@/components/Button";
 import DropImage from "@/components/DropImage";
-import FormContainer from "@/components/FormContainer";
 import InputIconLabel from "@/components/InputIconLabel";
 import InputLabel from "@/components/InputLabel";
 import SelectLabel from "@/components/SelectLabel";
@@ -54,7 +53,7 @@ function UsuariosForms({title="", subtitle="", nombres, setNombres = () =>{}, ap
     direccion, setDireccion  = () =>{}, genero, setGenero  = () =>{}, fechaNacimiento, setFechaNacimiento  = () =>{}, contrasenha, setContrasenha  = () =>{}, readOnly = false, onSubmit = () =>{}, buttonText}: Props){
 
 
-    const [roles, setRoles] = useState([]);
+    const [_roles, setRoles] = useState([]);
     const [tipoDocumentos, setTipoDocumentos] = useState([]);
     //const [tipoDocumentos, setTipoDocumentos] = useState([]);
     const navigate = useNavigate();
@@ -115,7 +114,7 @@ function UsuariosForms({title="", subtitle="", nombres, setNombres = () =>{}, ap
         { value: "Femenino", content: "Femenino" }
     ]
 
-    var readOnlyContrasenha;
+    let readOnlyContrasenha;
 
 
     if (contrasenha !== undefined){

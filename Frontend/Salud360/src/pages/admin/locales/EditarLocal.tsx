@@ -55,7 +55,7 @@ function EditarLocal(){
 
     //VALIDACIONES DE CAMPOS 
     const validarCampos = (): boolean => {
-        const soloLetras = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
+        //const soloLetras = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
         const soloNumeros = /^[0-9]+$/;
 
         if (!nombre || nombre.trim() === "") {
@@ -104,9 +104,11 @@ function EditarLocal(){
             return;
         }
 
+
         console.log("El contenido de los servicios a enviar es:", servicios)
+        //mbr
         try{
-            const response = await axios.put(`http://localhost:8080/api/locales/${id}`, 
+            await axios.put(`http://localhost:8080/api/locales/${id}`, 
                 {
                     nombre,
                     descripcion,

@@ -14,7 +14,7 @@ export const Default: Story = {
     comunidad: "Comunidad de Salud360",
     precio: 100,
     fechaRenovacion: "2023-10-01",
-    state: "idle",
+    state: "Activa",
     selected: false,
   },
 };

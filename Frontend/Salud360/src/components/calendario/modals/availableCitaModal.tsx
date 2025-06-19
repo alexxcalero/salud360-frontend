@@ -10,6 +10,7 @@ import { CalendarPlus } from "lucide-react";
 import { useState } from "react";
 import AgendarCitaModalForm from "./agendarCitaModalForm";
 
+//Hora: {citaMedica.hora.toFormat("t", { locale: "es" })}
 const AvailableCitaModal = ({
   citaMedica,
   open,
@@ -25,12 +26,12 @@ const AvailableCitaModal = ({
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <DialogTitle>
-            ¿Desea reservar su cita médica con {citaMedica.medico.apellidos}?
+            ¿Desea reservar su cita médica con {citaMedica.medico?.apellidos}?
           </DialogTitle>
           <div>
             <p>
-              Dia: {citaMedica.fecha.toFormat("DDDD", { locale: "es" })}
-              Hora: {citaMedica.hora.toFormat("t", { locale: "es" })}
+              Dia: {citaMedica.fecha?.toFormat("DDDD", { locale: "es" })}
+              Hora: {citaMedica.horaInicio?.toFormat("t")} - {citaMedica.horaFin?.toFormat("t")}
             </p>
           </div>
           <div className="flex justify-end items-center gap-4">

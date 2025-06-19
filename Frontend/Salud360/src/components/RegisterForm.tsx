@@ -11,7 +11,6 @@ import Input from "./input/Input"
 import MailInput from "./input/MailInput"
 import PasswordInput from "./input/PasswordInput"
 import axios from "axios"
-import { FaGenderless } from "react-icons/fa"
 import ModalValidacion from "./ModalValidacion"
 
 
@@ -84,8 +83,8 @@ export default function RegisterForm() {
       setMensajeValidacion("La contraseña no puede estar vacía.");
       return false;
     }
-
-    if (!formData.tipoDocumento || formData.tipoDocumento === 0) {
+    //rb t
+    if (!formData.tipoDocumento || formData.tipoDocumento.trim() === "") {
       setMensajeValidacion("Debe seleccionar un tipo de documento.");
       setShowModalValidacion(true);
       return false;

@@ -1,6 +1,6 @@
 import  { useState, useEffect } from "react";
 import axios from "axios";
-import { Search, Info, Trash2, Pencil, Filter, UserPlus, RotateCcw } from "lucide-react";
+import { Search, Info, Trash2, Pencil,  UserPlus, RotateCcw } from "lucide-react";
 import { useNavigate } from "react-router";
 
 import TableHeader from "@/components/admin/TableHeader";
@@ -10,13 +10,24 @@ import ButtonIcon from "@/components/ButtonIcon";
 import ModalExito from "@/components/ModalExito";
 import ModalError from "@/components/ModalError";
 
+interface Usuario {
+  idCliente: number;
+  nombres: string;
+  apellidos: string;
+  correo: string;
+  telefono: string;
+  activo: boolean;
+  fotoPerfil?: string;
+}
+
+
 function UsuariosPage() {
   const [selectAll, setSelectAll] = useState(false);
-  const [usuarios, setUsuarios] = useState([]);
+  const [usuarios, setUsuarios] = useState<Usuario[]>([]);
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState<any>();
   const [showModalExito, setShowModalExito] = useState(false);
   const [showModalError, setShowModalError] = useState(false);
-  const [search, setSearch] = useState("");
+  //const [search, setSearch] = useState("");
   const [paginaActual, setPaginaActual] = useState(1);
 
   //Para la funcionalidad de búsqueda:
@@ -148,7 +159,7 @@ function UsuariosPage() {
     <div className="w-full px-6 py-4 overflow-auto">
       <div className="grid grid-cols-12 gap-4 items-center mb-4">
         <div className="col-span-4">
-          <InputIcon icon={<Search className="w-5 h-5" />} value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Buscar usuarios" type="search" value={busqueda} onChange={(e) => setBusqueda(e.target.value)} />
+          <InputIcon icon={<Search className="w-5 h-5" />} value={busqueda} onChange={(e) => setBusqueda(e.target.value)} placeholder="Buscar usuarios" type="search" />
         </div>
         <div className="col-span-8 flex justify-end">
           <ButtonIcon icon={<UserPlus className="w-6 h-6" />} size="lg" variant="primary" onClick={() => navigate("/admin/usuarios/crear")}>Agregar usuario</ButtonIcon>
