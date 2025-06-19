@@ -138,14 +138,14 @@ function Inicio(){
                         <div className="w-full h-[460px] flex flex-row justify-start items-center gap-4 bg-gray-50 border border-[#2A86FF] rounded-sm p-4">
                             <div>
                                 {fotoPerfil ? (
-                                <img
-                                    src={fotoPerfil}
+                                    <img
+                                    src={`http://localhost:8080/api/archivo/${fotoPerfil}`}
                                     alt="Foto de perfil"
-                                    className="w-24 h-24 rounded-full"
-                                />
-                                ):
-                                <User color="black" className="w-24 h-24 border border-[#2A86FF] rounded-full"/>
-                                }
+                                    className="w-24 h-24 rounded-full object-cover"
+                                    />
+                                ) : (
+                                    <User color="black" className="w-24 h-24 border border-[#2A86FF] rounded-full" />
+                                )}
                             </div>
                             <div className="flex flex-col gap-3 items-start ">
                                 <div className="flex flex-row gap-4 items-center">
