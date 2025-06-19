@@ -84,13 +84,6 @@ export default function ReporteLocalForm({ data, onChange }: Props) {
         type="date" label="Fecha fin"
         value={data.fechaFin} onChange={onChange}
       />
-      <SelectIconLabelNum
-        icon={<FaHandHoldingUsd className="w-5 h-5" />} htmlFor="idservicio"
-        label="Servicio"
-        value={data.idservicio}
-        onChange={onChange}
-        options={servicios}
-      />
       <div className="col-span-2 flex justify-end mt-4">
         <Button type="button" onClick={handleGenerarReporte}>
           Generar reporte
