@@ -36,12 +36,25 @@ function DetalleComunidadLayout(){
 
     if (loading || !comunidad) return null;
 
+    //LOGICA DE HERODETALLECOMUNIDAD
+
+  // ⚠️ Verificamos que comunidad esté cargada y tenga imagen
+  const imagen = comunidad.imagen;
+
+  const imagenFinal =
+    imagen && (imagen.startsWith("http") || imagen.startsWith("data:"))
+      ? imagen
+      : imagen
+        ? `http://localhost:8080/api/archivo/${imagen}`
+        : "https://png.pngtree.com/png-clipart/20201224/ourmid/pngtree-panda-bamboo-bamboo-shoots-simple-strokes-cartoon-with-pictures-small-fresh-png-image_2625172.jpg";
+
+      
 
     return(
         
         <section>
             <title>Detalle comunidad</title>
-            <HeroDetalleComunidad image={heroImage} title={comunidad.nombre}/>
+            <HeroDetalleComunidad image={imagenFinal} title={comunidad.nombre}/>
             <DetalleComunidadNavbar/>
             <Outlet />
         </section>

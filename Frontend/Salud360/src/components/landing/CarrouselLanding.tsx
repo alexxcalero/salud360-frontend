@@ -14,6 +14,18 @@ interface Props{
 }
 
 function CarrouselLanding({module, currentIndex, cardWidth, xMargin, visibleCount, totalSize, handleNext, handlePrev, showButton=true}: Props){
+
+
+
+    function transformarImagen(imagen:String){
+      return(imagen && (imagen.startsWith("http") || imagen.startsWith("data:"))
+      ? imagen
+      : imagen
+        ? `http://localhost:8080/api/archivo/${imagen}`
+        : "https://png.pngtree.com/png-clipart/20201224/ourmid/pngtree-panda-bamboo-bamboo-shoots-simple-strokes-cartoon-with-pictures-small-fresh-png-image_2625172.jpg");
+    }
+
+
     return(
         <section className="flex flex-row gap-4 justify-center items-center">
             <button
@@ -36,7 +48,7 @@ function CarrouselLanding({module, currentIndex, cardWidth, xMargin, visibleCoun
 
                     <CardLanding key={comunidad.idComunidad}
                     id={comunidad.idComunidad}
-                    image={"https://png.pngtree.com/png-clipart/20201224/ourmid/pngtree-panda-bamboo-bamboo-shoots-simple-strokes-cartoon-with-pictures-small-fresh-png-image_2625172.jpg"}
+                    image={transformarImagen(comunidad.imagen)}
                     title={comunidad.nombre} subtitle={comunidad.descripcion} 
                     showButton={showButton}/>
 

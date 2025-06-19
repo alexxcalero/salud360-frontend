@@ -5,6 +5,43 @@ interface Props{
     title: string;
 }
 
+function HeroDetalleComunidad({image, title}: Props){
+    
+  console.log("Alex Calero", image)
+  return (
+        <section className="relative w-full h-[735px]">
+            <img
+        src={image}
+        alt={`Imagen de ${title || "la comunidad"}`}
+        className="w-full h-full object-cover"
+        onError={(e) => {
+          (e.target as HTMLImageElement).src =
+            "https://png.pngtree.com/png-clipart/20201224/ourmid/pngtree-panda-bamboo-bamboo-shoots-simple-strokes-cartoon-with-pictures-small-fresh-png-image_2625172.jpg";
+        }}
+      />
+
+            <div className="absolute inset-0 bg-black/30"></div> {/*Oscurece un poco la imagen*/}
+
+            <div className="absolute inset-0 flex flex-col justify-center items-center gap-4 text-white">
+                <h1 className="use-title-large">{title}</h1>
+            </div>
+
+        </section>
+    );
+}
+
+export default HeroDetalleComunidad;
+
+
+
+/*
+import { useComunidad } from "@/hooks/ComunidadContext";
+
+interface Props{
+    image: string;
+    title: string;
+}
+
 function HeroDetalleComunidad() {
   const { comunidad } = useComunidad();
 
@@ -35,3 +72,5 @@ function HeroDetalleComunidad() {
 }
 
 export default HeroDetalleComunidad;
+
+*/

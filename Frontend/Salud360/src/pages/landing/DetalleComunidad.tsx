@@ -39,9 +39,20 @@ function DetalleComunidad(){
       .catch(err => console.error("Error cargando comunidad", err));
     }
 
+    
     useEffect(() => {
         fetchComunidad();
     }, []);
+
+    const imagen = comunidad.imagen;
+
+  const imagenFinal =
+    imagen && (imagen.startsWith("http") || imagen.startsWith("data:"))
+      ? imagen
+      : imagen
+        ? `http://localhost:8080/api/archivo/${imagen}`
+        : "https://png.pngtree.com/png-clipart/20201224/ourmid/pngtree-panda-bamboo-bamboo-shoots-simple-strokes-cartoon-with-pictures-small-fresh-png-image_2625172.jpg";
+
 
     //console.log("Comunidad:", comunidad);
     console.log("Servicios de la comunidad:", servicios);
@@ -70,7 +81,7 @@ function DetalleComunidad(){
     return(
         <div>
             <title>Detalle de la comunidad</title>
-            <HeroDetalleComunidad image={heroImage} title={comunidad.nombre}/>
+            <HeroDetalleComunidad image={imagenFinal} title={comunidad.nombre}/>
             
             <section className="flex flex-col gap-32 my-32">
                 <section className="bg-white">
