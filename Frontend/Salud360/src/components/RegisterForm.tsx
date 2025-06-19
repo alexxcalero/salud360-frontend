@@ -12,12 +12,9 @@ import MailInput from "./input/MailInput"
 import PasswordInput from "./input/PasswordInput"
 import axios from "axios"
 import ModalValidacion from "./ModalValidacion"
-<<<<<<< HEAD
 import { Link } from "react-router-dom"
 
-=======
 import { jwtDecode } from "jwt-decode";
->>>>>>> origin/main
 
 export default function RegisterForm() {
   const [formData, setFormData] = useState({

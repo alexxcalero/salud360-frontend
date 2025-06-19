@@ -6,7 +6,7 @@ export interface IComunidad {
   nombre?: string;
   descripcion?: string;
   proposito?: string;
-  imagenes?: string[];
+  imagen?: string;
   cantMiembros?: number;
   calificacion?: number;
   servicios?: IServicio[];

@@ -7,7 +7,7 @@ export interface IServicio {
   idServicio?: number;
   nombre?: string;
   descripcion?: string;
-  imagenes?: string[];
+  imagen?: string;
   tipo?: string;
   activo?: boolean;
   fechaCreacion?: string;
