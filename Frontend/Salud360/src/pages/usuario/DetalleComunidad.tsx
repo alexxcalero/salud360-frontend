@@ -13,19 +13,28 @@ import CardLocal from "@/components/usuario/CardLocal";
 import CarrouselMedicos from "@/components/usuario/CarrouselMedicos";
 import CarrouselTestimonios from "@/components/usuario/CarrouselTestimonios";
 import ModalTestimonio from "@/components/modals/ModalTestimonio";
-import { crearTestimonio } from "@/services/testimonioService";
+import { crearTestimonio,  editarTestimonio, eliminarTestimonio} from "@/services/testimonioService";
 import { useContext } from "react";
 import { AuthContext } from "@/hooks/AuthContext";
 import SuccessModal from "@/components/modals/successModal";
+import type { NuevoTestimonio } from "@/services/testimonioService";
+
 
 //No funciona: //import PANDA from "https://png.pngtree.com/png-clipart/20201224/ourmid/pngtree-panda-bamboo-bamboo-shoots-simple-strokes-cartoon-with-pictures-small-fresh-png-image_2625172.jpg"
 
 
 function DetalleComunidad(){
+
+
+
+
+
+
     const {comunidad} = useComunidad();
     const { usuario } = useContext(AuthContext);
   
-    const [showSuccess, setShowSuccess] = useState(false);
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
     const [especialidad, setEspecialidad] = useState("__all__");
   
     const optionsSelect = [
@@ -43,11 +52,23 @@ function DetalleComunidad(){
     //console.log("Los serviciosConLocales son:", serviciosConLocales)
     //console.log("Tiene locales? Es:", tieneLocales)
 
-    const testimonios = comunidad.testimonios;
+    const testimonios = comunidad.testimonios.filter((t: any) => t.activo);
     const tieneTestimonios = testimonios.length > 0
+    const handleDeleteTestimonio = async (id: number) => {
+    try {
+      await eliminarTestimonio(id);
+      setSuccessMessage("¡Testimonio eliminado correctamente!");
+ // o setear refetch
+      window.location.reload();
+    } catch (err) {
+      alert("Ocurrió un error al eliminar el testimonio");
+      console.error(err);
+    }
+  };
     //console.log("Los testimonios son:", testimonios)
     //console.log("Tiene testimonios? Es:", tieneTestimonios)
     const [showModalTestimonio, setShowModalTestimonio] = useState(false);
+    const [testimonioEditando, setTestimonioEditando] = useState<NuevoTestimonio | null>(null);
 
     const medicos = useMemo(() => {
       const lista: any[] = [];
@@ -125,16 +146,19 @@ function DetalleComunidad(){
             <hr className="border border-gray-500"/>
           </div>
           <div className="my-32">
-            {tieneTestimonios &&
+            
               <div className="flex gap-6 flex-wrap justify-center">
-                {tieneTestimonios && (
+                
                   <CarrouselTestimonios
                     testimonios={testimonios}
+                    usuario={usuario}
                     onAddClick={() => setShowModalTestimonio(true)}
+                    onEdit={(t) => setTestimonioEditando(t)}
+                    onDelete={handleDeleteTestimonio}
                   />
-                )}
+                
               </div>
-            }
+           
           </div>
         </section>
 
@@ -160,7 +184,7 @@ function DetalleComunidad(){
                 },
               });
               setShowModalTestimonio(false);
-              setShowSuccess(true);
+              setSuccessMessage("¡Testimonio enviado!");
             } catch (err) {
               alert("Ocurrió un error al guardar tu testimonio");
               console.error(err);
@@ -168,13 +192,38 @@ function DetalleComunidad(){
           }}
         />
       )}
-      {showSuccess && (
+      {successMessage && (
         <SuccessModal
-          open={showSuccess}
-          setOpen={setShowSuccess}
-          title="¡Testimonio enviado!"
+          open={true}
+          setOpen={() => setSuccessMessage(null)}
+          title={successMessage}
           description="Gracias por compartir tu experiencia con la comunidad."
-          onConfirm={() => window.location.reload()} // o refetch si usas context
+          onConfirm={() => window.location.reload()}
+        />
+      )}
+
+
+      {testimonioEditando && (
+        <ModalTestimonio
+          defaultValues={testimonioEditando}
+          onClose={() => setTestimonioEditando(null)}
+          onSubmit={async (comentario, calificacion) => {
+            try {
+              await editarTestimonio(testimonioEditando.idTestimonio!, {
+                comentario,
+                calificacion,
+                idComunidad: comunidad.idComunidad,
+                autor: {
+                  idCliente: usuario.idCliente,
+                },
+              });
+              setTestimonioEditando(null);
+              setSuccessMessage("¡Testimonio editado correctamente!");
+            } catch (err) {
+              alert("Error al actualizar el testimonio");
+              console.error(err);
+            }
+          }}
         />
       )}
 

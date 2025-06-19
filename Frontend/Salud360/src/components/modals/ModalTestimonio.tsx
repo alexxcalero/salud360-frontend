@@ -1,17 +1,31 @@
 import InputLabel from "@/components/InputLabel";
 import Button from "@/components/Button";
 import useTestimonioForm from "@/hooks/useTestimonioForm";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ErrorModal from "@/components/modals/errorModal";
 
 interface Props {
   onClose: () => void;
   onSubmit: (comentario: string, calificacion: number) => void;
+  defaultValues?: {
+    comentario: string;
+    calificacion: number;
+  };
 }
 
-function ModalTestimonio({ onClose, onSubmit }: Props) {
+
+function ModalTestimonio({ onClose, onSubmit, defaultValues}: Props) {
   const { comentario, setComentario, calificacion, setCalificacion} = useTestimonioForm();
   const [showError, setShowError] = useState(false);
+  const [mensajeValidacion, setMensajeValidacion] = useState("");
+
+  useEffect(() => {
+    if (defaultValues) {
+      setComentario(defaultValues.comentario);
+      setCalificacion(defaultValues.calificacion);
+    }
+  }, [defaultValues]);
+
   return (
     <>
       {/* fondo oscuro */}
@@ -33,6 +47,9 @@ function ModalTestimonio({ onClose, onSubmit }: Props) {
               required
               onChange={(e) => setComentario(e.target.value)}
             />
+            {mensajeValidacion && (
+              <p className="text-red-500 text-sm -mt-2">{mensajeValidacion}</p>
+            )}
 
             <label className="text-sm font-semibold">Calificación</label>
             <select
@@ -50,12 +67,23 @@ function ModalTestimonio({ onClose, onSubmit }: Props) {
             <Button variant="white" onClick={onClose}>
               Cancelar
             </Button>
-            <Button variant="primary" onClick={ () => { 
+            <Button
+              variant="primary"
+              onClick={() => {
                 if (!comentario.trim()) {
-                setShowError(true);
-                return;
+                  setMensajeValidacion("El comentario no puede estar vacío.");
+                  setShowError(true);
+                  return;
                 }
-                onSubmit(comentario, calificacion)}}>
+                if (comentario.length > 255) {
+                  setMensajeValidacion("El comentario no puede tener más de 255 caracteres.");
+                  return;
+                }
+
+                setMensajeValidacion(""); // limpia el mensaje si todo está ok
+                onSubmit(comentario, calificacion);
+              }}
+            >
               Enviar
             </Button>
           </div>
