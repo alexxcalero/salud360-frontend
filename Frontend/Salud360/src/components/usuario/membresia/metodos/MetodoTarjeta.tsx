@@ -8,9 +8,11 @@ import FormularioTarjeta from "../FormularioTarjeta";
 const MetodoTarjeta = ({
   comunidad,
   membresia,
+  medioDePago,
 }: {
   comunidad: IComunidad;
   membresia: IMembresia;
+  medioDePago?: IMedioDePago;
 }) => {
   const navigate = useNavigate();
   return (
@@ -18,6 +20,7 @@ const MetodoTarjeta = ({
       <Progression currentStep={1} steps={3} />
       <div className="mt-4">
         <FormularioTarjeta
+          defaultValues={medioDePago}
           submitHandler={(data) => {
             // Falta este flujo
           }}

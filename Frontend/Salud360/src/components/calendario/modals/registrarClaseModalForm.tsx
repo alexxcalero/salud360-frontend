@@ -35,7 +35,7 @@ const RegistrarClaseModalForm = ({
 
   const [nombre, setNombre] = useState("");
   const [descripcion, setDescripcion] = useState("");
-  const [capacidad, setCapacidad] = useState("");
+  // const [capacidad, setCapacidad] = useState("");
 
   const [horaInicio, setHoraInicio] = useState(date?.toFormat("T") ?? "");
   const horaFin = useMemo(
@@ -104,7 +104,6 @@ const RegistrarClaseModalForm = ({
     const uploadData = {
       nombre,
       descripcion,
-      capacidad,
       horaInicio: horaInicio,
       horaFin: horaFin,
       fecha: dateInput.toISODate(),
@@ -128,6 +127,13 @@ const RegistrarClaseModalForm = ({
             <DialogTitle>Registrar clase</DialogTitle>
             <DialogDescription>Llena el formulario </DialogDescription>
             <div className="my-4 flex flex-col gap-4">
+              <div className="p-4 bg-blue-700/10 border-1 border-blue-500 rounded-md text-blue-500">
+                <p>
+                  La <strong>capacidad total</strong> de alumnos será{" "}
+                  <strong>asignada automáticamente</strong>
+                  por el sistema
+                </p>
+              </div>
               <Input
                 name="nombre"
                 placeholder="Ingrese el nombre"
@@ -145,15 +151,16 @@ const RegistrarClaseModalForm = ({
                 setValue={setDescripcion}
                 reserveSpace={true}
               />
+              {/* Poner un card
               <Input
                 name="capacidad"
-                placeholder="Capacidad..."
+                placeholder="Esto se asignará con la capacidad por defecto"
                 label="Capacidad"
-                required={true}
                 type="number"
-                value={capacidad}
-                setValue={setCapacidad}
-              />
+                // value={capacidad}
+                // setValue={setCapacidad}
+                disabled={true}
+              /> */}
 
               <CalendarInput
                 value={dateInput}

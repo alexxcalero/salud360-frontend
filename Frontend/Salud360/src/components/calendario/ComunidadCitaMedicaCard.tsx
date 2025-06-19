@@ -6,21 +6,21 @@ import {
 
 import { extenedCitaMedicaType } from "@/schemas/citaMedica";
 import BaseCard from "./cards/BaseCard";
-import Button from "../Button";
-import { Ban, Ticket } from "lucide-react";
 import { useDialog } from "@/hooks/dialogContext";
 import { postReservarAPI } from "@/services/reservas.service";
 import { useContext, useState } from "react";
 import { AuthContext } from "@/hooks/AuthContext";
 import { useParams } from "react-router";
-import { useToasts } from "@/hooks/ToastContext";
 import { useInternalModals } from "@/hooks/useInternalModals";
-import Time from "../time";
-import { cn } from "@/lib/utils";
 
 //Para el formulario
 import ModalFormularioReserva from "./modals/ModalFormularioReserva";
-
+import { CitaMedicaEstado } from "@/models/enums/citaMedica";
+import ReservarCitaMedica from "./form/ReservarCitaMedica";
+import CancelarCitaMedica from "./form/CancelarCitaMedica";
+import { cn } from "@/lib/utils";
+import Time from "../time";
+import Button from "../Button";
 
 export function ComunidadCitaMedicaCard({
   citaMedica,
@@ -29,22 +29,18 @@ export function ComunidadCitaMedicaCard({
   citaMedica: extenedCitaMedicaType;
   collapsed?: boolean;
 }) {
-  const {
-    callInfoDialog,
-    callSuccessDialog,
-    callErrorDialog,
-    callAlertDialog,
-  } = useDialog();
-  const { createToast } = useToasts();
+  const { callSuccessDialog, callErrorDialog } = useDialog();
   const { usuario } = useContext(AuthContext);
   const { id } = useParams();
 
   const { reload } = useInternalModals();
 
-
   //Para el formulario
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
-  const handleReservaConFormulario = async (descripcion: string, archivo?: File) => {
+  const handleReservaConFormulario = async (
+    descripcion: string,
+    archivo?: File
+  ) => {
     try {
       let nombreArchivo;
 
@@ -75,14 +71,15 @@ export function ComunidadCitaMedicaCard({
         callSuccessDialog({ title: "Cita reservada correctamente" });
         reload();
       } else {
-        callErrorDialog({ title: "La cita no pudo ser reservada correctamente" });
+        callErrorDialog({
+          title: "La cita no pudo ser reservada correctamente",
+        });
       }
     } catch (e) {
       console.error(e);
       callErrorDialog({ title: "Error durante la reserva" });
     }
   };
-
 
   const handleDescargarArchivo = async () => {
     try {
@@ -96,7 +93,6 @@ export function ComunidadCitaMedicaCard({
       callErrorDialog({ title: "No se pudo abrir el archivo." });
     }
   };
-
 
   return (
     <>
@@ -132,115 +128,66 @@ export function ComunidadCitaMedicaCard({
           </BaseCard>
         </HoverCardTrigger>
         <HoverCardContent className="w-max">
-          {citaMedica.estado !== "Reservada" && (
-            <div className="p-2">
+          <div className="p-2">
+            <div>
               <div>
-                <div>
-                  <strong role="heading">Detalles de la cita médica</strong>
-                  <span
-                    className={cn(
-                      "ml-2 bg-blue-500 px-2 py-1 rounded-full font-semibold select-none",
-                      citaMedica.estado === "Reservada" && "bg-green-500",
-                      citaMedica.estado === "Finalizada" && "bg-red-500",
-                      "use-label-small",
-                      "text-white"
-                    )}
-                  >
-                    {citaMedica.estado ?? "ESTADO NO ESPECIFICADO"}
+                <strong role="heading">Detalles de la cita médica</strong>
+                <span
+                  className={cn(
+                    "ml-2 bg-blue-500 px-2 py-1 rounded-full font-semibold select-none",
+                    citaMedica.estado === "Reservada" && "bg-green-500",
+                    citaMedica.estado === "Finalizada" && "bg-red-500",
+                    "use-label-small",
+                    "text-white"
+                  )}
+                >
+                  {citaMedica.estado ?? "ESTADO NO ESPECIFICADO"}
+                </span>
+                <p className="mt-2">
+                  {citaMedica.fecha?.toFormat("DDDD", { locale: "es" })}
+                  <br />
+                  <Time type="time" dateTime={citaMedica.horaInicio} /> -{" "}
+                  <Time type="time" dateTime={citaMedica.horaFin} />
+                </p>
+              </div>
+              <div className="mt-2">
+                <strong>Médico</strong>
+                <p>
+                  Dr(a):{" "}
+                  <span className="text-neutral-600">
+                    {citaMedica.medico?.nombres} {citaMedica.medico?.apellidos}
                   </span>
-                  <p className="mt-2">
-                    {citaMedica.fecha?.toFormat("DDDD", { locale: "es" })}
-                    <br />
-                    <Time type="time" dateTime={citaMedica.horaInicio} /> -{" "}
-                    <Time type="time" dateTime={citaMedica.horaFin} />
-                  </p>
-                </div>
-                <div className="mt-2">
-                  <strong>Médico</strong>
-                  <p>
-                    Dr(a):{" "}
-                    <span className="text-neutral-600">
-                      {citaMedica.medico?.nombres}{" "}
-                      {citaMedica.medico?.apellidos}
-                    </span>
-                    <br />
-                    Especialidad:{" "}
-                    <span className="text-neutral-600">
-                      {citaMedica.medico?.especialidad}
-                    </span>
-                  </p>
-                </div>
+                  <br />
+                  Especialidad:{" "}
+                  <span className="text-neutral-600">
+                    {citaMedica.medico?.especialidad}
+                  </span>
+                </p>
               </div>
-              {/* Mostrar el formulario*/}
-              <div className="flex gap-4 mt-2">
-                <Button onClick={() => setMostrarFormulario(true)}>
-                  <Ticket /> Reservar
-                </Button>
+              <div>
+                {citaMedica.nombreArchivo ? (
+                  <Button onClick={handleDescargarArchivo}>
+                    Descargar archivo médico
+                  </Button>
+                ) : (
+                  <p className="text-sm text-gray-600">
+                    No se adjuntó ningún archivo médico.
+                  </p>
+                )}
               </div>
             </div>
-          )}
-
-          {citaMedica.estado === "Reservada" && (
-            <div className="p-2 flex flex-col gap-2">
-              {/* Mostrar descripción si existe */}
-              {citaMedica.descripcion && (
-                <p className="mb-2 text-sm text-gray-700">
-                  <strong>Descripción médica:</strong> {citaMedica.descripcion}
-                </p>
+            {/* Mostrar el formulario*/}
+            <div className="flex gap-4 mt-2">
+              {citaMedica.estado === CitaMedicaEstado.disponible && (
+                <ReservarCitaMedica
+                  setMostrarFormulario={setMostrarFormulario}
+                />
               )}
-              <p className="mb-2 text-sm text-gray-700">
-                  <strong>Descripción xxxx:</strong> {citaMedica.descripcion}
-                </p>
-                <p className="mb-2 text-sm text-gray-700">
-                  <strong>Descripción asdasd:</strong> {citaMedica.nombreArchivo}
-                </p>
-              {/* Botón para descargar archivo médico */}
-              {citaMedica.nombreArchivo ? (
-                <Button variant="secondary" onClick={handleDescargarArchivo}>
-                  Descargar archivo médico
-                </Button>
-              ) : (
-                <p className="text-sm text-gray-600">
-                  No se adjuntó ningún archivo médico.
-                </p>
+              {citaMedica.estado === CitaMedicaEstado.reservada && (
+                <CancelarCitaMedica citaMedica={citaMedica} />
               )}
-              <Button
-                variant="danger"
-                onClick={() => {
-                  callAlertDialog({
-                    title: "¿Quieres cancelar esta reserva?",
-                    description: `${citaMedica.horaInicio?.toFormat(
-                      "T"
-                    )} - ${citaMedica.horaFin?.toFormat("T")}`,
-                    buttonLabel: "Cancelar",
-                    onConfirm: async () => {
-                      if (!usuario || !id) {
-                        createToast("error", {
-                          title: "Mal envio de datos",
-                        });
-                        return true;
-                      }
-                      reload();
-                      // const result = await deleteReservaAPI(citaMedica.);
-
-                      // if (result)
-                      //   callSuccessDialog({
-                      //     title: "Cita reservada correctamente",
-                      //   });
-                      // else
-                      //   callErrorDialog({
-                      //     title: "la cita no pudo ser reservada correctamente",
-                      //   });
-                      return false;
-                    },
-                  });
-                }}
-              >
-                <Ban /> Cancelar Reserva
-              </Button>
-              
             </div>
-          )}
+          </div>
         </HoverCardContent>
       </HoverCard>
 
@@ -257,7 +204,6 @@ export function ComunidadCitaMedicaCard({
     </>
   );
 }
-
 
 /*
 import {

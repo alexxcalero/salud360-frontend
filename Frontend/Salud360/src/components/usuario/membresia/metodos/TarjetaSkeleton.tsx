@@ -15,17 +15,13 @@ const TarjetaSkeleton = ({
   numero,
   exp,
   nombre = "Jhon Doe",
+  tipoTarjeta,
 }: {
   numero: string;
   exp?: DateTime;
   nombre?: string;
+  tipoTarjeta?: string;
 }) => {
-  const tipoTarjeta: "mastercard" | "visa" | "unknown" =
-    /^(5[1-5]|2(22[1-9]|2[3-9]|[3-6]|7[01]|720))/.test(numero)
-      ? "mastercard"
-      : /^4/.test(numero)
-      ? "visa"
-      : "unknown";
   const selectRandomBgImage = () =>
     [
       FondoTarjeta1,
@@ -104,14 +100,14 @@ const TarjetaSkeleton = ({
                 <p className="text-neutral-300 text-label-large">Expiracion</p>
                 <p className="expiracion">
                   <span className="mes">
-                    {exp?.toFormat("MM", { locale: "es" }) !==
+                    {exp?.toFormat("LL", { locale: "es" }) !==
                     "Invalid DateTime"
                       ? exp?.toFormat("MM", { locale: "es" })
                       : "MM"}
                   </span>{" "}
                   /{" "}
                   <span className="year">
-                    {exp?.toFormat("yy", { locale: "es" }) !==
+                    {exp?.toFormat("yyyy", { locale: "es" }) !==
                     "Invalid DateTime"
                       ? exp?.toFormat("yy", { locale: "es" })
                       : "AA"}

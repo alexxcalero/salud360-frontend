@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import {
+import React, {
   ReactNode,
   Suspense,
   useCallback,
@@ -20,6 +20,7 @@ import {
 import { useFetchHandler } from "@/hooks/useFetchHandler";
 import Spinner from "../Spinner";
 import { createPortal } from "react-dom";
+import { agruparEventosSolapados } from "@/lib/calendarOverlaping";
 
 /*
  * ===================================
@@ -27,27 +28,27 @@ import { createPortal } from "react-dom";
  * ===================================
  */
 
-interface Props<Data> {
+interface Props<Event> {
   fechaSemana?: DateTime;
   cards: {
-    day: (_: Data) => ReactNode;
-    week: (_: Data) => ReactNode;
-    month: (_: Data) => ReactNode;
+    day: (_: Event) => ReactNode;
+    week: (_: Event) => ReactNode;
+    month: (_: Event) => ReactNode;
   };
   filterContent?: ReactNode;
-  filterFuncs?: ((d: Data) => boolean)[];
-  getRangeDateFromData: (d: Data) => [DateTime, DateTime] | undefined;
-  RegisterForm?: (_: {
+  filterFuncs?: ((d: Event) => boolean)[];
+  getRangeDateFromData: (d: Event) => [DateTime, DateTime] | undefined;
+  RegisterForm?: React.FC<{
     open: boolean;
     setOpen: (_: boolean) => void;
     date?: DateTime;
-  }) => ReactNode;
-  ActualizarForm?: (_: {
+  }>;
+  ActualizarForm?: React.FC<{
     open: boolean;
     setOpen: (_: boolean) => void;
-    data: Data;
-  }) => ReactNode;
-  fetchData: () => Promise<Data[]>;
+    data: Event;
+  }>;
+  fetchData: () => Promise<Event[]>;
   fetchDataDependences?: any[];
 }
 
@@ -57,7 +58,7 @@ interface Props<Data> {
  * ===================================
  */
 
-export default function Calendario<Data>(props: Props<Data>) {
+export default function Calendario<Event>(props: Props<Event>) {
   return (
     <Suspense
       fallback={
@@ -67,7 +68,7 @@ export default function Calendario<Data>(props: Props<Data>) {
       }
     >
       <InternalModalsProvider>
-        <CalendarioWrapped<Data> {...props} />
+        <CalendarioWrapped<Event> {...props} />
       </InternalModalsProvider>
     </Suspense>
   );
@@ -79,7 +80,7 @@ export default function Calendario<Data>(props: Props<Data>) {
  * ===================================
  */
 
-function CalendarioWrapped<Data>({
+function CalendarioWrapped<Event>({
   fechaSemana = DateTime.now(),
   cards,
   filterContent,
@@ -89,9 +90,9 @@ function CalendarioWrapped<Data>({
   ActualizarForm,
   fetchData,
   fetchDataDependences = [],
-}: Props<Data>) {
-  const [data, setData] = useState<Data[]>([]);
-  // const [selectionesData, setSelectionedData] = useState<Data>();
+}: Props<Event>) {
+  const [events, setEvents] = useState<Event[]>([]);
+  // const [selectionesData, setSelectionedData] = useState<Event>();
 
   const [periodo, setPeriodo] = useState<"week" | "day" | "month">("week");
   const [targetDay, setTargetDay] = useState<DateTime>(
@@ -106,9 +107,9 @@ function CalendarioWrapped<Data>({
     [targetDay, periodo]
   );
 
-  const filteredData = useMemo<Data[]>(() => {
-    return data
-      .map((d) => [d, getRangeDateFromData(d)] as [Data, [DateTime, DateTime]])
+  const filteredData = useMemo<Record<string, Event[][]>>(() => {
+    const filteredEvents = events
+      .map((d) => [d, getRangeDateFromData(d)] as [Event, [DateTime, DateTime]])
       .filter(([_, rango]) => rango !== undefined && rango !== null)
       .filter(
         ([_, rango]) =>
@@ -117,7 +118,23 @@ function CalendarioWrapped<Data>({
       )
       .map(([d, _]) => d)
       .filter((d) => filterFuncs?.every((f) => f(d)) ?? true);
-  }, [rangeDays, data]);
+
+    // @ts-ignore
+    const groupedEventsByDay = Object.groupBy(
+      filteredEvents,
+      (event: Event) =>
+        getRangeDateFromData(event)?.[0].toISODate() ?? "unknown"
+    ) as Record<string, Event[]>;
+
+    const toReturnEvents: Record<string, Event[][]> = {};
+    Object.entries(groupedEventsByDay).forEach(([key, values]) => {
+      toReturnEvents[key] = agruparEventosSolapados(
+        values,
+        getRangeDateFromData
+      );
+    });
+    return toReturnEvents;
+  }, [rangeDays, events]);
 
   const changeDate = useCallback(
     (step = 1) => {
@@ -143,8 +160,8 @@ function CalendarioWrapped<Data>({
   //       setActiveModal?.("registrar");
   //     }, [])
   //   : undefined;
-  // const getCalendarData = useCallback((data: Data) => {
-  //   setSelectionedData(data);
+  // const getCalendarData = useCallback((events: Event) => {
+  //   setSelectionedData(events);
   //   if (RegisterForm) setActiveModal?.("actualizar");
   // }, []);
 
@@ -159,13 +176,13 @@ function CalendarioWrapped<Data>({
   const { fetch } = useFetchHandler();
   useEffect(() => {
     fetch(async () => {
-      setData(await fetchData());
+      setEvents(await fetchData());
     });
   }, [reloadState]);
 
   useEffect(() => {
     fetch(async () => {
-      setData(await fetchData());
+      setEvents(await fetchData());
     });
   }, fetchDataDependences);
 
@@ -220,7 +237,7 @@ function CalendarioWrapped<Data>({
               key={rangeDays.initial.toISO()}
               inicioSemana={rangeDays.initial}
               card={cards.week}
-              data={filteredData}
+              events={filteredData}
               registerEnabled={Boolean(RegisterForm)}
               getRangeDateFromData={getRangeDateFromData}
             />
@@ -232,7 +249,7 @@ function CalendarioWrapped<Data>({
               card={cards.day}
               getRangeDateFromData={getRangeDateFromData}
               registerEnabled={Boolean(RegisterForm)}
-              data={filteredData}
+              events={filteredData}
             />
           )}
           {periodo === "month" && (
@@ -244,7 +261,7 @@ function CalendarioWrapped<Data>({
               card={cards.month}
               getRangeDateFromData={getRangeDateFromData}
               registerEnabled={Boolean(RegisterForm)}
-              data={filteredData}
+              events={filteredData}
             />
           )}
         </div>

@@ -19,7 +19,7 @@ interface ModalInterface {
 }
 
 interface AlertModalInterface extends ModalInterface {
-  onConfirm?: () => Promise<boolean>;
+  onConfirm?: () => Promise<any>;
   buttonLabel?: string;
 }
 
@@ -106,7 +106,7 @@ export function DialogProvider({ children }: { children: ReactNode }) {
       }}
     >
       {children}
-      <div className="fixed z-[900]">
+      <div className="fixed z-4900">
         <SuccessModal
           open={openSuccess}
           setOpen={setOpenSuccess}

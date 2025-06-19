@@ -1,4 +1,3 @@
-import { extendedCitaMedicaSchema } from "@/schemas/citaMedica";
 import { baseAPI } from "./baseAPI";
 import { z } from "zod";
 import { claseDTOSchema } from "@/schemas/clase";

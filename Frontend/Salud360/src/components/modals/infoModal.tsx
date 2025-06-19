@@ -6,13 +6,14 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import { useFetchHandler } from "@/hooks/useFetchHandler";
 import { Info } from "lucide-react";
 
 interface Props {
   title?: string;
   description?: string;
   buttonLabel?: string;
-  onConfirm?: () => Promise<boolean>;
+  onConfirm?: () => Promise<any>;
   onCancel?: () => void;
   open: boolean;
   setOpen: (_: boolean) => void;
@@ -27,6 +28,7 @@ function InfoModal({
   open,
   setOpen,
 }: Props) {
+  const { fetch } = useFetchHandler();
   return (
     <Dialog
       open={open}
@@ -61,8 +63,9 @@ function InfoModal({
               </Button>
             </DialogClose>
             <Button
-              onClick={() => {
-                onConfirm?.().then((r) => setOpen(r));
+              onClick={async () => {
+                const data = (await fetch(async () => onConfirm?.())) ?? true;
+                setOpen(data);
               }}
             >
               {buttonLabel}

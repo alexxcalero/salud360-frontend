@@ -1,6 +1,5 @@
 import Input from "@/components/input/Input";
 import { CalendarInput } from "@/components/input/CalendarInput";
-import SelectLabel from "@/components/SelectLabel";
 import {
   Dialog,
   DialogClose,
@@ -10,7 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { useToasts } from "@/hooks/ToastContext";
 import { DateTime } from "luxon";
-import { FormEvent, useState } from "react";
+import { FormEvent, useMemo, useState } from "react";
 import Button from "@/components/Button";
 import { useFetchHandler } from "@/hooks/useFetchHandler";
 import { useInternalModals } from "@/hooks/useInternalModals";
@@ -35,7 +34,12 @@ const ActualizarClaseModalForm = ({
   const [horaInicio, setHoraInicio] = useState(
     clase.horaInicio?.toFormat("T") ?? ""
   );
-  const [horaFin, setHoraFin] = useState(clase.horaFin?.toFormat("T") ?? "");
+  const horaFin = useMemo(
+    () =>
+      DateTime.fromFormat(horaInicio, "T").plus({ hour: 1 }).toFormat("T") ??
+      "00:00",
+    [horaInicio]
+  );
 
   const [dateInput, setDateInput] = useState<DateTime>(
     clase.fecha ?? DateTime.now()
@@ -93,17 +97,9 @@ const ActualizarClaseModalForm = ({
       nombre,
       descripcion,
       capacidad,
-      cantAsistentes: clase.cantAsistentes,
       horaInicio: horaInicio,
       horaFin: horaFin,
-      fechaCreacion: clase.fechaCreacion?.toISO(),
-      fechaDesactivacion: clase.fechaDesactivacion?.toISO(),
-      activo: clase.activo,
       fecha: dateInput.toISODate(),
-      estado: clase.estado,
-      local: clase.local,
-      clientes: clase.clientes ?? [],
-      reservas: clase.reservas ?? [],
     };
 
     console.log(uploadData);
@@ -145,10 +141,10 @@ const ActualizarClaseModalForm = ({
                 name="capacidad"
                 placeholder="Capacidad..."
                 label="Capacidad"
-                required={true}
                 type="number"
                 value={capacidad}
                 setValue={setCapacidad}
+                disabled={true}
               />
 
               <CalendarInput
@@ -183,10 +179,10 @@ const ActualizarClaseModalForm = ({
                 />
                 <Input
                   name="hora-fin"
-                  required={true}
                   placeholder="Hora fin"
                   value={horaFin}
-                  setValue={setHoraFin}
+                  setValue={() => {}}
+                  disabled={true}
                   label="Hora fin"
                   type="time"
                 />

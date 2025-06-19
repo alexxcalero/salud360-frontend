@@ -37,6 +37,7 @@ const PasarelaPagoPage = () => {
   }
 
   const [membresia, setMembresia] = useState(membresiaParam);
+  console.log(mediosDePagoSeleccionado);
 
   return (
     <div className="w-full h-full flex justify-center items-center">
@@ -53,9 +54,13 @@ const PasarelaPagoPage = () => {
         <div className="w-[1px] h-full bg-neutral-300"></div>
 
         {tipo === "guardado" && (
-          <MetodoTarjeta comunidad={comunidad} membresia={membresia} />
+          <MetodoTarjeta
+            comunidad={comunidad}
+            membresia={membresia}
+            medioDePago={mediosDePagoSeleccionado}
+          />
         )}
-        {metodo === "tarjeta" && (
+        {metodo === "tarjeta" && tipo === "nuevo" && (
           <MetodoTarjeta comunidad={comunidad} membresia={membresia} />
         )}
         {metodo === "plin" && (

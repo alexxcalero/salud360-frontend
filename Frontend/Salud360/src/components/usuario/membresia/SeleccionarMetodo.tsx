@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router";
 import Progression from "./Progression";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import MassterCardIcon from "@/assets/method-mastercard.svg";
 import VisaIcon from "@/assets/method-visa.svg";
 import YapeIcon from "@/assets/yape.svg";
@@ -12,6 +12,8 @@ import { useFetchHandler } from "@/hooks/useFetchHandler";
 import { CircleCheck } from "lucide-react";
 import { IComunidad } from "@/models/comunidad";
 import { IMembresia } from "@/models/membresia";
+import { getAllMediosDePagosByUsuarioAPI } from "@/services/medioDePago.service";
+import { AuthContext } from "@/hooks/AuthContext";
 
 const SeleccionarMetodo = ({
   comunidad,
@@ -24,7 +26,7 @@ const SeleccionarMetodo = ({
   const navigate = useNavigate();
 
   const [activeOption, setActiveOption] = useState<"nuevo" | "guardado">(
-    "nuevo"
+    "guardado"
   );
 
   const [mediosDePago, setMediosDePago] = useState<IMedioDePago[]>([]);
@@ -32,14 +34,23 @@ const SeleccionarMetodo = ({
     useState<string>();
   const selectedMedioDePago = useMemo(
     () =>
-      mediosDePago.find((m) => m.idMedioDePago === selectedMedioDePagoInput),
+      mediosDePago.find(
+        (m) => m.idMedioDePago?.toString() === selectedMedioDePagoInput
+      ),
     [selectedMedioDePagoInput, mediosDePago]
   );
 
   const { fetch } = useFetchHandler();
+  const { usuario } = useContext(AuthContext);
   useEffect(() => {
     fetch(async () => {
-      setMediosDePago([]);
+      const mediosDePagos = await getAllMediosDePagosByUsuarioAPI(
+        usuario.idCliente
+      );
+      console.group("Medios");
+      console.log(mediosDePagos);
+      console.groupEnd();
+      setMediosDePago(mediosDePagos);
     });
   }, []);
 
@@ -58,7 +69,7 @@ const SeleccionarMetodo = ({
         className={cn(
           "p-4 border-1 border-neutral-400 rounded-md w-full",
           activeOption !== "guardado" &&
-            "grayscale bg-neutral-200  hover:bg-neutral-300 transition-all duration-500 ease-out"
+            "grayscale bg-neutral-200  hover:bg-neutral-300 transition-all duration-500 ease-out cursor-pointer"
         )}
         onClick={() => setActiveOption("guardado")}
       >
@@ -74,6 +85,7 @@ const SeleccionarMetodo = ({
             content: `**** **** **** ${m.ncuenta?.toString().slice(12, 16)}`,
           }))}
           htmlFor=""
+          disabled={activeOption !== "guardado"}
         />
       </div>
 
@@ -88,7 +100,7 @@ const SeleccionarMetodo = ({
         className={cn(
           "p-4 border-1 border-neutral-400 rounded-md w-full",
           activeOption !== "nuevo" &&
-            "grayscale bg-neutral-200 hover:bg-neutral-300 transition-all duration-500 ease-out"
+            "grayscale bg-neutral-200 hover:bg-neutral-300 transition-all duration-500 ease-out cursor-pointer"
         )}
         onClick={() => setActiveOption("nuevo")}
       >
