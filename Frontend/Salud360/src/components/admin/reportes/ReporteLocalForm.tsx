@@ -1,5 +1,6 @@
 import InputIconLabelEdit from "@/components/InputIconLabelEdit"
 import SelectIconLabel from "@/components/SelectIconLabel"
+import SelectIconLabelNum from "@/components/SelectIconLabelNum"
 import { Calendar, Shield } from "lucide-react"
 import { FaHandHoldingUsd } from "react-icons/fa";
 import Button from "@/components/Button";
@@ -10,14 +11,14 @@ interface Props {
   data: {
     fechaInicio: string;
     fechaFin: string;
-    servicio: string;
+    idservicio: number;
     descripcion: string;
   };
   onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
 }
 
 export default function ReporteLocalForm({ data, onChange }: Props) {
-  const [servicios, setServicios] = useState<{ value: string; label: string }[]>([]);
+  const [servicios, setServicios] = useState<{ value: number; content: string }[]>([]);
 
   useEffect(() => {
     const fetchServicios = async () => {
@@ -25,8 +26,8 @@ export default function ReporteLocalForm({ data, onChange }: Props) {
         const res = await axios.get("http://localhost:8080/api/servicios", {
           auth: { username: "admin", password: "admin123" }
         });
-        const opciones = res.data.map((s: any) => ({ value: s.idServicio, label: s.nombre }));
-        setServicios([{ value: "", label: "Elige una opcion" }, ...opciones]);
+        const opciones = res.data.map((s: any) => ({ value: s.idServicio, content: s.nombre }));
+        setServicios([{ value: "", content: "Elige una opción" }, ...opciones]);
       } catch (err) {
         console.error("Error cargando servicios", err);
       }
@@ -40,7 +41,7 @@ export default function ReporteLocalForm({ data, onChange }: Props) {
         fechaInicio: data.fechaInicio,
         descripcion: data.descripcion,
         fechaFin: data.fechaFin,
-        servicio: data.servicio
+        servicio: data.idservicio
       }, {
         auth: {
           username: "admin",
@@ -83,10 +84,11 @@ export default function ReporteLocalForm({ data, onChange }: Props) {
         type="date" label="Fecha fin"
         value={data.fechaFin} onChange={onChange}
       />
-      <SelectIconLabel
-        icon={<FaHandHoldingUsd className="w-5 h-5" />} htmlFor="servicio"
+      <SelectIconLabelNum
+        icon={<FaHandHoldingUsd className="w-5 h-5" />} htmlFor="idservicio"
         label="Servicio"
-        value={data.servicio} onChange={onChange}
+        value={data.idservicio}
+        onChange={onChange}
         options={servicios}
       />
       <div className="col-span-2 flex justify-end mt-4">
