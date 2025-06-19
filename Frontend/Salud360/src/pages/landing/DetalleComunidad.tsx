@@ -108,23 +108,32 @@ function DetalleComunidad(){
                 <section className="bg-white">
                     <div className="flex flex-col gap-8">
                         <h1>NUESTROS SERVICIOS</h1>
-                        {servicios.map((servicio: any, i: number) => (
+                        {servicios.map((servicio: any, i: number) => {
+                        const imagenServicio =
+                            servicio.imagen
+                            ? servicio.imagen.startsWith("http") || servicio.imagen.startsWith("data:")
+                                ? servicio.imagen
+                                : `http://localhost:8080/api/archivo/${servicio.imagen}`
+                            : "https://png.pngtree.com/png-clipart/20201224/ourmid/pngtree-panda-bamboo-bamboo-shoots-simple-strokes-cartoon-with-pictures-small-fresh-png-image_2625172.jpg";
+
+                        return (
                             <div key={servicio.idServicio}>
-                                {i % 2 === 0 ? (
+                            {i % 2 === 0 ? (
                                 <ImageSectionLeft
-                                    image={Imagen}
-                                    h1={servicio.nombre}
-                                    h3={servicio.descripcion}
+                                image={imagenServicio}
+                                h1={servicio.nombre}
+                                h3={servicio.descripcion}
                                 />
-                                ) : (
+                            ) : (
                                 <ImageSectionRight
-                                    image={Imagen}
-                                    h1={servicio.nombre}
-                                    h3={servicio.descripcion}
+                                image={imagenServicio}
+                                h1={servicio.nombre}
+                                h3={servicio.descripcion}
                                 />
-                                )}
+                            )}
                             </div>
-                        ))}
+                        );
+                        })}
                     </div>
                 </section>
 
