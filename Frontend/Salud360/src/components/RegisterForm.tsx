@@ -12,8 +12,12 @@ import MailInput from "./input/MailInput"
 import PasswordInput from "./input/PasswordInput"
 import axios from "axios"
 import ModalValidacion from "./ModalValidacion"
+<<<<<<< HEAD
 import { Link } from "react-router-dom"
 
+=======
+import { jwtDecode } from "jwt-decode";
+>>>>>>> origin/main
 
 export default function RegisterForm() {
   const [formData, setFormData] = useState({
@@ -203,16 +207,89 @@ export default function RegisterForm() {
     { value: "Femenino", content: "Femenino" }
   ]
 
-  //Uso de Google OAuth
   const registerGoogle = useGoogleLogin({
-    onSuccess: (tokenResponse) => {
-      console.log("Registro con Google OK:", tokenResponse)
-      // Aquí debemos jwtDecode para extraer el token que envia google
-    },
-    onError: () => {
-      console.error("Error al registrarse con Google")
+  onSuccess: async (tokenResponse) => {
+    console.log("👉 tokenResponse:", tokenResponse);
+
+    try {
+      const { access_token } = tokenResponse;
+
+      // Obtener datos del perfil desde Google
+      const res = await axios.get("https://www.googleapis.com/oauth2/v3/userinfo", {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      });
+
+      const userData = res.data;
+      console.log("✅ Datos de Google:", userData);
+
+      // Completar el formulario con datos obtenidos
+      const nuevosDatos = {
+        nombres: userData.given_name || "",
+        apellidos: userData.family_name || "",
+        correo: userData.email || "",
+        confirmarCorreo: userData.email || "",
+        numeroDocumento: Math.floor(10000000 + Math.random() * 90000000).toString(),
+        contraseña: "google123",
+        confirmarContraseña: "google123",
+        genero: "No especificado",
+        telefono: Math.floor(10000000 + Math.random() * 90000000).toString(),
+        fechaNacimiento: "2000-01-01",
+        lugarResidencia: "No especificado",
+        tipoDocumento: "1",
+      };
+
+      // Actualizar estado del formulario (visualmente)
+      setFormData(nuevosDatos);
+
+      // Enviar datos al backend
+      setLoading(true);
+
+      const datosEnvio = {
+        nombres: nuevosDatos.nombres,
+        apellidos: nuevosDatos.apellidos,
+        numeroDocumento: nuevosDatos.numeroDocumento,
+        correo: nuevosDatos.correo,
+        contrasenha: nuevosDatos.contraseña,
+        sexo: nuevosDatos.genero,
+        telefono: nuevosDatos.telefono,
+        fechaNacimiento: nuevosDatos.fechaNacimiento,
+        direccion: nuevosDatos.lugarResidencia,
+        tipoDocumento: {
+          idTipoDocumento: nuevosDatos.tipoDocumento
+        }
+      };
+
+      await register(datosEnvio);
+
+      createToast("success", {
+        title: "Registro exitoso con Google",
+        description: "Redirigiendo...",
+      });
+
+      navigate("/RegistroExitoso", {
+        state: { created: true },
+      });
+
+    } catch (error) {
+      console.error("❌ Error en registro con Google:", error);
+      createToast("error", {
+        title: "Error al registrar con Google",
+        description: "Intenta nuevamente.",
+      });
+    } finally {
+      setLoading(false);
     }
-  })
+  },
+  onError: () => {
+    console.error("Error al iniciar sesión con Google");
+    createToast("error", {
+      title: "Fallo en el inicio con Google",
+      description: "Intenta otra vez.",
+    });
+  }
+});
 
   const navigate = useNavigate()
   

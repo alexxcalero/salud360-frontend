@@ -179,7 +179,7 @@ function Inicio(){
                         </div>
                         <div className="flex mx-auto border border-[#2A86FF] rounded-sm ">
                             <CardLanding id={comunidadRandom.idComunidad} 
-                            image={"https://png.pngtree.com/png-clipart/20201224/ourmid/pngtree-panda-bamboo-bamboo-shoots-simple-strokes-cartoon-with-pictures-small-fresh-png-image_2625172.jpg"} 
+                            image={comunidadRandom.imagen}
                             title={comunidadRandom.nombre} 
                             subtitle={comunidadRandom.descripcion}/>
                         </div>

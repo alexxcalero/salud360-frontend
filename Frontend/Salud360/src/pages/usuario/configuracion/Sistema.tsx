@@ -328,7 +328,7 @@ const ConfigSistema = () => {
 
       {showModal && (
         <div className="fixed inset-0 bg-black/60 z-40 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-lg shadow-md max-w-md w-full">
+          <div className="bg-white p-6 rounded-lg shadow-md max-w-md w-full max-h-screen mt-20">
             <h3 className="text-lg mb-4">Agregar Método de Pago</h3>
             <form className="flex flex-col gap-4">
               <label>Tipo de tarjeta:</label>
@@ -344,7 +344,11 @@ const ConfigSistema = () => {
               <input
                 type="text"
                 value={newCard.numero}
-                onChange={(e) => setNewCard({ ...newCard, numero: e.target.value })}
+                onChange={(e) => {
+                  const rawValue = e.target.value.replace(/\D/g, ""); // Elimina todo lo que no sea dígito
+                  const formattedValue = rawValue.replace(/(.{4})/g, "$1 ").trim(); // Agrupa cada 4 dígitos
+                  setNewCard({ ...newCard, numero: formattedValue });
+                }}
                 className="w-full p-2 border rounded"
               />
               <label>Nombre del titular:</label>
@@ -395,8 +399,8 @@ const ConfigSistema = () => {
           <div className="fixed inset-0 bg-black/60 z-40" />
           <div className="fixed inset-0 z-50 flex items-center justify-center">
             <ModalExito
-              modulo="Método de Pago agregado correctamente!"  // El mensaje de éxito del método de pago
-              detalle="El Método de Pago fue agregado correctamente"
+              modulo="¡Método de pago agregado correctamente!"  // El mensaje de éxito del método de pago
+              detalle="El método de pago fue agregado correctamente"
               onConfirm={() => {
                 setShowModalExito(false);
                 fetchMetodoPago(); // Actualiza los métodos de pago

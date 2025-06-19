@@ -122,36 +122,109 @@ export default function LoginForm() {
 
   //Uso de Google OAuth
   const loginGoogle = useGoogleLogin({
-    onSuccess: async (tokenResponse) => {
-      console.log("Login con Google OK:", tokenResponse);
-      try {
-        const res = await fetch(
-          "https://www.googleapis.com/oauth2/v3/userinfo",
-          {
-            headers: {
-              Authorization: `Bearer ${tokenResponse.access_token}`,
-            },
-          }
-        );
+  onSuccess: async (tokenResponse) => {
+    console.log("✅ Login con Google OK:", tokenResponse);
 
-        const profile = await res.json();
-        console.log("Perfil de Google:", profile);
-        const correo = profile.email;
+    try {
+      // Obtener datos del perfil desde Google
+      const res = await fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
+        headers: {
+          Authorization: `Bearer ${tokenResponse.access_token}`,
+        },
+      });
 
-        const result = await authGoogleService(correo);
-        // Validación de cuenta opcional
-        if (!result.verificado) {
-          alert("Tu cuenta aún no ha sido verificada.");
-          return;
-        }
-        localStorage.setItem("authToken", tokenResponse.access_token);
-        navigate("/");
-      } catch (error) {
-        console.error("Error procesando login con Google:", error);
-        alert("No pudimos completar el inicio de sesión con Google.");
+      const profile = await res.json();
+      console.log("👤 Perfil de Google:", profile);
+
+      const correo = profile.email;
+      const contraseña = "google123"; // contraseña fija para login por Google
+
+      setLoading(true);
+
+      const response = await loginRequest(correo, contraseña);
+      console.log("El response del inicio de sesión es:", response);
+      console.log("El token de response es:", response.token);
+
+      const usuario = response.usuario;
+      let activeUser = null;
+
+      if (usuario.cliente) {
+        activeUser = {
+          ...usuario.cliente,
+          idUsuario: usuario.idUsuario,
+        };
+      } else if (usuario.administrador) {
+        activeUser = {
+          ...usuario.administrador,
+          idUsuario: usuario.idUsuario,
+        };
+      } else {
+        console.error("❌ Usuario no contiene ni cliente ni administrador:", usuario);
       }
-    },
-  });
+
+      const token = response.token;
+      const idRol = activeUser.rol?.idRol;
+
+      loginContext(activeUser, token);
+
+      console.log("🧠 Usuario activo:", activeUser);
+      console.log("🎫 Rol detectado:", idRol);
+
+      switch (idRol) {
+        case 1:
+          navigate("/admin");
+          break;
+        case 2:
+        case 3:
+          navigate("/usuario");
+          break;
+        default:
+          navigate("/");
+      }
+
+    } catch (error: any) {
+      console.error("❌ Error en login con Google:", error);
+
+      if (axios.isAxiosError(error)) {
+        if (error.code === "ECONNABORTED") {
+          createToast("error", {
+            title: "Error: Conexión agotada (timeout)",
+            description: "",
+          });
+        } else if (!error.response) {
+          createToast("error", {
+            title: "Error: No se pudo conectar al servidor",
+            description: "",
+          });
+        } else {
+          createToast("error", {
+            title: "Error de respuesta: " + error.response.status,
+            description: error.response.data || "",
+          });
+        }
+      } else if (error.response && error.response.status === 401) {
+        createToast("error", {
+          title: "Cuenta de Google no registrada aún",
+          description: "Regístrate antes de iniciar sesión con Google.",
+        });
+      } else {
+        createToast("error", {
+          title: "Error al iniciar sesión con Google",
+          description: "",
+        });
+      }
+    } finally {
+      setLoading(false);
+    }
+  },
+  onError: () => {
+    createToast("error", {
+      title: "Fallo en el inicio con Google",
+      description: "Intenta otra vez.",
+    });
+  }
+});
+
 
   const navigate = useNavigate();
 

@@ -5,6 +5,7 @@ import InputLabel from "@/components/InputLabel";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import { useRef } from "react";
 
 interface Props{
     title?: string
@@ -28,13 +29,19 @@ interface Props{
     servicios: number | null;//localesSeleccionados
     setServicios?: (val: number) => void;
 
+    aforo?: number;
+
     readOnly?: boolean;
     onSubmit?: () => void;
     buttonText?: string;
+
+    //Para la imagen
+    onImagenSeleccionada?: (file: File) => void;
+    imagenActual?: string | null;
 }
 
 function LocalesForms({title, subtitle, nombre, setNombre = () =>{}, telefono, setTelefono = () =>{}, descripcion, setDescripcion = () =>{}, 
-    direccion, setDireccion = () =>{}, tipo, setTipo = () =>{}, servicios, setServicios = () => {}, readOnly = false, onSubmit = () =>{}, buttonText}: Props){
+    direccion, setDireccion = () =>{}, tipo, setTipo = () =>{}, servicios, setServicios = () => {}, aforo = 0, readOnly = false, onSubmit = () =>{}, buttonText,onImagenSeleccionada = () => {},imagenActual = null}: Props){
 
     const [serviciosDisponibles, setServiciosDisponibles] = useState([]);
 
@@ -62,15 +69,18 @@ function LocalesForms({title, subtitle, nombre, setNombre = () =>{}, telefono, s
 
     const navigate = useNavigate();
 
-    /*const toggle = (id: number, selected: number[], setSelected: (val: number[]) => void) => {
-        if (readOnly) return;
-        setSelected(
-        selected.includes(id)
-            ? selected.filter(item => item !== id)
-            : [...selected, id]
-        );
-    };*/
-
+    //PARA LA IMAGEN RELACIONAD AL LOCAL
+    const [imagenSeleccionada, setImagenSeleccionada] = useState<File | null>(null); 
+    const imagenInputRef = useRef<HTMLInputElement>(null); 
+    
+    const handleImagenChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImagenSeleccionada(file); 
+      onImagenSeleccionada(file); 
+    }
+    };
+    
     console.log("Disponibles:", serviciosDisponibles);
     console.log("IDs seleccionados:", servicios);
         
@@ -78,6 +88,16 @@ function LocalesForms({title, subtitle, nombre, setNombre = () =>{}, telefono, s
         <div className="w-full px-10 py-6">
         <h1 className="text-4xl font-bold mb-2">{title}</h1>
         <h2 className="text-lg text-gray-700 mb-6">{subtitle}</h2>
+        
+        {readOnly &&
+            (
+                <p className="text-md text-gray-800 mb-6">
+                Aforo máximo del local: <span className="font-semibold">{aforo}</span> personas.
+                </p>
+            )
+        }
+        
+        
 
         <div className="grid grid-cols-2 gap-8 items-center w-full">
             <div className="col-span-1 flex flex-col gap-4">
@@ -117,7 +137,17 @@ function LocalesForms({title, subtitle, nombre, setNombre = () =>{}, telefono, s
             </div>
         </div>
 
-       <div className="my-6">{!readOnly && <DropImage/>}</div>
+       <div className="my-6">
+            {!readOnly && (
+            <DropImage
+                onFileSelect={(file) => {
+                setImagenSeleccionada(file);
+                onImagenSeleccionada?.(file);
+                }}
+                previewUrl={imagenSeleccionada ? URL.createObjectURL(imagenSeleccionada) : imagenActual ? `http://localhost:8080/api/archivo/${imagenActual}` : undefined}
+            />
+            )}
+        </div>
 
         {!readOnly && (
             <div className="flex gap-4 mt-6">

@@ -15,6 +15,10 @@ function EditarServicio(){
     const [showModalValidacion, setShowModalValidacion] = useState(false);
     const [mensajeValidacion, setMensajeValidacion] = useState("");
 
+    //Para la imagen actual y nueva
+    const [imagenFile, setImagenFile] = useState<File | null>(null);
+    const [imagenActual, setImagenActual] = useState<string | null>(null);
+    const [imagenSeleccionada, setImagenSeleccionada] = useState<File | null>(null);
 
     const {
         nombre, setNombre,
@@ -35,6 +39,7 @@ function EditarServicio(){
             console.log("Datos cargados en editarServicio:", res.data); // VER ESTO EN LA CONSOLA
             setServicioAPI(res.data)
             setLoading(false);
+            setImagenActual(res.data.imagen || null);
           })
           .catch(err => {
             console.error("Error cargando el servicio", err);
@@ -84,6 +89,24 @@ function EditarServicio(){
             return;
         }
 
+        let nombreArchivo = imagenActual;
+
+      if (imagenFile) {
+        const formData = new FormData();
+        formData.append("archivo", imagenFile);
+
+        try {
+          const res = await axios.post("http://localhost:8080/api/archivo", formData, {
+            auth: { username: "admin", password: "admin123" }
+          });
+          nombreArchivo = res.data.nombreArchivo;
+        } catch (error) {
+          console.error("Error al subir imagen:", error);
+          alert("No se pudo subir la imagen.");
+          return;
+        }
+      }
+
         console.log("El contenido de los locales a enviar es:", locales)
         try{
             const response = await axios.put(`http://localhost:8080/api/servicios/${id}`, 
@@ -91,6 +114,7 @@ function EditarServicio(){
                     nombre,
                     descripcion,
                     tipo,
+                    imagen: nombreArchivo,
                     locales: {idLocal: locales},
                 },
                 {  
@@ -129,6 +153,12 @@ function EditarServicio(){
                 readOnly={false}
                 onSubmit={handleCrearServicio}
                 buttonText="Guardar"
+                onImagenSeleccionada={(file) => {
+                setImagenSeleccionada(file);
+                setImagenFile(file);
+                }}
+                imagenSeleccionada={imagenSeleccionada}
+                imagenActual={imagenActual}
             />
         </div>
         {showModalValidacion && (

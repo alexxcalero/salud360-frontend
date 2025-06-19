@@ -37,15 +37,13 @@ function CardLocal({local}: Props){
 
     return (
     <div className={`h-[600px] relative flex flex-row justify-center items-center ${isLaptop ? 'w-[900px]' : 'w-[1500px]'}`}>
-      <div className={`absolute top-1/2 -translate-y-1/2 ${isLaptop ? 'left-[100px]' : 'left-[200px]'} `}>
-        <img
-          src={DAB}
-          alt=""
-          className={`object-cover shadow-xl ${isLaptop && 'w-[200px]'}`}
-        />
+      <div className={`absolute top-1/2 -translate-y-1/2 ${isLaptop ? 'left-[140px]' : 'left-[280px]'} `}>
+        <img src={ local.imagen ? (local.imagen.startsWith("http") || local.imagen.startsWith("data:") ? local.imagen : `http://localhost:8080/api/archivo/${local.imagen}`)
+        : "https://png.pngtree.com/png-clipart/20201224/ourmid/pngtree-panda-bamboo-bamboo-shoots-simple-strokes-cartoon-with-pictures-small-fresh-png-image_2625172.jpg"}
+    alt={`Imagen del local ${local.nombre}`}className={`w-120 h-90 object-cover rounded-md shadow-xl ${isLaptop && 'w-70 h-40'}`}  />
       </div>
       <div
-        className={`flex flex-col gap-16 m-8 py-8 pr-8 bg-gray-50 border border-[#2A86FF] rounded-xl justify-center
+        className={`flex flex-col gap-16 m-8 py-8 pr-8 bg-gray-50 border-2 border-[#2A86FF] rounded-xl justify-center
             ${isLaptop ? 'w-[650px] h-[450px] pl-64' : 'pl-144'}`
         }
       >

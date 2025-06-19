@@ -1,5 +1,6 @@
 import { useState } from "react";
 import CardMedico from "./CardMedico";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface Props{
     medicos: any;
@@ -34,7 +35,7 @@ function CarrouselMedicos({medicos}: Props){
             <div className="flex justify-between items-center px-32">
                 {showCarrousel && <button onClick={handlePrev} disabled={currentIndex === 0}
                 className={`w-10 h-10 p-2 ${"text-white bg-[#2A86FF]"} rounded-full disabled:opacity-50 ${!(currentIndex === 0) && 'cursor-pointer'}`}>
-                    ←
+                    <ChevronLeft />
                 </button>}
 
                 <div className="w-full max-w-[1400px] mx-auto overflow-hidden py-8">
@@ -62,7 +63,7 @@ function CarrouselMedicos({medicos}: Props){
                     disabled={currentIndex + visibleCount >= totalSize}
                     className={`w-10 h-10 p-2 ${"text-white bg-[#2A86FF]"} rounded-full disabled:opacity-50 ${!(currentIndex + visibleCount >= totalSize) && 'cursor-pointer'}`}
                 >
-                    →
+                    <ChevronRight />
                 </button>}
             </div>
         </section>
