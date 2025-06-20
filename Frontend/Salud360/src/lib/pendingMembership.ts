@@ -10,7 +10,7 @@ export const setPendingMembership = (
   localStorage.setItem("targeted_membership", JSON.stringify(membresia));
   localStorage.setItem(
     "membreship_datetime_limit",
-    DateTime.now().plus({ second: 5 }).toISO()
+    DateTime.now().plus({ minute: 30 }).toISO()
   );
 };
 
