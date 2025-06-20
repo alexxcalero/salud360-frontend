@@ -16,7 +16,7 @@ const ModalFormularioReserva = ({
   onSubmit,
 }: {
   onClose: () => void;
-  onSubmit: (descripcion: string, archivo?: File) => void;
+  onSubmit: (descripcion: string, archivo?: File) => Promise<void>;
 }) => {
   const [descripcion, setDescripcion] = useState("");
   const [archivo, setArchivo] = useState<File | undefined>();
@@ -31,7 +31,7 @@ const ModalFormularioReserva = ({
     if (selected) setArchivo(selected);
   };
 
-  const handleDragDrop = (e: React.DragEvent<HTMLDivElement>) => {
+  const handleDragDrop = async (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     const dropped = e.dataTransfer.files?.[0];
     if (dropped) setArchivo(dropped);
@@ -48,11 +48,11 @@ const ModalFormularioReserva = ({
     return true;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!validarCampos()) return;
 
     try {
-      onSubmit(descripcion, archivo);
+      await onSubmit(descripcion, archivo);
       navigate(`/usuario/comunidades/detalle/${id}/reservas`);
     } catch (e) {
       callErrorDialog({
