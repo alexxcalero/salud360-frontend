@@ -6,9 +6,9 @@ import InputIcon from "@/components/InputIcon";
 import ButtonIcon from "@/components/ButtonIcon";
 import TableHeader from "@/components/admin/TableHeader";
 import TableBody from "@/components/admin/TableBody";
-import axios from "axios";
 import ModalError from "@/components/ModalError";
 import ModalExito from "@/components/ModalExito";
+import { baseAPI } from "@/services/baseAPI";
 
 function ServiciosPage() {
   const [selectAll, setSelectAll] = useState(false);
@@ -20,7 +20,7 @@ function ServiciosPage() {
   const [paginaActual, setPaginaActual] = useState(1);
 
   const fetchServicios = () => {
-    axios.get("http://localhost:8080/api/servicios", {
+    baseAPI.get("/servicios", {
       auth: {
         username: "admin",
         password: "admin123"
@@ -49,7 +49,7 @@ function ServiciosPage() {
 
   const handleEliminarServicio = (): void => {
     //console.log("El id del servicio a eliminar es:", servicioSeleccionado.idServicio)
-    axios.delete(`http://localhost:8080/api/servicios/${servicioSeleccionado.idServicio}`)
+    baseAPI.delete(`/servicios/${servicioSeleccionado.idServicio}`)
     .then(() => {
       setShowModalExito(true);
       setShowModalError(false)
@@ -59,7 +59,7 @@ function ServiciosPage() {
 
   const handleReactivarServicio = (): void => {
     console.log("El id del servicio a reactivar es:", servicioSeleccionado.idServicio)
-    axios.put(`http://localhost:8080/api/servicios/${servicioSeleccionado.idServicio}/reactivar`)
+    baseAPI.put(`/servicios/${servicioSeleccionado.idServicio}/reactivar`)
     .then(() => {
       setShowModalExito(true);
       setShowModalError(false)

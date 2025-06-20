@@ -1,12 +1,12 @@
 import Button from "@/components/Button";
 import CardMisComunidades from "@/components/usuario/CardMisComunidades";
 import { AuthContext } from "@/hooks/AuthContext";
-import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { NavLink } from "react-router";
 import { AlertTriangle } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { p } from "node_modules/react-router/dist/development/lib-B8x_tOvL.d.mts";
+import { baseAPI } from "@/services/baseAPI";
 
 export interface MembresiaResumenDTO {
   idMembresia: number;
@@ -52,8 +52,8 @@ function Comunidades(){
 
     useEffect(() => {
         window.scrollTo(0, 0); //Para que apenas cargue aparezca en el tope de la página.
-        axios
-        .get("http://localhost:8080/api/afiliaciones",{ auth: {
+        baseAPI
+        .get("/afiliaciones",{ auth: {
             username: "admin",
             password: "admin123"
         }})

@@ -1,5 +1,4 @@
 import  { useEffect, useState} from "react";
-import axios from "axios";
 import heroImage from "@/assets/heroComunidades.png"
 import detalleComunidadImage1 from "@/assets/detalleComunidad1.png"
 import HeroDetalleComunidad from "@/components/landing/HeroDetalleComunidad";
@@ -12,6 +11,7 @@ import abstractImage from "@/assets/abstractMembresías.jpg"
 import Imagen from "@/assets/detalleComunidadX.png"
 import CardMembresia from "@/components/landing/CardMembresía";
 import { IComunidad } from "@/models/comunidad";
+import { baseAPI } from "@/services/baseAPI";
 
 function DetalleComunidad(){
 
@@ -20,7 +20,7 @@ function DetalleComunidad(){
     
 
     const fetchComunidad = () => {
-    axios.get(`http://localhost:8080/api/comunidades/${id}`, {
+    baseAPI.get(`/comunidades/${id}`, {
       auth: {
         username: "admin",
         password: "admin123"

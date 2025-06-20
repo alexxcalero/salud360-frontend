@@ -1,6 +1,6 @@
 import CardLanding from "@/components/landing/CardLanding";
 import CardExplorarComunidades from "@/components/usuario/CardExplorarComunidades";
-import axios from "axios";
+import { baseAPI } from "@/services/baseAPI";
 import { Section } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -9,7 +9,7 @@ function ExplorarComunidades(){
     const [comunidades, setComunidades] = useState([]);
 
     const fetchComunidades = () => {
-    axios.get("http://localhost:8080/api/comunidades/activas", {
+    baseAPI.get("/comunidades/activas", {
       auth: {
         username: "admin",
         password: "admin123"

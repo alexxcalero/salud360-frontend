@@ -1,9 +1,9 @@
-import axios from "axios";
 import UsuariosForms from "@/components/admin/usuarios/UsuariosForms";
 import useUsuarioForm from "@/hooks/useUsuarioForm";
 import ModalValidacion from "@/components/ModalValidacion";
 import  { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
+import { baseAPI } from "@/services/baseAPI";
 
 function CrearUsuario(){
 
@@ -108,7 +108,7 @@ function CrearUsuario(){
             console.log("Nombres:", nombres, " Apellidos:", apellidos, " numeroDocumento:", numeroDocumento, " Telefono:", telefono,
                  " correo:", correo, " sexo:", sexo, " contraseña:", contrasenha, " fechaNacimiento:", fechaNacimiento);
 
-            const response = await axios.post("http://localhost:8080/api/admin/clientes", 
+            const response = await baseAPI.post("/admin/clientes", 
                 {
                     nombres,
                     apellidos,

@@ -1,6 +1,5 @@
 import UnderConstruction from "@/pages/UnderConstruction";
 import  { useState, useEffect } from "react";
-import axios from "axios";
 import { Search, Info, Trash2, Pencil, Filter, UserPlus, RotateCcw } from "lucide-react";
 import { useNavigate } from "react-router";
 import { useLocation } from "react-router";
@@ -11,6 +10,7 @@ import InputIcon from "@/components/InputIcon";
 import ButtonIcon from "@/components/ButtonIcon";
 import ModalExito from "@/components/ModalExito";
 import ModalError from "@/components/ModalError";
+import { baseAPI } from "@/services/baseAPI";
 
 function PersonalMedicoPage() {
   const [selectAll, setSelectAll] = useState(false);
@@ -29,8 +29,8 @@ function PersonalMedicoPage() {
   const handleSelectAll = () => setSelectAll(!selectAll);
 
   const fetchMedicos = () => {
-    axios
-      .get("http://localhost:8080/api/admin/medicos", {
+    baseAPI
+      .get("/admin/medicos", {
         auth: { username: "admin", password: "admin123" },
       })
       .then((res) => {
@@ -53,7 +53,7 @@ function PersonalMedicoPage() {
   }, []);
 
   const handleEliminarMedico = ():  void => {
-    axios.delete(`http://localhost:8080/api/admin/medicos/${medicoSeleccionado.idMedico}`)
+    baseAPI.delete(`/admin/medicos/${medicoSeleccionado.idMedico}`)
       .then(() => {
         setShowModalExito(true);
         setShowModalError(false);
@@ -63,7 +63,7 @@ function PersonalMedicoPage() {
   };
 
   const handleReactivarMedico = () => {
-    axios.put(`http://localhost:8080/api/admin/medicos/${medicoSeleccionado.idMedico}/reactivar`)
+    baseAPI.put(`/admin/medicos/${medicoSeleccionado.idMedico}/reactivar`)
     .then(() => {
       setShowModalExito(true);
       setShowModalError(false);

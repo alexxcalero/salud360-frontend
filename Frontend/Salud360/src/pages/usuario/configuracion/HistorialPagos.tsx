@@ -2,7 +2,7 @@ import Spinner from "@/components/Spinner";
 import CardHistorialPago from "@/components/usuario/config/CardHistorialPago";
 import { AuthContext } from "@/hooks/AuthContext";
 import useInfiniteScroll from "@/hooks/useInfiniteScroll";
-import axios from "axios";
+import { baseAPI } from "@/services/baseAPI";
 import { AlertTriangle } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 
@@ -27,7 +27,7 @@ const HistorialPagos = () => {
   const fetchPagos = async () => {
     try {
       console.log("El id del usuario es:", id)
-      const res = await axios.get(`http://localhost:8080/api/pagos/${id}`, {
+      const res = await baseAPI.get(`/pagos/${id}`, {
         auth: {
           username: "admin",
           password: "admin123",

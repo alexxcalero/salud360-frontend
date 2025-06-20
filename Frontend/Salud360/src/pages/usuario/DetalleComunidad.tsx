@@ -1,6 +1,5 @@
 import HeroDetalleComunidad from "@/components/landing/HeroDetalleComunidad";
 import heroImage from "@/assets/heroComunidades.png"
-import axios from "axios";
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router";
 import { useComunidad } from "@/hooks/ComunidadContext";

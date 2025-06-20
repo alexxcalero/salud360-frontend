@@ -4,10 +4,10 @@ import { Mail, Calendar, Shield } from "lucide-react"
 import { FaBuilding } from "react-icons/fa";
 import { FaHandHoldingUsd } from "react-icons/fa";
 import Button from "@/components/Button";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import ModalPreview from "@/components/admin/reportes/ModalPreview"; 
 import previewUsuario from "@/assets/previewUsuario.png";
+import { baseAPI } from "@/services/baseAPI";
 
 
 interface Props {
@@ -23,7 +23,7 @@ export default function ReporteUsuarioForm({ data, onChange }: Props) {
   
   const descargarReporte = async () => {
     try {
-      const response = await axios.post("http://localhost:8080/api/reportes/usuarios", {
+      const response = await baseAPI.post("/reportes/usuarios", {
         fechaInicio: data.fechaInicio,
         descripcion: data.descripcion,
         fechaFin: data.fechaFin,

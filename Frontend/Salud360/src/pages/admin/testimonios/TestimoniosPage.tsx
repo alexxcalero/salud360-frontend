@@ -6,7 +6,7 @@ import ModalError from "@/components/ModalError";
 import ModalExito from "@/components/ModalExito";
 import StarRating from "@/components/StarRating";
 import UnderConstruction from "@/pages/UnderConstruction";
-import axios from "axios";
+import { baseAPI } from "@/services/baseAPI";
 import { Info, Pencil, RotateCcw, Search, Trash2, UserPlus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
@@ -25,7 +25,7 @@ function CalificacionesPage() {
     const [busqueda, setBusqueda] = useState("");
 
     const fetchUsuarios = () => {
-        axios.get("http://localhost:8080/api/testimonios", {
+        baseAPI.get("/testimonios", {
             auth: {
                 username: "admin",
                 password: "admin123"
@@ -57,7 +57,7 @@ function CalificacionesPage() {
 
     const handleEliminarTestimonio = (): void => {
         //console.log("El id del testimonio a eliminar es:", testimonioSeleccionado)
-        axios.delete(`http://localhost:8080/api/testimonios/${testimonioSeleccionado.idTestimonio}`)
+        baseAPI.delete(`/testimonios/${testimonioSeleccionado.idTestimonio}`)
         .then(() => {
         setShowModalExito(true);
         setShowModalError(false)
@@ -67,7 +67,7 @@ function CalificacionesPage() {
 
     const handleReactivarTestimonio = (): void => {
         //console.log("El id del usuario a reactivar es:", testimonioSeleccionado.idTestimonio)
-        axios.put(`http://localhost:8080/api/testimonios/reactivar/${testimonioSeleccionado.idTestimonio}`)
+        baseAPI.put(`/testimonios/reactivar/${testimonioSeleccionado.idTestimonio}`)
         .then(() => {
         setShowModalExito(true);
         setShowModalError(false)

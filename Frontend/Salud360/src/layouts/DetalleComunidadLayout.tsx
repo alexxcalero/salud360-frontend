@@ -1,10 +1,10 @@
 import HeroDetalleComunidad from "@/components/landing/HeroDetalleComunidad";
 import heroImage from "@/assets/heroComunidades.png"
-import axios from "axios";
 import { useEffect} from "react";
 import { Outlet, useParams } from "react-router";
 import { useComunidad } from "@/hooks/ComunidadContext";
 import DetalleComunidadNavbar from "@/components/usuario/DetalleComunidadNavbar";
+import { baseAPI } from "@/services/baseAPI";
 
 function DetalleComunidadLayout(){
     
@@ -15,7 +15,7 @@ function DetalleComunidadLayout(){
     const fetchComunidad = async () => {
       setLoading(true);
       try {
-        const res = await axios.get(`http://localhost:8080/api/comunidades/${id}`, {
+        const res = await baseAPI.get(`/comunidades/${id}`, {
           auth: {
             username: "admin",
             password: "admin123",

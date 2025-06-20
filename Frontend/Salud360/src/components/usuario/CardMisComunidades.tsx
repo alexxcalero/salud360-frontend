@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router";
 import Button from "../Button";
 import { useState } from "react"
-import axios from "axios";
 import AlertModal from "@/components/modals/alertModal"
+import { baseAPI } from "@/services/baseAPI";
 
 export interface MembresiaResumenDTO {
   idMembresia: number;
@@ -75,7 +75,7 @@ function CardMisComunidades({id, image, title, subtitle, afiliacion, showButton=
                         onConfirm: async () => {
                             console.log("Comunidad abandonada:", afiliacion)
 
-                            axios.put(`http://localhost:8080/api/afiliaciones/${afiliacion?.idAfiliacion}`, {
+                            baseAPI.put(`/afiliaciones/${afiliacion?.idAfiliacion}`, {
                                 membresia: afiliacion?.membresia,
                                 idAfiliacion: afiliacion?.idAfiliacion,
                                 estado: "Inactivo", // o false, dependiendo del tipo

@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router";
-import axios from "axios";
 
 import useRol from "@/hooks/useRol";
 import RolForm from "@/components/admin/roles/RolForm";
+import { baseAPI } from "@/services/baseAPI";
 
 function CrearRol() {
   const navigate = useNavigate();
@@ -11,7 +11,7 @@ function CrearRol() {
 
   const handleCrearRol = async () => {
     try {
-      await axios.post("http://localhost:8080/api/roles", {
+      await baseAPI.post("/roles", {
         nombre
       }, {
         auth: { username: "admin", password: "admin123" }

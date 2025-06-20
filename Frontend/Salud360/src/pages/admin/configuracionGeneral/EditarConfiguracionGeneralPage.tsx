@@ -1,11 +1,11 @@
 
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import axios from "axios";
 import InfoCard from "@/components/Infocard";
 import BlueBullet from "@/components/BlueBullet";
 import Button from "@/components/Button";
 import ModalError from "@/components/ModalAlert"; // Asegúrate que el path sea correcto
+import { baseAPI } from "@/services/baseAPI";
 
 function EditarConfiguracionGeneralPage() {
   const navigate = useNavigate();
@@ -15,7 +15,7 @@ function EditarConfiguracionGeneralPage() {
   const [mensajeError, setMensajeError] = useState("");
 
   useEffect(() => {
-    axios.get("http://localhost:8080/api/reglas", {
+    baseAPI.get("/reglas", {
       auth: {
         username: "admin",
         password: "admin123",
@@ -68,8 +68,8 @@ function EditarConfiguracionGeneralPage() {
   const handleActualizar = () => {
     if (!validarCampos()) return;
 
-    axios
-      .put(`http://localhost:8080/api/reglas/${reglas.idRegla}`, reglas, {
+    baseAPI
+      .put(`/reglas/${reglas.idRegla}`, reglas, {
         auth: {
           username: "admin",
           password: "admin123",

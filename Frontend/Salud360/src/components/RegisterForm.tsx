@@ -16,6 +16,7 @@ import { Link } from "react-router-dom"
 
 import { jwtDecode } from "jwt-decode";
 import { enviarNotificacion } from "@/services/notificacionService";
+import { baseAPI } from "@/services/baseAPI"
 
 export default function RegisterForm() {
   const [formData, setFormData] = useState({
@@ -198,7 +199,7 @@ export default function RegisterForm() {
 
   //Llamada TipoDocumentos
     const fetchTipoDocumentos = () => {
-    axios.get("http://localhost:8080/api/admin/tiposDocumentos", {
+    baseAPI.get("/admin/tiposDocumentos", {
       auth: {
         username: "admin",
         password: "admin123"
