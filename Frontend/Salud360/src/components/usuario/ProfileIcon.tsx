@@ -33,10 +33,10 @@ const ProfileIcon = () => {
           <div className="flex gap-2 border-b-2 border-neutral-200 py-2 items-center">
             {fotoPerfil ? (
               <img
-                src={fotoPerfil}
-                alt=""
-                className="aspect-1/1 h-[32px] rounded-full"
-              />
+              src={`http://localhost:8080/api/archivo/${fotoPerfil}`}
+              alt="Foto de perfil"
+              className="aspect-1/1 h-[32px] rounded-full object-cover"
+            />
             ) : (
               <User color="black" />
             )}

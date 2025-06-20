@@ -12,8 +12,9 @@ import PerfilForms from "@/components/landing/PerfilForms";
 import PerfilPasswordForms from "@/components/usuario/PerfilPasswordForms";
 import ModalValidacion from "@/components/ModalValidacion";
 
+
 function InicioPerfil() {
-  const { usuario, logout, loading: cargando } = useContext(AuthContext);
+  const { usuario, logout, loading: cargando, actualizarUsuario } = useContext(AuthContext);
     if (cargando || !usuario) return null;
 
     const [loading, setLoading] = useState(true);
@@ -25,6 +26,10 @@ function InicioPerfil() {
 
     const [staticNombres, setStaticNombres] = useState("");
     const [staticApellidos, setStaticApellidos] = useState("");
+
+    //Para la imagen
+    const [imagenFile, setImagenFile] = useState<File | null>(null);
+    const [imagenPreview, setImagenPreview] = useState<string | null>(null);
 
     const {
       fotoPerfil,
@@ -156,6 +161,23 @@ function InicioPerfil() {
     }
 
 
+    let nombreArchivo = fotoPerfil;
+
+    if (imagenFile) {
+      const formData = new FormData();
+      formData.append("archivo", imagenFile);
+
+    try {
+      const res = await axios.post("http://localhost:8080/api/archivo", formData, {
+        auth: { username: "admin", password: "admin123" },
+      });
+      nombreArchivo = res.data.nombreArchivo;
+    } catch (error) {
+      console.error("❌ Error al subir imagen:", error);
+      alert("No se pudo subir la imagen.");
+      return;
+    }
+    }
     console.log("Genero en onSubmit:", genero);
     console.log("TipoDoc en onSubmit:", tipoDoc);
     try {
@@ -174,6 +196,7 @@ function InicioPerfil() {
           sexo: genero,
           fechaNacimiento,
           direccion,
+          fotoPerfil: nombreArchivo ?? null,
           tipoDocumento: {
               idTipoDocumento: tipoDoc
           },
@@ -189,6 +212,9 @@ function InicioPerfil() {
         }
       );
 
+      
+
+      actualizarUsuario(response.data);
       console.log("Perfil editado:", response.data);
       //alert("Usuario editado exitosamente");
       navigate("/usuario/configuracion/successEditar", {
@@ -211,9 +237,9 @@ function InicioPerfil() {
           <figure className="relative group">
             {fotoPerfil ? (
               <img
-                src={fotoPerfil}
+                src={imagenPreview ? imagenPreview : `http://localhost:8080/api/archivo/${fotoPerfil}`}
                 alt="Foto de perfil"
-                className="h-[72px] aspect-1/1 rounded-full"
+                className="h-[72px] aspect-1/1 rounded-full object-cover"
               />
             ) : (
               <User
@@ -225,10 +251,16 @@ function InicioPerfil() {
               <Pen color="white" />
             </div>
             <input
-              type="file"
-              name=""
-              id=""
-              className="absolute top-0 left-0 w-full h-full opacity-0"
+                  type="file"
+                  className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      setImagenFile(file);
+                      setImagenPreview(URL.createObjectURL(file));
+                    }
+                  }}
             />
           </figure>
           <div>

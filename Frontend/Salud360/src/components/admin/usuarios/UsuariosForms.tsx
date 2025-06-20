@@ -48,10 +48,14 @@ interface Props{
     readOnly?: boolean;
     onSubmit?: () => void;
     buttonText?: string;
+
+    //Para la imagen
+    onImagenSeleccionada?: (file: File) => void;
+    imagenActual?: string | null;
 }
 
 function UsuariosForms({title="", subtitle="", nombres, setNombres = () =>{}, apellidos, setApellidos = () =>{}, tipoDoc, setTipoDoc = () =>{}, DNI, setDNI  = () =>{}, telefono, setTelefono  = () =>{}, correo, setCorreo  = () =>{}, 
-    direccion, setDireccion  = () =>{}, genero, setGenero  = () =>{}, fechaNacimiento, setFechaNacimiento  = () =>{}, contrasenha, setContrasenha  = () =>{}, readOnly = false, onSubmit = () =>{}, buttonText}: Props){
+    direccion, setDireccion  = () =>{}, genero, setGenero  = () =>{}, fechaNacimiento, setFechaNacimiento  = () =>{}, contrasenha, setContrasenha  = () =>{}, readOnly = false, onSubmit = () =>{}, buttonText,onImagenSeleccionada = () => {},imagenActual = null}: Props){
 
 
     const [roles, setRoles] = useState([]);
@@ -59,6 +63,8 @@ function UsuariosForms({title="", subtitle="", nombres, setNombres = () =>{}, ap
     //const [tipoDocumentos, setTipoDocumentos] = useState([]);
     const navigate = useNavigate();
     
+    const [imagenSeleccionada, setImagenSeleccionada] = useState<File | null>(null);
+
     //Llamada Roles
     const fetchRoles = () => {
     axios.get("http://localhost:8080/api/admin/roles", {
@@ -157,7 +163,15 @@ function UsuariosForms({title="", subtitle="", nombres, setNombres = () =>{}, ap
                     </div>
                 </div>
 
-                {!readOnly && <DropImage/>}
+                <div className="my-6">
+                  {!readOnly && (
+                  <DropImage
+                    onFileSelect={(file) => {setImagenSeleccionada(file);onImagenSeleccionada?.(file);}}
+                    previewUrl={imagenSeleccionada ? URL.createObjectURL(imagenSeleccionada): imagenActual? 
+                        `http://localhost:8080/api/archivo/${imagenActual}` : undefined }
+                    />
+                  )}
+              </div>
 
                 <div className="flex flex-row justify-between">
                     <div className="">

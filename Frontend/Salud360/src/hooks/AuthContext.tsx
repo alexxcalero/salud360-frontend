@@ -35,6 +35,12 @@ export const AuthProvider = ({children}: any) => {
         localStorage.setItem("authToken", tokenData);
     }
 
+    //Para recuperar la imagen en caso se actualice:
+    const actualizarUsuario = (nuevoUsuario: any) => {
+        setUsuario(nuevoUsuario);
+        localStorage.setItem("activeUser", JSON.stringify(nuevoUsuario));
+    }
+    
     const logout = () => {
         setUsuario(null);
         setToken(null);
@@ -43,7 +49,7 @@ export const AuthProvider = ({children}: any) => {
     }
 
     return(
-        <AuthContext.Provider value={{ usuario, token, login, logout, loading }}>
+        <AuthContext.Provider value={{ usuario, token, login, logout,actualizarUsuario, loading }}>
             {children}
         </AuthContext.Provider>
     )
