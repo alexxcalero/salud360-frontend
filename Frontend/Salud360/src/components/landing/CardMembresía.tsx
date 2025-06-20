@@ -36,7 +36,7 @@ function CardMembresia({
           onClick={() => {
             setPendingMembership(comunidad, membresia);
             const ruta = usuario ? "/usuario/pasarela-pagos/" :  "/RegistroUsuario"
-            navigate(ruta, { state: { membresia, comunidad } });
+            navigate(ruta);
           }}
         >
           SUSCRÍBETE HOY
