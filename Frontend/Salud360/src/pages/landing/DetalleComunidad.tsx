@@ -143,7 +143,7 @@ function DetalleComunidad(){
                             {/*CUANDO FUNCIONE REEMPLAZAR POR EL CODIGO DE ABAJO */}
                             {comunidad?.membresias?.map((membresia: any, i: number) => (
                                 <div key={i}>
-                                    <CardMembresia membresia={membresia} comunidad={comunidad}/>
+                                    <CardMembresia membresia={membresia} comunidad={comunidad} servicios={comunidad.servicios}/>
                                 </div>
                             ))}
                         </div>

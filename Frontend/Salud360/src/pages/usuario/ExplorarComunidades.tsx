@@ -1,33 +1,45 @@
 import CardLanding from "@/components/landing/CardLanding";
 import CardExplorarComunidades from "@/components/usuario/CardExplorarComunidades";
 import { baseAPI } from "@/services/baseAPI";
+import { AuthContext } from "@/hooks/AuthContext";
+import axios from "axios";
 import { Section } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 function ExplorarComunidades(){
 
     const [comunidades, setComunidades] = useState([]);
 
+    const { usuario, logout, loading } = useContext(AuthContext);
+    
+    if (loading || !usuario) return null;
+  
+    const id = usuario.idCliente;
+
     const fetchComunidades = () => {
-    baseAPI.get("/comunidades/activas", {
-      auth: {
-        username: "admin",
-        password: "admin123"
-      }
-    })
-      .then(res => {
-        //console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
-        setComunidades(res.data);
-        //console.log("Comunidades:", res.data);
+      baseAPI.get("/cliente/excluyendo-cliente", {
+        params: {
+          idCliente: id,
+        },
+        auth: {
+          username: "admin",
+          password: "admin123",
+        },
       })
-      .catch(err => console.error("Error cargando comunidades", err));
-    }
+        .then((res) => {
+          setComunidades(res.data);
+        })
+        .catch((err) => {
+          console.error("Error cargando comunidades:", err);
+        });
+    };
+
 
     useEffect(() => {
         fetchComunidades();
     }, []);
 
-    function transformarImagen(imagen:String){
+    function transformarImagen(imagen: string){
       return(imagen && (imagen.startsWith("http") || imagen.startsWith("data:"))
       ? imagen
       : imagen

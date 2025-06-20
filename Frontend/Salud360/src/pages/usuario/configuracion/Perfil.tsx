@@ -343,17 +343,17 @@ function InicioPerfil() {
                             <div className="flex justify-center gap-4">
                                 <Button
                                     size="lg"
-                                    onClick={logout}
+                                    onClick={() => {
+                                        setShowModalLogout(false);
+                                    }}
+                                    
                                 >
                                     Cancelar
                                 </Button>
                                 <Button
                                     variant="danger"
                                     size="lg"
-                                    onClick={() => {
-                                        setShowModalLogout(false);
-                                        navigate("/"); // Reemplaza "/" con la ruta que corresponda a tu login o inicio
-                                    }}
+                                    onClick={logout}
                                 >
                                     Confirmar
                                 </Button>

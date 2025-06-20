@@ -6,40 +6,44 @@ const CardHistorialPago = ({
   nombreComunidad,
   precio,
   fechaPago,
+  onDetalles
 }: {
   identificadorTransaccion: string;
   nombreComunidad: string;
   precio: number;
   fechaPago: string;
+  onDetalles: () => void;
 }) => {
   return (
-    <div className="rounded-md shadow-md p-4 bg-white flex items-center justify-between">
-      <div>
-        <span className="text-neutral-800 mr-2">
-          {identificadorTransaccion} - {nombreComunidad}
-        </span>
-        <span className="bg-blue-500 text-white px-2 py-[2px] rounded-full use-label-large mr-2">
-          s/.{" "}
-          {precio.toLocaleString("es-PE", {
-            maximumFractionDigits: 2,
-            minimumFractionDigits: 2,
-          })}
-        </span>
+    <div className="rounded-md shadow-md p-8 bg-white flex items-center justify-between">
+      <div className="flex flex-col">
+        <div className="flex flex-row items-center gap-4">
+          <h3 className="text-neutral-800 mr-2">
+            {identificadorTransaccion} - {nombreComunidad}
+          </h3>
+          <p className="bg-blue-500 text-lg font-bold text-white px-2 py-2 rounded-sm use-label-large mr-2">
+            s/.{" "}
+            {precio.toLocaleString("es-PE", {
+              maximumFractionDigits: 2,
+              minimumFractionDigits: 2,
+            })}
+          </p>
+        </div>
 
-        <span className="text-sm text-left text-neutral-600 block mt-2">
+        <p className="text-left text-md text-neutral-600 block mt-2">
           Fecha de renovación:{" "}
           <time dateTime={fechaPago} className="text-neutral-800">
             {fechaPago}
           </time>
-        </span>
+        </p>
       </div>
 
-      <div>
-        <Button size="sm" className="mr-2 rounded-full">
+      <div className="flex flex-row gap-4">
+        <Button size="lg" className="mr-2 rounded-sm" onClick={onDetalles}>
           <Info />
           Detalles
         </Button>
-        <Button size="sm" className="mr-2 rounded-full">
+        <Button size="lg" className="mr-2 rounded-sm">
           <Upload />
           Descargar
         </Button>
