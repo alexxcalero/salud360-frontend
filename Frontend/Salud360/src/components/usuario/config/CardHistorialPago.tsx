@@ -6,11 +6,13 @@ const CardHistorialPago = ({
   nombreComunidad,
   precio,
   fechaPago,
+  onDetalles
 }: {
   identificadorTransaccion: string;
   nombreComunidad: string;
   precio: number;
   fechaPago: string;
+  onDetalles: () => void;
 }) => {
   return (
     <div className="rounded-md shadow-md p-8 bg-white flex items-center justify-between">
@@ -37,7 +39,7 @@ const CardHistorialPago = ({
       </div>
 
       <div className="flex flex-row gap-4">
-        <Button size="lg" className="mr-2 rounded-sm">
+        <Button size="lg" className="mr-2 rounded-sm" onClick={onDetalles}>
           <Info />
           Detalles
         </Button>

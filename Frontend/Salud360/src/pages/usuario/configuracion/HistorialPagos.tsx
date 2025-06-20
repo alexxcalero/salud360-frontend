@@ -1,5 +1,6 @@
 import Spinner from "@/components/Spinner";
 import CardHistorialPago from "@/components/usuario/config/CardHistorialPago";
+import DetallePagoModal from "@/components/usuario/DetallePago";
 import { AuthContext } from "@/hooks/AuthContext";
 import useInfiniteScroll from "@/hooks/useInfiniteScroll";
 import axios from "axios";
@@ -17,6 +18,9 @@ const HistorialPagos = () => {
 
   const [pagos, setPagos] = useState([]);
   const [waiting, setWaiting] = useState(true);
+
+  const [pagoActual, setPagoActual] = useState([]);
+  const [showDetallePago, setShowDetallePago] = useState(false);
 
   const {usuario, logout, loading} = useContext(AuthContext);
 
@@ -68,6 +72,48 @@ const HistorialPagos = () => {
 
   console.log("tienePagos es:", tienePagos)
 
+  const handleDetalles = (pago: any) => {
+      setPagoActual(pago)
+      setShowDetallePago(true);
+  };
+
+
+  //Obtenemos el total por métodos de pago:
+  const resumenPorCuenta: Record<string, { tipo: string; total: number }> = {};
+
+
+  const formatearTipo = (tipo: string) => {
+  const map: Record<string, string> = {
+    tarjeta_credito: "Tarjeta de Crédito",
+    tarjeta_debito: "Tarjeta de Débito",
+    efectivo: "Efectivo",
+    yape: "Yape",
+    plin: "Plin",
+    visa: "Visa",
+    mastercard: "Mastercard",
+    //Estoy agregando estos porseaca
+  };
+
+  return map[tipo] || tipo.charAt(0).toUpperCase() + tipo.slice(1).replace('_', ' ');
+};
+
+  pagos.forEach((pago) => {
+    const cuenta = pago.medioDePago?.ncuenta || "Desconocido";
+    const tipoRaw = pago.medioDePago?.tipo || "Desconocido";
+    const tipo = formatearTipo(tipoRaw)
+
+    if (!resumenPorCuenta[cuenta]) {
+      resumenPorCuenta[cuenta] = { tipo, total: 0 };
+    }
+
+    resumenPorCuenta[cuenta].total += pago.monto;
+  });
+
+  const ocultarCuenta = (n: string) =>
+    n.length > 4 ? `**** **** **** ${n.slice(-4)}` : n;
+
+
+
   return (
     <div className="p-8">
       <title>Historial de pagos</title>
@@ -78,18 +124,24 @@ const HistorialPagos = () => {
           {(tienePagos) ? (
             <>
 
-              <div className="bg-gray-50 p-4 border rounded mb-6">
-                <h4 className="text-sm font-medium text-gray-700 mb-2">Resumen de pagos por método</h4>
-                <div className="text-sm text-gray-800 space-y-1">
-                  <div className="flex justify-between">
-                    <span>VISA •••• 5678</span>
-                    <span className="font-semibold">S/ 350.00</span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                {Object.entries(resumenPorCuenta).map(([cuenta, { tipo, total }]) => (
+                  <div
+                    key={cuenta}
+                    className="bg-white border border-gray-200 rounded-xl shadow-sm p-4 flex items-center justify-between hover:shadow-md transition"
+                  >
+                    <div>
+                      <h4 className="text-sm text-gray-500 mb-1">{formatearTipo(tipo)}</h4>
+                      <p className="text-base font-semibold text-gray-800">
+                        {ocultarCuenta(cuenta)}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-xs text-gray-500">Total</span>
+                      <p className="text-lg font-bold text-blue-600">S/ {total.toFixed(2)}</p>
+                    </div>
                   </div>
-                  <div className="flex justify-between">
-                    <span>Yape</span>
-                    <span className="font-semibold">S/ 120.00</span>
-                  </div>
-                </div>
+                ))}
               </div>
 
 
@@ -99,9 +151,10 @@ const HistorialPagos = () => {
                     <li key={index}>
                       <CardHistorialPago
                         identificadorTransaccion={pago.idPago as string}
-                        nombreComunidad={"Messi"}
+                        nombreComunidad={pago.afiliacion?.comunidad?.nombre}
                         precio={pago.monto as number}
                         fechaPago={formatFechaMasUnMes(pago.fechaPago) as string}
+                        onDetalles={() => handleDetalles(pago)}
                       />
                     </li>
                   )
@@ -122,6 +175,20 @@ const HistorialPagos = () => {
 
         </>
       }
+
+
+      {showDetallePago && (
+          <>
+            <div className="fixed inset-0 bg-black/60 z-40" />
+            <div className="fixed inset-0 z-50 flex items-center justify-center">
+              <div>
+                <DetallePagoModal pago={pagoActual} onClick ={() => setShowDetallePago(false)} />
+              </div>
+            </div>
+          </>
+        )}
+
+
 
 
     </div>
