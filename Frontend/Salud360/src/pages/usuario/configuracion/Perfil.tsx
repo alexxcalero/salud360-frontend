@@ -1,27 +1,14 @@
 import Button from "@/components/Button";
-import Input from "@/components/input/Input";
-import PasswordInput from "@/components/input/PasswordInput";
 import { AuthContext } from "@/hooks/AuthContext";
-import { useUsuario } from "@/hooks/useUsuario";
 import {
-  Calendar,
-  ChevronDown,
-  Mail,
-  MapPin,
-  Pen,
-  Phone,
-  User,
+  Pen, User
 } from "lucide-react";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom"; // Asegúrate de tener esto bien configurado
 import axios from "axios";
 import { useEffect, useState } from "react";
-import SelectLabel from "@/components/SelectLabel";
 import useUsuarioForm from "@/hooks/useUsuarioForm";
-import InputLabel from "@/components/InputLabel";
-import InputIconLabel from "@/components/InputIconLabel";
 import PerfilForms from "@/components/landing/PerfilForms";
-import { useParams } from "react-router";
 import PerfilPasswordForms from "@/components/usuario/PerfilPasswordForms";
 import ModalValidacion from "@/components/ModalValidacion";
 

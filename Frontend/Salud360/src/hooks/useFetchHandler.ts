@@ -9,8 +9,9 @@ export function useFetchHandler() {
 
   return {
     fetch: useCallback(
-      async (func: () => Promise<void>) => {
+      async (func: () => Promise<any>) => {
         setLoading(true);
+        let noErrorFlag = true;
         try {
           await func();
         } catch (error) {
@@ -47,8 +48,10 @@ export function useFetchHandler() {
               description: "Error desconocido",
             });
           }
+          noErrorFlag = false;
         } finally {
           setLoading(false);
+          return noErrorFlag;
         }
       },
       [setLoading, createToast]

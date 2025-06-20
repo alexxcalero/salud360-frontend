@@ -1,5 +1,5 @@
 import Button from "@/components/Button";
-import CardExplorarComunidades from "@/components/usuario/CardExplorarComunidades";
+import CardMisComunidades from "@/components/usuario/CardMisComunidades";
 import { AuthContext } from "@/hooks/AuthContext";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
@@ -8,10 +8,35 @@ import { AlertTriangle } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { p } from "node_modules/react-router/dist/development/lib-B8x_tOvL.d.mts";
 
+export interface MembresiaResumenDTO {
+  idMembresia: number;
+  nombre: string;
+  descripcion: string;
+  tipo: string;
+  conTope: boolean;
+  precio: number;
+  cantUsuarios: number;
+  maxReservas: number;
+  icono: string;
+  activo: boolean;
+  fechaCreacion: string; // o Date si haces parsing
+  fechaDesactivacion: string | null;
+}
+
+export interface AfiliacionResumenDTO {
+  membresia: MembresiaResumenDTO;
+  idAfiliacion: number;
+  idComunidad: number;
+  estado: string;
+  fechaAfiliacion: string; // o Date
+  fechaDesafiliacion: string | null;
+}
+
 function Comunidades(){
     
     //const [comunidades, setComunidades] = useState([]);
     const {usuario, logout, loading} = useContext(AuthContext);
+    const [afiliaciones, setAfiliaciones] = useState<AfiliacionResumenDTO[]>([]);
     if (loading || !usuario) return null;
 
     const id = usuario.idUsuario;
@@ -27,6 +52,18 @@ function Comunidades(){
 
     useEffect(() => {
         window.scrollTo(0, 0); //Para que apenas cargue aparezca en el tope de la página.
+        axios
+        .get("http://localhost:8080/api/afiliaciones",{ auth: {
+            username: "admin",
+            password: "admin123"
+        }})
+        .then((response) => {
+            setAfiliaciones(response.data);
+            console.log("Afiliaciones cargadas:", afiliaciones);
+        })
+        .catch((error) => {
+            console.error("Error al obtener afiliaciones:", error);
+        });
     }, []);
 
     return(
@@ -61,17 +98,22 @@ function Comunidades(){
               </div>
             ):(
               <div className="mx-auto grid grid-cols-3 gap-16 justify-center mb-16">
-                {comunidades.map((comunidad: any) => (
-                    <div className="col-span-1">
-                        <CardExplorarComunidades key={comunidad.idComunidad}
+                {comunidades.map((comunidad: any) => {
+                    console.log("Afiliaciones cargadas:", afiliaciones);
+                const afiliacion = afiliaciones.find((a) => a.idComunidad === comunidad.idComunidad);
+                return (
+                    <div className="col-span-1" key={comunidad.idComunidad}>
+                    <CardMisComunidades
                         id={comunidad.idComunidad}
                         image={comunidad.imagen}
                         title={comunidad.nombre} 
                         subtitle={comunidad.descripcion}
-                        isMiComunidad={true} 
-                        />  
+                        afiliacion={afiliacion}
+                        isMiComunidad={true}
+                    />
                     </div>
-                ))}
+                );
+                })}
             </div>
             )}
         </section>

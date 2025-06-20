@@ -1,3 +1,4 @@
+import { DateTime } from "luxon";
 import {
   createContext,
   ReactNode,
@@ -11,6 +12,10 @@ interface InternalModals {
   setActiveModal?: (_: string) => void;
   reload: () => void;
   reloadState: boolean;
+  selectedData?: any;
+  selectedDateTime?: DateTime;
+  setSelectedData: (_: unknown | undefined) => void;
+  setSelectedDateTime: (_: DateTime | undefined) => void;
 }
 
 const internalModalsContext = createContext<InternalModals | undefined>(
@@ -26,12 +31,23 @@ export const useInternalModals = () => {
 export function InternalModalsProvider({ children }: { children: ReactNode }) {
   const [activeModal, setActiveModal] = useState<string>();
   const [reloadState, setReloadState] = useState(false);
+  const [selectedData, setSelectedData] = useState<any>();
+  const [selectedDateTime, setSelectedDateTime] = useState<DateTime>();
   const reload = useCallback(() => {
     setReloadState((prev) => !prev);
   }, []);
   return (
     <internalModalsContext.Provider
-      value={{ activeModal, setActiveModal, reload, reloadState }}
+      value={{
+        activeModal,
+        setActiveModal,
+        reload,
+        reloadState,
+        selectedData,
+        selectedDateTime,
+        setSelectedData,
+        setSelectedDateTime,
+      }}
     >
       {children}
     </internalModalsContext.Provider>

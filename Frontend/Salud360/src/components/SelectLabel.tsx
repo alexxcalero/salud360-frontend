@@ -21,7 +21,7 @@ function SelectLabel({options, placeholder="", htmlFor, label, value, disabled, 
     return(
         <div>
             <Label htmlFor={htmlFor} required={required}> {label} </Label>
-            <Select options={options} placeholder={placeholder} value={value} disabled={disabled} onChange={onChange}></Select>
+            <Select options={options} placeholder={placeholder} value={value} disabled={disabled} onChange={onChange} required={required}></Select>
         </div>
     );
 }

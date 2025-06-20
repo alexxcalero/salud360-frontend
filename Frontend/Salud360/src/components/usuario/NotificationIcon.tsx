@@ -4,7 +4,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useUsuario } from "@/hooks/useUsuario";
 import { useContext, useState } from "react";
 import { AuthContext } from "@/hooks/AuthContext";
 
@@ -23,7 +22,7 @@ const NotificationIcon = () => {
     { message: "Notificación 10", date: "2023-10-10", time: "07:00 PM" },
   ];*/
 
-  const {usuario, loading} = useContext(AuthContext)
+  const { usuario, loading } = useContext(AuthContext);
   if (loading || !usuario) return null;
 
   const notificaciones = usuario.notificaciones;
@@ -50,10 +49,7 @@ const NotificationIcon = () => {
         </PopoverTrigger>
 
         <PopoverContent className="max-h-[400px] overflow-y-auto w-80">
-
-
-
-          {tieneNotificaciones ?
+          {tieneNotificaciones ? (
             <>
               <div className="pt-4 flex flex-col gap-2">
                 <h3>Notificaciones</h3>
@@ -71,16 +67,13 @@ const NotificationIcon = () => {
                 </div>
               ))}
             </>
-            :
+          ) : (
             <>
               <div className="pt-4">
                 <p className="">No hay notificaciones.</p>
               </div>
             </>
-          }
-
-
-
+          )}
         </PopoverContent>
       </Popover>
     </>

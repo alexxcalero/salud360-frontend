@@ -6,10 +6,7 @@ import { useContext, useEffect } from "react"
 export default function ReportesPage() {
   return (
     <div className="w-full px-8 py-8 text-left">
-      <h1 className="text-4xl font-bold mb-2">Panel de Reportes</h1>
-      <h2 className="text-lg text-gray-700 mb-6">
-        Seleccione el tema del reporte a generar
-      </h2>
+      <h1 className="text-4xl font-bold mb-2">Panel de Reportes</h1>  
       <ReportePanel />
     </div>
   )

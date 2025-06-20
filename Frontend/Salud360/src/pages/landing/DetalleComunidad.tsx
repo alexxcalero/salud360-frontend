@@ -11,12 +11,11 @@ import abstractImage from "@/assets/abstractMembresías.jpg"
 
 import Imagen from "@/assets/detalleComunidadX.png"
 import CardMembresia from "@/components/landing/CardMembresía";
+import { IComunidad } from "@/models/comunidad";
 
 function DetalleComunidad(){
 
-    const [comunidad, setComunidad] = useState<any>({});
-    const [servicios, setServicios] = useState([]);
-    const [membresias, setMembresias] = useState([]);
+    const [comunidad, setComunidad] = useState<IComunidad>({});
     const {id} = useParams();
     
 
@@ -31,10 +30,8 @@ function DetalleComunidad(){
         //console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
         setComunidad(res.data);
         console.log("Comunidad:", res.data);
-        setServicios(res.data.servicios);
         //console.log("Servicios de la comunidad 1:", res.data.servicios);
         //console.log("Servicios de la comunidad 2:", servicios);
-        setMembresias(res.data.membresias);
       })
       .catch(err => console.error("Error cargando comunidad", err));
     }
@@ -55,12 +52,12 @@ function DetalleComunidad(){
 
 
     //console.log("Comunidad:", comunidad);
-    console.log("Servicios de la comunidad:", servicios);
+    console.log("Servicios de la comunidad:", comunidad.servicios);
 
 
     //console.log("Membresía 2:", membresias);
 
-    servicios.map((servicio: any, _: number) => (
+    comunidad?.servicios?.map((servicio: any, _: number) => (
         console.log("LA DESCRIPCIÓN es:", servicio.descripcion)
     ))
 
@@ -81,7 +78,7 @@ function DetalleComunidad(){
     return(
         <div>
             <title>Detalle de la comunidad</title>
-            <HeroDetalleComunidad image={imagenFinal} title={comunidad.nombre}/>
+            <HeroDetalleComunidad image={heroImage} title={comunidad?.nombre ?? ""}/>
             
             <section className="flex flex-col gap-32 my-32">
                 <section className="bg-white">
@@ -108,7 +105,7 @@ function DetalleComunidad(){
                 <section className="bg-white">
                     <div className="flex flex-col gap-8">
                         <h1>NUESTROS SERVICIOS</h1>
-                        {servicios.map((servicio: any, i: number) => {
+                        {comunidad.servicios?.map((servicio: any, i: number) => {
                         const imagenServicio =
                             servicio.imagen
                             ? servicio.imagen.startsWith("http") || servicio.imagen.startsWith("data:")
@@ -144,9 +141,9 @@ function DetalleComunidad(){
 
                         <div className="flex flex-row m-8 gap-12">
                             {/*CUANDO FUNCIONE REEMPLAZAR POR EL CODIGO DE ABAJO */}
-                            {membresias.map((membresia: any, i: number) => (
+                            {comunidad?.membresias?.map((membresia: any, i: number) => (
                                 <div key={i}>
-                                    <CardMembresia membresia={membresia} servicios={servicios}/>
+                                    <CardMembresia membresia={membresia} comunidad={comunidad}/>
                                 </div>
                             ))}
                         </div>
