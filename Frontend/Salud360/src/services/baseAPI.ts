@@ -5,5 +5,5 @@ import axios from "axios";
 export const baseAPI = axios.create({
   baseURL: `${Config.BACKEND_HOST}/api`,
   timeout: 10000,
-  withCredentials: true, // Necesario para trabajar en autenticación
+  withCredentials: false, // Necesario para trabajar en autenticación
 });
