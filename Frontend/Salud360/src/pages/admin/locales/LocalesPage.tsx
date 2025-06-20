@@ -10,13 +10,23 @@ import { Filter, FolderPlus, Info, Pencil, RotateCcw, Search, Trash2, UserPlus }
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
+interface Local {
+  idLocal: number;
+  nombre: string;
+  descripcion: string;
+  tipoServicio: string;
+  telefono: string;
+  direccion: string;
+  activo: boolean;
+}
+
 function LocalesPage() {
     const [selectAll, setSelectAll] = useState(false);
-    const [locales, setLocales] = useState([]);
+    const [locales, setLocales] = useState<Local[]>([]);
     const [localSeleccionado, setLocalSeleccionado] = useState<any>();
     const [showModalExito, setShowModalExito] = useState(false);
     const [showModalError, setShowModalError] = useState(false);
-    const [search, setSearch] = useState("");
+    //const [search, setSearch] = useState("");
     const [paginaActual, setPaginaActual] = useState(1);
 
     //Para la funcionalidad de búsqueda:

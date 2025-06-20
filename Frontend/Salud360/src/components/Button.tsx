@@ -7,7 +7,8 @@ interface Props{
     size?: "sm" | "md" | "lg";
     className?: string;
     type?: "button" | "submit" | "reset";
-    onClick?: React.MouseEventHandler<HTMLButtonElement>
+    onClick?: React.MouseEventHandler<HTMLButtonElement>;
+    disabled?: boolean;
 }
 
 function Button({children, size="sm", variant = "primary", className="", type="button", onClick = () =>{}}: Props){

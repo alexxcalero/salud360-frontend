@@ -51,7 +51,7 @@ function InicioPerfil() {
         correo, setCorreo,
         genero, setGenero,
         fechaNacimiento, setFechaNacimiento,
-        contrasenha, setContrasenha,
+        contrasenha, //setContrasenha,
         setUsuarioAPI
     } = useUsuarioForm();
 
@@ -131,7 +131,7 @@ function InicioPerfil() {
       return false;
     }
 
-    if (!tipoDoc || tipoDoc === 0) {
+    if (!tipoDoc || tipoDoc.trim() === "") {
       setMensajeValidacion("Debe seleccionar un tipo de documento.");
       setShowModalValidacion(true);
       return false;
@@ -168,7 +168,7 @@ function InicioPerfil() {
       formData.append("archivo", imagenFile);
 
     try {
-      const res = await axios.post("http://localhost:8080/api/archivo", formData, {
+      const res = await baseAPI.post("/archivo", formData, {
         auth: { username: "admin", password: "admin123" },
       });
       nombreArchivo = res.data.nombreArchivo;

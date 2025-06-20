@@ -1,8 +1,8 @@
 import InputIconLabelEdit from "@/components/InputIconLabelEdit"
-import SelectIconLabel from "@/components/SelectIconLabel"
-import { Mail, Calendar, Shield } from "lucide-react"
-import { FaBuilding } from "react-icons/fa";
-import { FaHandHoldingUsd } from "react-icons/fa";
+//import SelectIconLabel from "@/components/SelectIconLabel"
+import { Calendar } from "lucide-react"
+//import { FaBuilding } from "react-icons/fa";
+//import { FaHandHoldingUsd } from "react-icons/fa";
 import Button from "@/components/Button";
 import { useEffect, useState } from "react";
 import ModalPreview from "@/components/admin/reportes/ModalPreview"; 

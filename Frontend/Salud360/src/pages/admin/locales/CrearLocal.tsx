@@ -18,8 +18,8 @@ function CrearLocal(){
         direccion, setDireccion,
         tipo, setTipo,
         servicios, setServicios,
-        aforo, setAforo,
-        setLocalAPI
+        aforo, setAforo
+        //setLocalAPI
     } = useLocalForm();
 
     //Para la imagen
@@ -28,7 +28,7 @@ function CrearLocal(){
 
 //VALIDACIONES DE CAMPOS 
     const validarCampos = (): boolean => {
-        const soloLetras = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
+        //const soloLetras = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
         const soloNumeros = /^[0-9]+$/;
 
         if (!nombre || nombre.trim() === "") {

@@ -3,12 +3,11 @@ import heroImage from "@/assets/heroComunidades.png"
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router";
 import { useComunidad } from "@/hooks/ComunidadContext";
-import DAB from "@/assets/DAB.jpg";
+
 import SelectLabel from "@/components/SelectLabel";
 import ServicioConLocalesSection from "./ServicioConLocalesSection";
-import UnderConstruction from "../UnderConstruction";
-import CarrouselLocales from "@/components/usuario/CarrouselLocales";
-import CardLocal from "@/components/usuario/CardLocal";
+
+
 import CarrouselMedicos from "@/components/usuario/CarrouselMedicos";
 import CarrouselTestimonios from "@/components/usuario/CarrouselTestimonios";
 import ModalTestimonio from "@/components/modals/ModalTestimonio";
@@ -36,11 +35,11 @@ function DetalleComunidad(){
 
     const [especialidad, setEspecialidad] = useState("__all__");
   
-    const optionsSelect = [
-      { value: "Hombre", content: "Hombre" },
-      { value: "Mujer", content: "Mujer" },
-      { value: "Rodrigo Roller", content: "Rodrigo Roller" },
-    ];
+   // const optionsSelect = [
+    //  { value: "Hombre", content: "Hombre" },
+     // { value: "Mujer", content: "Mujer" },
+     // { value: "Rodrigo Roller", content: "Rodrigo Roller" },
+    //];
 
     console.log("$$$:", comunidad)
 
@@ -52,7 +51,7 @@ function DetalleComunidad(){
     //console.log("Tiene locales? Es:", tieneLocales)
 
     const testimonios = comunidad.testimonios.filter((t: any) => t.activo);
-    const tieneTestimonios = testimonios.length > 0
+
     const handleDeleteTestimonio = async (id: number) => {
     try {
       await eliminarTestimonio(id);
@@ -232,9 +231,3 @@ function DetalleComunidad(){
 
 export default DetalleComunidad;
 
-{/*
-  
-          <p>Messi:</p>
-          <CardLocal local={serviciosConLocales[0].locales[0]}/>
-          <p>arriba</p>
-  */}

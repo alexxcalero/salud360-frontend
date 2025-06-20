@@ -2,8 +2,8 @@ import InputLabel from "@/components/InputLabel";
 import Button from "@/components/Button";
 import Checkbox from "@/components/Checkbox";
 import { useNavigate } from "react-router";
-import { useRef, useState } from "react";
-import ModalError from "@/components/ModalError";
+import { useState } from "react";
+//import ModalError from "@/components/ModalError";
 import ModalValidacion from "@/components/ModalValidacion";
 import DropImage from "@/components/DropImage";
 
@@ -63,9 +63,9 @@ function ComunidadForm({
   setServiciosSeleccionados,
   onSubmit = () => {},
   buttonText = "Crear comunidad",
-  membresiasDisponibles,
-  membresiasSeleccionadas,
-  setMembresiasSeleccionadas,
+  //membresiasDisponibles,
+  //membresiasSeleccionadas,
+  //setMembresiasSeleccionadas,
   localesDisponibles,
   localesSeleccionados,
   setLocalesSeleccionados,

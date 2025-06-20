@@ -1,21 +1,27 @@
 import { useState, useEffect, useContext } from "react";
 import Button from "@/components/Button";
 import { AuthContext } from "@/hooks/AuthContext";
-import { useNavigate } from "react-router";
-import ModalError from "@/components/ModalError";
-import { useUsuario } from "@/hooks/useUsuario";
+//import { useNavigate } from "react-router";
+//import ModalError from "@/components/ModalError";
+//import { useUsuario } from "@/hooks/useUsuario";
 import useUsuarioForm from "@/hooks/useUsuarioForm";
 import ModalValidacion from "@/components/ModalValidacion";
 import MethodCard from "@/components/usuario/config/CardMetodoPago";
 import ModalExito from "@/components/ModalExito";
 import { baseAPI } from "@/services/baseAPI";
+import { MetodoPago } from "@/services/metodoPagoService";
 
 const ConfigSistema = () => {
+
+  
 
   const [showModalExito, setShowModalExito] = useState(false);
 
   const { usuario, loading } = useContext(AuthContext);
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
+
+  
+
 
   const fetchMetodoPago = () => {
     baseAPI.get(`/mediosDePago/usuario/${id}`, {
@@ -35,15 +41,15 @@ const ConfigSistema = () => {
   const id = usuario.idCliente;
 
   const {
-    nombres, setNombres,
-    apellidos, setApellidos,
-    tipoDoc, setTipoDoc,
-    DNI, setDNI,
-    telefono, setTelefono,
-    direccion, setDireccion,
-    correo, setCorreo,
-    genero, setGenero,
-    fechaNacimiento, setFechaNacimiento,
+    nombres, //setNombres,
+    apellidos, //setApellidos,
+    tipoDoc, //setTipoDoc,
+    DNI, //setDNI,
+    telefono, //setTelefono,
+    direccion, //setDireccion,
+    correo, //setCorreo,
+    genero, //setGenero,
+    fechaNacimiento, //setFechaNacimiento,
     notiPorCorreo, setNotiPorCorreo,
     notiPorSMS, setNotiPorSMS,
     notiPorWhatsApp, setNotiPorWhatsApp,
@@ -68,6 +74,7 @@ const ConfigSistema = () => {
         setMetodosPago(res.data || []); // Asegúrate de que metodosPago sea un array vacío si no hay datos
       })
       .catch(err => {
+        console.error("Error cargando los métodos de pago", err); // 👈 úsalo
         setMetodosPago([]); // En caso de error, aseguramos que sea un array vacío
       });
 
@@ -75,7 +82,8 @@ const ConfigSistema = () => {
   }, [id]);
 
   // Estados para el modal y los datos de la tarjeta
-  const [metodosPago, setMetodosPago] = useState([]);
+  const [metodosPago, setMetodosPago] = useState<MetodoPago[]>([]);
+
   const [showModal, setShowModal] = useState(false);
   const [newCard, setNewCard] = useState({
     method: "mastercard", // Default method
@@ -183,6 +191,7 @@ const ConfigSistema = () => {
         }
       );
 
+      console.log("Respuesta del PUT:", response.data);
       setModalExitoTipo("notificaciones");  // Establece el tipo de modal
       setModalExitoTexto("¡Notificaciones actualizadas correctamente!");
       setShowModalExito(true);

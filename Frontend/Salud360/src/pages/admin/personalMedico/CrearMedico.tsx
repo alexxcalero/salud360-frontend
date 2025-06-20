@@ -1,6 +1,6 @@
 import PersonalMedicoForms from "@/components/admin/personalMedico/PersonalMedicoForms";
 import usePersonalMedicoForm from "@/hooks/usePersonalMedicoForm";
-import UnderConstruction from "@/pages/UnderConstruction";
+//import UnderConstruction from "@/pages/UnderConstruction";
 import ModalValidacion from "@/components/ModalValidacion";
 import  { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
@@ -24,18 +24,18 @@ function CrearMedico() {
     setTipoDoc,
     DNI,
     setDNI,
-    telefono,
-    setTelefono,
+    //telefono,
+    //setTelefono,
     especialidad,
     setEspecialidad,
-    correo,
-    setCorreo,
+    //correo,
+    //setCorreo,
     genero,
     setGenero,
-    fechaNacimiento,
-    setFechaNacimiento,
-    contrasenha,
-    setContrasenha,
+    //fechaNacimiento,
+    //setFechaNacimiento,
+    //contrasenha,
+   // setContrasenha,
     descripcion,
     setDescripcion,
   } = usePersonalMedicoForm();
@@ -76,8 +76,8 @@ function CrearMedico() {
       setShowModalValidacion(true);
       return false;
     }
-
-    if (!tipoDoc || tipoDoc === 0) {
+    //modb t
+    if (!tipoDoc || tipoDoc.trim() === "") {
       setMensajeValidacion("Debe seleccionar un tipo de documento.");
       setShowModalValidacion(true);
       return false;

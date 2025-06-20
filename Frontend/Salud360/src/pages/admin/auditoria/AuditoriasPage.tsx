@@ -12,8 +12,8 @@ function AuditoriasPage(){
 
   const [selectAll, setSelectAll] = useState(false);
   const [auditorias, setAuditorias] = useState([]);
-  const [auditoriaSeleccionada, setAuditoriaSeleccionada] = useState<any>();
-  const [showModalDetalle, setShowModalDetalle] = useState(false);
+  const [_auditoriaSeleccionada, setAuditoriaSeleccionada] = useState<any>();
+  const [_showModalDetalle, setShowModalDetalle] = useState(false);
   const [search, setSearch] = useState("");
 
   const [paginaActual, setPaginaActual] = useState(1);

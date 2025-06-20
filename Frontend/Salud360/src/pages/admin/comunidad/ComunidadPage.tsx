@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Filter, UserPlus, Pencil, Trash2, Info, Search, RotateCcw, FolderPlus } from "lucide-react";
+import {  Pencil, Trash2, Info, Search, RotateCcw, FolderPlus } from "lucide-react";
 import { useNavigate } from "react-router";
 
 import InputIcon from "@/components/InputIcon";
@@ -17,7 +17,8 @@ function ComunidadPage() {
   const [comunidadSeleccionada, setComunidadSeleccionada] = useState<any>();
   const [showModalExito, setShowModalExito] = useState(false);
   const [showModalError, setShowModalError] = useState(false);
-  const [showModalRestauracion, setShowModalRestauracion] = useState(false);
+  
+  //const [showModalRestauracion, setShowModalRestauracion] = useState(false);
   const [paginaActual, setPaginaActual] = useState(1);
 
   const navigate = useNavigate();

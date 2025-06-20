@@ -1,7 +1,8 @@
 import InputIconLabelEdit from "@/components/InputIconLabelEdit"
-import SelectIconLabel from "@/components/SelectIconLabel"
+//import SelectIconLabel from "@/components/SelectIconLabel"
 import SelectIconLabelNum from "@/components/SelectIconLabelNum"
-import { Calendar, Shield } from "lucide-react"
+//, Shield 
+import { Calendar } from "lucide-react"
 import { FaHandHoldingUsd } from "react-icons/fa";
 import Button from "@/components/Button";
 import { useEffect, useState } from "react";
@@ -16,6 +17,7 @@ interface Props {
     fechaFin: string;
     idservicio: number;
     descripcion: string;
+    idlocal?: number;
   };
   onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
 }

@@ -59,7 +59,7 @@ function EditarLocal(){
 
     //VALIDACIONES DE CAMPOS 
     const validarCampos = (): boolean => {
-        const soloLetras = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
+        //const soloLetras = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
         const soloNumeros = /^[0-9]+$/;
 
         if (!nombre || nombre.trim() === "") {

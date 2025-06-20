@@ -24,7 +24,7 @@ function EditarServicio(){
         nombre, setNombre,
         descripcion, setDescripcion,
         tipo, setTipo,
-        locales, setLocales,
+        locales, //setLocales,
         setServicioAPI
     } = useServicioForms();
 
@@ -56,8 +56,8 @@ function EditarServicio(){
 
     //VALIDACIONES DE CAMPOS 
     const validarCampos = (): boolean => {
-    const soloLetras = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
-    const soloNumeros = /^[0-9]+$/;
+    //const soloLetras = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
+    //const soloNumeros = /^[0-9]+$/;
 
     if (!nombre || nombre.trim() === "") {
       setMensajeValidacion("El nombre del servicio no debe estar vacíos.");

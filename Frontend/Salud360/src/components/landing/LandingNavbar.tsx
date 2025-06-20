@@ -1,4 +1,4 @@
-import UnderConstruction from "@/pages/UnderConstruction";
+//import UnderConstruction from "@/pages/UnderConstruction";
 import logo from "@/assets/logo.png";
 import { Link, NavLink } from "react-router";
 import Button from "../Button";
@@ -6,11 +6,11 @@ import { AuthContext } from "@/hooks/AuthContext";
 import { useContext } from "react";
 import NotificationIcon from "../usuario/NotificationIcon";
 import ProfileIcon from "../usuario/ProfileIcon";
-import { Bell } from "lucide-react";
+//import { Bell } from "lucide-react";
 
 function LandingNavbar(){
-
-    const {usuario, logout} = useContext(AuthContext)
+    //rb r , logout
+    const {usuario} = useContext(AuthContext)
 
     console.log("En el landing, usuario es:", usuario)
 
