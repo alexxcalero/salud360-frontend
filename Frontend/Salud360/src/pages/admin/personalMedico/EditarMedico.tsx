@@ -28,18 +28,18 @@ function EditarMedico() {
     setTipoDoc,
     DNI,
     setDNI,
-    telefono,
-    setTelefono,
+    //telefono,
+    //setTelefono,
     especialidad,
     setEspecialidad,
-    correo,
-    setCorreo,
+    //correo,
+    //setCorreo,
     genero,
     setGenero,
-    fechaNacimiento,
-    setFechaNacimiento,
-    contrasenha,
-    setContrasenha,
+    //fechaNacimiento,
+    //setFechaNacimiento,
+    //contrasenha,
+    //setContrasenha,
     descripcion,
     setDescripcion,
     setMedicoAPI,
@@ -108,8 +108,8 @@ function EditarMedico() {
       setShowModalValidacion(true);
       return false;
     }
-
-    if (!tipoDoc || tipoDoc === 0) {
+    //mod b t
+    if (!tipoDoc || tipoDoc.trim() === "") {
       setMensajeValidacion("Debe seleccionar un tipo de documento.");
       setShowModalValidacion(true);
       return false;

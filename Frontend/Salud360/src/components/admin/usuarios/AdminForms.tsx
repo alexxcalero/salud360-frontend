@@ -1,6 +1,6 @@
 import Button from "@/components/Button";
-import DropImage from "@/components/DropImage";
-import FormContainer from "@/components/FormContainer";
+//import DropImage from "@/components/DropImage";
+//import FormContainer from "@/components/FormContainer";
 import InputIconLabel from "@/components/InputIconLabel";
 import InputLabel from "@/components/InputLabel";
 import SelectLabel from "@/components/SelectLabel";
@@ -42,10 +42,11 @@ interface Props{
     onSubmit?: () => void;
 }
 
-function AdminForms({title="", subtitle="", nombres, setNombres = () =>{}, apellidos, setApellidos = () =>{}, tipoDoc, setTipoDoc = () =>{}, DNI, setDNI  = () =>{}, telefono, setTelefono  = () =>{}, correo, setCorreo  = () =>{},  
+//rb r title="", subtitle="",
+function AdminForms({ nombres, setNombres = () =>{}, apellidos, setApellidos = () =>{}, tipoDoc, setTipoDoc = () =>{}, DNI, setDNI  = () =>{}, telefono, setTelefono  = () =>{}, correo, setCorreo  = () =>{},  
     genero, setGenero  = () =>{}, contrasenha, setContrasenha  = () =>{}, onSubmit = () =>{}}: Props){
-
-    const [roles, setRoles] = useState([]);
+    // rb r roles,
+    const [_roles, setRoles] = useState<any[]>([]);
     const [tipoDocumentos, setTipoDocumentos] = useState([]);
     //const [tipoDocumentos, setTipoDocumentos] = useState([]);
     const navigate = useNavigate();

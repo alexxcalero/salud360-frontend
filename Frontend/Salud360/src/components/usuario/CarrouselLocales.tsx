@@ -3,16 +3,16 @@ import { useState } from "react";
 import CardLocal from "./CardLocal";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-interface Props{
+/*interface Props{
     locales: any;
-}
+}*/
 
 function CarrouselLocales({locales}: any){
 
     const [currentIndex, setCurrentIndex] = useState(0);
     const cardWidth = 1500;
     const xMargin = 20;
-    const showButton = true;
+    //const showButton = true;
     const totalSize = locales.length;
 
     console.log("El innerwidth es:", window.innerWidth)

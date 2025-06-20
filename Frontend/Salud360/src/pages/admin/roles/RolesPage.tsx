@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Filter, UserPlus, Pencil, Trash2, Info, Search, RotateCcw } from "lucide-react";
+import { UserPlus, Pencil, Trash2, Info, Search, RotateCcw } from "lucide-react";
 import { useNavigate } from "react-router";
 
 import InputIcon from "@/components/InputIcon";

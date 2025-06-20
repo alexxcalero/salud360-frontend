@@ -6,6 +6,12 @@ import { baseAPI } from "@/services/baseAPI";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
+interface Local {
+  idLocal: number;
+  nombre: string;
+  // puedes agregar más campos si los usas
+}
+
 interface Props{
     title?: string
     subtitle?: string;
@@ -19,8 +25,8 @@ interface Props{
     tipo: string;
     setTipo?: (val: string) => void;
 
-    locales?: number | null;//localesSeleccionados
-    setLocales?: (val: number) => void;
+    locales?: number[] | null;//localesSeleccionados
+    setLocales?: (val: number[]) => void;
 
     readOnly?: boolean;
     onSubmit?: () => void;
@@ -34,7 +40,7 @@ interface Props{
 function ServiciosForm({title, subtitle, nombre, setNombre = () =>{}, descripcion, setDescripcion = () =>{},
     tipo, setTipo = () =>{}, locales=null, setLocales = () => {}, readOnly = false, onSubmit = () =>{}, buttonText,onImagenSeleccionada,imagenSeleccionada,imagenActual  }: Props){
 
-    const [localesDisponibles, setLocalesDisponibles] = useState([]);
+    const [localesDisponibles, setLocalesDisponibles] = useState<Local[]>([]);
 
     console.log("en ServiciosForms los locales del props son:", locales)
 

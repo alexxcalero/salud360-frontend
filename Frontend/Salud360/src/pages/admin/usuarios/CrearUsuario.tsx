@@ -1,7 +1,7 @@
 import UsuariosForms from "@/components/admin/usuarios/UsuariosForms";
 import useUsuarioForm from "@/hooks/useUsuarioForm";
 import ModalValidacion from "@/components/ModalValidacion";
-import  { useState, useEffect } from "react";
+import  { useState } from "react";
 import { useNavigate } from "react-router";
 import { baseAPI } from "@/services/baseAPI";
 
@@ -71,7 +71,7 @@ function CrearUsuario(){
       return false;
     }
 
-    if (!tipoDoc || tipoDoc === 0) {
+    if (!tipoDoc || tipoDoc.trim() === "") {
       setMensajeValidacion("Debe seleccionar un tipo de documento.");
       setShowModalValidacion(true);
       return false;

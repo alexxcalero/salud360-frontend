@@ -11,7 +11,7 @@ function CarrouselMedicos({medicos}: Props){
     const [currentIndex, setCurrentIndex] = useState(0);
     const cardWidth = 330;
     const xMargin = 20;
-    const showButton = true;
+    //const showButton = true;
     const visibleCount = 4;
     const totalSize = medicos.length;
     const showCarrousel = totalSize >= visibleCount;

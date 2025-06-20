@@ -1,10 +1,10 @@
 import UnderConstruction from "@/pages/UnderConstruction";
-import { useParams } from "react-router";
+//import { useParams } from "react-router";
 
 function DetalleTestimonio(){
 
     
-    const {id} = useParams();
+    //const {id} = useParams();
 
     //A diferencia de todos los 'DetalleModulo' aca no hago un componente forms reutilizable ya que
     //los testimonios no se pueden crear ni editar, solo ver.

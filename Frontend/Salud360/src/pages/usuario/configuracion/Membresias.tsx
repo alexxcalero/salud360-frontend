@@ -9,13 +9,13 @@ import { useContext, useEffect, useState } from "react";
 import ModalError from "@/components/ModalError";
 import ModalExito from "@/components/ModalExito";
 
-interface MembresiaFake {
+/*interface MembresiaFake {
   comunidad: string;
   precio: number;
   fechaRenovacion: string;
   state: "idle" | "suspended" | "canceled";
   selected: boolean;
-}
+}*/
 
 const Membresias = () => {
   const [afiliaciones, setAfiliaciones] = useState([]);

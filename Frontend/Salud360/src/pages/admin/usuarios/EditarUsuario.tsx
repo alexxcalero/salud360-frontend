@@ -30,7 +30,7 @@ function EditarUsuario(){
         correo, setCorreo,
         genero, setGenero,
         fechaNacimiento, setFechaNacimiento,
-        contrasenha, setContrasenha,
+        contrasenha, //setContrasenha,
         setUsuarioAPI
     } = useUsuarioForm();
 
@@ -103,7 +103,7 @@ function EditarUsuario(){
       return false;
     }
 
-    if (!tipoDoc || tipoDoc === 0) {
+    if (!tipoDoc || tipoDoc.trim() === "") {
       setMensajeValidacion("Debe seleccionar un tipo de documento.");
       setShowModalValidacion(true);
       return false;

@@ -7,12 +7,12 @@ import { baseAPI } from "@/services/baseAPI";
 import { AlertTriangle } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 
-interface HistorialPagoFake {
+/*interface HistorialPagoFake {
   identificadorTransaccion: string;
   nombreComunidad: string;
   precio: number;
   fechaPago: string;
-}
+}*/
 
 const HistorialPagos = () => {
   const [pagos, setPagos] = useState([]);

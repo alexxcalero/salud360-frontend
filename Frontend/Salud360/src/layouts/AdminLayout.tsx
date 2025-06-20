@@ -34,8 +34,8 @@ function AdminLayout() {
   //console.log("El módulo es:", module);
 
   const active = routeToIndex[module] ?? 0; //Si lo encuentra, lo asigna. Si no encuentra el modulo, el valor predeterminado será 0
-
-  const { usuario, logout } = useContext(AuthContext);
+  //mbl
+  const { usuario } = useContext(AuthContext);
   console.log("En admin, el usuario es:", usuario);
 
   //REALICÉ UN CAMBIO PARA EL QUE FONDO ESTÉ MEJOR

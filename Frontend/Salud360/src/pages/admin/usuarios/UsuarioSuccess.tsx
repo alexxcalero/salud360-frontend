@@ -30,6 +30,7 @@ function UsuarioSuccess({modulo, detalle, route= "/admin/usuarios"}: Props){
 
     return (
     <>
+        <title>Comunidad creada exitosamente</title>
         <div className="fixed inset-0 bg-black/60 z-40" />
         <div className="fixed inset-0 z-50 flex items-center justify-center">
         <ModalExito

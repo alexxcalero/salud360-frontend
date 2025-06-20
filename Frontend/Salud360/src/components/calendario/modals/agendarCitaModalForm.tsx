@@ -10,7 +10,8 @@ import {
 import { useDialog } from "@/hooks/dialogContext";
 import { useLoading } from "@/hooks/LoadingContext";
 import { useToasts } from "@/hooks/ToastContext";
-import { citaMedicaSchema, citaMedicaType } from "@/schemas/citaMedica";
+
+import { citaMedicaType } from "@/schemas/citaMedica";
 import { reservarCitaMedica } from "@/services/calendarioUsuario.service";
 import { FormEvent } from "react";
 

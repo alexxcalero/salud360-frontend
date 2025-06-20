@@ -1,7 +1,7 @@
 import monkey from "@/assets/logoFooter.png";
 import FooterImage1 from "@/assets/imagenFooter.png";
 import { Instagram, Youtube, Linkedin, Twitter } from "lucide-react";
-import { Link } from "react-router";
+
 import { HashLink } from "react-router-hash-link";
 
 function LandingFooter() {

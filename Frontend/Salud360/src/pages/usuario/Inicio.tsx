@@ -19,20 +19,20 @@ function Inicio(){
     //const tieneComunidades = usuario.comunidades.length !== 0
 
     const {
-        nombres, setNombres,
-        apellidos, setApellidos,
-        tipoDoc, setTipoDoc,
-        DNI: numeroDocumento, setDNI,
-        telefono, setTelefono,
-        direccion, setDireccion,
-        correo, setCorreo,
-        genero: sexo, setGenero,
-        fechaNacimiento: rawFechaNacimiento, setFechaNacimiento,
-        contrasenha, setContrasenha,
-        fechaCreacion: rawFechaCreacion, setFechaCreacion,
-        fotoPerfil, setFotoPerfil,
-        nombreTipoDoc: tipoDocumento, setNombreTipoDoc,
-        comunidades, setComunidades,
+        nombres, //setNombres,
+        apellidos, //setApellidos,
+        //tipoDoc, setTipoDoc,
+        DNI: numeroDocumento, //setDNI,
+        telefono,// setTelefono,
+        //direccion, setDireccion,
+        correo, //setCorreo,
+        genero: sexo, //setGenero,
+        fechaNacimiento: rawFechaNacimiento, //setFechaNacimiento,
+        //contrasenha, setContrasenha,
+        fechaCreacion: rawFechaCreacion, //setFechaCreacion,
+        fotoPerfil, //setFotoPerfil,
+        nombreTipoDoc: tipoDocumento, //setNombreTipoDoc,
+        comunidades, //setComunidades,
         setUsuarioAPI
     } = useUsuarioForm();
 

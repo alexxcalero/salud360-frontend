@@ -1,5 +1,5 @@
 import heroImage from "@/assets/heroComunidades.png"
-import Button from "../Button";
+//import Button from "../Button";
 
 function HeroComunidades(){
     return(
