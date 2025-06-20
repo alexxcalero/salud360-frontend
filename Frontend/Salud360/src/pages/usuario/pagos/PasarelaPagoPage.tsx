@@ -3,6 +3,7 @@ import MetodoPlin from "@/components/usuario/membresia/metodos/MetodoPlin";
 import MetodoTarjeta from "@/components/usuario/membresia/metodos/MetodoTarjeta";
 import MetodoYape from "@/components/usuario/membresia/metodos/MetodoYape";
 import { IComunidad } from "@/models/comunidad";
+import { IMedioDePago } from "@/models/medioDePago";
 import { IMembresia } from "@/models/membresia";
 import { useState } from "react";
 import { useLocation } from "react-router";

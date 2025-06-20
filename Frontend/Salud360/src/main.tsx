@@ -85,6 +85,7 @@ import PasarelaPagoPage from "./pages/usuario/pagos/PasarelaPagoPage";
 import DetalleTestimonio from "./pages/admin/testimonios/DetalleTestimonio";
 import SeleccionarTipo from "./pages/admin/usuarios/SeleccionarTipo";
 import CrearAdmin from "./pages/admin/usuarios/CrearAdmin";
+import PasarelaExito from "./pages/usuario/pagos/PasarelaExitoTmr";
 
 const CLIENT_ID =
   "442103352631-urj3v36db8bhki2cg4vu6c2q404dkko7.apps.googleusercontent.com";
@@ -146,6 +147,7 @@ createRoot(document.getElementById("root")!).render(
                       <Route path="pasarela-pagos/">
                         <Route index element={<PasarelaInicialPage />} />
                         <Route path="pago" element={<PasarelaPagoPage />} />
+                        <Route path="exito" element={<PasarelaExito />} />
                       </Route>
                     </Route>
                   </Route>

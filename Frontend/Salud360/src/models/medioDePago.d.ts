@@ -1,3 +1,5 @@
+import { IUsuario } from "./usuario";
+
 interface IMedioDePago {
   idMedioDePago?: number;
   tipo?: string;
@@ -7,5 +9,6 @@ interface IMedioDePago {
   activo?: boolean;
   fechaCreacion?: string;
   fechaDesactivacion?: string;
-  usuario?: string;
+  usuario?: IUsuario;
+  totalGastado?: number;
 }

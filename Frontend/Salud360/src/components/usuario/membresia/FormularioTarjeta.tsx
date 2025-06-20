@@ -13,12 +13,14 @@ import { cn } from "@/lib/utils";
 import MastercardIcon from "@/assets/method-mastercard.svg";
 import VisaIcon from "@/assets/method-visa.svg";
 import { AuthContext } from "@/hooks/AuthContext";
+import { IMedioDePago } from "@/models/medioDePago";
 
 interface Props {
   defaultValues?: IMedioDePago;
   submitHandler: (formData: IMedioDePago) => void;
   cancelHandler: () => void;
   submitBtnContent: ReactNode;
+  resetFormOnSubmit?: boolean;
 }
 
 const FormularioTarjeta = ({
@@ -26,9 +28,10 @@ const FormularioTarjeta = ({
   submitHandler: submitHandlerParam,
   cancelHandler,
   submitBtnContent,
+  resetFormOnSubmit = false,
 }: Props) => {
   const { setLoading } = useLoading();
-  const { callSuccessDialog, callErrorDialog } = useDialog();
+  const { callErrorDialog } = useDialog();
 
   // const [displayTipo, setDisplayTipo] = useState<string>(
   //   defaultValues?.tipo ?? ""
@@ -92,14 +95,14 @@ const FormularioTarjeta = ({
     try {
       submitHandlerParam(newCard);
 
-      callSuccessDialog({ title: "Método de pago agregado correctamente" });
-
       // Limpiar los campos del formulario después de agregar el método de pago
       // setDisplayTipo("mastercard");
-      setDisplayNumeroTarjeta("");
-      setCvvDisplay("");
-      setMesInput("");
-      setAnioInput("");
+      if (resetFormOnSubmit) {
+        setDisplayNumeroTarjeta("");
+        setCvvDisplay("");
+        setMesInput("");
+        setAnioInput("");
+      }
     } catch (err) {
       console.error("Error al agregar el método de pago", err);
       callErrorDialog({ title: "Error al agregar el método de pago" });
@@ -129,7 +132,7 @@ const FormularioTarjeta = ({
             id="metodo-mastercard"
             checked={displayTipo === "mastercard"}
             value="mastercard"
-            // onChange={(e) => setDisplayTipo(e.target.value)}
+            onChange={() => {}}
             className="hidden"
           />
           <input
@@ -138,7 +141,7 @@ const FormularioTarjeta = ({
             id="metodo-visa"
             checked={displayTipo === "visa"}
             value="visa"
-            // onChange={(e) => setDisplayTipo(e.target.value)}
+            onChange={() => {}}
             className="hidden"
           />
 
