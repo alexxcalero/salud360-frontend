@@ -1,6 +1,6 @@
 import ServiciosForm from "@/components/admin/servicios/ServiciosForm";
 import useServicioForms from "@/hooks/useServicioForms";
-import axios from "axios";
+import { baseAPI } from "@/services/baseAPI";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 
@@ -20,7 +20,7 @@ function DetalleServicio(){
     const [localesSeleccionados, setLocalesSeleccionados] = useState([]);
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/api/servicios/${id}`, {
+        baseAPI.get(`/servicios/${id}`, {
           auth: {
             username: "admin",
             password: "admin123"

@@ -6,9 +6,9 @@ import PasswordInput from "../input/PasswordInput";
 import Button from "../Button";
 import { useNavigate } from "react-router";
 import { useContext, useEffect, useState } from "react";
-import axios from "axios";
 import DropImage from "../DropImage";
 import { AuthContext } from "@/hooks/AuthContext";
+import { baseAPI } from "@/services/baseAPI";
 
 
 interface Props{
@@ -60,7 +60,7 @@ function PerfilForms({nombres, setNombres = () =>{}, apellidos, setApellidos = (
 
     //Llamada TipoDocumentos
     const fetchTipoDocumentos = () => {
-    axios.get("http://localhost:8080/api/admin/tiposDocumentos", {
+    baseAPI.get("/admin/tiposDocumentos", {
       auth: {
         username: "admin",
         password: "admin123"

@@ -61,8 +61,8 @@ function AlertModal({
             <Button
               variant="danger"
               onClick={async () => {
-                const data = (await fetch(async () => onConfirm?.())) ?? true;
-                setOpen(data);
+                await fetch(async () => onConfirm?.());
+                setOpen(false);
               }}
             >
               {buttonLabel}

@@ -2,8 +2,8 @@ import LocalesForms from "@/components/admin/locales/LocalesForms";
 import useLocalForm from "@/hooks/useLocalForm";
 import ModalValidacion from "@/components/ModalValidacion";
 import  { useState, useEffect } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router";
+import { baseAPI } from "@/services/baseAPI";
 
 function CrearLocal(){
     const navigate = useNavigate();
@@ -82,7 +82,7 @@ function CrearLocal(){
             const formData = new FormData();
             formData.append("archivo", imagenFile);
         try {
-            const res = await axios.post("http://localhost:8080/api/archivo", formData, {
+            const res = await baseAPI.post("/archivo", formData, {
             auth: {
                 username: "admin",
                 password: "admin123"
@@ -102,8 +102,8 @@ function CrearLocal(){
 
             setAforo(0);
             // 🔍 Validar si ya existe un local con ese nombre y servicio
-            const { data: existe } = await axios.get(
-                "http://localhost:8080/api/locales/validar-existencia",
+            const { data: existe } = await baseAPI.get(
+                "/locales/validar-existencia",
                 {
                     params: {
                         nombre: nombre,
@@ -123,7 +123,7 @@ function CrearLocal(){
             }
 
             // ✅ Si no existe, procede a crear el local
-            await axios.post("http://localhost:8080/api/locales",
+            await baseAPI.post("/locales",
                 {
                     nombre,
                     descripcion,

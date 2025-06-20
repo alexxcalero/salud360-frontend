@@ -3,10 +3,10 @@ import { useContext, useEffect, useState } from "react";
 import { User, Pencil, IdCard, PersonStanding, Settings, CreditCard, Calendar } from "lucide-react";
 import AccesoRapido from "@/components/usuario/AccesoRapido";
 import { Link } from "react-router";
-import axios from "axios";
 import useUsuarioForm from "@/hooks/useUsuarioForm";
 import CardLanding from "@/components/landing/CardLanding";
 import CardMembresiaAdvertencia from "@/components/usuario/membresia/CardMembresiaAdvertencia";
+import { baseAPI } from "@/services/baseAPI";
 
 function Inicio(){
 
@@ -39,7 +39,7 @@ function Inicio(){
     const fetchComunidadAleatoria = () => {
         //console.log("El id del cliente a enviar es:", id)
 
-        axios.get("http://localhost:8080/api/cliente/aleatoria", {
+        baseAPI.get("/cliente/aleatoria", {
             params: {
                 idCliente: id
             },
@@ -57,7 +57,7 @@ function Inicio(){
     }
 
     const fetchUsuario = () => {
-        axios.get(`http://localhost:8080/api/admin/clientes/${id}`, {
+        baseAPI.get(`/admin/clientes/${id}`, {
           auth: {
             username: "admin",
             password: "admin123"

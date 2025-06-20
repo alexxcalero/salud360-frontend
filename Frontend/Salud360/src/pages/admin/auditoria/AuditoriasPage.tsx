@@ -3,7 +3,7 @@ import TableHeader from "@/components/admin/TableHeader";
 import ButtonIcon from "@/components/ButtonIcon";
 import InputIcon from "@/components/InputIcon";
 import UnderConstruction from "@/pages/UnderConstruction";
-import axios from "axios";
+import { baseAPI } from "@/services/baseAPI";
 import { FileText, Filter, Info, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
@@ -25,7 +25,7 @@ function AuditoriasPage(){
 
   
   const fetchAuditorias = () => {
-    axios.get("http://localhost:8080/api/auditorias", {
+    baseAPI.get("/auditorias", {
       auth: {
         username: "admin",
         password: "admin123"

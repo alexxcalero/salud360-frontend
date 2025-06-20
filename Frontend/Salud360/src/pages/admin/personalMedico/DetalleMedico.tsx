@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useParams } from "react-router";
 import usePersonalMedicoForm from "@/hooks/usePersonalMedicoForm";
 import PersonalMedicoForms from "@/components/admin/personalMedico/PersonalMedicoForms";
+import { baseAPI } from "@/services/baseAPI";
 
 function DetalleMedico() {
   const [loading, setLoading] = useState(true);
@@ -35,8 +35,8 @@ function DetalleMedico() {
   } = usePersonalMedicoForm();
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:8080/api/admin/medicos/${id}`, {
+    baseAPI
+      .get(`/admin/medicos/${id}`, {
         auth: {
           username: "admin",
           password: "admin123",

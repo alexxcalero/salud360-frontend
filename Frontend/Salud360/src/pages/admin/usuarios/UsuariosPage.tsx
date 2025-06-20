@@ -1,5 +1,4 @@
 import  { useState, useEffect } from "react";
-import axios from "axios";
 import { Search, Info, Trash2, Pencil, Filter, UserPlus, RotateCcw } from "lucide-react";
 import { useNavigate } from "react-router";
 
@@ -9,6 +8,7 @@ import InputIcon from "@/components/InputIcon";
 import ButtonIcon from "@/components/ButtonIcon";
 import ModalExito from "@/components/ModalExito";
 import ModalError from "@/components/ModalError";
+import { baseAPI } from "@/services/baseAPI";
 
 function UsuariosPage() {
   const [selectAll, setSelectAll] = useState(false);
@@ -23,7 +23,7 @@ function UsuariosPage() {
   const [busqueda, setBusqueda] = useState("");
 
   const fetchUsuarios = () => {
-    axios.get("http://localhost:8080/api/admin/clientes", {
+    baseAPI.get("/admin/clientes", {
       auth: {
         username: "admin",
         password: "admin123"
@@ -47,7 +47,7 @@ function UsuariosPage() {
 
   const handleEliminarUsuario = (): void => {
     //console.log("El id del usuario a eliminar es:", usuarioSeleccionado.idCliente)
-    axios.delete(`http://localhost:8080/api/admin/clientes/${usuarioSeleccionado.idCliente}`)
+    baseAPI.delete(`/admin/clientes/${usuarioSeleccionado.idCliente}`)
     .then(() => {
       setShowModalExito(true);
       setShowModalError(false)
@@ -57,7 +57,7 @@ function UsuariosPage() {
 
   const handleReactivarUsuario = (): void => {
     console.log("El id del usuario a reactivar es:", usuarioSeleccionado.idCliente)
-    axios.put(`http://localhost:8080/api/admin/clientes/${usuarioSeleccionado.idCliente}/reactivar`)
+    baseAPI.put(`/admin/clientes/${usuarioSeleccionado.idCliente}/reactivar`)
     .then(() => {
       setShowModalExito(true);
       setShowModalError(false)

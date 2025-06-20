@@ -77,7 +77,8 @@ export function ComunidadCitaMedicaCard({
       }
     } catch (e) {
       console.error(e);
-      callErrorDialog({ title: "Error durante la reserva" });
+      // callErrorDialog({ title: "Error durante la reserva" });
+      throw new Error("Error durante la reserva");
     }
   };
 
@@ -195,9 +196,9 @@ export function ComunidadCitaMedicaCard({
       {mostrarFormulario && (
         <ModalFormularioReserva
           onClose={() => setMostrarFormulario(false)}
-          onSubmit={(descripcion, archivo) => {
+          onSubmit={async (descripcion, archivo) => {
             setMostrarFormulario(false);
-            handleReservaConFormulario(descripcion, archivo);
+            await handleReservaConFormulario(descripcion, archivo);
           }}
         />
       )}

@@ -2,7 +2,7 @@ import Button from "@/components/Button";
 import Checkbox from "@/components/Checkbox";
 import DropImage from "@/components/DropImage";
 import InputLabel from "@/components/InputLabel";
-import axios from "axios";
+import { baseAPI } from "@/services/baseAPI";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
@@ -40,7 +40,7 @@ function ServiciosForm({title, subtitle, nombre, setNombre = () =>{}, descripcio
 
     //Llamada Locales
     const fetchLocales = () => {
-    axios.get("http://localhost:8080/api/locales", {
+    baseAPI.get("/locales", {
       auth: {
         username: "admin",
         password: "admin123"

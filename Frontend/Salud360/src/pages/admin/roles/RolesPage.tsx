@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Filter, UserPlus, Pencil, Trash2, Info, Search, RotateCcw } from "lucide-react";
 import { useNavigate } from "react-router";
-import axios from "axios";
 
 import InputIcon from "@/components/InputIcon";
 import ButtonIcon from "@/components/ButtonIcon";
@@ -10,6 +9,7 @@ import TableBody from "@/components/admin/TableBody";
 import ModalExito from "@/components/ModalExito";
 import ModalError from "@/components/ModalError";
 import ModalRestauracion from "@/components/ModalRestauracion";
+import { baseAPI } from "@/services/baseAPI";
 
 function RolesPage() {
   const [selectAll, setSelectAll] = useState(false);
@@ -22,7 +22,7 @@ function RolesPage() {
   const navigate = useNavigate();
 
   const fetchRoles = () => {
-    axios.get("http://localhost:8080/api/roles", {
+    baseAPI.get("/roles", {
       auth: { username: "admin", password: "admin123" }
     })
     .then(res => setRoles(res.data))
@@ -36,7 +36,7 @@ function RolesPage() {
   const handleSelectAll = () => setSelectAll(!selectAll);
 
   const handleEliminarRol = () => {
-    axios.delete(`http://localhost:8080/api/roles/${rolSeleccionado.id}`)
+    baseAPI.delete(`/roles/${rolSeleccionado.id}`)
       .then(() => {
         setShowModalExito(true);
         setShowModalError(false);
@@ -45,7 +45,7 @@ function RolesPage() {
   };
 
   const handleRestaurarRol = () => {
-    axios.put(`http://localhost:8080/api/roles/${rolSeleccionado.id}/restaurar`)
+    baseAPI.put(`/roles/${rolSeleccionado.id}/restaurar`)
       .then(() => {
         setShowModalRestauracion(true);
         setShowModalError(false);

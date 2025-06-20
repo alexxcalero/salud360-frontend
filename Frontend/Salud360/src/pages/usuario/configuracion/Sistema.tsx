@@ -1,6 +1,5 @@
 import { useState, useEffect, useContext } from "react";
 import Button from "@/components/Button";
-import axios from "axios";
 import { AuthContext } from "@/hooks/AuthContext";
 import { useNavigate } from "react-router";
 import ModalError from "@/components/ModalError";
@@ -9,6 +8,7 @@ import useUsuarioForm from "@/hooks/useUsuarioForm";
 import ModalValidacion from "@/components/ModalValidacion";
 import MethodCard from "@/components/usuario/config/CardMetodoPago";
 import ModalExito from "@/components/ModalExito";
+import { baseAPI } from "@/services/baseAPI";
 
 const ConfigSistema = () => {
 
@@ -18,7 +18,7 @@ const ConfigSistema = () => {
   const navigate = useNavigate();
 
   const fetchMetodoPago = () => {
-    axios.get(`http://localhost:8080/api/mediosDePago/usuario/${id}`, {
+    baseAPI.get(`/mediosDePago/usuario/${id}`, {
       auth: { username: "admin", password: "admin123" }
     })
     .then(res => {
@@ -51,7 +51,7 @@ const ConfigSistema = () => {
   } = useUsuarioForm();
 
   const fetchUsuario = () => {
-    axios.get(`http://localhost:8080/api/admin/clientes/${id}`, {
+    baseAPI.get(`/admin/clientes/${id}`, {
       auth: { username: "admin", password: "admin123" }
     })
       .then(res => setUsuarioAPI(res.data))
@@ -61,7 +61,7 @@ const ConfigSistema = () => {
   useEffect(() => {
     // Obtener los métodos de pago del cliente
     fetchUsuario()
-    axios.get(`http://localhost:8080/api/mediosDePago/usuario/${id}`, {
+    baseAPI.get(`/mediosDePago/usuario/${id}`, {
       auth: { username: "admin", password: "admin123" }
     })
       .then(res => {
@@ -155,7 +155,7 @@ const ConfigSistema = () => {
 
 
     try {
-      const response = await axios.put(`http://localhost:8080/api/admin/clientes/${id}`,
+      const response = await baseAPI.put(`/admin/clientes/${id}`,
         {
           nombres,
           apellidos,
@@ -219,7 +219,7 @@ const ConfigSistema = () => {
         }
       };
 
-      await axios.post("http://localhost:8080/api/mediosDePago", data, {
+      await baseAPI.post("/mediosDePago", data, {
         auth: { username: "admin", password: "admin123" },
         headers: { "Content-Type": "application/json" },
       });

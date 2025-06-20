@@ -11,7 +11,7 @@ interface Props{
 
 function CardLanding({id, image, title, subtitle, showButton=true}: Props){
     return(
-        <div className="w-[330px] h-[460px] grid grid-rows-2 rounded-sm border shadow-xl">
+        <div className="w-[330px] h-[460px] grid grid-rows-2 rounded-sm border shadow-xl" aria-label={`card-${title}`}>
             <div className="row-span-1">
                 <img src={image ? (image.startsWith("http") || image.startsWith("data:")? image: `http://localhost:8080/api/archivo/${image}`)
                 : "https://png.pngtree.com/png-clipart/20201224/ourmid/pngtree-panda-bamboo-bamboo-shoots-simple-strokes-cartoon-with-pictures-small-fresh-png-image_2625172.jpg"}alt="imagen"

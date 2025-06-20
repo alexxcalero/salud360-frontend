@@ -64,8 +64,8 @@ function InfoModal({
             </DialogClose>
             <Button
               onClick={async () => {
-                const data = (await fetch(async () => onConfirm?.())) ?? true;
-                setOpen(data);
+                await fetch(async () => onConfirm?.());
+                setOpen(false);
               }}
             >
               {buttonLabel}

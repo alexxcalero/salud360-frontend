@@ -1,6 +1,6 @@
 import { IUsuario } from "./usuario";
 
-interface IMedioDePago {
+export interface IMedioDePago {
   idMedioDePago?: number;
   tipo?: string;
   ncuenta?: number;

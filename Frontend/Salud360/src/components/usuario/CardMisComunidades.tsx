@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router";
 import Button from "../Button";
 import { useState } from "react"
-import axios from "axios";
 import AlertModal from "@/components/modals/alertModal"
+import { baseAPI } from "@/services/baseAPI";
 
 export interface MembresiaResumenDTO {
   idMembresia: number;
@@ -35,21 +35,18 @@ interface Props{
     subtitle: string;
     afiliacion?: AfiliacionResumenDTO;
     showButton?: boolean;
-    isMiComunidad?: boolean;
-    
+    activo?: boolean;
+    onAbandonar?: () => void;
+    onSuspender?: () => void;
+    onReactivar?: () => void;
 }
 
-function CardMisComunidades({id, image, title, subtitle, afiliacion, showButton=true, isMiComunidad=false}: Props){
+function CardMisComunidades({id, image, title, subtitle, afiliacion, showButton=true, activo=false, onAbandonar = () =>{}, onSuspender = () =>{}, onReactivar = () =>{}}: Props){
 
     const navigate = useNavigate();
-    const [modalAbierto, setModalAbierto] = useState(false)
-    const [modalData, setModalData] = useState({
-    title: "",
-    description: "",
-    buttonLabel: "",
-    onConfirm: async () => true,
-    onCancel: () => {},
-    });
+
+    
+
 
     return (
         <div className="w-[450px] h-[550px] grid grid-rows-2 rounded-sm border border-[#2A86FF] shadow-xl">
@@ -62,81 +59,36 @@ function CardMisComunidades({id, image, title, subtitle, afiliacion, showButton=
 
 
                 <div className="flex flex-row justify-between">
-                    <div className="inline-block w-32">
-                        <Button size="lg" className="w-full" onClick={() => navigate(`/usuario/comunidades/detalle/${id}`)}>{isMiComunidad ? 'Ver' : 'Información'}</Button>
-                    </div>
 
-                    {isMiComunidad && <div className="inline-block w-32">
-                        <Button size="lg" className="w-full" variant="danger" onClick={() => {
-                        setModalData({
-                        title: "¿Abandonar comunidad?",
-                        description: `¿Estás seguro de abandonar la comunidad "${title}"?`,
-                        buttonLabel: "Abandonar",
-                        onConfirm: async () => {
-                            console.log("Comunidad abandonada:", afiliacion)
-
-                            axios.put(`http://localhost:8080/api/afiliaciones/${afiliacion?.idAfiliacion}`, {
-                                membresia: afiliacion?.membresia,
-                                idAfiliacion: afiliacion?.idAfiliacion,
-                                estado: "Inactivo", // o false, dependiendo del tipo
-                                fechaAfiliacion: afiliacion?.fechaAfiliacion, // o Date si haces parsing
-                                fechaDesafiliacion: new Date().toISOString(), // o Date si haces parsing
-                                fechaReactivacion: null,
-                                medioDePago: null,
-                                usuario: null
-                            }, {
-                            auth: {
-                                username: "admin",
-                                password: "admin123"
-                            }
-                            })
-                            .then(response => {
-                            console.log("Actualizado correctamente:", response.data);
-                            })
-                            .catch(error => {
-                            console.error("Error al actualizar:", error);
-                            });
-                            return true
-                        },
-                        onCancel: () => console.log("Cancelaste abandonar"),
-                        })
-                        setModalAbierto(true)
-                    }}>Abandonar</Button>
-                    </div>}
-
-                    {isMiComunidad && (
+                    {activo ? 
+                    <>
                         <div className="inline-block w-32">
-                        <Button size="lg" className="w-full" variant="danger" onClick={() => {
-                            setModalData({
-                            title: "¿Suspender comunidad?",
-                            description: `¿Deseas suspender la comunidad "${title}"?`,
-                            buttonLabel: "Suspender",
-                            onConfirm: async () => {
-                                console.log("Comunidad suspendida:", id)
-                                return true
-                            },
-                            onCancel: () => console.log("Cancelado"),
-                            })
-                            setModalAbierto(true)
-                        }}>
-                            Suspender
-                        </Button>
+                            <Button size="lg" className="w-full" onClick={() => navigate(`/usuario/comunidades/detalle/${id}`)}>Ver</Button>
                         </div>
-                    )}
-                    
+
+                        <div className="inline-block w-32">
+                            <Button size="lg" className="w-full" variant="danger" onClick={onAbandonar}>Abandonar</Button>
+                        </div>
+
+                        
+                        <div className="inline-block w-32">
+                            <Button size="lg" className="w-full" variant="danger" onClick={onSuspender}>Suspender</Button>
+                        </div>
+                    </>
+                    :
+                    <>
+                        <div className="inline-block w-32">
+                            <Button size="lg" className="w-full" onClick={onReactivar}>Reactivar</Button>
+                        </div>
+                    </>
+                    }
                 </div>
 
                 
             </div>
-            <AlertModal
-            open={modalAbierto}
-            setOpen={setModalAbierto}
-            title={modalData.title}
-            description={modalData.description}
-            buttonLabel={modalData.buttonLabel}
-            onConfirm={modalData.onConfirm}
-            onCancel={modalData.onCancel}
-            />
+
+            
+
         </div>
     );
 }

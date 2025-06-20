@@ -5,12 +5,12 @@ import {
 } from "lucide-react";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom"; // Asegúrate de tener esto bien configurado
-import axios from "axios";
 import { useEffect, useState } from "react";
 import useUsuarioForm from "@/hooks/useUsuarioForm";
 import PerfilForms from "@/components/landing/PerfilForms";
 import PerfilPasswordForms from "@/components/usuario/PerfilPasswordForms";
 import ModalValidacion from "@/components/ModalValidacion";
+import { baseAPI } from "@/services/baseAPI";
 
 
 function InicioPerfil() {
@@ -56,7 +56,7 @@ function InicioPerfil() {
     } = useUsuarioForm();
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/api/admin/clientes/${idCliente}`, {
+        baseAPI.get(`/admin/clientes/${idCliente}`, {
           auth: {
             username: "admin",
             password: "admin123"
@@ -182,8 +182,8 @@ function InicioPerfil() {
     console.log("TipoDoc en onSubmit:", tipoDoc);
     try {
       
-      const response = await axios.put(
-        `http://localhost:8080/api/admin/clientes/${idCliente}`,
+      const response = await baseAPI.put(
+        `/admin/clientes/${idCliente}`,
         {
           nombres,
           apellidos,
@@ -343,17 +343,17 @@ function InicioPerfil() {
                             <div className="flex justify-center gap-4">
                                 <Button
                                     size="lg"
-                                    onClick={logout}
+                                    onClick={() => {
+                                        setShowModalLogout(false);
+                                    }}
+                                    
                                 >
                                     Cancelar
                                 </Button>
                                 <Button
                                     variant="danger"
                                     size="lg"
-                                    onClick={() => {
-                                        setShowModalLogout(false);
-                                        navigate("/"); // Reemplaza "/" con la ruta que corresponda a tu login o inicio
-                                    }}
+                                    onClick={logout}
                                 >
                                     Confirmar
                                 </Button>

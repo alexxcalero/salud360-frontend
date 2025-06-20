@@ -1,9 +1,9 @@
 import ServiciosForm from "@/components/admin/servicios/ServiciosForm";
 import useServicioForms from "@/hooks/useServicioForms";
-import axios from "axios";
 import ModalValidacion from "@/components/ModalValidacion";
 import  { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
+import { baseAPI } from "@/services/baseAPI";
 
 function CrearServicio(){
 
@@ -68,7 +68,7 @@ function CrearServicio(){
                 formData.append("archivo", imagenFile);
         
                 try {
-                  const res = await axios.post("http://localhost:8080/api/archivo", formData, {
+                  const res = await baseAPI.post("/archivo", formData, {
                     auth: {
                       username: "admin",
                       password: "admin123"
@@ -83,7 +83,7 @@ function CrearServicio(){
               }
         
         try{
-            const response = await axios.post("http://localhost:8080/api/servicios", 
+            const response = await baseAPI.post("/servicios", 
                 {
                     nombre,
                     descripcion,

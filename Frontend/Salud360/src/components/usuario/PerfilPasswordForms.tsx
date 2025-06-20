@@ -2,8 +2,8 @@ import { ChangeEvent, useState } from "react";
 import PasswordInput from "../input/PasswordInput";
 import InputPasswordLabel from "../InputPassword";
 import Button from "../Button";
-import axios from "axios";
 import { useNavigate } from "react-router";
+import { baseAPI } from "@/services/baseAPI";
 
 interface Props{
     id: string;
@@ -29,7 +29,7 @@ function PerfilPasswordForms({id}: Props){
 
 
         try {
-            const response = await axios.put(`http://localhost:8080/api/usuarios/${id}/cambiarContrasenha`,
+            const response = await baseAPI.put(`/usuarios/${id}/cambiarContrasenha`,
                 {
                     contrasenhaActual: passwordActual,
                     contrasenhaNueva: passwordNueva

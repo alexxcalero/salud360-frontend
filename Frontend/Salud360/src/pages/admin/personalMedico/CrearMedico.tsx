@@ -3,8 +3,8 @@ import usePersonalMedicoForm from "@/hooks/usePersonalMedicoForm";
 import UnderConstruction from "@/pages/UnderConstruction";
 import ModalValidacion from "@/components/ModalValidacion";
 import  { useState, useEffect } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router";
+import { baseAPI } from "@/services/baseAPI";
 
 function CrearMedico() {
   const navigate = useNavigate();
@@ -109,7 +109,7 @@ function CrearMedico() {
         formData.append("archivo", imagenFile);
 
         try {
-          const res = await axios.post("http://localhost:8080/api/archivo", formData, {
+          const res = await baseAPI.post("/archivo", formData, {
             auth: {
               username: "admin",
               password: "admin123"
@@ -127,8 +127,8 @@ function CrearMedico() {
     try {
       const sexo = genero;
       console.log("Nombre de la imagen subida:", nombreArchivo);
-      const response = await axios.post(
-        "http://localhost:8080/api/admin/medicos",
+      const response = await baseAPI.post(
+        "/admin/medicos",
         {
           nombres,
           apellidos,

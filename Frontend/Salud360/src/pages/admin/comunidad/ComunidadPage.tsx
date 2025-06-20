@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Filter, UserPlus, Pencil, Trash2, Info, Search, RotateCcw, FolderPlus } from "lucide-react";
 import { useNavigate } from "react-router";
-import axios from "axios";
 
 import InputIcon from "@/components/InputIcon";
 import ButtonIcon from "@/components/ButtonIcon";
@@ -10,6 +9,7 @@ import TableBody from "@/components/admin/TableBody";
 import ModalExito from "@/components/ModalExito";
 import ModalError from "@/components/ModalError";
 import ModalRestauracion from "@/components/ModalRestauracion";
+import { baseAPI } from "@/services/baseAPI";
 
 function ComunidadPage() {
   const [selectAll, setSelectAll] = useState(false);
@@ -26,7 +26,7 @@ function ComunidadPage() {
   const [busqueda, setBusqueda] = useState("");
 
   const fetchComunidades = () => {
-    axios.get("http://localhost:8080/api/comunidades", {
+    baseAPI.get("/comunidades", {
       auth: { username: "admin", password: "admin123" }
     })
     .then(res => setComunidades(res.data))
@@ -40,7 +40,7 @@ function ComunidadPage() {
   const handleSelectAll = () => {setSelectAll(!selectAll);};
 
   const handleEliminarComunidad = (): void => {
-    axios.delete(`http://localhost:8080/api/comunidades/${comunidadSeleccionada.idComunidad}`)
+    baseAPI.delete(`/comunidades/${comunidadSeleccionada.idComunidad}`)
       .then(() => {
         setShowModalExito(true);
         setShowModalError(false);
@@ -49,7 +49,7 @@ function ComunidadPage() {
   };
 
   const handleReactivarComunidad = (): void => {
-    axios.post(`http://localhost:8080/api/comunidades/${comunidadSeleccionada.idComunidad}/restaurar`)
+    baseAPI.post(`/comunidades/${comunidadSeleccionada.idComunidad}/restaurar`)
       .then(() => {
         setShowModalExito(true);
         setShowModalError(false);

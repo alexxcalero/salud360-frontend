@@ -1,7 +1,7 @@
 import  { useEffect, useState} from "react";
-import axios from "axios";
 import CardLanding from "./CardLanding";
 import CarrouselLanding from "./CarrouselLanding";
+import { baseAPI } from "@/services/baseAPI";
 
 function ListaLocales(){
     
@@ -12,7 +12,7 @@ function ListaLocales(){
     const visibleCount = 3;
 
     const fetchLocales = () => {
-    axios.get("http://localhost:8080/api/locales", {
+    baseAPI.get("/locales", {
       auth: {
         username: "admin",
         password: "admin123"

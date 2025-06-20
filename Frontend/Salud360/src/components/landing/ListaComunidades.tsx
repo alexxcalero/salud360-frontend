@@ -1,8 +1,8 @@
 import  { useEffect, useState} from "react";
-import axios from "axios";
 import CardLanding from "./CardLanding";
 import { Carrot, ChartArea } from "lucide-react";
 import CarrouselLanding from "./CarrouselLanding";
+import { baseAPI } from "@/services/baseAPI";
 
 function ListaComunidades(){
     
@@ -13,7 +13,7 @@ function ListaComunidades(){
     const visibleCount = 3;
 
     const fetchComunidades = () => {
-    axios.get("http://localhost:8080/api/comunidades/activas", {
+    baseAPI.get("/comunidades/activas", {
       auth: {
         username: "admin",
         password: "admin123"

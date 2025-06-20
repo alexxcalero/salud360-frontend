@@ -1,9 +1,9 @@
 import LocalesForms from "@/components/admin/locales/LocalesForms";
 import useLocalForm from "@/hooks/useLocalForm";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import ModalValidacion from "@/components/ModalValidacion";
 import { useNavigate, useParams } from "react-router";
+import { baseAPI } from "@/services/baseAPI";
 
 function EditarLocal(){
     const [loading, setLoading] = useState(true);
@@ -30,7 +30,7 @@ function EditarLocal(){
     //const [serviciosSeleccionados, setServiciosSeleccionados] = useState([]);
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/api/locales/${id}`, {
+        baseAPI.get(`/locales/${id}`, {
           auth: {
             username: "admin",
             password: "admin123"
@@ -115,7 +115,7 @@ function EditarLocal(){
         const formData = new FormData();
         formData.append("archivo", imagenFile);
         try {
-            const res = await axios.post("http://localhost:8080/api/archivo", formData, {
+            const res = await baseAPI.post("/archivo", formData, {
             auth: {
                 username: "admin",
                 password: "admin123"
@@ -131,7 +131,7 @@ function EditarLocal(){
         }
         
         try{
-            const response = await axios.put(`http://localhost:8080/api/locales/${id}`, 
+            const response = await baseAPI.put(`/locales/${id}`, 
                 {
                     nombre,
                     descripcion,
