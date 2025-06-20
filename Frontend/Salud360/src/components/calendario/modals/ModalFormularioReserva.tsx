@@ -9,6 +9,7 @@ import {
 import { useState } from "react";
 import { UploadCloud } from "lucide-react";
 import { useDialog } from "@/hooks/dialogContext";
+import { useNavigate, useParams } from "react-router";
 
 const ModalFormularioReserva = ({
   onClose,
@@ -21,6 +22,9 @@ const ModalFormularioReserva = ({
   const [archivo, setArchivo] = useState<File | undefined>();
 
   const { callErrorDialog } = useDialog();
+
+  const { id } = useParams();
+  const navigate = useNavigate();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.files?.[0];
@@ -49,6 +53,7 @@ const ModalFormularioReserva = ({
 
     try {
       onSubmit(descripcion, archivo);
+      navigate(`/usuario/comunidades/detalle/${id}/reservas`);
     } catch (e) {
       callErrorDialog({
         title: "Error en el formulario",

@@ -2,11 +2,11 @@ import Button from "@/components/Button";
 import { AuthContext } from "@/hooks/AuthContext";
 import { useDialog } from "@/hooks/dialogContext";
 import { useToasts } from "@/hooks/ToastContext";
-import { useInternalModals } from "@/hooks/useInternalModals";
 import { claseDTOType } from "@/schemas/clase";
 import { postReservarAPI } from "@/services/reservas.service";
 import { Ticket } from "lucide-react";
 import { useContext } from "react";
+import { useNavigate } from "react-router";
 
 const ReservarClaseForm = ({
   clase,
@@ -18,7 +18,7 @@ const ReservarClaseForm = ({
   const { callErrorDialog, callInfoDialog, callSuccessDialog } = useDialog();
   const { usuario } = useContext(AuthContext);
   const { createToast } = useToasts();
-  const { reload } = useInternalModals();
+  const navigate = useNavigate();
   return (
     <Button
       onClick={() => {
@@ -51,7 +51,7 @@ const ReservarClaseForm = ({
               callSuccessDialog({
                 title: "Cita reservada correctamente",
               });
-              reload();
+              navigate(`/usuario/comunidades/detalle/${id}/reservas`);
             } else
               callErrorDialog({
                 title: "la cita no pudo ser reservada correctamente",
