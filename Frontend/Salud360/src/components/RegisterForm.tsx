@@ -14,6 +14,7 @@ import axios from "axios"
 import { FaGenderless } from "react-icons/fa"
 import ModalValidacion from "./ModalValidacion"
 import { jwtDecode } from "jwt-decode";
+import { enviarNotificacion } from "@/services/notificacionService";
 
 export default function RegisterForm() {
   const [formData, setFormData] = useState({
@@ -153,9 +154,31 @@ export default function RegisterForm() {
         
       };
 
-      await register(datosEnvio);
+    const clienteRegistrado = await register(datosEnvio);
+    const idCliente = clienteRegistrado.idCliente;
 
-      setLoading(false);
+       // ⏩ Notificación después del registro exitoso
+      const fechaActual = new Date().toISOString();
+      await enviarNotificacion({
+        mensaje: "Bienvenido a Salud 360. Tu cuenta se ha creado correctamente.",
+        fechaEnvio: fechaActual,
+        tipo: "CREACIÓN CUENTA - SIN GOOGLE",
+        cliente: {
+          idCliente: idCliente,
+          correo: formData.correo,
+          nombres: formData.nombres,
+          apellidos: formData.apellidos,
+          numeroDocumento: formData.numeroDocumento,
+          sexo: formData.genero,
+          telefono: formData.telefono,
+          fechaNacimiento: formData.fechaNacimiento,
+          direccion: formData.lugarResidencia,
+          notificacionPorCorreo: true,
+          notificacionPorSMS: false,
+          notificacionPorWhatsApp: false
+        },
+        reserva: null
+      });
       console.log("✅ Usuario creado");
       console.log("A punto de navegar a successCrear");
       navigate("/RegistroExitoso", {
@@ -226,11 +249,11 @@ export default function RegisterForm() {
         apellidos: userData.family_name || "",
         correo: userData.email || "",
         confirmarCorreo: userData.email || "",
-        numeroDocumento: Math.floor(10000000 + Math.random() * 90000000).toString(),
+        numeroDocumento: "11111111",
         contraseña: "google123",
         confirmarContraseña: "google123",
         genero: "No especificado",
-        telefono: Math.floor(10000000 + Math.random() * 90000000).toString(),
+        telefono: "11111111",
         fechaNacimiento: "2000-01-01",
         lugarResidencia: "No especificado",
         tipoDocumento: "1",
@@ -257,8 +280,30 @@ export default function RegisterForm() {
         }
       };
 
-      await register(datosEnvio);
+    const clienteRegistrado = await register(datosEnvio);
+    const idCliente = clienteRegistrado.idCliente;
 
+      const fechaActual = new Date().toISOString();
+      await enviarNotificacion({
+        mensaje: "Bienvenido a Salud 360. Tu cuenta se ha creado correctamente mediante Google OAuth. Por favor edita tus campos desde tu perfil",
+        fechaEnvio: fechaActual,
+        tipo: "CREACIÓN CUENTA - CON GOOGLE",
+        cliente: {
+          idCliente: idCliente,
+          correo: datosEnvio.correo,
+          nombres: datosEnvio.nombres,
+          apellidos: datosEnvio.apellidos,
+          numeroDocumento: datosEnvio.numeroDocumento,
+          sexo: datosEnvio.sexo,
+          telefono: datosEnvio.telefono,
+          fechaNacimiento: datosEnvio.fechaNacimiento,
+          direccion: datosEnvio.direccion,
+          notificacionPorCorreo: true,
+          notificacionPorSMS: false,
+          notificacionPorWhatsApp: false
+        },
+        reserva: null
+      });
       createToast("success", {
         title: "Registro exitoso con Google",
         description: "Redirigiendo...",
