@@ -27,7 +27,7 @@ const HistorialPagos = () => {
   const fetchPagos = async () => {
     try {
       console.log("El id del usuario es:", id)
-      const res = await axios.get(`http://localhost:8080/api/pagos/${id}`, {
+      const res = await axios.get(`http://localhost:8080/api/cliente/${id}/pagos-cliente`, {
         auth: {
           username: "admin",
           password: "admin123",
@@ -46,8 +46,8 @@ const HistorialPagos = () => {
     fetchPagos();
   }, []);
 
-  //const tienePagos = !waiting && pagos.length > 0;
-  const tienePagos = !waiting && pagos !== undefined;
+  const tienePagos = !waiting && pagos.length > 0;
+  //const tienePagos = !waiting && pagos !== undefined;
 
 
 
@@ -95,13 +95,13 @@ const HistorialPagos = () => {
 
               <ul className="flex flex-col gap-4">
                 {pagos.map(
-                  (pagos: any, index) => (
+                  (pago: any, index) => (
                     <li key={index}>
                       <CardHistorialPago
                         identificadorTransaccion={pago.idPago as string}
                         nombreComunidad={"Messi"}
                         precio={pago.monto as number}
-                        fechaPago={formatFechaMasUnMes(pagos.fechaPago) as string}
+                        fechaPago={formatFechaMasUnMes(pago.fechaPago) as string}
                       />
                     </li>
                   )
@@ -116,7 +116,7 @@ const HistorialPagos = () => {
             <div className="text-center flex flex-col items-center gap-4 mt-32">
               <AlertTriangle className="text-red-500 w-32 h-32" />
               <h1>NO HAZ REALIZADO NINGÚN PAGO.</h1>
-              <h3>Tus pagos aparecerán cada vez que compres una membresía.</h3>
+              <h3>Tus pagos aparecerán aquí cada vez que compres una membresía.</h3>
             </div>
           )}
 

@@ -1,27 +1,38 @@
 import CardLanding from "@/components/landing/CardLanding";
 import CardExplorarComunidades from "@/components/usuario/CardExplorarComunidades";
+import { AuthContext } from "@/hooks/AuthContext";
 import axios from "axios";
 import { Section } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 function ExplorarComunidades(){
 
     const [comunidades, setComunidades] = useState([]);
 
+    const { usuario, logout, loading } = useContext(AuthContext);
+    
+    if (loading || !usuario) return null;
+  
+    const id = usuario.idCliente;
+
     const fetchComunidades = () => {
-    axios.get("http://localhost:8080/api/comunidades/activas", {
-      auth: {
-        username: "admin",
-        password: "admin123"
-      }
-    })
-      .then(res => {
-        //console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
-        setComunidades(res.data);
-        //console.log("Comunidades:", res.data);
+      axios.get("http://localhost:8080/api/cliente/excluyendo-cliente", {
+        params: {
+          idCliente: id,
+        },
+        auth: {
+          username: "admin",
+          password: "admin123",
+        },
       })
-      .catch(err => console.error("Error cargando comunidades", err));
-    }
+        .then((res) => {
+          setComunidades(res.data);
+        })
+        .catch((err) => {
+          console.error("Error cargando comunidades:", err);
+        });
+    };
+
 
     useEffect(() => {
         fetchComunidades();

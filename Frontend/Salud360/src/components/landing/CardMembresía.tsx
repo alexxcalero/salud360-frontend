@@ -4,9 +4,11 @@ import Button from "../Button";
 interface Props{
     membresia: any;
     servicios: any;
+    readOnly?: boolean;
+    onClick?: () => void;
 }
 
-function CardMembresia({membresia, servicios}: Props){
+function CardMembresia({membresia, servicios, readOnly = false, onClick = () =>{}}: Props){
 
     const navigate = useNavigate();
 
@@ -21,7 +23,7 @@ function CardMembresia({membresia, servicios}: Props){
                     }
                 </p>
                 <h2 className="font-extrabold">S/. {membresia.precio}</h2>
-                <Button size="lg" variant="outline" className="mx-2" onClick={() => navigate("/RegistroUsuario")}>SUSCRÍBETE HOY</Button>
+                {!readOnly && <Button size="lg" variant="outline" className="mx-2" onClick={() => navigate("/RegistroUsuario")}>SUSCRÍBETE HOY</Button>}
             
             </div>
             <div className="p-2">
@@ -46,6 +48,8 @@ function CardMembresia({membresia, servicios}: Props){
                     ))}
                 </div>
             </div>
+
+            <div className="mt-4">{readOnly && <Button size="lg" variant="outline" onClick={onClick}>Volver</Button>}</div>
 
         </div>
     );

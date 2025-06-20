@@ -51,6 +51,38 @@ function CardMisComunidades({id, image, title, subtitle, afiliacion, showButton=
     onCancel: () => {},
     });
 
+    const handleAbandonarComunidad = async () => {
+        console.log("Comunidad abandonada:", afiliacion)
+        try {
+            const response = await axios.put(
+            `http://localhost:8080/api/afiliaciones/${afiliacion?.idAfiliacion}`,
+            {
+                membresia: afiliacion?.membresia,
+                idAfiliacion: afiliacion?.idAfiliacion,
+                estado: "Inactivo",
+                fechaAfiliacion: afiliacion?.fechaAfiliacion,
+                fechaDesafiliacion: new Date().toISOString(),
+                fechaReactivacion: null,
+                medioDePago: null,
+                usuario: null,
+            },
+            {
+                auth: {
+                username: "admin",
+                password: "admin123",
+                },
+            }
+            );
+
+            console.log("Actualizado correctamente:", response.data);
+            return true;
+        } catch (error) {
+            console.error("Error al actualizar:", error);
+            return false;
+        }
+    }
+
+
     return (
         <div className="w-[450px] h-[550px] grid grid-rows-2 rounded-sm border border-[#2A86FF] shadow-xl">
             <div className="row-span-1">
@@ -68,38 +100,13 @@ function CardMisComunidades({id, image, title, subtitle, afiliacion, showButton=
 
                     {isMiComunidad && <div className="inline-block w-32">
                         <Button size="lg" className="w-full" variant="danger" onClick={() => {
-                        setModalData({
-                        title: "¿Abandonar comunidad?",
-                        description: `¿Estás seguro de abandonar la comunidad "${title}"?`,
-                        buttonLabel: "Abandonar",
-                        onConfirm: async () => {
-                            console.log("Comunidad abandonada:", afiliacion)
-
-                            axios.put(`http://localhost:8080/api/afiliaciones/${afiliacion?.idAfiliacion}`, {
-                                membresia: afiliacion?.membresia,
-                                idAfiliacion: afiliacion?.idAfiliacion,
-                                estado: "Inactivo", // o false, dependiendo del tipo
-                                fechaAfiliacion: afiliacion?.fechaAfiliacion, // o Date si haces parsing
-                                fechaDesafiliacion: new Date().toISOString(), // o Date si haces parsing
-                                fechaReactivacion: null,
-                                medioDePago: null,
-                                usuario: null
-                            }, {
-                            auth: {
-                                username: "admin",
-                                password: "admin123"
-                            }
+                            setModalData({
+                            title: "¿Abandonar comunidad?",
+                            description: `¿Estás seguro de abandonar la comunidad "${title}"?`,
+                            buttonLabel: "Abandonar",
+                            onConfirm: handleAbandonarComunidad,
+                            onCancel: () => console.log("Cancelaste abandonar"),
                             })
-                            .then(response => {
-                            console.log("Actualizado correctamente:", response.data);
-                            })
-                            .catch(error => {
-                            console.error("Error al actualizar:", error);
-                            });
-                            return true
-                        },
-                        onCancel: () => console.log("Cancelaste abandonar"),
-                        })
                         setModalAbierto(true)
                     }}>Abandonar</Button>
                     </div>}

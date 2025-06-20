@@ -34,26 +34,39 @@ export interface AfiliacionResumenDTO {
 
 function Comunidades(){
     
-    //const [comunidades, setComunidades] = useState([]);
+    const [comunidades, setComunidades] = useState([]);
+    const [waiting, setWaiting] = useState(true);
+
     const {usuario, logout, loading} = useContext(AuthContext);
     const [afiliaciones, setAfiliaciones] = useState<AfiliacionResumenDTO[]>([]);
     if (loading || !usuario) return null;
 
-    const id = usuario.idUsuario;
+    const id = usuario.idCliente;
 
     //setComunidades(usuario.comunidades)
+
+    const fetchComunidades = () => {
+        axios.get(`http://localhost:8080/api/cliente/comunidades-activas`, {
+            params: {
+                idCliente: id,
+            },
+            auth: {
+            username: "admin",
+            password: "admin123",
+            },
+        })
+        .then((res) => {
+            console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
+            setComunidades(res.data);
+            console.log("Comunidades:", res.data);
+        })
+        .catch((error) => {
+            console.error("Error al obtener comunidades activas:", error);
+        });
+    }
     
-    const comunidades = usuario.comunidades;
-    console.log("Las comunidades del usuario son:", comunidades)
-    const tieneComunidades = comunidades.length !== 0
-    const tieneInactivas = false;
-
-    const [activo, setActivo] = useState(false);
-
-    useEffect(() => {
-        window.scrollTo(0, 0); //Para que apenas cargue aparezca en el tope de la página.
-        axios
-        .get("http://localhost:8080/api/afiliaciones",{ auth: {
+    const fetchAfiliaciones = () => {
+        axios.get(`http://localhost:8080/api/cliente/${id}/afiliaciones-cliente`,{ auth: {
             username: "admin",
             password: "admin123"
         }})
@@ -64,7 +77,28 @@ function Comunidades(){
         .catch((error) => {
             console.error("Error al obtener afiliaciones:", error);
         });
+    }
+
+    useEffect(() => {
+        window.scrollTo(0, 0); //Para que apenas cargue aparezca en el tope de la página.
+        fetchComunidades();
+        fetchAfiliaciones();
+        setWaiting(false);
     }, []);
+
+
+    const tieneComunidades = !waiting && comunidades.length !== 0
+    const tieneInactivas = false;
+
+    const [activo, setActivo] = useState(false);
+
+    function transformarImagen(imagen:String){
+      return(imagen && (imagen.startsWith("http") || imagen.startsWith("data:"))
+      ? imagen
+      : imagen
+        ? `http://localhost:8080/api/archivo/${imagen}`
+        : "https://png.pngtree.com/png-clipart/20201224/ourmid/pngtree-panda-bamboo-bamboo-shoots-simple-strokes-cartoon-with-pictures-small-fresh-png-image_2625172.jpg");
+    }
 
     return(
         <section className="flex flex-col gap-16">
@@ -105,7 +139,7 @@ function Comunidades(){
                     <div className="col-span-1" key={comunidad.idComunidad}>
                     <CardMisComunidades
                         id={comunidad.idComunidad}
-                        image={comunidad.imagen}
+                        image={transformarImagen(comunidad.imagen)}
                         title={comunidad.nombre} 
                         subtitle={comunidad.descripcion}
                         afiliacion={afiliacion}

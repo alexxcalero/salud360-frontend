@@ -23,7 +23,9 @@ function HeroDetalleComunidad({image, title}: Props){
             <div className="absolute inset-0 bg-black/30"></div> {/*Oscurece un poco la imagen*/}
 
             <div className="absolute inset-0 flex flex-col justify-center items-center gap-4 text-white">
-                <h1 className="use-title-large">{title}</h1>
+                <div className="bg-black/50 px-6 py-3 rounded-md shadow-lg backdrop-blur-sm transition-all">
+                    <h1 className="use-title-large text-white text-center">{title}</h1>
+                </div>
             </div>
 
         </section>
