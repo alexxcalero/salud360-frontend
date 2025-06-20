@@ -6,6 +6,9 @@ import { FaBuilding } from "react-icons/fa";
 import Button from "@/components/Button";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import ModalPreview from "@/components/admin/reportes/ModalPreview";
+import previewServicio from "@/assets/previewServicio.png";
+
 
 interface Props {
   data: {
@@ -19,6 +22,7 @@ interface Props {
 
 export default function ReporteServicioForm({ data, onChange }: Props) {
   const [locales, setLocales] = useState<{ value: number; label: string }[]>([]);
+  const [showPreview, setShowPreview] = useState(false);
 
   useEffect(() => {
     const fetchLocales = async () => {
@@ -35,41 +39,37 @@ export default function ReporteServicioForm({ data, onChange }: Props) {
     fetchLocales();
   }, []);
 
-  const handleGenerarReporte = async () => {
+  const descargarReporte = async () => {
     try {
-      const response = await axios.post("http://localhost:8080/api/reportes/servicios", {    
+      const response = await axios.post("http://localhost:8080/api/reportes/servicios", {
         fechaInicio: data.fechaInicio,
-        descripcion: data.descripcion,
         fechaFin: data.fechaFin,
-        local: data.idlocal
+        descripcion: data.descripcion,
+        local: data.idlocal, // o servicio según el caso
       }, {
-        auth: {
-          username: "admin",
-          password: "admin123"
-        }
+        auth: { username: "admin", password: "admin123" }
       });
 
       const base64 = response.data.pdf;
       const byteCharacters = atob(base64);
-      const byteNumbers = new Array(byteCharacters.length);
-      for (let i = 0; i < byteCharacters.length; i++) {
-        byteNumbers[i] = byteCharacters.charCodeAt(i);
-      }
-      const byteArray = new Uint8Array(byteNumbers);
+      const byteArray = new Uint8Array([...byteCharacters].map(c => c.charCodeAt(0)));
       const blob = new Blob([byteArray], { type: "application/pdf" });
 
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", "reporte-servicios.pdf");
+      link.setAttribute("download", "reporte-servicios.pdf"); // cambia nombre según formulario
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-
-    } catch (error) {
-      console.error("Error al generar reporte de servicios:", error);
+    } catch (err) {
+      console.error("Error al generar el reporte:", err);
       alert("Hubo un error al generar el reporte.");
     }
+  };
+
+  const handleGenerarReporte = () => {
+    setShowPreview(true); // esto muestra el pop-up
   };
 
   return (
@@ -84,17 +84,30 @@ export default function ReporteServicioForm({ data, onChange }: Props) {
         type="date" label="Fecha fin"
         value={data.fechaFin} onChange={onChange}
       />
-      <SelectIconLabelNum
-        icon={<FaBuilding className="w-5 h-5" />} htmlFor="local"
-        label="Locales"
-        value={data.idlocal} onChange={onChange}
-        options={locales}
-      />
       <div className="col-span-2 flex justify-end mt-4">
         <Button type="button" onClick={handleGenerarReporte}>
           Generar reporte
         </Button>
       </div>
-    </div>
+      <ModalPreview
+        isOpen={showPreview}
+        onClose={() => setShowPreview(false)}
+        onConfirm={() => {
+          setShowPreview(false);
+          descargarReporte();
+        }}
+        titulo="Vista previa del Reporte de Servicios" // o Locales
+        imagenPreview={previewServicio} // o previewLocal
+        contenido={
+          <div className="text-sm text-gray-700 whitespace-pre-line leading-relaxed text-justify">
+            {data.descripcion}
+            <br /><br />
+            <strong>Rango seleccionado:</strong><br />
+            Desde: {data.fechaInicio || "No seleccionado"}<br />
+            Hasta: {data.fechaFin || "No seleccionado"}
+          </div>
+        }
+      />
+    </div>   
   )
 }

@@ -6,6 +6,9 @@ import { FaHandHoldingUsd } from "react-icons/fa";
 import Button from "@/components/Button";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import ModalPreview from "@/components/admin/reportes/ModalPreview";
+import previewLocal from "@/assets/previewLocal.png"; 
+
 
 interface Props {
   data: {
@@ -19,6 +22,7 @@ interface Props {
 
 export default function ReporteLocalForm({ data, onChange }: Props) {
   const [servicios, setServicios] = useState<{ value: number; content: string }[]>([]);
+  const [showPreview, setShowPreview] = useState(false);
 
   useEffect(() => {
     const fetchServicios = async () => {
@@ -35,7 +39,7 @@ export default function ReporteLocalForm({ data, onChange }: Props) {
     fetchServicios();
   }, []);
   
-  const handleGenerarReporte = async () => {
+  const descargarReporte = async () => {
     try {
       const response = await axios.post("http://localhost:8080/api/reportes/locales", {     
         fechaInicio: data.fechaInicio,
@@ -72,6 +76,11 @@ export default function ReporteLocalForm({ data, onChange }: Props) {
     }
   };
 
+
+  const handleGenerarReporte = () => {
+    setShowPreview(true); // esto muestra el pop-up
+  };
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <InputIconLabelEdit
@@ -84,18 +93,30 @@ export default function ReporteLocalForm({ data, onChange }: Props) {
         type="date" label="Fecha fin"
         value={data.fechaFin} onChange={onChange}
       />
-      <SelectIconLabelNum
-        icon={<FaHandHoldingUsd className="w-5 h-5" />} htmlFor="idservicio"
-        label="Servicio"
-        value={data.idservicio}
-        onChange={onChange}
-        options={servicios}
-      />
       <div className="col-span-2 flex justify-end mt-4">
         <Button type="button" onClick={handleGenerarReporte}>
           Generar reporte
         </Button>
       </div>
+      <ModalPreview
+        isOpen={showPreview}
+        onClose={() => setShowPreview(false)}
+        onConfirm={() => {
+          setShowPreview(false);
+          descargarReporte();
+        }}
+        titulo="Vista previa del Reporte de Locales"
+        imagenPreview={previewLocal} 
+        contenido={
+          <div className="text-sm text-gray-700 whitespace-pre-line leading-relaxed text-justify">
+            {data.descripcion}
+            <br /><br />
+            <strong>Rango seleccionado:</strong><br />
+            Desde: {data.fechaInicio || "No seleccionado"}<br />
+            Hasta: {data.fechaFin || "No seleccionado"}
+          </div>
+        }
+      />
     </div>
   )
 }
