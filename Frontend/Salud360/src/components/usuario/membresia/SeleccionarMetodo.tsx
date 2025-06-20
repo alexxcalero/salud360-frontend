@@ -14,6 +14,7 @@ import { IComunidad } from "@/models/comunidad";
 import { IMembresia } from "@/models/membresia";
 import { getAllMediosDePagosByUsuarioAPI } from "@/services/medioDePago.service";
 import { AuthContext } from "@/hooks/AuthContext";
+import { IMedioDePago } from "@/models/medioDePago";
 
 const SeleccionarMetodo = ({
   comunidad,
