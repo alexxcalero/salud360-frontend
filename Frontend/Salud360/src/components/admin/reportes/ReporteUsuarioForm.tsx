@@ -6,6 +6,9 @@ import { FaHandHoldingUsd } from "react-icons/fa";
 import Button from "@/components/Button";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import ModalPreview from "@/components/admin/reportes/ModalPreview"; 
+import previewUsuario from "@/assets/previewUsuario.png";
+
 
 interface Props {
   data: {
@@ -16,9 +19,11 @@ interface Props {
   onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
 }
 export default function ReporteUsuarioForm({ data, onChange }: Props) {
-  const handleGenerarReporte = async () => {
+  const [showPreview, setShowPreview] = useState(false);
+  
+  const descargarReporte = async () => {
     try {
-      const response = await axios.post("http://localhost:8080/api/reportes/usuarios", {   
+      const response = await axios.post("http://localhost:8080/api/reportes/usuarios", {
         fechaInicio: data.fechaInicio,
         descripcion: data.descripcion,
         fechaFin: data.fechaFin,
@@ -52,23 +57,51 @@ export default function ReporteUsuarioForm({ data, onChange }: Props) {
     }
   };
 
+  const handleGenerarReporte = () => {
+    setShowPreview(true); // esto muestra el pop-up
+  };
+
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <InputIconLabelEdit
-        icon={<Calendar className="w-5 h-5" />} htmlFor="fechaInicio"
-        type="date" label="Fecha inicio"
-        value={data.fechaInicio} onChange={onChange}
-      />
-      <InputIconLabelEdit
-        icon={<Calendar className="w-5 h-5" />} htmlFor="fechaFin"
-        type="date" label="Fecha fin"
-        value={data.fechaFin} onChange={onChange}
-      />
-      <div className="col-span-2 flex justify-end mt-4">
-        <Button type="button" onClick={handleGenerarReporte}>
-          Generar reporte
-        </Button>
+    <>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <InputIconLabelEdit
+          icon={<Calendar className="w-5 h-5" />} htmlFor="fechaInicio"
+          type="date" label="Fecha inicio"
+          value={data.fechaInicio} onChange={onChange}
+        />
+        <InputIconLabelEdit
+          icon={<Calendar className="w-5 h-5" />} htmlFor="fechaFin"
+          type="date" label="Fecha fin"
+          value={data.fechaFin} onChange={onChange}
+        />
+        <div className="col-span-2 flex justify-end mt-4">
+          <Button type="button" onClick={handleGenerarReporte}>
+            Generar reporte
+          </Button>
+        </div>
       </div>
-    </div>
-  )
+
+      <ModalPreview
+        isOpen={showPreview}
+        onClose={() => setShowPreview(false)}
+        onConfirm={() => {
+          setShowPreview(false);
+          descargarReporte();
+        }}
+        titulo="Vista previa del Reporte de Usuarios"
+        imagenPreview={previewUsuario}
+        contenido={
+          <div className="text-sm text-gray-700 whitespace-pre-line leading-relaxed">
+            {data.descripcion}
+            <br /><br />
+            <strong>Rango seleccionado:</strong><br />
+            Desde: {data.fechaInicio || "No seleccionado"}<br />
+            Hasta: {data.fechaFin || "No seleccionado"}
+          </div>
+        }
+      />
+    </>
+  );
+
 }

@@ -24,8 +24,8 @@ const BaseCard = forwardRef<HTMLDivElement, Props>(
           className={cn(
             styles["collapsed-card"],
             styles[color],
-            (!active || (date !== undefined && date < DateTime.now())) &&
-              styles["neutral"],
+            date !== undefined && date < DateTime.now() && styles["gray"],
+            !active && styles["neutral"],
             props.className
           )}
         ></div>
@@ -38,8 +38,8 @@ const BaseCard = forwardRef<HTMLDivElement, Props>(
         className={cn(
           styles["card"],
           styles[color],
-          (!active || (date !== undefined && date < DateTime.now())) &&
-            styles["neutral"],
+          date !== undefined && date < DateTime.now() && styles["gray"],
+          !active && styles["neutral"],
           props.className
         )}
       >

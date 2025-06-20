@@ -6,7 +6,7 @@ export const localSchema = z.object({
   descripcion: z.string(),
   direccion: z.string(),
   tipoServicio: z.string(),
-  imagenes: z.array(z.string()),
+  imagenes: z.array(z.string()).optional().nullable(),
   activo: z.boolean().optional().default(false),
 });
 

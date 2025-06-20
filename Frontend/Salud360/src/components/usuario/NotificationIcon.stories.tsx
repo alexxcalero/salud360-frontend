@@ -1,17 +1,14 @@
 import { Meta, StoryObj } from "@storybook/react";
 
 import NotificationIcon from "./NotificationIcon";
-import { UsuarioProvider } from "@/hooks/useUsuario";
 
 const meta: Meta<typeof NotificationIcon> = {
   component: NotificationIcon,
   decorators: [
     (Story) => (
-      <UsuarioProvider>
-        <div className="flex justify-end p-4 bg-black">
-          <Story />
-        </div>
-      </UsuarioProvider>
+      <div className="flex justify-end p-4 bg-black">
+        <Story />
+      </div>
     ),
   ],
 };

@@ -11,9 +11,11 @@ import Input from "./input/Input"
 import MailInput from "./input/MailInput"
 import PasswordInput from "./input/PasswordInput"
 import axios from "axios"
-import { FaGenderless } from "react-icons/fa"
 import ModalValidacion from "./ModalValidacion"
+import { Link } from "react-router-dom"
+
 import { jwtDecode } from "jwt-decode";
+import { enviarNotificacion } from "@/services/notificacionService";
 
 export default function RegisterForm() {
   const [formData, setFormData] = useState({
@@ -85,7 +87,7 @@ export default function RegisterForm() {
       return false;
     }
 
-    if (!formData.tipoDocumento || formData.tipoDocumento === 0) {
+    if (!formData.tipoDocumento || formData.tipoDocumento === "") {
       setMensajeValidacion("Debe seleccionar un tipo de documento.");
       setShowModalValidacion(true);
       return false;
@@ -153,9 +155,31 @@ export default function RegisterForm() {
         
       };
 
-      await register(datosEnvio);
+    const clienteRegistrado = await register(datosEnvio);
+    const idCliente = clienteRegistrado.idCliente;
 
-      setLoading(false);
+       // ⏩ Notificación después del registro exitoso
+      const fechaActual = new Date().toISOString();
+      await enviarNotificacion({
+        mensaje: "Bienvenido a Salud 360. Tu cuenta se ha creado correctamente.",
+        fechaEnvio: fechaActual,
+        tipo: "CREACIÓN CUENTA - SIN GOOGLE",
+        cliente: {
+          idCliente: idCliente,
+          correo: formData.correo,
+          nombres: formData.nombres,
+          apellidos: formData.apellidos,
+          numeroDocumento: formData.numeroDocumento,
+          sexo: formData.genero,
+          telefono: formData.telefono,
+          fechaNacimiento: formData.fechaNacimiento,
+          direccion: formData.lugarResidencia,
+          notificacionPorCorreo: true,
+          notificacionPorSMS: false,
+          notificacionPorWhatsApp: false
+        },
+        reserva: null
+      });
       console.log("✅ Usuario creado");
       console.log("A punto de navegar a successCrear");
       navigate("/RegistroExitoso", {
@@ -203,65 +227,111 @@ export default function RegisterForm() {
     { value: "Femenino", content: "Femenino" }
   ]
 
-  //Uso de Google OAuth
   const registerGoogle = useGoogleLogin({
-    onSuccess: async (tokenResponse) => {
-      try {
-        console.log("Registro con Google OK:", tokenResponse);
+  onSuccess: async (tokenResponse) => {
+    console.log("👉 tokenResponse:", tokenResponse);
 
-        // 1. Decodificamos el token para obtener los datos
-        const decoded: any = jwtDecode(tokenResponse.access_token);
-        console.log("Decoded Google token:", decoded);
+    try {
+      const { access_token } = tokenResponse;
 
-        // 2. Armar el objeto con los datos necesarios
-        const datosGoogle = {
-          nombres: decoded.given_name || "",
-          apellidos: decoded.family_name || "",
-          correo: decoded.email,
-          contrasenha: "GOOGLE_AUTH",
-          sexo: "No especificado",
-          telefono: "",
-          fechaNacimiento: "",
-          direccion: "",
-          numeroDocumento: "00000000",
-          tipoDocumento: {
-            idTipoDocumento: "1",
-          },
-        };
-
-        setLoading(true);
-        await axios.post("http://localhost:8080/api/autenticacion/google", {
-          correo: decoded.email,
-          nombres: decoded.given_name,
-          apellidos: decoded.family_name
-        });
-        createToast("success", {
-          title: "Registro con Google exitoso",
-          description: "Redirigiendo...",
-        });
-
-        navigate("/RegistroExitoso", {
-          state: { created: true },
-        });
-      } catch (error) {
-        console.error("Error al registrar con Google:", error);
-        createToast("error", {
-          title: "Error en registro con Google",
-          description: "Inténtalo nuevamente.",
-        });
-      } finally {
-        setLoading(false);
-      }
-    },
-    onError: () => {
-      console.error("Error al registrarse con Google");
-      createToast("error", {
-        title: "Fallo el inicio con Google",
-        description: "Intenta otra vez.",
+      // Obtener datos del perfil desde Google
+      const res = await axios.get("https://www.googleapis.com/oauth2/v3/userinfo", {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
       });
-    },
-  });
 
+      const userData = res.data;
+      console.log("✅ Datos de Google:", userData);
+
+      // Completar el formulario con datos obtenidos
+      const nuevosDatos = {
+        nombres: userData.given_name || "",
+        apellidos: userData.family_name || "",
+        correo: userData.email || "",
+        confirmarCorreo: userData.email || "",
+        numeroDocumento: "11111111",
+        contraseña: "google123",
+        confirmarContraseña: "google123",
+        genero: "No especificado",
+        telefono: "11111111",
+        fechaNacimiento: "2000-01-01",
+        lugarResidencia: "No especificado",
+        tipoDocumento: "1",
+      };
+
+      // Actualizar estado del formulario (visualmente)
+      setFormData(nuevosDatos);
+
+      // Enviar datos al backend
+      setLoading(true);
+
+      const datosEnvio = {
+        nombres: nuevosDatos.nombres,
+        apellidos: nuevosDatos.apellidos,
+        numeroDocumento: nuevosDatos.numeroDocumento,
+        correo: nuevosDatos.correo,
+        contrasenha: nuevosDatos.contraseña,
+        sexo: nuevosDatos.genero,
+        telefono: nuevosDatos.telefono,
+        fechaNacimiento: nuevosDatos.fechaNacimiento,
+        direccion: nuevosDatos.lugarResidencia,
+        tipoDocumento: {
+          idTipoDocumento: nuevosDatos.tipoDocumento
+        }
+      };
+
+    const clienteRegistrado = await register(datosEnvio);
+    const idCliente = clienteRegistrado.idCliente;
+
+      const fechaActual = new Date().toISOString();
+      await enviarNotificacion({
+        mensaje: "Bienvenido a Salud 360. Tu cuenta se ha creado correctamente mediante Google OAuth. Por favor edita tus campos desde tu perfil",
+        fechaEnvio: fechaActual,
+        tipo: "CREACIÓN CUENTA - CON GOOGLE",
+        cliente: {
+          idCliente: idCliente,
+          correo: datosEnvio.correo,
+          nombres: datosEnvio.nombres,
+          apellidos: datosEnvio.apellidos,
+          numeroDocumento: datosEnvio.numeroDocumento,
+          sexo: datosEnvio.sexo,
+          telefono: datosEnvio.telefono,
+          fechaNacimiento: datosEnvio.fechaNacimiento,
+          direccion: datosEnvio.direccion,
+          notificacionPorCorreo: true,
+          notificacionPorSMS: false,
+          notificacionPorWhatsApp: false
+        },
+        reserva: null
+      });
+      createToast("success", {
+        title: "Registro exitoso con Google",
+        description: "Redirigiendo...",
+      });
+
+      navigate("/RegistroExitoso", {
+        state: { created: true },
+      });
+
+    } catch (error) {
+      console.error("❌ Error en registro con Google:", error);
+      createToast("error", {
+        title: "Error al registrar con Google",
+        description: "Intenta nuevamente.",
+      });
+    } finally {
+      setLoading(false);
+    }
+  },
+  onError: () => {
+    console.error("Error al iniciar sesión con Google");
+    createToast("error", {
+      title: "Fallo en el inicio con Google",
+      description: "Intenta otra vez.",
+    });
+  }
+});
 
   const navigate = useNavigate()
   
@@ -297,6 +367,15 @@ export default function RegisterForm() {
 
       <PasswordInput name="contraseña" placeholder="***********" label="Contraseña" defaultValue={formData.contraseña} onChange={handleChange} required={true} />
       <PasswordInput name="confirmarContraseña" placeholder="***********" label="Confirmar contraseña" defaultValue={formData.contraseña} onChange={handleChange} required={true} />
+
+      <div className="text-sm">
+        <span>¿Ya tienes una cuenta?</span>{" "}
+        <Link to={`/IniciarSesionUsuario`}>
+          <span className="text-blue-500 hover:underline">
+            Inicia sesión aquí
+          </span>
+        </Link>
+      </div>
 
       <Button type="submit" className="w-full mt-4">
         Registrarse

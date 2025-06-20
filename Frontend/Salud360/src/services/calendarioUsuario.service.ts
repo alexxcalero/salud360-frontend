@@ -146,15 +146,15 @@ export const reservarCitaMedica = async (idCitaMedica: number) => {
 };
 
 export const getCitasSimilares = async (
-  idCitaMedica: number
+  _idCitaMedica: number
 ): Promise<citaMedicaType[]> => {
   return [];
 };
 
 export const postergarCitaMedicaQuery = async (
-  idCitaMedica: number,
-  nuevaIdCitaMedica: number,
-  descripcion: string
+  _idCitaMedica: number,
+  _nuevaIdCitaMedica: number,
+  _descripcion: string
 ): Promise<boolean> => {
   return true;
 };

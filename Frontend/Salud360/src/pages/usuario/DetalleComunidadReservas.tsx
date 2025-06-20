@@ -8,7 +8,7 @@ function DetalleComunidadReservas() {
       <title>Reservas en comunidad</title>
       <CalendarioComunidad
         id={Number(id)}
-        filtrosAdicionales={[(d) => d.estado === "Reservada"]}
+        filtrosAdicionales={[(d) => d.tipo === "reserva"]}
       />
     </section>
   );

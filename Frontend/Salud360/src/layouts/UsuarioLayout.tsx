@@ -8,7 +8,7 @@ function UsuarioLayout() {
   }, []);
 
   return (
-    <div className="max-w-full max-h-full">
+    <div className="max-w-full max-h-full min-h-dvh grid grid-rows-[auto_1fr]">
       <UsuarioNavbar />
       <Outlet />
     </div>
