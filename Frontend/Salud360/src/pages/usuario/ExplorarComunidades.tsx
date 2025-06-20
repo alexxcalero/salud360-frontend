@@ -9,7 +9,7 @@ function ExplorarComunidades(){
     const [comunidades, setComunidades] = useState([]);
 
     const fetchComunidades = () => {
-    axios.get("http://ec2-54-91-52-110.compute-1.amazonaws.com:8080/api/comunidades/activas", {
+    axios.get("http://localhost:8080/api/comunidades/activas", {
       auth: {
         username: "admin",
         password: "admin123"
