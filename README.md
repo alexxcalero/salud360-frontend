@@ -18,6 +18,11 @@ Luego, asegurarse que tenga instalado correctamente tood
 npm i --legacy-peer-deps
 ```
 
+Instalar chromium
+```bash
+npx playwright install
+```
+
 Y por último, playwright evalúa sobre la aplicación en funcionamiento, así que debes ejecutarlo antes de los tests
 
 ```bash
