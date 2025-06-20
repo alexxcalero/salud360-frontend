@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { useToasts } from "@/hooks/ToastContext";
 import { DateTime } from "luxon";
-import { FormEvent, useState } from "react";
+import { FormEvent, useMemo, useState } from "react";
 import Button from "@/components/Button";
 import { putCitaMedicaAPI } from "@/services/citasMedicasAdmin.service";
 import { useFetchHandler } from "@/hooks/useFetchHandler";
@@ -33,8 +33,11 @@ const ActualizarCitaModalForm = ({
   const [horaInicio, setHoraInicio] = useState(
     citaMedica.horaInicio?.toFormat("T") ?? ""
   );
-  const [horaFin, setHoraFin] = useState(
-    citaMedica.horaFin?.toFormat("T") ?? ""
+  const horaFin = useMemo(
+    () =>
+      DateTime.fromFormat(horaInicio, "T").plus({ hour: 1 }).toFormat("T") ??
+      "00:00",
+    [horaInicio]
   );
 
   const [dateInput, setDateInput] = useState<DateTime>(
@@ -91,20 +94,6 @@ const ActualizarCitaModalForm = ({
       horaInicio: horaInicio,
       horaFin: horaFin,
       fecha: dateInput.toISODate(),
-      estado: citaMedica.estado,
-      activo: citaMedica.activo,
-      fechaCrecion: citaMedica.fechaCreacion,
-      fechaDesactivacion: citaMedica.fechaDesactivacion,
-      medico: {
-        idMedico: citaMedica.medico?.idMedico,
-        nombres: citaMedica.medico?.nombres,
-        apellidos: citaMedica.medico?.apellidos,
-        especialidad: citaMedica.medico?.especialidad,
-        descripcion: citaMedica.medico?.descripcion,
-        fotoPerfil: citaMedica.medico?.fotoPerfil,
-      },
-      cliente: citaMedica.cliente,
-      servicio: citaMedica.servicio,
     };
 
     fetch(async () => {
@@ -160,10 +149,10 @@ const ActualizarCitaModalForm = ({
                 />
                 <Input
                   name="hora-fin"
-                  required={true}
                   placeholder="Hora fin"
                   value={horaFin}
-                  setValue={setHoraFin}
+                  setValue={() => {}}
+                  disabled={true}
                   label="Hora fin"
                   type="time"
                 />

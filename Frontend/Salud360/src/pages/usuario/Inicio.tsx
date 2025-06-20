@@ -1,12 +1,12 @@
 import { AuthContext } from "@/hooks/AuthContext";
-import UnderConstruction from "../UnderConstruction";
 import { useContext, useEffect, useState } from "react";
-import { User, Pencil, IdCard, PersonStanding, Settings, CreditCard, Calendar  } from "lucide-react";
+import { User, Pencil, IdCard, PersonStanding, Settings, CreditCard, Calendar } from "lucide-react";
 import AccesoRapido from "@/components/usuario/AccesoRapido";
 import { Link } from "react-router";
 import axios from "axios";
 import useUsuarioForm from "@/hooks/useUsuarioForm";
 import CardLanding from "@/components/landing/CardLanding";
+import CardMembresiaAdvertencia from "@/components/usuario/membresia/CardMembresiaAdvertencia";
 
 function Inicio(){
 
@@ -129,6 +129,11 @@ function Inicio(){
                 <div className=" p-8">
                     <h1>¡Bienvenido, {nombres}!</h1>
                 </div>
+
+
+                <div className="px-8">
+                    <CardMembresiaAdvertencia activeButtons={true} />
+                </div>
                 
                 <div className="w-full grid grid-cols-2 border border-gray-300">
                     <div className=" flex flex-col gap-4 p-8">
@@ -191,8 +196,8 @@ function Inicio(){
                 
                 <div className="w-full flex flex-wrap gap-y-2 justify-center p-8 border border-gray-300">
                     {/*<AccesoRapido icon={<Pencil className="text-black"/>} title="Mis membresías" subtitle={`${cantComunidades} activas`}/>*/}
-                    {accesosRapidos.map(([Icon, title, subtitle, route]: any) => (
-                        <div className="m-auto">
+                    {accesosRapidos.map(([Icon, title, subtitle, route]: any, index) => (
+                        <div className="m-auto" key={index}>
                             <AccesoRapido icon={<Icon className="w-16 h-16 text-black "/>} title={title} subtitle={subtitle} route={route}/>
                         </div>
                     ))}

@@ -6,9 +6,8 @@ interface Props<Data> {
   inicioMes: DateTime;
   finMes: DateTime;
   mes: number;
-  getDate?: (_: DateTime) => void;
-  getCalendarData?: (_: Data) => void;
-  data: Data[];
+  registerEnabled?: boolean;
+  events: Record<string, Data[][]>;
   getRangeDateFromData: (d: Data) => [DateTime, DateTime] | undefined;
   card: (_: Data, _2?: (_: Data) => void) => ReactNode;
 }
@@ -17,10 +16,7 @@ function CalendarioMensual<Data>({
   mes,
   inicioMes,
   finMes,
-  getRangeDateFromData,
-  getCalendarData,
-  getDate,
-  data,
+  events,
   card,
 }: Props<Data>) {
   const diasPorSemanas: DateTime[][] = [];
@@ -59,15 +55,9 @@ function CalendarioMensual<Data>({
           {diasPorSemanas.map((_dias, i) => (
             <div key={i} className="grid grid-cols-subgrid col-span-full">
               {_dias.map((dia, index) => {
-                const virtual = data.filter((elem) => {
-                  const rango = getRangeDateFromData(elem);
-
-                  if (rango === undefined) return false;
-
-                  return (
-                    dia.startOf("day") < rango[0] && rango[1] < dia.endOf("day")
-                  );
-                });
+                const matrizEvents = events[dia.toISODate() ?? ""];
+                console.log(events);
+                console.log(dia.toISODate());
                 return (
                   <div
                     key={index}
@@ -85,9 +75,12 @@ function CalendarioMensual<Data>({
                       {dia.toFormat("dd")}
                     </div>
                     <div className="flex flex-wrap gap-2">
-                      {virtual.map((d, index) => (
-                        <div key={index}>{card(d, getCalendarData)}</div>
-                      ))}
+                      {matrizEvents &&
+                        matrizEvents.map((arrayEvents) =>
+                          arrayEvents.map((event, index) => (
+                            <div key={index}>{card(event)}</div>
+                          ))
+                        )}
                     </div>
                   </div>
                 );
