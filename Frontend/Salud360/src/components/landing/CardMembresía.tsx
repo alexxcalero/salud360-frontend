@@ -3,6 +3,8 @@ import Button from "../Button";
 import { IComunidad } from "@/models/comunidad";
 import { IMembresia } from "@/models/membresia";
 import { setPendingMembership } from "@/lib/pendingMembership";
+import { useContext } from "react";
+import { AuthContext } from "@/hooks/AuthContext";
 
 interface Props {
   comunidad: IComunidad;
@@ -13,9 +15,9 @@ interface Props {
 function CardMembresia({
   membresia,
   comunidad,
-  to = "/RegistroUsuario",
 }: Props) {
   const navigate = useNavigate();
+  const {usuario} = useContext(AuthContext)
 
   return (
     <div className="flex flex-col py-4 px-4 w-[400px] h-full bg-white border-2 border-black rounded-xl gap-2">
@@ -33,7 +35,8 @@ function CardMembresia({
           className="mx-2"
           onClick={() => {
             setPendingMembership(comunidad, membresia);
-            navigate(to, { state: { membresia, comunidad } });
+            const ruta = usuario ? "/usuario/pasarela-pagos/" :  "/RegistroUsuario"
+            navigate(ruta, { state: { membresia, comunidad } });
           }}
         >
           SUSCRÍBETE HOY
