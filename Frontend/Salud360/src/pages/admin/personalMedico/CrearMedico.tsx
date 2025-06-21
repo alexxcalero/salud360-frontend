@@ -77,7 +77,7 @@ function CrearMedico() {
       return false;
     }
     //modb t
-    if (!tipoDoc || tipoDoc.trim() === "") {
+    if (!tipoDoc || tipoDoc === "") {
       setMensajeValidacion("Debe seleccionar un tipo de documento.");
       setShowModalValidacion(true);
       return false;
