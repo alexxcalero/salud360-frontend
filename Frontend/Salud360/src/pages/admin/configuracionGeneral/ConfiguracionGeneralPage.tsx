@@ -1,11 +1,11 @@
 
 import { useNavigate } from "react-router";
 import { useState, useEffect } from "react";
-import axios from "axios";
 import InfoCard from "@/components/Infocard";
 import ButtonIcon from "@/components/ButtonIcon";
 import BlueBullet from "@/components/BlueBullet";
 import { Pencil } from "lucide-react";
+import { baseAPI } from "@/services/baseAPI";
 
 
 function ConfiguracionGeneralPage() {
@@ -29,7 +29,7 @@ function ConfiguracionGeneralPage() {
 
 
   useEffect(() => {
-    axios.get("http://localhost:8080/api/reglas", {
+    baseAPI.get("/reglas", {
       auth: {
         username: "admin",
         password: "admin123"

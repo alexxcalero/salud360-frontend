@@ -1,10 +1,9 @@
 import Button from "@/components/Button";
 import DropImage from "@/components/DropImage";
-import FormContainer from "@/components/FormContainer";
 import InputIconLabel from "@/components/InputIconLabel";
 import InputLabel from "@/components/InputLabel";
 import SelectLabel from "@/components/SelectLabel";
-import axios from "axios";
+import { baseAPI } from "@/services/baseAPI";
 import { Mail, Phone } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
@@ -58,7 +57,7 @@ function UsuariosForms({title="", subtitle="", nombres, setNombres = () =>{}, ap
     direccion, setDireccion  = () =>{}, genero, setGenero  = () =>{}, fechaNacimiento, setFechaNacimiento  = () =>{}, contrasenha, setContrasenha  = () =>{}, readOnly = false, onSubmit = () =>{}, buttonText,onImagenSeleccionada = () => {},imagenActual = null}: Props){
 
 
-    const [roles, setRoles] = useState([]);
+    const [_roles, setRoles] = useState([]);
     const [tipoDocumentos, setTipoDocumentos] = useState([]);
     //const [tipoDocumentos, setTipoDocumentos] = useState([]);
     const navigate = useNavigate();
@@ -67,7 +66,7 @@ function UsuariosForms({title="", subtitle="", nombres, setNombres = () =>{}, ap
 
     //Llamada Roles
     const fetchRoles = () => {
-    axios.get("http://localhost:8080/api/admin/roles", {
+    baseAPI.get("/admin/roles", {
       auth: {
         username: "admin",
         password: "admin123"
@@ -92,7 +91,7 @@ function UsuariosForms({title="", subtitle="", nombres, setNombres = () =>{}, ap
 
     //Llamada TipoDocumentos
     const fetchTipoDocumentos = () => {
-    axios.get("http://localhost:8080/api/admin/tiposDocumentos", {
+    baseAPI.get("/admin/tiposDocumentos", {
       auth: {
         username: "admin",
         password: "admin123"
@@ -121,7 +120,7 @@ function UsuariosForms({title="", subtitle="", nombres, setNombres = () =>{}, ap
         { value: "Femenino", content: "Femenino" }
     ]
 
-    var readOnlyContrasenha;
+    let readOnlyContrasenha;
 
 
     if (contrasenha !== undefined){

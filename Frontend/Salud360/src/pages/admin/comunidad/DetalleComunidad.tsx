@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import axios from "axios";
 
 import useComunidadForm from "@/hooks/useComunidadForm";
 import ComunidadForm from "@/components/admin/comunidades/ComunidadForm";
+import { baseAPI } from "@/services/baseAPI";
 
 function DetalleComunidad() {
   const { id } = useParams();
@@ -28,16 +28,16 @@ function DetalleComunidad() {
     const fetchData = async () => {
       try {
         const [comunidadRes, serviciosRes, membresiasRes, localesRes] = await Promise.all([
-          axios.get(`http://localhost:8080/api/comunidades/${id}`, {
+          baseAPI.get(`/comunidades/${id}`, {
             auth: { username: "admin", password: "admin123" }
           }),
-          axios.get("http://localhost:8080/api/servicios", {
+          baseAPI.get("/servicios", {
             auth: { username: "admin", password: "admin123" }
           }),
-          axios.get("http://localhost:8080/api/membresias", {
+          baseAPI.get("/membresias", {
             auth: { username: "admin", password: "admin123" }
           }),
-          axios.get("http://localhost:8080/api/locales", {
+          baseAPI.get("/locales", {
             auth: { username: "admin", password: "admin123" }
           })
         ]);

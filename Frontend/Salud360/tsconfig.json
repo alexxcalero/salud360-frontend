@@ -1,13 +1,25 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ],
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
-    }
-  }
+    },
+    "noEmitOnError": false,
+    "skipLibCheck": true,
+    "strict": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "allowJs": true,
+    "checkJs": false,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "moduleResolution": "node",
+    "jsx": "react-jsx"
+  },
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ]
 }
+

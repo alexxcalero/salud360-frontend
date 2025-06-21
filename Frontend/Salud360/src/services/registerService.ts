@@ -1,4 +1,4 @@
-import axios from "axios"
+import { baseAPI } from "./baseAPI";
 
 export const register = async (datosRegistro: {
   nombres: string;
@@ -14,6 +14,6 @@ export const register = async (datosRegistro: {
     idTipoDocumento: string;
   };
 }) => {
-  const response = await axios.post("http://localhost:8080/api/autenticacion/signup", datosRegistro)
+  const response = await baseAPI.post("/autenticacion/signup", datosRegistro)
   return response.data
 }

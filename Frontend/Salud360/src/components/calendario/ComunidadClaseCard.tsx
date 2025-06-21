@@ -21,6 +21,9 @@ export function ComunidadClaseCard({
   collapsed?: boolean;
 }) {
   const { id } = useParams();
+  console.group("AAAAA");
+  console.log(clase.clientes);
+  console.groupEnd();
   return (
     <>
       <HoverCard openDelay={300}>

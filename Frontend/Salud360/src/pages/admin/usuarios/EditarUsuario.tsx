@@ -1,10 +1,10 @@
 import  { useEffect, useState } from "react";
-import axios from "axios";
 import { useParams } from "react-router";
 import UsuariosForms from "@/components/admin/usuarios/UsuariosForms";
 import useUsuarioForm from "@/hooks/useUsuarioForm";
 import { useNavigate } from "react-router";
 import ModalValidacion from "@/components/ModalValidacion";
+import { baseAPI } from "@/services/baseAPI";
 
 
 function EditarUsuario(){
@@ -30,14 +30,14 @@ function EditarUsuario(){
         correo, setCorreo,
         genero, setGenero,
         fechaNacimiento, setFechaNacimiento,
-        contrasenha, setContrasenha,
+        contrasenha, //setContrasenha,
         setUsuarioAPI
     } = useUsuarioForm();
 
     useEffect(() => {
 
 
-        axios.get(`http://localhost:8080/api/admin/clientes/${id}`, {
+        baseAPI.get(`/admin/clientes/${id}`, {
           auth: {
             username: "admin",
             password: "admin123"
@@ -103,7 +103,7 @@ function EditarUsuario(){
       return false;
     }
 
-    if (!tipoDoc || tipoDoc === 0) {
+    if (!tipoDoc || tipoDoc.trim() === "") {
       setMensajeValidacion("Debe seleccionar un tipo de documento.");
       setShowModalValidacion(true);
       return false;
@@ -160,7 +160,7 @@ function EditarUsuario(){
         try{
             const sexo = genero;
 
-            const response = await axios.put(`http://localhost:8080/api/admin/clientes/${id}`, 
+            const response = await baseAPI.put(`/admin/clientes/${id}`, 
                 {
                     nombres,
                     apellidos,

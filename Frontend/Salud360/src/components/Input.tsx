@@ -7,12 +7,13 @@ interface Props{
     value?: string;
     className?: string;
     disabled?: boolean;
+    readOnly?: boolean;
     onChange?: React.ChangeEventHandler<HTMLInputElement>;
 }
 
-function Input({type= "text", placeholder="", leftPadding="", value="", className="", disabled=false, onChange = () => {}}: Props){
+function Input({type= "text", placeholder="", leftPadding="", value="", className="", disabled=false,readOnly = false, onChange = () => {}}: Props){
     return(
-        <ShadInput type={type} placeholder={placeholder} className={`border-[#6A6262] border-2 rounded-[5px] py-5 px-4 ${leftPadding} ${className}`} value={value} disabled={disabled} onChange={onChange}/>
+        <ShadInput type={type} placeholder={placeholder} className={`border-[#6A6262] border-2 rounded-[5px] py-5 px-4 ${leftPadding} ${className}`} value={value} disabled={disabled} readOnly={readOnly} onChange={onChange}/>
     );
 }
 

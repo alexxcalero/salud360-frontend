@@ -3,6 +3,7 @@ import { HTMLInputTypeAttribute, useId, useState } from "react";
 import Label from "../Label";
 
 export interface InputProps {
+  //idName: string;
   name: string;
   defaultValue?: string;
   label?: string;

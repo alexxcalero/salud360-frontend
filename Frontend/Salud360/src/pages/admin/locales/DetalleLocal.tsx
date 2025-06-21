@@ -1,6 +1,6 @@
 import LocalesForms from "@/components/admin/locales/LocalesForms";
 import useLocalForm from "@/hooks/useLocalForm";
-import axios from "axios";
+import { baseAPI } from "@/services/baseAPI";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 
@@ -10,20 +10,20 @@ function DetalleLocal(){
     const {id} = useParams();
 
     const {
-        nombre, setNombre,
-        telefono, setTelefono,
-        descripcion, setDescripcion,
-        direccion, setDireccion,
-        tipo, setTipo,
-        servicios, setServicios,
-        aforo, setAforo,
+        nombre,// setNombre,
+        telefono, //setTelefono,
+        descripcion, //setDescripcion,
+        direccion, //setDireccion,
+        tipo, //setTipo,
+        servicios, //setServicios,
+        aforo, //setAforo,
         setLocalAPI
     } = useLocalForm();
     
     //const [serviciosSeleccionados, setServiciosSeleccionados] = useState([]);
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/api/locales/${id}`, {
+        baseAPI.get(`/locales/${id}`, {
           auth: {
             username: "admin",
             password: "admin123"

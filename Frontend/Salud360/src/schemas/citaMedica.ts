@@ -31,6 +31,9 @@ export const citaMedicaSchema = z.object({
     .transform((str) => DateTime.fromISO(str))
     .optional()
     .nullable(),
+
+    //agregado rb
+    medico: z.lazy(() => medicoSchema.optional().nullable()),
 });
 
 export const extendedCitaMedicaSchema = citaMedicaSchema.extend({

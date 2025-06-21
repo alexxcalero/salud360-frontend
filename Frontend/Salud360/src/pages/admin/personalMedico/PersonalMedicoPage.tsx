@@ -1,6 +1,5 @@
-import UnderConstruction from "@/pages/UnderConstruction";
+//import UnderConstruction from "@/pages/UnderConstruction";
 import  { useState, useEffect } from "react";
-import axios from "axios";
 import { Search, Info, Trash2, Pencil, Filter, UserPlus, RotateCcw } from "lucide-react";
 import { useNavigate } from "react-router";
 import { useLocation } from "react-router";
@@ -11,10 +10,22 @@ import InputIcon from "@/components/InputIcon";
 import ButtonIcon from "@/components/ButtonIcon";
 import ModalExito from "@/components/ModalExito";
 import ModalError from "@/components/ModalError";
+import { baseAPI } from "@/services/baseAPI";
+
+interface Medico {
+  idMedico: number;
+  nombres: string;
+  apellidos: string;
+  especialidad: string;
+  descripcion: string;
+  activo: boolean;
+  fotoPerfil?: string;
+}
+
 
 function PersonalMedicoPage() {
   const [selectAll, setSelectAll] = useState(false);
-  const [medicos, setMedicos] = useState([]);
+  const [medicos, setMedicos] = useState<Medico[]>([]);
   const [especialidadesUnicas, setEspecialidadesUnicas] = useState<string[]>([]);
   const [especialidadSeleccionada, setEspecialidadSeleccionada] = useState("");
   const [medicoSeleccionado, setMedicoSeleccionado] = useState<any>();
@@ -29,14 +40,14 @@ function PersonalMedicoPage() {
   const handleSelectAll = () => setSelectAll(!selectAll);
 
   const fetchMedicos = () => {
-    axios
-      .get("http://localhost:8080/api/admin/medicos", {
+    baseAPI
+      .get("/admin/medicos", {
         auth: { username: "admin", password: "admin123" },
       })
       .then((res) => {
         setMedicos(res.data);
         const especialidades = [...new Set(res.data.map((m: any) => m.especialidad).filter(Boolean))];
-        setEspecialidadesUnicas(especialidades);
+        setEspecialidadesUnicas(especialidades.filter((e): e is string => typeof e === "string"));//modificado b
       })
       .catch((err) => console.error("Error cargando médicos", err));
   };
@@ -53,7 +64,7 @@ function PersonalMedicoPage() {
   }, []);
 
   const handleEliminarMedico = ():  void => {
-    axios.delete(`http://localhost:8080/api/admin/medicos/${medicoSeleccionado.idMedico}`)
+    baseAPI.delete(`/admin/medicos/${medicoSeleccionado.idMedico}`)
       .then(() => {
         setShowModalExito(true);
         setShowModalError(false);
@@ -63,7 +74,7 @@ function PersonalMedicoPage() {
   };
 
   const handleReactivarMedico = () => {
-    axios.put(`http://localhost:8080/api/admin/medicos/${medicoSeleccionado.idMedico}/reactivar`)
+    baseAPI.put(`/admin/medicos/${medicoSeleccionado.idMedico}/reactivar`)
     .then(() => {
       setShowModalExito(true);
       setShowModalError(false);

@@ -1,11 +1,16 @@
 import Button from "@/components/Button";
-import Checkbox from "@/components/Checkbox";
+//import Checkbox from "@/components/Checkbox";
 import DropImage from "@/components/DropImage";
 import InputLabel from "@/components/InputLabel";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { useRef } from "react";
+import { baseAPI } from "@/services/baseAPI";
+
+interface Servicio {
+  idServicio: number;
+  nombre: string;
+}
 
 interface Props{
     title?: string
@@ -43,13 +48,13 @@ interface Props{
 function LocalesForms({title, subtitle, nombre, setNombre = () =>{}, telefono, setTelefono = () =>{}, descripcion, setDescripcion = () =>{}, 
     direccion, setDireccion = () =>{}, tipo, setTipo = () =>{}, servicios, setServicios = () => {}, aforo = 0, readOnly = false, onSubmit = () =>{}, buttonText,onImagenSeleccionada = () => {},imagenActual = null}: Props){
 
-    const [serviciosDisponibles, setServiciosDisponibles] = useState([]);
+    const [serviciosDisponibles, setServiciosDisponibles] = useState<Servicio[]>([]);
 
     console.log("en LocalesForms los servicios del props son:", servicios)
 
     //Llamada Locales
     const fetchServicios = () => {
-    axios.get("http://localhost:8080/api/servicios", {
+    baseAPI.get("/servicios", {
       auth: {
         username: "admin",
         password: "admin123"

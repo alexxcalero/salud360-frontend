@@ -9,25 +9,29 @@ import {
 import { useState } from "react";
 import { UploadCloud } from "lucide-react";
 import { useDialog } from "@/hooks/dialogContext";
+import { useNavigate, useParams } from "react-router";
 
 const ModalFormularioReserva = ({
   onClose,
   onSubmit,
 }: {
   onClose: () => void;
-  onSubmit: (descripcion: string, archivo?: File) => void;
+  onSubmit: (descripcion: string, archivo?: File) => Promise<void>;
 }) => {
   const [descripcion, setDescripcion] = useState("");
   const [archivo, setArchivo] = useState<File | undefined>();
 
   const { callErrorDialog } = useDialog();
 
+  const { id } = useParams();
+  const navigate = useNavigate();
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.files?.[0];
     if (selected) setArchivo(selected);
   };
 
-  const handleDragDrop = (e: React.DragEvent<HTMLDivElement>) => {
+  const handleDragDrop = async (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     const dropped = e.dataTransfer.files?.[0];
     if (dropped) setArchivo(dropped);
@@ -44,11 +48,12 @@ const ModalFormularioReserva = ({
     return true;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!validarCampos()) return;
 
     try {
-      onSubmit(descripcion, archivo);
+      await onSubmit(descripcion, archivo);
+      navigate(`/usuario/comunidades/detalle/${id}/reservas`);
     } catch (e) {
       callErrorDialog({
         title: "Error en el formulario",

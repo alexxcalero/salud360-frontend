@@ -4,6 +4,7 @@ import axios from "axios";
 
 import useComunidadForm from "@/hooks/useComunidadForm";
 import ComunidadForm from "@/components/admin/comunidades/ComunidadForm";
+import { baseAPI } from "@/services/baseAPI";
 
 interface Item {
   nombre: string;
@@ -41,17 +42,17 @@ function CrearComunidad() {
 
   // Cargar datos iniciales
   useEffect(() => {
-    axios.get("http://localhost:8080/api/servicios", {
+    baseAPI.get("/servicios", {
       auth: { username: "admin", password: "admin123" }
     }).then(res => setServiciosDisponibles(res.data))
       .catch(err => console.error("Error cargando servicios", err));
 
-    axios.get("http://localhost:8080/api/membresias", {
+    baseAPI.get("/membresias", {
       auth: { username: "admin", password: "admin123" }
     }).then(res => setMembresias(res.data))
       .catch(err => console.error("Error cargando membresías", err));
 
-    axios.get("http://localhost:8080/api/locales", {
+    baseAPI.get("/locales", {
       auth: { username: "admin", password: "admin123" }
     }).then(res => setLocales(res.data))
       .catch(err => console.error("Error cargando locales", err));
@@ -69,7 +70,7 @@ function CrearComunidad() {
         formData.append("archivo", imagenFile);
 
         try {
-          const res = await axios.post("http://localhost:8080/api/archivo", formData, {
+          const res = await baseAPI.post("/archivo", formData, {
             auth: {
               username: "admin",
               password: "admin123"
@@ -95,7 +96,7 @@ function CrearComunidad() {
 
       console.log("Enviando datos de comunidad:", requestBody);
 
-      const response = await axios.post("http://localhost:8080/api/comunidades", requestBody, {
+      const response = await baseAPI.post("/comunidades", requestBody, {
         auth: {
           username: "admin",
           password: "admin123"

@@ -1,16 +1,16 @@
 import Button from "@/components/Button";
 import DropImage from "@/components/DropImage";
-import FormContainer from "@/components/FormContainer";
-import InputIconLabel from "@/components/InputIconLabel";
+//import FormContainer from "@/components/FormContainer";
+//import InputIconLabel from "@/components/InputIconLabel";
 import InputLabel from "@/components/InputLabel";
 import SelectLabel from "@/components/SelectLabel";
-import axios from "axios";
-import { Mail, Phone } from "lucide-react";
+import { baseAPI } from "@/services/baseAPI";
+//import { Mail, Phone } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
-import { Input as ShadInput} from "@/components/ui/input";
-import { Label as ShadLabel} from "@/components/ui/label";
+//import { Input as ShadInput} from "@/components/ui/input";
+//import { Label as ShadLabel} from "@/components/ui/label";
 
 interface Props{
 
@@ -58,7 +58,7 @@ function PersonalMedicoForms({title="", subtitle="", nombres, setNombres = () =>
 
     //Llamada TipoDocumentos
     const fetchTipoDocumentos = () => {
-    axios.get("http://localhost:8080/api/admin/tiposDocumentos", {
+    baseAPI.get("/admin/tiposDocumentos", {
       auth: {
         username: "admin",
         password: "admin123"

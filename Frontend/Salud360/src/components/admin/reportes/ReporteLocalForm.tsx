@@ -1,13 +1,14 @@
 import InputIconLabelEdit from "@/components/InputIconLabelEdit"
-import SelectIconLabel from "@/components/SelectIconLabel"
+//import SelectIconLabel from "@/components/SelectIconLabel"
 import SelectIconLabelNum from "@/components/SelectIconLabelNum"
-import { Calendar, Shield } from "lucide-react"
+//, Shield 
+import { Calendar } from "lucide-react"
 import { FaHandHoldingUsd } from "react-icons/fa";
 import Button from "@/components/Button";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import ModalPreview from "@/components/admin/reportes/ModalPreview";
 import previewLocal from "@/assets/previewLocal.png"; 
+import { baseAPI } from "@/services/baseAPI";
 
 
 interface Props {
@@ -16,6 +17,7 @@ interface Props {
     fechaFin: string;
     idservicio: number;
     descripcion: string;
+    idlocal?: number;
   };
   onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
 }
@@ -27,7 +29,7 @@ export default function ReporteLocalForm({ data, onChange }: Props) {
   useEffect(() => {
     const fetchServicios = async () => {
       try {
-        const res = await axios.get("http://localhost:8080/api/servicios", {
+        const res = await baseAPI.get("/servicios", {
           auth: { username: "admin", password: "admin123" }
         });
         const opciones = res.data.map((s: any) => ({ value: s.idServicio, content: s.nombre }));
@@ -41,7 +43,7 @@ export default function ReporteLocalForm({ data, onChange }: Props) {
   
   const descargarReporte = async () => {
     try {
-      const response = await axios.post("http://localhost:8080/api/reportes/locales", {     
+      const response = await baseAPI.post("/reportes/locales", {     
         fechaInicio: data.fechaInicio,
         descripcion: data.descripcion,
         fechaFin: data.fechaFin,

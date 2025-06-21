@@ -1,28 +1,27 @@
 import DetallesMembresia from "@/components/usuario/membresia/DetallesMembresia";
 import SeleccionarMetodo from "@/components/usuario/membresia/SeleccionarMetodo";
+import { getPendingMembership } from "@/lib/pendingMembership";
 import { IComunidad } from "@/models/comunidad";
 import { IMembresia } from "@/models/membresia";
 import { useState } from "react";
-import { useLocation } from "react-router";
-import { useNavigate } from "react-router";
+import { Navigate, useLocation } from "react-router";
 
 const PasarelaInicialPage = () => {
-  const navigate = useNavigate();
   const location = useLocation();
+  const { comunidad: comunidadArg, membresia: membresiaArg } =
+    getPendingMembership();
 
-  if (!location.state) {
-    navigate("/usuario");
-    return;
-  }
-
-  const { comunidad, membresia: membresiaParam } = location.state as {
-    comunidad: IComunidad | undefined;
-    membresia: IMembresia | undefined;
-  };
+  // const { comunidad, membresia: membresiaParam } = location.state as {
+  //   comunidad: IComunidad | undefined;
+  //   membresia: IMembresia | undefined;
+  // };
+  const comunidad =
+    comunidadArg ?? (location.state.comunidad as IComunidad | null);
+  const membresiaParam =
+    membresiaArg ?? (location.state.membresia as IMembresia | null);
 
   if (!comunidad || !membresiaParam) {
-    navigate("/usuario");
-    return;
+    return <Navigate to={"/usuario"} />;
   }
 
   const [membresia, setMembresia] = useState(membresiaParam);

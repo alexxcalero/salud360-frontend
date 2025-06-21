@@ -3,17 +3,16 @@ import Progression from "./Progression";
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import MassterCardIcon from "@/assets/method-mastercard.svg";
 import VisaIcon from "@/assets/method-visa.svg";
-import YapeIcon from "@/assets/yape.svg";
-import PlinIcon from "@/assets/plin.svg";
 import Button from "@/components/Button";
 import { cn } from "@/lib/utils";
 import SelectLabel from "@/components/SelectLabel";
 import { useFetchHandler } from "@/hooks/useFetchHandler";
-import { CircleCheck } from "lucide-react";
+import { CircleCheck, Wallet } from "lucide-react";
 import { IComunidad } from "@/models/comunidad";
 import { IMembresia } from "@/models/membresia";
 import { getAllMediosDePagosByUsuarioAPI } from "@/services/medioDePago.service";
 import { AuthContext } from "@/hooks/AuthContext";
+import { IMedioDePago } from "@/models/medioDePago";
 
 const SeleccionarMetodo = ({
   comunidad,
@@ -133,6 +132,21 @@ const SeleccionarMetodo = ({
           <input
             type="radio"
             name="tipoDePago"
+            id="efectivo"
+            value="tarjeta"
+            defaultChecked={true}
+            onChange={() => (tipoDePago.current = "tarjeta")}
+            className="flex-none"
+          />
+          <label htmlFor="metodo-tarjeta" className="flex gap-1">
+            <Wallet />
+            Efectivo
+          </label>
+        </div>
+        {/* <div className="flex items-center gap-2">
+          <input
+            type="radio"
+            name="tipoDePago"
             id="metodo-plin"
             value="plin"
             className="inline-block"
@@ -163,7 +177,7 @@ const SeleccionarMetodo = ({
             />
             Yape
           </label>
-        </div>
+        </div> */}
       </form>
 
       <div className="flex gap-4 justify-center w-full">

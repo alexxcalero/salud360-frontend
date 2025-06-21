@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import {
   clearPendingMembership,
   getPendingMembership,
@@ -9,6 +9,7 @@ import { ShoppingCart, X } from "lucide-react";
 import { useDialog } from "@/hooks/dialogContext";
 import { useNavigate } from "react-router";
 import { useLocation } from "react-router";
+import { DateTime } from "luxon";
 
 const CardMembresiaAdvertencia = ({
   activeButtons,
@@ -20,14 +21,41 @@ const CardMembresiaAdvertencia = ({
 
   const comunidad = localStorageData.comunidad ?? location.state?.comunidad;
   const membresia = localStorageData.membresia ?? location.state?.membresia;
+  const tiempoFinal: DateTime =
+    localStorageData.tiempoFaltante ??
+    location.state?.tiempoFaltante ??
+    DateTime.now().plus({ minute: 3 });
 
   const [selfDestruct, setSelfDestruct] = useState(false);
   const { callAlertDialog } = useDialog();
 
   const navigate = useNavigate();
 
-  if (!membresia || !comunidad || selfDestruct) return undefined;
+  const timeInterval = useRef<NodeJS.Timeout>(null);
+  const displayTiempoRef = useRef<HTMLSpanElement>(null);
+  useEffect(() => {
+    timeInterval.current = setInterval(() => {
+      if (!displayTiempoRef.current) return;
+      displayTiempoRef.current.innerHTML = tiempoFinal
+        .diff(DateTime.now())
+        .toFormat("mm:ss");
+      if (tiempoFinal <= DateTime.now()) {
+        clearPendingMembership();
+        setSelfDestruct(true);
+        if (!timeInterval.current) return;
+        clearInterval(timeInterval.current);
+        timeInterval.current = null;
+      }
+    }, 1000);
 
+    return () => {
+      if (!timeInterval.current) return;
+      clearInterval(timeInterval.current);
+      timeInterval.current = null;
+    };
+  }, []);
+
+  if (!membresia || !comunidad || selfDestruct) return undefined;
   return (
     <div className="p-4 border-1 border-blue-700 bg-blue-200 text-blue-700 rounded-md my-4 flex justify-between">
       <div className="text-left flex flex-col gap-2">
@@ -74,9 +102,15 @@ const CardMembresiaAdvertencia = ({
           </div>
         )}
       </div>
-      <div>
+      <div className="flex gap-2">
+        <span className="text-right">
+          Se eliminará en{" "}
+          <span className="font-semibold" ref={displayTiempoRef}>
+            {"{{ duration }}"}
+          </span>
+        </span>
         <button
-          className="bg-blue-700 text-blue-200 hover:bg-blue-500 transition-colors duration-150 ease-out p-1 rounded-full"
+          className="bg-blue-700 text-blue-200 hover:bg-blue-500 transition-colors duration-150 ease-out p-1 rounded-full h-min w-min"
           onClick={() => {
             callAlertDialog({
               title: "Estás seguro de cancelar la membresía pendiente?",

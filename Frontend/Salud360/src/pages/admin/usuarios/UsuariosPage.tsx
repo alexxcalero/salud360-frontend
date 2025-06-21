@@ -1,5 +1,4 @@
 import  { useState, useEffect } from "react";
-import axios from "axios";
 import { Search, Info, Trash2, Pencil, Filter, UserPlus, RotateCcw } from "lucide-react";
 import { useNavigate } from "react-router";
 
@@ -9,21 +8,33 @@ import InputIcon from "@/components/InputIcon";
 import ButtonIcon from "@/components/ButtonIcon";
 import ModalExito from "@/components/ModalExito";
 import ModalError from "@/components/ModalError";
+import { baseAPI } from "@/services/baseAPI";
+
+interface Usuario {
+  idCliente: number;
+  nombres: string;
+  apellidos: string;
+  correo: string;
+  telefono: string;
+  activo: boolean;
+  fotoPerfil?: string;
+}
+
 
 function UsuariosPage() {
   const [selectAll, setSelectAll] = useState(false);
-  const [usuarios, setUsuarios] = useState([]);
+  const [usuarios, setUsuarios] = useState<Usuario[]>([]);
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState<any>();
   const [showModalExito, setShowModalExito] = useState(false);
   const [showModalError, setShowModalError] = useState(false);
-  const [search, setSearch] = useState("");
+  //const [search, setSearch] = useState("");
   const [paginaActual, setPaginaActual] = useState(1);
 
   //Para la funcionalidad de búsqueda:
   const [busqueda, setBusqueda] = useState("");
 
   const fetchUsuarios = () => {
-    axios.get("http://localhost:8080/api/admin/clientes", {
+    baseAPI.get("/admin/clientes", {
       auth: {
         username: "admin",
         password: "admin123"
@@ -47,7 +58,7 @@ function UsuariosPage() {
 
   const handleEliminarUsuario = (): void => {
     //console.log("El id del usuario a eliminar es:", usuarioSeleccionado.idCliente)
-    axios.delete(`http://localhost:8080/api/admin/clientes/${usuarioSeleccionado.idCliente}`)
+    baseAPI.delete(`/admin/clientes/${usuarioSeleccionado.idCliente}`)
     .then(() => {
       setShowModalExito(true);
       setShowModalError(false)
@@ -57,7 +68,7 @@ function UsuariosPage() {
 
   const handleReactivarUsuario = (): void => {
     console.log("El id del usuario a reactivar es:", usuarioSeleccionado.idCliente)
-    axios.put(`http://localhost:8080/api/admin/clientes/${usuarioSeleccionado.idCliente}/reactivar`)
+    baseAPI.put(`/admin/clientes/${usuarioSeleccionado.idCliente}/reactivar`)
     .then(() => {
       setShowModalExito(true);
       setShowModalError(false)
@@ -148,7 +159,7 @@ function UsuariosPage() {
     <div className="w-full px-6 py-4 overflow-auto">
       <div className="grid grid-cols-12 gap-4 items-center mb-4">
         <div className="col-span-4">
-          <InputIcon icon={<Search className="w-5 h-5" />} value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Buscar usuarios" type="search" value={busqueda} onChange={(e) => setBusqueda(e.target.value)} />
+          <InputIcon icon={<Search className="w-5 h-5" />} value={busqueda} onChange={(e) => setBusqueda(e.target.value)} placeholder="Buscar usuarios" type="search" />
         </div>
         <div className="col-span-8 flex justify-end">
           <ButtonIcon icon={<UserPlus className="w-6 h-6" />} size="lg" variant="primary" onClick={() => navigate("/admin/usuarios/crear")}>Agregar usuario</ButtonIcon>
