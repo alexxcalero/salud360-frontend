@@ -15,7 +15,7 @@ import { useContext, useEffect, useState } from "react";
 }*/
 
 const HistorialPagos = () => {
-  const [pagos, setPagos] = useState([]);
+  const [pagos, setPagos] = useState<any[]>([]);
   const [waiting, setWaiting] = useState(true);
 
   const [pagoActual, setPagoActual] = useState([]);
@@ -37,7 +37,7 @@ const HistorialPagos = () => {
         },
       });
       console.log("Pagos del Usuario:", res.data);
-      setPagos(res.data);
+      setPagos(Array.isArray(res.data) ? res.data : [res.data]);
     } catch (error) {
       console.error("Error cargando Pagos", error);
     } finally {
