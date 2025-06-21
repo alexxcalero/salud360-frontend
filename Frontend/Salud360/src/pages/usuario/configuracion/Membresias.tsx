@@ -18,7 +18,7 @@ import ModalExito from "@/components/ModalExito";
 }*/
 
 const Membresias = () => {
-  const [afiliaciones, setAfiliaciones] = useState([]);
+  const [afiliaciones, setAfiliaciones] = useState<any[]>([]);
   const [membresiaActual, setMembresiaActual] = useState<any>();
   const [comunidadActual, setComunidadActual] = useState<any>();
   const [afiliacionActual, setAfiliacionActual] = useState<any>();
@@ -49,7 +49,7 @@ const Membresias = () => {
         },
       });
       console.log("Afiliaciones del Usuario:", res.data);
-      setAfiliaciones(res.data);
+      setAfiliaciones(Array.isArray(res.data) ? res.data : [res.data]);
     } catch (error) {
       console.error("Error cargando Afiliaciones", error);
     } finally {
