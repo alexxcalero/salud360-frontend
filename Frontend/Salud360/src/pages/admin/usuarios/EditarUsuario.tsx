@@ -1,10 +1,10 @@
 import  { useEffect, useState } from "react";
-import axios from "axios";
 import { useParams } from "react-router";
 import UsuariosForms from "@/components/admin/usuarios/UsuariosForms";
 import useUsuarioForm from "@/hooks/useUsuarioForm";
 import { useNavigate } from "react-router";
 import ModalValidacion from "@/components/ModalValidacion";
+import { baseAPI } from "@/services/baseAPI";
 
 
 function EditarUsuario(){
@@ -16,6 +16,10 @@ function EditarUsuario(){
     const [showModalValidacion, setShowModalValidacion] = useState(false);
     const [mensajeValidacion, setMensajeValidacion] = useState("");
 
+    //Para la imagen actual y nueva
+    const [imagenFile, setImagenFile] = useState<File | null>(null);
+    const [imagenActual, setImagenActual] = useState<string | null>(null);
+
     const {
         nombres, setNombres,
         apellidos, setApellidos,
@@ -26,14 +30,14 @@ function EditarUsuario(){
         correo, setCorreo,
         genero, setGenero,
         fechaNacimiento, setFechaNacimiento,
-        contrasenha, setContrasenha,
+        contrasenha, //setContrasenha,
         setUsuarioAPI
     } = useUsuarioForm();
 
     useEffect(() => {
 
 
-        axios.get(`http://localhost:8080/api/admin/clientes/${id}`, {
+        baseAPI.get(`/admin/clientes/${id}`, {
           auth: {
             username: "admin",
             password: "admin123"
@@ -42,6 +46,7 @@ function EditarUsuario(){
           .then(res => {
             console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
             setUsuarioAPI(res.data);
+            setImagenActual(res.data.fotoPerfil || null);
             console.log("Usuario:", res.data);
             setLoading(false);
           })
@@ -98,7 +103,7 @@ function EditarUsuario(){
       return false;
     }
 
-    if (!tipoDoc || tipoDoc === 0) {
+    if (!tipoDoc || tipoDoc.trim() === "") {
       setMensajeValidacion("Debe seleccionar un tipo de documento.");
       setShowModalValidacion(true);
       return false;
@@ -132,10 +137,30 @@ function EditarUsuario(){
             return;
         }
 
+        let nombreArchivo = imagenActual;
+
+      if (imagenFile) {
+        const formData = new FormData();
+        formData.append("archivo", imagenFile);
+
+        try {
+          const res = await axios.post("http://localhost:8080/api/archivo", formData, {
+            auth: { username: "admin", password: "admin123" }
+          });
+          nombreArchivo = res.data.nombreArchivo;
+        } catch (error) {
+          console.error("Error al subir imagen:", error);
+          alert("No se pudo subir la imagen.");
+          return;
+        }
+      }
+
+
+
         try{
             const sexo = genero;
 
-            const response = await axios.put(`http://localhost:8080/api/admin/clientes/${id}`, 
+            const response = await baseAPI.put(`/admin/clientes/${id}`, 
                 {
                     nombres,
                     apellidos,
@@ -149,6 +174,7 @@ function EditarUsuario(){
                     notificacionPorSMS: true,
                     notificacionPorWhatsApp: true,
                     direccion,
+                    fotoPerfil: nombreArchivo ?? null,
                     tipoDocumento: {
                         idTipoDocumento: tipoDoc
                     },
@@ -201,6 +227,8 @@ function EditarUsuario(){
                 setFechaNacimiento={setFechaNacimiento}
                 onSubmit={handleEditarUsuario}
                 buttonText="Guardar"
+                imagenActual={imagenActual}
+        onImagenSeleccionada={(file) => setImagenFile(file)}
                 readOnly={false}
             />
       {showModalValidacion && (

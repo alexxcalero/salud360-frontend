@@ -1,25 +1,37 @@
 import Button from "@/components/Button";
-import {Dialog,DialogContent,DialogHeader,DialogTitle,DialogFooter,} from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { useState } from "react";
 import { UploadCloud } from "lucide-react";
-import ModalValidacion from "@/components/ModalValidacion";
+import { useDialog } from "@/hooks/dialogContext";
+import { useNavigate, useParams } from "react-router";
 
-const ModalFormularioReserva = ({onClose,  onSubmit,}: {
+const ModalFormularioReserva = ({
+  onClose,
+  onSubmit,
+}: {
   onClose: () => void;
-  onSubmit: (descripcion: string, archivo?: File) => void;
+  onSubmit: (descripcion: string, archivo?: File) => Promise<void>;
 }) => {
   const [descripcion, setDescripcion] = useState("");
   const [archivo, setArchivo] = useState<File | undefined>();
 
-  const [showModalValidacion, setShowModalValidacion] = useState(false);
-  const [mensajeValidacion, setMensajeValidacion] = useState("");
+  const { callErrorDialog } = useDialog();
+
+  const { id } = useParams();
+  const navigate = useNavigate();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.files?.[0];
     if (selected) setArchivo(selected);
   };
 
-  const handleDragDrop = (e: React.DragEvent<HTMLDivElement>) => {
+  const handleDragDrop = async (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     const dropped = e.dataTransfer.files?.[0];
     if (dropped) setArchivo(dropped);
@@ -27,21 +39,26 @@ const ModalFormularioReserva = ({onClose,  onSubmit,}: {
 
   const validarCampos = (): boolean => {
     if (!descripcion || descripcion.trim() === "") {
-      setMensajeValidacion("La descripción no puede estar vacía.");
-      setShowModalValidacion(true);
+      callErrorDialog({
+        title: "Error en el formulario",
+        description: "La descripción no puede estar vacía.",
+      });
       return false;
     }
     return true;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!validarCampos()) return;
 
     try {
-      onSubmit(descripcion, archivo);
+      await onSubmit(descripcion, archivo);
+      navigate(`/usuario/comunidades/detalle/${id}/reservas`);
     } catch (e) {
-      setMensajeValidacion("Hubo un error al enviar el archivo. Intenta de nuevo.");
-      setShowModalValidacion(true);
+      callErrorDialog({
+        title: "Error en el formulario",
+        description: "Hubo un error al enviar el archivo. Intenta de nuevo.",
+      });
     }
   };
 
@@ -91,13 +108,14 @@ const ModalFormularioReserva = ({onClose,  onSubmit,}: {
             </div>
 
             <p className="text-xs text-neutral-500 mt-1">
-              El envío de los documentos es opcional. En caso no se envíe ningún archivo, se enviará un enlace por correo para adjuntarlos luego.
+              El envío de los documentos es opcional. En caso no se envíe ningún
+              archivo, se enviará un enlace por correo para adjuntarlos luego.
             </p>
           </div>
 
           <DialogFooter className="pt-4 gap-2">
             <Button
-              variant="secondary"
+              variant="outline"
               onClick={onClose}
               className="w-full sm:w-auto"
             >
@@ -109,16 +127,6 @@ const ModalFormularioReserva = ({onClose,  onSubmit,}: {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-
-      {/* Portal porque se loqueaba el modal de validacion */}
-      {showModalValidacion && (
-        <ModalValidacion
-          titulo="Error en el formulario"
-          mensaje={mensajeValidacion}
-          textoBoton="Entendido"
-          onClose={() => setShowModalValidacion(false)}
-        />
-      )}
     </>
   );
 };

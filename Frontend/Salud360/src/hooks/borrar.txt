@@ -1,3 +1,0 @@
-Tutorial para custom hooks y HOC pattern
-
-https://www.youtube.com/watch?v=dQw4w9WgXcQ

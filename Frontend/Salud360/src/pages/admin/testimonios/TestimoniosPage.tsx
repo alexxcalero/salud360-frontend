@@ -1,31 +1,43 @@
 import TableBody from "@/components/admin/TableBody";
 import TableHeader from "@/components/admin/TableHeader";
-import ButtonIcon from "@/components/ButtonIcon";
+//import ButtonIcon from "@/components/ButtonIcon";
 import InputIcon from "@/components/InputIcon";
 import ModalError from "@/components/ModalError";
 import ModalExito from "@/components/ModalExito";
 import StarRating from "@/components/StarRating";
 import UnderConstruction from "@/pages/UnderConstruction";
-import axios from "axios";
+import { baseAPI } from "@/services/baseAPI";
 import { Info, Pencil, RotateCcw, Search, Trash2, UserPlus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
+interface Testimonio {
+  idTestimonio: number;
+  comentario: string;
+  autor: {
+    nombres: string;
+    apellidos: string;
+  };
+  calificacion: number;
+  fechaCreacion: string;
+  activo: boolean;
+}
+
 function CalificacionesPage() {
 
     const [selectAll, setSelectAll] = useState(false);
-    const [testimonios, setTestimonions] = useState([]);
+    const [testimonios, setTestimonions] = useState<Testimonio[]>([]);
     const [testimonioSeleccionado, setTestimonioSeleccionado] = useState<any>();
     const [showModalExito, setShowModalExito] = useState(false);
     const [showModalError, setShowModalError] = useState(false);
-    const [search, setSearch] = useState("");
+    //const [search, setSearch] = useState("");
     const [paginaActual, setPaginaActual] = useState(1);
 
     //Para la funcionalidad de búsqueda:
     const [busqueda, setBusqueda] = useState("");
 
     const fetchUsuarios = () => {
-        axios.get("http://localhost:8080/api/testimonios", {
+        baseAPI.get("/testimonios", {
             auth: {
                 username: "admin",
                 password: "admin123"
@@ -57,7 +69,7 @@ function CalificacionesPage() {
 
     const handleEliminarTestimonio = (): void => {
         //console.log("El id del testimonio a eliminar es:", testimonioSeleccionado)
-        axios.delete(`http://localhost:8080/api/testimonios/${testimonioSeleccionado.idTestimonio}`)
+        baseAPI.delete(`/testimonios/${testimonioSeleccionado.idTestimonio}`)
         .then(() => {
         setShowModalExito(true);
         setShowModalError(false)
@@ -67,7 +79,7 @@ function CalificacionesPage() {
 
     const handleReactivarTestimonio = (): void => {
         //console.log("El id del usuario a reactivar es:", testimonioSeleccionado.idTestimonio)
-        axios.put(`http://localhost:8080/api/testimonios/reactivar/${testimonioSeleccionado.idTestimonio}`)
+        baseAPI.put(`/testimonios/reactivar/${testimonioSeleccionado.idTestimonio}`)
         .then(() => {
         setShowModalExito(true);
         setShowModalError(false)
@@ -151,7 +163,13 @@ function CalificacionesPage() {
         <div className="w-full px-6 py-4 overflow-auto">
             <div className="grid grid-cols-12 gap-4 items-center mb-4">
                 <div className="col-span-4">
-                    <InputIcon icon={<Search className="w-5 h-5" />} value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Buscar testimonios" type="search" value={busqueda} onChange={(e) => setBusqueda(e.target.value)} />
+                   <InputIcon
+                    icon={<Search className="w-5 h-5" />}
+                    value={busqueda}
+                    onChange={(e) => setBusqueda(e.target.value)}
+                    placeholder="Buscar testimonios"
+                    type="search"
+                    />
                 </div>
             </div>
 

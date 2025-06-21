@@ -27,7 +27,7 @@ function DropImage({ onFileSelect, previewUrl }: DropImageProps) {
   return (
     <div className="border border-dashed rounded-md p-4 w-full h-64 flex items-center justify-center bg-white">
       <label className="cursor-pointer text-gray-500">
-        <input type="file" accept="image/*" className="hidden" onChange={handleDrop} />
+        <input name='imagen-comunidad' type="file" accept="image/*" className="hidden" onChange={handleDrop} />
         {preview ? (
           <img src={preview} alt="Preview" className="max-h-48 w-auto object-contain rounded-md"/>
         ) : (

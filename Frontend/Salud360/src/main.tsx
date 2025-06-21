@@ -21,7 +21,7 @@ import DetalleComunidad from "./pages/admin/comunidad/DetalleComunidad";
 import ServiciosPage from "./pages/admin/servicios/ServiciosPage";
 import DashboardPage from "./pages/admin/dashboard/DashboardPage";
 import RolesPage from "./pages/admin/roles/RolesPage";
-import MembresiasPage from "./pages/admin/membresias/MembresiasPage";
+//import MembresiasPage from "./pages/admin/membresias/MembresiasPage";
 import LocalesPage from "./pages/admin/locales/LocalesPage";
 import PersonalMedicoPage from "./pages/admin/personalMedico/PersonalMedicoPage";
 import TestiomoniosPage from "./pages/admin/testimonios/TestimoniosPage";
@@ -66,10 +66,10 @@ import { ComunidadProvider } from "./hooks/ComunidadContext";
 import DetalleComunidadHorario from "./pages/usuario/DetalleComunidadHorarios";
 import DetalleComunidadReservas from "./pages/usuario/DetalleComunidadReservas";
 import DetalleComunidadMembresia from "./pages/usuario/DetalleComunidadMembresia";
-import DetalleComunidadIntegrantes from "./pages/usuario/DetalleComunidadIntegrantes";
+//import DetalleComunidadIntegrantes from "./pages/usuario/DetalleComunidadIntegrantes";
 import CalendarioYReservas from "./pages/usuario/CalendarioYReservas";
-import CitasMedicas from "./pages/usuario/CitasMedicas";
-import HistorialMedico from "./pages/usuario/HistorialMedico";
+//import CitasMedicas from "./pages/usuario/CitasMedicas";
+//import HistorialMedico from "./pages/usuario/HistorialMedico";
 import ClasesPage from "./pages/admin/clases/ClasesPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { DialogProvider } from "./hooks/dialogContext";
@@ -80,9 +80,12 @@ import DetalleLocal from "./pages/admin/locales/DetalleLocal";
 import EditarLocal from "./pages/admin/locales/EditarLocal";
 import EditarServicio from "./pages/admin/servicios/EditarServicio";
 import CitasMedicasPage from "./pages/admin/citasMedicas/CitasMedicasPage";
+import PasarelaInicialPage from "./pages/usuario/pagos/PasarelaInicialPage";
+import PasarelaPagoPage from "./pages/usuario/pagos/PasarelaPagoPage";
 import DetalleTestimonio from "./pages/admin/testimonios/DetalleTestimonio";
 import SeleccionarTipo from "./pages/admin/usuarios/SeleccionarTipo";
 import CrearAdmin from "./pages/admin/usuarios/CrearAdmin";
+import PasarelaExito from "./pages/usuario/pagos/PasarelaExitoTmr";
 
 const CLIENT_ID =
   "442103352631-urj3v36db8bhki2cg4vu6c2q404dkko7.apps.googleusercontent.com";
@@ -140,6 +143,11 @@ createRoot(document.getElementById("root")!).render(
                             <Route path="membresia" element={<DetalleComunidadMembresia/>}></Route>
                             {/*<Route path="integrantes" element={<DetalleComunidadIntegrantes/>}></Route>*/}
                           </Route>
+                      </Route>
+                      <Route path="pasarela-pagos/">
+                        <Route index element={<PasarelaInicialPage />} />
+                        <Route path="pago" element={<PasarelaPagoPage />} />
+                        <Route path="exito" element={<PasarelaExito />} />
                       </Route>
                     </Route>
                   </Route>

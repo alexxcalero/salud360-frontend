@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router";
-import axios from "axios";
 
 import useRol from "@/hooks/useRol";
 import RolForm from "@/components/admin/roles/RolForm";
+import { baseAPI } from "@/services/baseAPI";
 
 function EditarRol() {
   const { id } = useParams();
@@ -12,7 +12,7 @@ function EditarRol() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get(`http://localhost:8080/api/roles/${id}`, {
+    baseAPI.get(`/roles/${id}`, {
       auth: { username: "admin", password: "admin123" }
     })
       .then(res => {
@@ -30,7 +30,7 @@ function EditarRol() {
 
   const handleEditarRol = async () => {
     try {
-      await axios.patch(`http://localhost:8080/api/roles/${id}`, { nombre }, {
+      await baseAPI.patch(`/roles/${id}`, { nombre }, {
         auth: { username: "admin", password: "admin123" }
       });
 

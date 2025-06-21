@@ -1,8 +1,8 @@
 import  { useEffect, useState } from "react";
-import axios from "axios";
 import { useParams } from "react-router";
 import UsuariosForms from "@/components/admin/usuarios/UsuariosForms";
 import useUsuarioForm from "@/hooks/useUsuarioForm";
+import { baseAPI } from "@/services/baseAPI";
 
 
 function DetalleUsuario(){
@@ -32,21 +32,21 @@ function DetalleUsuario(){
     const {id} = useParams();
 
     const {
-        nombres, setNombres,
-        apellidos, setApellidos,
-        tipoDoc, setTipoDoc,
-        DNI, setDNI,
-        telefono, setTelefono,
-        direccion, setDireccion,
-        correo, setCorreo,
-        genero, setGenero,
-        fechaNacimiento, setFechaNacimiento,
-        contrasenha, setContrasenha,
+        nombres,// setNombres,
+        apellidos, //setApellidos,
+        tipoDoc, //setTipoDoc,
+        DNI, //setDNI,
+        telefono,// setTelefono,
+        direccion, //setDireccion,
+        correo,// setCorreo,
+        genero, //setGenero,
+        fechaNacimiento, //setFechaNacimiento,
+        //contrasenha, setContrasenha,
         setUsuarioAPI
     } = useUsuarioForm();
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/api/admin/clientes/${id}`, {
+        baseAPI.get(`/admin/clientes/${id}`, {
           auth: {
             username: "admin",
             password: "admin123"

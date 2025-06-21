@@ -5,7 +5,7 @@ import { Trash } from "lucide-react";
 import colors from "tailwindcss/colors";
 import ModalError from "@/components/ModalError";
 import ModalExito from "@/components/ModalExito";
-import axios from "axios";
+import { baseAPI } from "@/services/baseAPI";
 
 const CardMetodoPago = ({
   method,
@@ -27,7 +27,7 @@ const CardMetodoPago = ({
   // Función para eliminar el método de pago
   const eliminarMetodoPago = () => {
     console.log(id);  // Verifica el valor de id aquí
-    axios.delete(`http://localhost:8080/api/mediosDePago/${id}`, {
+    baseAPI.delete(`/mediosDePago/${id}`, {
         auth: { username: "admin", password: "admin123" }
     })
     .then(() => {

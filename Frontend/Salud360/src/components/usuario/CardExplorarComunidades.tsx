@@ -9,8 +9,8 @@ interface Props{
     showButton?: boolean;
     isMiComunidad?: boolean;
 }
-
-function CardExplorarComunidades({id, image, title, subtitle, showButton=true, isMiComunidad=false}: Props){
+//mb r  showButton=true
+function CardExplorarComunidades({id, image, title, subtitle, isMiComunidad=false}: Props){
 
     const navigate = useNavigate();
       const imagenFinal =
@@ -33,7 +33,7 @@ function CardExplorarComunidades({id, image, title, subtitle, showButton=true, i
 
                 <div className="flex flex-row justify-between">
                     {!isMiComunidad && <div className="inline-block w-32">
-                        <Button size="lg" className="w-full" onClick={() => navigate(`/usuario/comunidades/detalle/${id}`)}>Inscribirse</Button>
+                        <Button size="lg" className="w-full" onClick={() => navigate(`/usuario/comunidades/detalle/${id}/membresia`)}>Inscribirse</Button>
                     </div>}
 
                     <div className="inline-block w-32">

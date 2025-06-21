@@ -3,7 +3,7 @@ import TableHeader from "@/components/admin/TableHeader";
 import ButtonIcon from "@/components/ButtonIcon";
 import InputIcon from "@/components/InputIcon";
 import UnderConstruction from "@/pages/UnderConstruction";
-import axios from "axios";
+import { baseAPI } from "@/services/baseAPI";
 import { FileText, Filter, Info, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
@@ -12,8 +12,8 @@ function AuditoriasPage(){
 
   const [selectAll, setSelectAll] = useState(false);
   const [auditorias, setAuditorias] = useState([]);
-  const [auditoriaSeleccionada, setAuditoriaSeleccionada] = useState<any>();
-  const [showModalDetalle, setShowModalDetalle] = useState(false);
+  const [_auditoriaSeleccionada, setAuditoriaSeleccionada] = useState<any>();
+  const [_showModalDetalle, setShowModalDetalle] = useState(false);
   const [search, setSearch] = useState("");
 
   const [paginaActual, setPaginaActual] = useState(1);
@@ -25,7 +25,7 @@ function AuditoriasPage(){
 
   
   const fetchAuditorias = () => {
-    axios.get("http://localhost:8080/api/auditorias", {
+    baseAPI.get("/auditorias", {
       auth: {
         username: "admin",
         password: "admin123"

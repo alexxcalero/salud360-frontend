@@ -1,9 +1,9 @@
-import axios from "axios";
 import UsuariosForms from "@/components/admin/usuarios/UsuariosForms";
 import useUsuarioForm from "@/hooks/useUsuarioForm";
 import ModalValidacion from "@/components/ModalValidacion";
-import  { useState, useEffect } from "react";
+import  { useState } from "react";
 import { useNavigate } from "react-router";
+import { baseAPI } from "@/services/baseAPI";
 
 function CrearUsuario(){
 
@@ -12,6 +12,9 @@ function CrearUsuario(){
     const [showModalValidacion, setShowModalValidacion] = useState(false);
     const [mensajeValidacion, setMensajeValidacion] = useState("");
 
+     //Para la imagen
+    const [imagenFile, setImagenFile] = useState<File | null>(null);
+    
     const {
         nombres, setNombres,
         apellidos, setApellidos,
@@ -68,7 +71,7 @@ function CrearUsuario(){
       return false;
     }
 
-    if (!tipoDoc || tipoDoc === 0) {
+    if (!tipoDoc || tipoDoc.trim() === "") {
       setMensajeValidacion("Debe seleccionar un tipo de documento.");
       setShowModalValidacion(true);
       return false;
@@ -99,6 +102,31 @@ function CrearUsuario(){
             setShowModalValidacion(true);
             return;
         }
+
+        let nombreArchivo = null;
+
+      if (imagenFile) {
+        const formData = new FormData();
+        formData.append("archivo", imagenFile);
+
+        try {
+          const res = await axios.post("http://localhost:8080/api/archivo", formData, {
+            auth: {
+              username: "admin",
+              password: "admin123"
+            }
+          });
+          nombreArchivo = res.data.nombreArchivo;
+        } catch (error) {
+          console.error("Error al subir imagen:", error);
+          alert("No se pudo subir la imagen.");
+          return;
+        }
+      }
+
+
+
+
         try{
             const numeroDocumento = DNI;
             const sexo = genero;
@@ -108,7 +136,7 @@ function CrearUsuario(){
             console.log("Nombres:", nombres, " Apellidos:", apellidos, " numeroDocumento:", numeroDocumento, " Telefono:", telefono,
                  " correo:", correo, " sexo:", sexo, " contraseña:", contrasenha, " fechaNacimiento:", fechaNacimiento);
 
-            const response = await axios.post("http://localhost:8080/api/admin/clientes", 
+            const response = await baseAPI.post("/admin/clientes", 
                 {
                     nombres,
                     apellidos,
@@ -119,6 +147,7 @@ function CrearUsuario(){
                     telefono,
                     fechaNacimiento,
                     direccion,
+                    fotoPerfil: nombreArchivo ?? null,
                     tipoDocumento: {
                         idTipoDocumento: tipoDoc
                     }
@@ -180,6 +209,7 @@ function CrearUsuario(){
                 onSubmit={handleCrearUsuario}
                 buttonText="Crear Usuario"
                 readOnly={false}
+                onImagenSeleccionada={(file) => setImagenFile(file)}
             />
             {showModalValidacion && (
                 <div className="fixed inset-0 bg-black/60 z-40">

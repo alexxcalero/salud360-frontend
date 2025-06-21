@@ -5,8 +5,8 @@ import { AuthContext } from "@/hooks/AuthContext";
 import { useContext } from "react";
 
 function Hero(){
-
-    const {usuario, logout, loading} = useContext(AuthContext)
+    //rb r logout,
+    const {usuario,   loading} = useContext(AuthContext)
       
     if (loading) return null;
 

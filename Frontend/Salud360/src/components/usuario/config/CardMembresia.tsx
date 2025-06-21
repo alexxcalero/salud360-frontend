@@ -7,12 +7,20 @@ const CardMembresia = ({
   fechaRenovacion,
   state,
   selected = false,
+  onDetalles,
+  onCancelar,
+  onSuspender,
+  onReactivar
 }: {
   comunidad: string;
   precio: number;
   fechaRenovacion: string;
-  state: "Activa" | "Suspendida" | "Cancelada";
+  state: "Activado" | "Suspendido" | "Cancelado";
   selected?: boolean;
+  onDetalles: () => void;
+  onCancelar: () => void;
+  onSuspender: () => void;
+  onReactivar: () => void;
 }) => {
 
 
@@ -42,17 +50,17 @@ const CardMembresia = ({
             })}
           </p>
           <div className="inline-block">
-            {state === "Activa" && (
+            {state === "Activado" && (
               <p className="bg-green-500 text-lg font-bold text-white px-2 py-2 rounded-sm use-label-large">
                 Activa
               </p>
             )}
-            {state === "Suspendida" && (
+            {state === "Suspendido" && (
               <p className="bg-yellow-500 text-lg font-bold text-white px-2 py-2 rounded-sm use-label-large">
                 Suspendida
               </p>
             )}
-            {state === "Cancelada" && (
+            {state === "Cancelado" && (
               <p className="bg-red-500 text-lg font-bold text-white px-2 py-2 rounded-sm use-label-large">
                 Cancelada
               </p>
@@ -75,37 +83,36 @@ const CardMembresia = ({
       </div>
 
       <div className="flex flex-row gap-4">
-        {state === "Activa" && (
-          <>
-            <Button size="lg" className="mr-2 rounded-sm">
+        {state !== "Cancelado" && (
+            <Button size="lg" className="mr-2 rounded-sm" onClick={onDetalles}>
               <Info />
               Detalles
             </Button>
-            <Button variant="danger" size="lg" className="mr-2 rounded-sm">
+        )}
+
+        {state === "Activado" && (
+          <>
+            
+            <Button variant="danger" size="lg" className="mr-2 rounded-sm" onClick={onSuspender}>
               <CircleMinus />
               Suspender
             </Button>
-            <Button variant="danger" size="lg" className="mr-2 rounded-sm">
-              <Ban />
-              Cancelar
-            </Button>
           </>
         )}
-        {state === "Suspendida" && (
+        {state === "Suspendido" && (
           <>
-            <Button size="lg" className="mr-2 rounded-sm">
-              <Info />
-              Detalles
-            </Button>
-            <Button size="lg" className="mr-2 rounded-sm">
+            <Button size="lg" className="mr-2 rounded-sm" onClick={onReactivar}>
               <Plus />
               Reactivar
             </Button>
-            <Button variant="danger" size="lg" className="mr-2 rounded-sm">
+          </>
+        )}
+
+        {state !== "Cancelado" && (
+            <Button variant="danger" size="lg" className="mr-2 rounded-sm" onClick={onCancelar}>
               <Ban />
               Cancelar
             </Button>
-          </>
         )}
       </div>
     </div>

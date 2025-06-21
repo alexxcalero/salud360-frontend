@@ -5,6 +5,7 @@ interface Props {
   icon: ReactNode
   htmlFor: string
   label: string
+  //rb numeber -> string
   value: number
   required?: boolean
   onChange: React.ChangeEventHandler<HTMLSelectElement>

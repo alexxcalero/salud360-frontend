@@ -5,25 +5,35 @@ import InputIcon from "@/components/InputIcon";
 import ModalError from "@/components/ModalError";
 import ModalExito from "@/components/ModalExito";
 import UnderConstruction from "@/pages/UnderConstruction";
-import axios from "axios";
+import { baseAPI } from "@/services/baseAPI";
 import { Filter, FolderPlus, Info, Pencil, RotateCcw, Search, Trash2, UserPlus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
+interface Local {
+  idLocal: number;
+  nombre: string;
+  descripcion: string;
+  tipoServicio: string;
+  telefono: string;
+  direccion: string;
+  activo: boolean;
+}
+
 function LocalesPage() {
     const [selectAll, setSelectAll] = useState(false);
-    const [locales, setLocales] = useState([]);
+    const [locales, setLocales] = useState<Local[]>([]);
     const [localSeleccionado, setLocalSeleccionado] = useState<any>();
     const [showModalExito, setShowModalExito] = useState(false);
     const [showModalError, setShowModalError] = useState(false);
-    const [search, setSearch] = useState("");
+    //const [search, setSearch] = useState("");
     const [paginaActual, setPaginaActual] = useState(1);
 
     //Para la funcionalidad de búsqueda:
     const [busqueda, setBusqueda] = useState("");
 
     const fetchLocales = () => {
-        axios.get("http://localhost:8080/api/locales/admin", {
+        baseAPI.get("/locales/admin", {
             auth: {
                 username: "admin",
                 password: "admin123"
@@ -49,7 +59,7 @@ function LocalesPage() {
 
     const handleEliminarLocal = (): void => {
         //console.log("El id del local a eliminar es:", localSeleccionado.idLocal)
-        axios.delete(`http://localhost:8080/api/locales/${localSeleccionado.idLocal}`)
+        baseAPI.delete(`/locales/${localSeleccionado.idLocal}`)
             .then(() => {
                 setShowModalExito(true);
                 setShowModalError(false)
@@ -59,7 +69,7 @@ function LocalesPage() {
 
     const handleReactivarLocal = (): void => {
         console.log("El id del local a reactivar es:", localSeleccionado.idLocal)
-        axios.put(`http://localhost:8080/api/locales/${localSeleccionado.idLocal}/reactivar`)
+        baseAPI.put(`/locales/${localSeleccionado.idLocal}/reactivar`)
             .then(() => {
                 setShowModalExito(true);
                 setShowModalError(false)

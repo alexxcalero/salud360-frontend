@@ -1,8 +1,8 @@
 // src/services/authService.ts
-import axios from "axios";
+import { baseAPI } from "./baseAPI";
 
 export const authGoogleService = async (correo: string) => {
-  const response = await axios.post("http://localhost:8080/api/usuarios/login-google", {
+  const response = await baseAPI.post("/usuarios/login-google", {
     correo,
   });
 

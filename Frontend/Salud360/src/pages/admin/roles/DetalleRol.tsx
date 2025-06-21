@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import axios from "axios";
 
 import useRol from "@/hooks/useRol";
 import RolForm from "@/components/admin/roles/RolForm";
+import { baseAPI } from "@/services/baseAPI";
 
 function DetalleRol() {
   const { id } = useParams();
@@ -16,7 +16,7 @@ function DetalleRol() {
   } = useRol();
 
   useEffect(() => {
-    axios.get(`http://localhost:8080/api/roles/${id}`, {
+    baseAPI.get(`/roles/${id}`, {
       auth: { username: "admin", password: "admin123" }
     })
       .then(res => {

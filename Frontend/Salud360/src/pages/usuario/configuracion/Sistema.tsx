@@ -1,24 +1,30 @@
 import { useState, useEffect, useContext } from "react";
 import Button from "@/components/Button";
-import axios from "axios";
 import { AuthContext } from "@/hooks/AuthContext";
-import { useNavigate } from "react-router";
-import ModalError from "@/components/ModalError";
-import { useUsuario } from "@/hooks/useUsuario";
+//import { useNavigate } from "react-router";
+//import ModalError from "@/components/ModalError";
+//import { useUsuario } from "@/hooks/useUsuario";
 import useUsuarioForm from "@/hooks/useUsuarioForm";
 import ModalValidacion from "@/components/ModalValidacion";
 import MethodCard from "@/components/usuario/config/CardMetodoPago";
 import ModalExito from "@/components/ModalExito";
+import { baseAPI } from "@/services/baseAPI";
+import { MetodoPago } from "@/services/metodoPagoService";
 
 const ConfigSistema = () => {
+
+  
 
   const [showModalExito, setShowModalExito] = useState(false);
 
   const { usuario, loading } = useContext(AuthContext);
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
+
+  
+
 
   const fetchMetodoPago = () => {
-    axios.get(`http://localhost:8080/api/mediosDePago/usuario/${id}`, {
+    baseAPI.get(`/mediosDePago/usuario/${id}`, {
       auth: { username: "admin", password: "admin123" }
     })
     .then(res => {
@@ -35,15 +41,15 @@ const ConfigSistema = () => {
   const id = usuario.idCliente;
 
   const {
-    nombres, setNombres,
-    apellidos, setApellidos,
-    tipoDoc, setTipoDoc,
-    DNI, setDNI,
-    telefono, setTelefono,
-    direccion, setDireccion,
-    correo, setCorreo,
-    genero, setGenero,
-    fechaNacimiento, setFechaNacimiento,
+    nombres, //setNombres,
+    apellidos, //setApellidos,
+    tipoDoc, //setTipoDoc,
+    DNI, //setDNI,
+    telefono, //setTelefono,
+    direccion, //setDireccion,
+    correo, //setCorreo,
+    genero, //setGenero,
+    fechaNacimiento, //setFechaNacimiento,
     notiPorCorreo, setNotiPorCorreo,
     notiPorSMS, setNotiPorSMS,
     notiPorWhatsApp, setNotiPorWhatsApp,
@@ -51,7 +57,7 @@ const ConfigSistema = () => {
   } = useUsuarioForm();
 
   const fetchUsuario = () => {
-    axios.get(`http://localhost:8080/api/admin/clientes/${id}`, {
+    baseAPI.get(`/admin/clientes/${id}`, {
       auth: { username: "admin", password: "admin123" }
     })
       .then(res => setUsuarioAPI(res.data))
@@ -61,13 +67,14 @@ const ConfigSistema = () => {
   useEffect(() => {
     // Obtener los métodos de pago del cliente
     fetchUsuario()
-    axios.get(`http://localhost:8080/api/mediosDePago/usuario/${id}`, {
+    baseAPI.get(`/mediosDePago/usuario/${id}`, {
       auth: { username: "admin", password: "admin123" }
     })
       .then(res => {
         setMetodosPago(res.data || []); // Asegúrate de que metodosPago sea un array vacío si no hay datos
       })
       .catch(err => {
+        console.error("Error cargando los métodos de pago", err); // 👈 úsalo
         setMetodosPago([]); // En caso de error, aseguramos que sea un array vacío
       });
 
@@ -75,7 +82,8 @@ const ConfigSistema = () => {
   }, [id]);
 
   // Estados para el modal y los datos de la tarjeta
-  const [metodosPago, setMetodosPago] = useState([]);
+  const [metodosPago, setMetodosPago] = useState<MetodoPago[]>([]);
+
   const [showModal, setShowModal] = useState(false);
   const [newCard, setNewCard] = useState({
     method: "mastercard", // Default method
@@ -155,7 +163,7 @@ const ConfigSistema = () => {
 
 
     try {
-      const response = await axios.put(`http://localhost:8080/api/admin/clientes/${id}`,
+      const response = await baseAPI.put(`/admin/clientes/${id}`,
         {
           nombres,
           apellidos,
@@ -183,6 +191,7 @@ const ConfigSistema = () => {
         }
       );
 
+      console.log("Respuesta del PUT:", response.data);
       setModalExitoTipo("notificaciones");  // Establece el tipo de modal
       setModalExitoTexto("¡Notificaciones actualizadas correctamente!");
       setShowModalExito(true);
@@ -219,7 +228,7 @@ const ConfigSistema = () => {
         }
       };
 
-      await axios.post("http://localhost:8080/api/mediosDePago", data, {
+      await baseAPI.post("/mediosDePago", data, {
         auth: { username: "admin", password: "admin123" },
         headers: { "Content-Type": "application/json" },
       });

@@ -1,9 +1,9 @@
 import ServiciosForm from "@/components/admin/servicios/ServiciosForm";
 import useServicioForms from "@/hooks/useServicioForms";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import ModalValidacion from "@/components/ModalValidacion";
 import { useNavigate, useParams } from "react-router";
+import { baseAPI } from "@/services/baseAPI";
 
 function EditarServicio(){
 
@@ -24,12 +24,12 @@ function EditarServicio(){
         nombre, setNombre,
         descripcion, setDescripcion,
         tipo, setTipo,
-        locales, setLocales,
+        locales, //setLocales,
         setServicioAPI
     } = useServicioForms();
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/api/servicios/${id}`, {
+        baseAPI.get(`/servicios/${id}`, {
           auth: {
             username: "admin",
             password: "admin123"
@@ -56,8 +56,8 @@ function EditarServicio(){
 
     //VALIDACIONES DE CAMPOS 
     const validarCampos = (): boolean => {
-    const soloLetras = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
-    const soloNumeros = /^[0-9]+$/;
+    //const soloLetras = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
+    //const soloNumeros = /^[0-9]+$/;
 
     if (!nombre || nombre.trim() === "") {
       setMensajeValidacion("El nombre del servicio no debe estar vacíos.");
@@ -96,7 +96,7 @@ function EditarServicio(){
         formData.append("archivo", imagenFile);
 
         try {
-          const res = await axios.post("http://localhost:8080/api/archivo", formData, {
+          const res = await baseAPI.post("/archivo", formData, {
             auth: { username: "admin", password: "admin123" }
           });
           nombreArchivo = res.data.nombreArchivo;
@@ -109,7 +109,7 @@ function EditarServicio(){
 
         console.log("El contenido de los locales a enviar es:", locales)
         try{
-            const response = await axios.put(`http://localhost:8080/api/servicios/${id}`, 
+            const response = await baseAPI.put(`/servicios/${id}`, 
                 {
                     nombre,
                     descripcion,

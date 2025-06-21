@@ -5,6 +5,7 @@ import {
   DialogClose,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useFetchHandler } from "@/hooks/useFetchHandler";
 import { DialogDescription } from "@radix-ui/react-dialog";
 import { TriangleAlert } from "lucide-react";
 
@@ -12,7 +13,7 @@ interface Props {
   title?: string;
   description?: string;
   buttonLabel?: string;
-  onConfirm?: () => Promise<boolean>;
+  onConfirm?: () => Promise<any>;
   onCancel?: () => void;
   open: boolean;
   setOpen: (_: boolean) => void;
@@ -27,6 +28,7 @@ function AlertModal({
   open,
   setOpen,
 }: Props) {
+  const { fetch } = useFetchHandler();
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent>
@@ -58,8 +60,9 @@ function AlertModal({
             </DialogClose>
             <Button
               variant="danger"
-              onClick={() => {
-                onConfirm?.().then((r) => setOpen(r));
+              onClick={async () => {
+                await fetch(async () => onConfirm?.());
+                setOpen(false);
               }}
             >
               {buttonLabel}

@@ -13,7 +13,7 @@ import { useToasts } from "@/hooks/ToastContext";
 import { medicoType } from "@/schemas/medico";
 import { extendedServicioType } from "@/schemas/servicio";
 import { DateTime } from "luxon";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import Button from "@/components/Button";
 import { getServiciosAPI } from "@/services/servicio.service";
 import { postCitaMedicaAPI } from "@/services/citasMedicasAdmin.service";
@@ -36,9 +36,12 @@ const RegistrarCitaModalForm = ({
   const [servicios, setServicios] = useState<extendedServicioType[]>([]);
   const [servicioInput, setServicioInput] = useState("");
 
-  const [horaInicio, setHoraInicio] = useState(date?.toFormat("T") ?? "");
-  const [horaFin, setHoraFin] = useState(
-    date?.plus({ hour: 1, minute: -1 }).toFormat("T") ?? ""
+  const [horaInicio, setHoraInicio] = useState(date?.toFormat("T") ?? "00:00");
+  const horaFin = useMemo(
+    () =>
+      DateTime.fromFormat(horaInicio, "T").plus({ hour: 1 }).toFormat("T") ??
+      "00:00",
+    [horaInicio]
   );
 
   const [dateInput, setDateInput] = useState<DateTime>(date ?? DateTime.now());
@@ -56,6 +59,13 @@ const RegistrarCitaModalForm = ({
 
   const submitHanlder = async (e: FormEvent) => {
     e.preventDefault();
+
+    if (servicioInput === "") {
+      createToast("error", {
+        title: "Seleccione un servicio",
+      });
+      return;
+    }
 
     if (
       dateInput &&
@@ -123,6 +133,8 @@ const RegistrarCitaModalForm = ({
       ),
     };
 
+    console.log("Webada");
+    console.log(uploadData);
     fetch(async () => {
       await postCitaMedicaAPI(uploadData);
       setOpen(false);
@@ -135,7 +147,7 @@ const RegistrarCitaModalForm = ({
     <>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
-          <form action="" onSubmit={submitHanlder}>
+          <form onSubmit={submitHanlder}>
             <DialogTitle>Registrar cita médica</DialogTitle>
             <DialogDescription>Llena el formulario </DialogDescription>
             <div className="my-4 flex flex-col gap-4">
@@ -145,7 +157,7 @@ const RegistrarCitaModalForm = ({
               </p>
               <SelectLabel
                 htmlFor="servicio"
-                label="Seleccione servicio *"
+                label="Seleccione servicio"
                 placeholder="Seleccione servicio"
                 value={servicioInput}
                 onChange={setServicioInput}
@@ -153,6 +165,7 @@ const RegistrarCitaModalForm = ({
                   value: s.idServicio?.toString() ?? "",
                   content: s.nombre ?? "",
                 }))}
+                required={true}
               />
               <CalendarInput
                 value={dateInput}
@@ -175,10 +188,10 @@ const RegistrarCitaModalForm = ({
                 />
                 <Input
                   name="hora-fin"
-                  required={true}
                   placeholder="Hora fin"
                   value={horaFin}
-                  setValue={setHoraFin}
+                  setValue={() => {}}
+                  disabled={true}
                   label="Hora fin"
                   type="time"
                 />

@@ -76,7 +76,9 @@ export default function ClasesPage() {
         <div className="w-full flex flex-col gap-4 px-8 py-8 text-left">
           <div>
             <h1 className="text-4xl font-bold mb-2">Clases</h1>
-            <h2 className="text-lg text-gray-700 mb-2">Seleccione un local para crear y editar clases</h2>
+            <h2 className="text-lg text-gray-700 mb-2">
+              Seleccione un local para crear y editar clases
+            </h2>
           </div>
           <div className="self-stretch">
             <SelectLabel
@@ -121,14 +123,9 @@ export default function ClasesPage() {
                     : undefined
                 }
                 cards={{
-                  day: (d, g) =>
-                    g ? <AdminClaseCard clase={d} update={g} /> : undefined,
-                  week: (d, g) =>
-                    g ? <AdminClaseCard clase={d} update={g} /> : undefined,
-                  month: (d, g) =>
-                    g ? (
-                      <AdminClaseCard clase={d} update={g} collapsed={true} />
-                    ) : undefined,
+                  day: (d) => <AdminClaseCard clase={d} />,
+                  week: (d) => <AdminClaseCard clase={d} />,
+                  month: (d) => <AdminClaseCard clase={d} collapsed={true} />,
                 }}
                 filterContent={
                   <div>

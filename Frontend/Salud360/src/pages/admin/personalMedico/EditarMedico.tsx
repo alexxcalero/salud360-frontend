@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useParams } from "react-router";
 import usePersonalMedicoForm from "@/hooks/usePersonalMedicoForm";
 import PersonalMedicoForms from "@/components/admin/personalMedico/PersonalMedicoForms";
 import { useNavigate } from "react-router";
 import ModalValidacion from "@/components/ModalValidacion";
+import { baseAPI } from "@/services/baseAPI";
 
 
 function EditarMedico() {
@@ -28,26 +28,26 @@ function EditarMedico() {
     setTipoDoc,
     DNI,
     setDNI,
-    telefono,
-    setTelefono,
+    //telefono,
+    //setTelefono,
     especialidad,
     setEspecialidad,
-    correo,
-    setCorreo,
+    //correo,
+    //setCorreo,
     genero,
     setGenero,
-    fechaNacimiento,
-    setFechaNacimiento,
-    contrasenha,
-    setContrasenha,
+    //fechaNacimiento,
+    //setFechaNacimiento,
+    //contrasenha,
+    //setContrasenha,
     descripcion,
     setDescripcion,
     setMedicoAPI,
   } = usePersonalMedicoForm();
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:8080/api/admin/medicos/${id}`, {
+    baseAPI
+      .get(`/admin/medicos/${id}`, {
         auth: {
           username: "admin",
           password: "admin123",
@@ -108,8 +108,8 @@ function EditarMedico() {
       setShowModalValidacion(true);
       return false;
     }
-
-    if (!tipoDoc || tipoDoc === 0) {
+    //mod b t
+    if (!tipoDoc || tipoDoc.trim() === "") {
       setMensajeValidacion("Debe seleccionar un tipo de documento.");
       setShowModalValidacion(true);
       return false;
@@ -140,7 +140,7 @@ function EditarMedico() {
         formData.append("archivo", imagenFile);
 
         try {
-          const res = await axios.post("http://localhost:8080/api/archivo", formData, {
+          const res = await baseAPI.post("/archivo", formData, {
             auth: { username: "admin", password: "admin123" }
           });
           nombreArchivo = res.data.nombreArchivo;
@@ -156,8 +156,8 @@ function EditarMedico() {
     try {
       const sexo = genero;
 
-      const response = await axios.put(
-        `http://localhost:8080/api/admin/medicos/${id}`,
+      const response = await baseAPI.put(
+        `/admin/medicos/${id}`,
         {
           nombres,
           apellidos,

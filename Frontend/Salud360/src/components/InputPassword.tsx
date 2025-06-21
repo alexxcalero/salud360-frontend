@@ -1,7 +1,8 @@
 import { useState } from "react";
 import Label from "./Label";
 import Input from "./Input";
-import { Lock, Eye, EyeOff, EyeClosed } from "lucide-react";
+//rm b EyeOff,
+import { Lock, Eye,   EyeClosed } from "lucide-react";
 
 interface Props {
   htmlFor: string;

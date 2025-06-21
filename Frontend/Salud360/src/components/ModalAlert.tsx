@@ -1,5 +1,5 @@
-import React from "react";
-import Button from "./Button";
+//import React from "react";
+//import Button from "./Button";
 
 interface Props{
   modulo?: string;
@@ -7,8 +7,8 @@ interface Props{
   onConfirm: () => void;
   onCancel: () => void;
 }
-
-function ModalError({modulo="", detalle="", onConfirm, onCancel}: Props) {
+//rb onConfirm,
+function ModalError({modulo="", detalle="",  onCancel}: Props) {
   return (
       <div className="bg-white p-8 rounded-2xl shadow-md max-w-md w-full text-center">
         {/* Icono de advertencia */}

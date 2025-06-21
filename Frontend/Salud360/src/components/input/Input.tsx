@@ -3,6 +3,7 @@ import { HTMLInputTypeAttribute, useId, useState } from "react";
 import Label from "../Label";
 
 export interface InputProps {
+  //idName: string;
   name: string;
   defaultValue?: string;
   label?: string;
@@ -13,6 +14,7 @@ export interface InputProps {
   className?: string;
   value?: string;
   setValue?: (_: string) => void;
+  maxLength?: number;
 }
 
 interface BaseProps extends InputProps {
@@ -35,6 +37,7 @@ const Input = ({
   required,
   value: argValue,
   setValue: argSetValue,
+  maxLength,
 }: BaseProps) => {
   const [value, setValue] =
     argValue !== undefined && argSetValue !== undefined
@@ -46,7 +49,9 @@ const Input = ({
   return (
     <div>
       {label && (
-        <Label htmlFor={name} required={required}>{label}</Label>
+        <Label htmlFor={name} required={required}>
+          {label}
+        </Label>
       )}
       {/* Este es el campo del input */}
       <label
@@ -69,6 +74,7 @@ const Input = ({
           value={value}
           required={required}
           disabled={disabled}
+          maxLength={maxLength}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             setFirstUpdate(true);
             setValue(e.currentTarget.value);
