@@ -1,7 +1,9 @@
+import { IAfiliacion } from "./afiliacion";
+
 export interface IPago {
   idPago?: number;
   monto?: number;
   fechaPago?: string;
-  idAfiliacion?: number;
+  afiliacion?: IAfiliacion;
   medioDePago: IMedioDePago;
 }
