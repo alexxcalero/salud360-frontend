@@ -2,7 +2,7 @@ import InputLabel from "@/components/InputLabel";
 import Button from "@/components/Button";
 import Checkbox from "@/components/Checkbox";
 import { useNavigate } from "react-router";
-import { useState } from "react";
+import { useRef, useState } from "react";
 //import ModalError from "@/components/ModalError";
 import ModalValidacion from "@/components/ModalValidacion";
 import DropImage from "@/components/DropImage";
