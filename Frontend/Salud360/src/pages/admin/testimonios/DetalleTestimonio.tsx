@@ -55,6 +55,14 @@ function DetalleTestimonio(){
         );
     }
 
+    const formatFechaHora = (isoString: string) => {
+        const fecha = new Date(isoString);
+        return new Intl.DateTimeFormat("es-PE", {
+        dateStyle: "short",
+        timeStyle: "short",
+        }).format(fecha);
+    };
+
     //const {id} = useParams();
 
     //A diferencia de todos los 'DetalleModulo' aca no hago un componente forms reutilizable ya que
@@ -72,7 +80,7 @@ function DetalleTestimonio(){
                             </div>
                             <div className="col-span-1 flex flex-col gap-6">
                                 <InputLabel type="email" placeholder="Ingrese los apellidos" htmlFor="email" label="Apellidos" value={autor.apellidos} disabled={true} />
-                                <InputIconLabel icon={<Phone className="w-5 h-5" />} placeholder="Teléfono" type="text" htmlFor="tel" label="Telefono" value={autor.correo} disabled={true} />
+                                <InputIconLabel icon={<Phone className="w-5 h-5" />} placeholder="Teléfono" type="text" htmlFor="tel" label="Telefono" value={autor.telefono} disabled={true} />
                             </div>
                         </div>
                     </div>
@@ -95,7 +103,7 @@ function DetalleTestimonio(){
                                             <small>({testimonio.calificacion} estrellas)</small>
                                         </div>
 
-                                        <p className="font-bold">Fecha de Creación: <span className="font-normal">{testimonio.fechaCreacion}</span></p>
+                                        <p className="font-bold">Fecha de Creación: <span className="font-normal">{formatFechaHora(testimonio.fechaCreacion)}</span></p>
                                     </div>
                                     <div className="col-span-1 flex flex-col gap-6">
                                         <div className="flex flex-row gap-2 items-center">
