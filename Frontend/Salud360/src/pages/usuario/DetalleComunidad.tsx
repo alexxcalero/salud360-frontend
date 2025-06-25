@@ -22,12 +22,7 @@ import type { NuevoTestimonio } from "@/services/testimonioService";
 
 
 function DetalleComunidad(){
-
-
-
-
-
-
+  
     const {comunidad} = useComunidad();
     const { usuario } = useContext(AuthContext);
   

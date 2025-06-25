@@ -5,17 +5,21 @@ import { IMembresia } from "@/models/membresia";
 import { setPendingMembership } from "@/lib/pendingMembership";
 import React, { useContext } from "react";
 import { AuthContext } from "@/hooks/AuthContext";
+import { Ban, CircleMinus } from "lucide-react";
 
 interface Props{
     comunidad: IComunidad;
     membresia: IMembresia;
     servicios: any;
     readOnly?: boolean;
+    flujoUsuario?: boolean;
     onClick?: () => void;
+    onCancelar?: () => void;
+    onSuspender?: () => void;
 }
 
 function 
-CardMembresia({membresia, comunidad, servicios, readOnly = false, onClick = () =>{}}: Props){
+CardMembresia({membresia, comunidad, servicios, readOnly = false, flujoUsuario = false, onClick = () =>{}, onCancelar = () =>{}, onSuspender = () =>{},}: Props){
   const navigate = useNavigate();
   const {usuario} = useContext(AuthContext)
   return (
@@ -62,12 +66,28 @@ CardMembresia({membresia, comunidad, servicios, readOnly = false, onClick = () =
               >
                 <p className="font-bold">{servicio.nombre}</p>
               </div>
-
-              <div className="mt-4">{readOnly && <Button size="lg" variant="outline" onClick={onClick}>Volver</Button>}</div>
             </React.Fragment>
           ))}
         </div>
       </div>
+
+      
+      <div className="mt-4">{ (readOnly && !flujoUsuario) && <Button size="lg" variant="outline" onClick={onClick}>Volver</Button>}</div>
+
+      {flujoUsuario && 
+        <div className="flex flex-row justify-around">
+          <Button size="lg" variant="outlineDanger" onClick={onSuspender}>
+            <CircleMinus />
+            Suspender
+          </Button>
+          <Button size="lg" variant="danger" onClick={onCancelar}>
+            <Ban />
+            Cancelar
+          </Button>
+        </div>
+      }
+          
+
     </div>
   );
 }

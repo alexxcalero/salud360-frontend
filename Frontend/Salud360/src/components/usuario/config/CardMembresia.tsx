@@ -93,7 +93,7 @@ const CardMembresia = ({
         {state === "Activado" && (
           <>
             
-            <Button variant="danger" size="lg" className="mr-2 rounded-sm" onClick={onSuspender}>
+            <Button variant="outlineDanger" size="lg" className="mr-2 rounded-sm" onClick={onSuspender}>
               <CircleMinus />
               Suspender
             </Button>

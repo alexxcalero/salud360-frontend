@@ -42,7 +42,7 @@ const Membresias = () => {
   const fetchComunidad = async () => {
     try {
       console.log("El id del usuario es:", id);
-      const res = await baseAPI.get(`/afiliaciones/${id}`, {
+      const res = await baseAPI.get(`/cliente/${id}/afiliaciones-cliente`, {
         auth: {
           username: "admin",
           password: "admin123",

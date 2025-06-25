@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 
 interface Props{
     children: React.ReactNode;
-    variant?: "primary" | "outline" | "danger" | "white";
+    variant?: "primary" | "outline" | "danger" | "outlineDanger" | "white";
     size?: "sm" | "md" | "lg";
     className?: string;
     type?: "button" | "submit" | "reset";
@@ -18,6 +18,7 @@ function Button({children, size="sm", variant = "primary", className="", type="b
         outline: "bg-black text-white hover:bg-gray-700",
         //outline: "border border-[#2A86FF] text-[#2A86FF] hover:bg-blue-50",
         danger: "bg-red-500 text-white hover:bg-red-700",
+        outlineDanger: "text-red-500 border border-red-500 bg-white hover:bg-red-50",
         white: "bg-white text-[#2A86FF] border border-[#2A86FF] hover:bg-gray-100"
     }
     const sizes ={

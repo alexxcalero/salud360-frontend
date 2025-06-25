@@ -3,6 +3,7 @@ import Button from "../Button";
 import { useState } from "react"
 import AlertModal from "@/components/modals/alertModal"
 import { baseAPI } from "@/services/baseAPI";
+import { Ban, CircleMinus, Eye, RotateCcw } from "lucide-react";
 
 export interface MembresiaResumenDTO {
   idMembresia: number;
@@ -63,22 +64,34 @@ function CardMisComunidades({id, image, title, subtitle, afiliacion, showButton=
                     {activo ? 
                     <>
                         <div className="inline-block w-32">
-                            <Button size="lg" className="w-full" onClick={() => navigate(`/usuario/comunidades/detalle/${id}`)}>Ver</Button>
+                            <Button size="lg" className="w-full" onClick={() => navigate(`/usuario/comunidades/detalle/${id}`)}>
+                                <Eye/>
+                                Ver
+                            </Button>
                         </div>
 
                         <div className="inline-block w-32">
-                            <Button size="lg" className="w-full" variant="danger" onClick={onAbandonar}>Abandonar</Button>
+                            <Button size="lg" className="w-full" variant="outlineDanger" onClick={onSuspender}>
+                                <CircleMinus />
+                                Suspender
+                            </Button>
                         </div>
 
-                        
                         <div className="inline-block w-32">
-                            <Button size="lg" className="w-full" variant="danger" onClick={onSuspender}>Suspender</Button>
+                            <Button size="lg" className="w-full" variant="danger" onClick={onAbandonar}>
+                                <Ban />
+                                Abandonar
+                            </Button>
                         </div>
+
                     </>
                     :
                     <>
                         <div className="inline-block w-32">
-                            <Button size="lg" className="w-full" onClick={onReactivar}>Reactivar</Button>
+                            <Button size="lg" className="w-full" onClick={onReactivar}>
+                                <RotateCcw/>
+                                Reactivar
+                            </Button>
                         </div>
                     </>
                     }
