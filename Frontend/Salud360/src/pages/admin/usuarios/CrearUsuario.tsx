@@ -1,57 +1,73 @@
 import UsuariosForms from "@/components/admin/usuarios/UsuariosForms";
 import useUsuarioForm from "@/hooks/useUsuarioForm";
 import ModalValidacion from "@/components/ModalValidacion";
-import  { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router";
 import { baseAPI } from "@/services/baseAPI";
 
-function CrearUsuario(){
+function CrearUsuario() {
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
+  const [showModalValidacion, setShowModalValidacion] = useState(false);
+  const [mensajeValidacion, setMensajeValidacion] = useState("");
 
-    const [showModalValidacion, setShowModalValidacion] = useState(false);
-    const [mensajeValidacion, setMensajeValidacion] = useState("");
+  //Para la imagen
+  const [imagenFile, setImagenFile] = useState<File | null>(null);
 
-     //Para la imagen
-    const [imagenFile, setImagenFile] = useState<File | null>(null);
-    
-    const {
-        nombres, setNombres,
-        apellidos, setApellidos,
-        tipoDoc, setTipoDoc,
-        DNI, setDNI,
-        telefono, setTelefono,
-        direccion, setDireccion,
-        correo, setCorreo,
-        genero, setGenero,
-        fechaNacimiento, setFechaNacimiento,
-        contrasenha, setContrasenha
-    } = useUsuarioForm();
+  const {
+    nombres,
+    setNombres,
+    apellidos,
+    setApellidos,
+    tipoDoc,
+    setTipoDoc,
+    DNI,
+    setDNI,
+    telefono,
+    setTelefono,
+    direccion,
+    setDireccion,
+    correo,
+    setCorreo,
+    genero,
+    setGenero,
+    fechaNacimiento,
+    setFechaNacimiento,
+    contrasenha,
+    setContrasenha,
+  } = useUsuarioForm();
 
-
-    //VALIDACIONES DE CAMPOS 
-    const validarCampos = (): boolean => {
+  //VALIDACIONES DE CAMPOS
+  const validarCampos = (): boolean => {
     const soloLetras = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
     const soloNumeros = /^[0-9]+$/;
     const regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!nombres || !soloLetras.test(nombres)) {
-      setMensajeValidacion("Los nombres deben contener solo letras y no estar vacíos.");
+      setMensajeValidacion(
+        "Los nombres deben contener solo letras y no estar vacíos."
+      );
       return false;
     }
 
     if (!apellidos || !soloLetras.test(apellidos)) {
-      setMensajeValidacion("Los apellidos deben contener solo letras y no estar vacíos.");
+      setMensajeValidacion(
+        "Los apellidos deben contener solo letras y no estar vacíos."
+      );
       return false;
     }
 
     if (!DNI || !soloNumeros.test(DNI) || DNI.length !== 8) {
-      setMensajeValidacion("El DNI debe tener exactamente 8 dígitos numéricos.");
+      setMensajeValidacion(
+        "El DNI debe tener exactamente 8 dígitos numéricos."
+      );
       return false;
     }
 
     if (!telefono || !soloNumeros.test(telefono) || telefono.length !== 9) {
-      setMensajeValidacion("El teléfono debe tener exactamente 9 dígitos numéricos.");
+      setMensajeValidacion(
+        "El teléfono debe tener exactamente 9 dígitos numéricos."
+      );
       return false;
     }
 
@@ -71,7 +87,8 @@ function CrearUsuario(){
       return false;
     }
 
-    if (!tipoDoc || tipoDoc.trim() === "") {
+    console.log(tipoDoc);
+    if (!tipoDoc || tipoDoc === "") {
       setMensajeValidacion("Debe seleccionar un tipo de documento.");
       setShowModalValidacion(true);
       return false;
@@ -86,146 +103,155 @@ function CrearUsuario(){
     const fechaIngresada = new Date(fechaNacimiento);
     const hoy = new Date();
     if (isNaN(fechaIngresada.getTime()) || fechaIngresada >= hoy) {
-      setMensajeValidacion("La fecha de nacimiento debe ser válida y anterior a hoy.");
+      setMensajeValidacion(
+        "La fecha de nacimiento debe ser válida y anterior a hoy."
+      );
       return false;
     }
     return true;
-  };   
+  };
 
-
-
-
-
-    const handleCrearUsuario = async() => {
-
-        if (!validarCampos()) {
-            setShowModalValidacion(true);
-            return;
-        }
-
-        let nombreArchivo = null;
-
-      if (imagenFile) {
-        const formData = new FormData();
-        formData.append("archivo", imagenFile);
-
-        try {
-          const res = await axios.post("http://localhost:8080/api/archivo", formData, {
-            auth: {
-              username: "admin",
-              password: "admin123"
-            }
-          });
-          nombreArchivo = res.data.nombreArchivo;
-        } catch (error) {
-          console.error("Error al subir imagen:", error);
-          alert("No se pudo subir la imagen.");
-          return;
-        }
-      }
-
-
-
-
-        try{
-            const numeroDocumento = DNI;
-            const sexo = genero;
-
-            //console.log("Rol: ", rol, "Genero: ", genero, "TipoDoc:", tipoDoc)
-
-            console.log("Nombres:", nombres, " Apellidos:", apellidos, " numeroDocumento:", numeroDocumento, " Telefono:", telefono,
-                 " correo:", correo, " sexo:", sexo, " contraseña:", contrasenha, " fechaNacimiento:", fechaNacimiento);
-
-            const response = await baseAPI.post("/admin/clientes", 
-                {
-                    nombres,
-                    apellidos,
-                    numeroDocumento: DNI,
-                    correo,
-                    contrasenha,
-                    sexo,
-                    telefono,
-                    fechaNacimiento,
-                    direccion,
-                    fotoPerfil: nombreArchivo ?? null,
-                    tipoDocumento: {
-                        idTipoDocumento: tipoDoc
-                    }
-                },
-                {  
-                    auth: {
-                        username: "admin",
-                        password: "admin123"
-                    },
-                    headers: {
-                        "Content-Type": "application/json",
-                      },
-                }
-            );
-
-            console.log("Usuario creado:", response.data);
-            //alert("Usuario creado exitosamente");
-            console.log("A punto de navegar a successCrear")
-            navigate("/admin/usuarios/successCrear", {
-                state: { created: true }
-            });
-
-            //console.log("DESDE USUARIO SUCCESS, EL VALOR DE state.created ES:", state.created)
-
-        }
-        catch (err){
-            console.error("Error al crear usuario:", err);
-            alert("Hubo un error al crear el usuario");
-        }
-
-
+  const handleCrearUsuario = async () => {
+    if (!validarCampos()) {
+      setShowModalValidacion(true);
+      return;
     }
 
-    return(
-        <>
-            <UsuariosForms
-                title="Registrar Usuario"
-                subtitle="Rellene los siguientes campos para completar el registro del usuario."
-                nombres={nombres}
-                setNombres={setNombres}
-                apellidos={apellidos}
-                setApellidos={setApellidos}
-                tipoDoc={tipoDoc}
-                setTipoDoc={setTipoDoc}
-                DNI={DNI}
-                setDNI={setDNI}
-                telefono={telefono}
-                setTelefono={setTelefono}
-                correo={correo}
-                setCorreo={setCorreo}
-                direccion={direccion}
-                setDireccion={setDireccion}
-                genero={genero}
-                setGenero={setGenero}
-                fechaNacimiento={fechaNacimiento}
-                setFechaNacimiento={setFechaNacimiento}
-                contrasenha={contrasenha}
-                setContrasenha={setContrasenha}
-                onSubmit={handleCrearUsuario}
-                buttonText="Crear Usuario"
-                readOnly={false}
-                onImagenSeleccionada={(file) => setImagenFile(file)}
+    let nombreArchivo = null;
+
+    if (imagenFile) {
+      const formData = new FormData();
+      formData.append("archivo", imagenFile);
+
+      try {
+        const res = await baseAPI.post(
+          "/archivo",
+          formData,
+          {
+            auth: {
+              username: "admin",
+              password: "admin123",
+            },
+          }
+        );
+        nombreArchivo = res.data.nombreArchivo;
+      } catch (error) {
+        console.error("Error al subir imagen:", error);
+        alert("No se pudo subir la imagen.");
+        return;
+      }
+    }
+
+    try {
+      const numeroDocumento = DNI;
+      const sexo = genero;
+
+      //console.log("Rol: ", rol, "Genero: ", genero, "TipoDoc:", tipoDoc)
+
+      console.log(
+        "Nombres:",
+        nombres,
+        " Apellidos:",
+        apellidos,
+        " numeroDocumento:",
+        numeroDocumento,
+        " Telefono:",
+        telefono,
+        " correo:",
+        correo,
+        " sexo:",
+        sexo,
+        " contraseña:",
+        contrasenha,
+        " fechaNacimiento:",
+        fechaNacimiento
+      );
+
+      const response = await baseAPI.post(
+        "/admin/clientes",
+        {
+          nombres,
+          apellidos,
+          numeroDocumento: DNI,
+          correo,
+          contrasenha,
+          sexo,
+          telefono,
+          fechaNacimiento,
+          direccion,
+          fotoPerfil: nombreArchivo ?? null,
+          tipoDocumento: {
+            idTipoDocumento: tipoDoc,
+          },
+        },
+        {
+          auth: {
+            username: "admin",
+            password: "admin123",
+          },
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      console.log("Usuario creado:", response.data);
+      //alert("Usuario creado exitosamente");
+      console.log("A punto de navegar a successCrear");
+      navigate("/admin/usuarios/successCrear", {
+        state: { created: true },
+      });
+
+      //console.log("DESDE USUARIO SUCCESS, EL VALOR DE state.created ES:", state.created)
+    } catch (err) {
+      console.error("Error al crear usuario:", err);
+      alert("Hubo un error al crear el usuario");
+    }
+  };
+
+  return (
+    <>
+      <UsuariosForms
+        title="Registrar Usuario"
+        subtitle="Rellene los siguientes campos para completar el registro del usuario."
+        nombres={nombres}
+        setNombres={setNombres}
+        apellidos={apellidos}
+        setApellidos={setApellidos}
+        tipoDoc={tipoDoc}
+        setTipoDoc={setTipoDoc}
+        DNI={DNI}
+        setDNI={setDNI}
+        telefono={telefono}
+        setTelefono={setTelefono}
+        correo={correo}
+        setCorreo={setCorreo}
+        direccion={direccion}
+        setDireccion={setDireccion}
+        genero={genero}
+        setGenero={setGenero}
+        fechaNacimiento={fechaNacimiento}
+        setFechaNacimiento={setFechaNacimiento}
+        contrasenha={contrasenha}
+        setContrasenha={setContrasenha}
+        onSubmit={handleCrearUsuario}
+        buttonText="Crear Usuario"
+        readOnly={false}
+        onImagenSeleccionada={(file) => setImagenFile(file)}
+      />
+      {showModalValidacion && (
+        <div className="fixed inset-0 bg-black/60 z-40">
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <ModalValidacion
+              titulo="Error en los campos"
+              mensaje={mensajeValidacion}
+              onClose={() => setShowModalValidacion(false)}
             />
-            {showModalValidacion && (
-                <div className="fixed inset-0 bg-black/60 z-40">
-                <div className="fixed inset-0 z-50 flex items-center justify-center">
-                    <ModalValidacion
-                    titulo="Error en los campos"
-                    mensaje={mensajeValidacion}
-                    onClose={() => setShowModalValidacion(false)}
-                    />
-                </div>
-                </div>
-            )}
-            </>
-            
-    );
-    
+          </div>
+        </div>
+      )}
+    </>
+  );
 }
 
 export default CrearUsuario;
@@ -259,7 +285,6 @@ export default CrearUsuario;
             </div>
 
 */
-
 
 //Esto es lo que envuelve a lo que está arriba
 //<div className="max-w-3xl w-full mx-auto p-8 my-10"></div>

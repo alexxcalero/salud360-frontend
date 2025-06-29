@@ -31,15 +31,15 @@ export const afiliarPorPasarelaAPI = async (
     fechaAfiliacion: DateTime.now().toISO({ includeOffset: false }),
   };
   const afiliacion = await postAfiliacionDTO(afiliacionArg);
-  console.log(usuario);
 
   // Paso 2: Realizar pago
   const pagoARg: IPago = {
     medioDePago,
     monto: membresia.precio,
-    idAfiliacion: afiliacion.idAfiliacion,
+    afiliacion,
     fechaPago: DateTime.now().toISO({ includeOffset: false }),
   };
+  console.log(pagoARg);
   const pago = await postPagoAPI(pagoARg);
 
   // Paso 3: Actualizar medio de pago

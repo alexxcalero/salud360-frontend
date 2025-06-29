@@ -153,6 +153,7 @@ const HistorialPagos = () => {
                       precio={pago.monto as number}
                       fechaPago={formatFechaMasUnMes(pago.fechaPago) as string}
                       onDetalles={() => handleDetalles(pago)}
+                      pago={pago}
                     />
                   </li>
                 ))}

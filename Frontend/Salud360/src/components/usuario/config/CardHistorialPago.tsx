@@ -1,4 +1,6 @@
 import Button from "@/components/Button";
+import { IPago } from "@/models/pago";
+import { postBoletaAPI } from "@/services/reporte.service";
 import { Info, Upload } from "lucide-react";
 
 const CardHistorialPago = ({
@@ -6,13 +8,15 @@ const CardHistorialPago = ({
   nombreComunidad,
   precio,
   fechaPago,
-  onDetalles
+  onDetalles,
+  pago,
 }: {
   identificadorTransaccion: string;
   nombreComunidad: string;
   precio: number;
   fechaPago: string;
   onDetalles: () => void;
+  pago?: any;
 }) => {
   return (
     <div className="rounded-md shadow-md p-8 bg-white flex items-center justify-between">
@@ -43,7 +47,29 @@ const CardHistorialPago = ({
           <Info />
           Detalles
         </Button>
-        <Button size="lg" className="mr-2 rounded-sm">
+        <Button
+          size="lg"
+          className="mr-2 rounded-sm"
+          onClick={async () => {
+            const boleta = await postBoletaAPI(pago as IPago);
+            const base64PDF = boleta.pdf;
+            if (!base64PDF) return;
+            const byteCharacters = atob(base64PDF);
+            const byteNumbers = Array.from(byteCharacters, (char) =>
+              char.charCodeAt(0)
+            );
+            const byteArray = new Uint8Array(byteNumbers);
+            const blob = new Blob([byteArray], { type: "application/pdf" });
+
+            // Creamos un enlace para descargarlo
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "mi_archivo.pdf";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+          }}
+        >
           <Upload />
           Descargar
         </Button>
