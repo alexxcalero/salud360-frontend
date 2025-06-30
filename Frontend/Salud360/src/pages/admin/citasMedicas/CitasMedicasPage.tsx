@@ -14,9 +14,23 @@ import { DateTime } from "luxon";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import colors from "tailwindcss/colors";
 
+import { baseAPI } from "@/services/baseAPI"
+import ModalError from "@/components/ModalError";
+import ModalExito from "@/components/ModalExito";
+import ModalValidacion from "@/components/ModalValidacion";
+import ButtonIcon from "@/components/ButtonIcon";
+import { Filter, FolderPlus, Info, Pencil, RotateCcw, Search, Trash2, UserPlus } from "lucide-react";
+
+
+
 export default function RegistrarCitaMedicasPage() {
   const [medicos, setMedicos] = useState<medicoType[]>([]);
   const [medicoInput, setMedicoInput] = useState("");
+
+  const [showModalExito, setShowModalExito] = useState(false);
+  const [showModalValidacion, setShowModalValidacion] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
+  
   const medicoSeleccionado = useMemo(
     () => medicos.find(({ idMedico }) => idMedico?.toString() === medicoInput),
     [medicoInput, medicos]
@@ -73,17 +87,63 @@ export default function RegistrarCitaMedicasPage() {
     });
   }, []);
 
+
+  // PARA LA CARGA MASIVA
+        const handleCSVUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (!file) return;
+    
+        const formData = new FormData();
+        formData.append("file", file);
+    
+        try {
+            const response = await baseAPI.post("/citas-medicas/cargaMasiva", formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+            auth: {
+                username: "admin",
+                password: "admin123"
+            }
+            });
+    
+            setShowModalExito(true);
+        } catch (error) {
+            console.error("Error al cargar el archivo CSV", error);
+            setShowModalValidacion(true);
+        }
+        };
+  
+
+
+
   return (
     <>
       <title>Citas médicas</title>
       <div className="grid grid-rows-[auto_1fr] min-h-0 min-w-0 gap-2">
         <div className="w-full flex flex-col gap-4 px-8 py-8 text-left">
+          <div className="flex items-center justify-between mb-4">
           <div>
             <h1 className="text-4xl font-bold mb-2">Citas médicas</h1>
-            <h2 className="text-lg text-gray-700 mb-2">
+            <h2 className="text-lg text-gray-700">
               Seleccione un médico para crear y editar citas
             </h2>
           </div>
+
+          {/* Botón de carga masiva */}
+          <div className="flex items-center">
+            <ButtonIcon icon={<FolderPlus className="w-6 h-6" />} size="lg" variant="primary" className="ml-2">
+              <label htmlFor="csvUpload" className="cursor-pointer">Carga masiva</label>
+            </ButtonIcon>
+            <input
+              id="csvUpload"
+              type="file"
+              accept=".csv"
+              onChange={handleCSVUpload}
+              className="hidden"
+            />
+          </div>
+        </div>
           <div className="self-stretch">
             <SelectLabel
               htmlFor="medico"
@@ -101,6 +161,40 @@ export default function RegistrarCitaMedicasPage() {
           </div>
           <hr className="border mt-4" />
         </div>
+
+        {/* Modal CARGA MASIVA */}
+                {showModalExito && (
+                <>
+                    <div className="fixed inset-0 bg-black/60 z-40" />
+                    <div className="fixed inset-0 z-50 flex items-center justify-center">
+                        <ModalExito
+                            modulo="Carga masiva correcta"
+                            detalle="Se registró de manera exitosa las clases mediante el archivo CSV"
+                            onConfirm={() => {
+                                setShowModalExito(false);
+                                
+                                
+                            }}
+                        />
+                    </div>
+                </>
+            )}
+
+            {/* Modal CARGA MASIVA */}
+            {showModalValidacion && (
+                <>
+                    <div className="fixed inset-0 bg-black/60 z-40" />
+                    <div className="fixed inset-0 z-50 flex items-center justify-center">
+                        <ModalValidacion
+                            titulo="Error en la carga masiva"
+                            mensaje="No se pudieron registrar las clases mediante el archivo CSV. Verifique las relgas de negocio y la existencia de los médicos"
+                            onClose={() => setShowModalValidacion(false)}
+                        />
+                    </div>
+                </>
+            )}
+
+
 
         {medicoSeleccionado !== undefined ? (
           <div className="px-8 min-h-0 min-w-0">
