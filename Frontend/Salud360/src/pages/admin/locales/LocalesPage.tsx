@@ -267,7 +267,7 @@ function LocalesPage() {
                     <div className="fixed inset-0 z-50 flex items-center justify-center">
                         <ModalValidacion
                             titulo="Error en la carga masiva"
-                            mensaje="No se pudieron registrar los locales mediante el archivo CSV"
+                            mensaje="No se pudieron registrar los locales mediante el archivo CSV. El servicio que seleccionó no existe"
                             onClose={() => setShowModalValidacion(false)}
                         />
                     </div>
