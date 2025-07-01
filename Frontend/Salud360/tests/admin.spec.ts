@@ -23,9 +23,9 @@ test.describe("Comunidades", () => {
     await page
       .getByRole("textbox")
       .nth(1)
-      .fill("Descripcion: Somos una comunidad");
+      .fill("Descripcion Somos una comunidad");
     await page.getByRole("textbox").nth(2).click();
-    await page.getByRole("textbox").nth(2).fill("Proposito: Ganar dinero");
+    await page.getByRole("textbox").nth(2).fill("Proposito Ganar dinero");
     await page.getByRole("checkbox", { name: "Terapia Psicológica" }).check();
     await page
       .getByRole("checkbox", { name: "Consulta Médica General" })
@@ -157,3 +157,168 @@ test.describe("Locales", () => {
     await expect(page).toHaveURL(/.*admin\/locales\/successCrear/);
   });
 });
+
+test.describe("Usuarios", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto("http://localhost:5173/IniciarSesionUsuario");
+    await page.locator('input[name="correo"]').fill("fabianmr2806@hotmail.com");
+    await page.locator('input[name="contraseña"]').fill("admin123");
+    await page
+      .getByRole("button", { name: "Iniciar Sesión", exact: true })
+      .click();
+    await expect(page).toHaveTitle("Administración");
+  });
+
+  test("Crear usuario cliente", async ({ page }) => {
+    await page.getByText("Usuarios").click();
+    await page.getByRole("button", { name: "Agregar usuario" }).click();
+    await expect(page).toHaveURL(/.*\/crear/);
+    await page.getByRole("button", { name: "Crear Usuario" }).click();
+    await expect(page).toHaveURL(/.*\/crear\/usuario/);
+    await page.getByRole("textbox", { name: "Ingrese los nombres" }).click();
+    await page
+      .getByRole("textbox", { name: "Ingrese los nombres" })
+      .fill(faker.person.firstName());
+    await page
+      .getByRole("textbox", { name: "Ingrese los nombres" })
+      .press("Tab");
+    await page
+      .getByRole("textbox", { name: "Ingrese los apellidos" })
+      .fill(faker.person.lastName());
+    await page.getByRole("textbox", { name: "Mail" }).click();
+    await page
+      .getByRole("textbox", { name: "Mail" })
+      .fill(faker.internet.email());
+    await page
+      .getByRole("combobox")
+      .filter({ hasText: "Seleccione su genero" })
+      .click();
+    await page.getByText("Masculino").click();
+    await page
+      .getByRole("combobox")
+      .filter({ hasText: "Seleccione el tipo de" })
+      .click();
+    await page.getByRole("option", { name: "DNI" }).click();
+    await page.getByRole("textbox", { name: "Teléfono" }).click();
+    await page.getByRole("textbox", { name: "Teléfono" }).fill("946960334");
+    await page.getByRole("textbox", { name: "Ingrese el número de" }).click();
+    await page
+      .getByRole("textbox", { name: "Ingrese el número de" })
+      .fill("72072237");
+    await page.getByRole("textbox", { name: "Ingrese la contraseña" }).click();
+    await page
+      .getByRole("textbox", { name: "Ingrese la contraseña" })
+      .fill("sdasdasd");
+    await page.getByRole("textbox", { name: "Ingrese la dirección" }).click();
+    await page
+      .getByRole("textbox", { name: "Ingrese la dirección" })
+      .fill("asdasdasd");
+    await page
+      .getByPlaceholder("Ingrese la fecha de nacimiento")
+      .fill("2025-06-08");
+    await page.getByRole("button", { name: "Crear Usuario" }).click();
+    await expect(page).toHaveURL(/.*admin\/usuarios\/successCrear/);
+  });
+
+  test("Crear usuario admin", async ({ page }) => {
+    await page.getByText("Usuarios").click();
+    await page.getByRole("button", { name: "Agregar usuario" }).click();
+    await expect(page).toHaveURL(/.*\/crear/);
+    await page.getByRole("button", { name: "Crear Administrador" }).click();
+    await expect(page).toHaveURL(/.*\/crear\/admin/);
+    await page.getByRole("textbox", { name: "Ingrese los nombres" }).click();
+    await page
+      .getByRole("textbox", { name: "Ingrese los nombres" })
+      .fill(faker.person.firstName());
+    await page
+      .getByRole("textbox", { name: "Ingrese los nombres" })
+      .press("Tab");
+    await page
+      .getByRole("textbox", { name: "Ingrese los apellidos" })
+      .fill(faker.person.lastName());
+    await page
+      .getByRole("textbox", { name: "Ingrese los apellidos" })
+      .press("Tab");
+    await page
+      .getByRole("combobox")
+      .filter({ hasText: "Seleccione el tipo de" })
+      .click();
+    await page.getByRole("option", { name: "DNI" }).click();
+    await page
+      .getByRole("combobox")
+      .filter({ hasText: "Seleccione su genero" })
+      .click();
+    await page.getByText("Masculino").click();
+    await page.getByRole("textbox", { name: "Ingrese la contraseña" }).click();
+    await page
+      .getByRole("textbox", { name: "Ingrese la contraseña" })
+      .fill("asdasdasdasd");
+    await page.getByRole("textbox", { name: "Teléfono" }).click();
+    await page.getByRole("textbox", { name: "Teléfono" }).fill("946960334");
+    await page.getByRole("textbox", { name: "Mail" }).click();
+    await page
+      .getByRole("textbox", { name: "Mail" })
+      .fill(faker.internet.email());
+    await page.getByRole("textbox", { name: "Ingrese el número de" }).click();
+    await page
+      .getByRole("textbox", { name: "Ingrese el número de" })
+      .fill("72072237");
+    await page.getByRole("button", { name: "Crear Administrador" }).click();
+    await expect(page).toHaveURL(/.*\/successCrear/);
+  });
+});
+
+// test.describe("Medico", () => {
+//   test.beforeEach(async ({ page }) => {
+//     await page.goto("http://localhost:5173/IniciarSesionUsuario");
+//     await page.locator('input[name="correo"]').fill("fabianmr2806@hotmail.com");
+//     await page.locator('input[name="contraseña"]').fill("admin123");
+//     await page
+//       .getByRole("button", { name: "Iniciar Sesión", exact: true })
+//       .click();
+//     await expect(page).toHaveTitle("Administración");
+//   });
+
+//   test("Crear médico", async ({ page }) => {
+//     await page.getByText("Personal Médico").click();
+//     await page.getByRole("button", { name: "Agregar médico" }).click();
+//     await expect(page).toHaveURL(/.*\/crear/);
+
+//     await page.getByRole("textbox", { name: "Ingrese los nombres" }).click();
+//     await page
+//       .getByRole("textbox", { name: "Ingrese los nombres" })
+//       .fill(faker.person.firstName());
+//     await page
+//       .getByRole("textbox", { name: "Ingrese los nombres" })
+//       .press("Tab");
+//     await page
+//       .getByRole("textbox", { name: "Ingrese los apellidos" })
+//       .fill(faker.person.lastName());
+//     await page
+//       .getByRole("combobox")
+//       .filter({ hasText: "Seleccione el tipo de" })
+//       .click();
+//     await page.getByRole("option", { name: "DNI" }).click();
+//     await page.getByRole("textbox", { name: "Ingrese el número de" }).click();
+//     await page
+//       .getByRole("textbox", { name: "Ingrese el número de" })
+//       .fill("72072237");
+//     await page
+//       .getByRole("combobox")
+//       .filter({ hasText: "Seleccione su genero" })
+//       .click();
+//     await page.getByRole("option", { name: "Masculino" }).click();
+//     await page
+//       .getByRole("textbox", { name: "Ingrese la especialidad" })
+//       .click();
+//     await page
+//       .getByRole("textbox", { name: "Ingrese la especialidad" })
+//       .fill("asdasdasdasd");
+//     await page.getByRole("textbox", { name: "Ingrese la descripción" }).click();
+//     await page
+//       .getByRole("textbox", { name: "Ingrese la descripción" })
+//       .fill("asdasdasdas");
+//     await page.getByRole("button", { name: "Crear Medico" }).click();
+//     await expect(page).toHaveURL(/.*\/successCrear/);
+//   });
+// });
