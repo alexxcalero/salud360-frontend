@@ -9,6 +9,8 @@ import ButtonIcon from "@/components/ButtonIcon";
 import ModalExito from "@/components/ModalExito";
 import ModalError from "@/components/ModalError";
 import { baseAPI } from "@/services/baseAPI";
+import { ChevronDown } from "lucide-react";
+
 
 interface Usuario {
   idCliente: number;
@@ -32,6 +34,12 @@ function UsuariosPage() {
 
   //Para la funcionalidad de búsqueda:
   const [busqueda, setBusqueda] = useState("");
+
+  //carmasiva
+  type TipoCarga = "cliente" | "administrador";
+  const [tipoCargaMasiva, setTipoCargaMasiva] = useState<TipoCarga | null>(null);
+  const [mostrarOpcionesCarga, setMostrarOpcionesCarga] = useState(false);
+
 
   const fetchUsuarios = () => {
     baseAPI.get("/admin/clientes", {
@@ -65,6 +73,37 @@ function UsuariosPage() {
     })
     .catch(() => console.log("Error"));
   }
+
+  const endpointMap: Record<TipoCarga, string> = {
+    cliente: "/cliente/cargaMasiva",
+    administrador: "/admin/cargaMasiva",
+    //afiliacion: "/afiliaciones/cargaMasiva",
+    //pago: "/pagos/cargaMasiva",
+  };
+
+  const handleCSVUpload = async (event: React.ChangeEvent<HTMLInputElement>, tipo: keyof typeof endpointMap) => {
+    const file = event.target.files?.[0];
+    if (!file || !tipo) return;
+
+    const endpoint = endpointMap[tipo];
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      await baseAPI.post(endpoint, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+        auth: { username: "admin", password: "admin123" },
+      });
+
+      setShowModalExito(true);
+      fetchUsuarios(); // o fetch dinámico si querés por tipo
+    } catch (error) {
+      setShowModalError(true);
+    }
+
+    setTipoCargaMasiva(null);
+  };
+
 
   const handleReactivarUsuario = (): void => {
     console.log("El id del usuario a reactivar es:", usuarioSeleccionado.idCliente)
@@ -162,7 +201,45 @@ function UsuariosPage() {
           <InputIcon icon={<Search className="w-5 h-5" />} value={busqueda} onChange={(e) => setBusqueda(e.target.value)} placeholder="Buscar usuarios" type="search" />
         </div>
         <div className="col-span-8 flex justify-end">
-          <ButtonIcon icon={<UserPlus className="w-6 h-6" />} size="lg" variant="primary" onClick={() => navigate("/admin/usuarios/crear")}>Agregar usuario</ButtonIcon>
+          <ButtonIcon icon={<UserPlus className="w-6 h-6" />} size="lg" variant="primary" onClick={() => navigate("/admin/usuarios/crear")}>
+            Agregar usuario
+          </ButtonIcon>
+          <div className="relative ml-2">
+            <ButtonIcon
+              icon={<ChevronDown className="w-5 h-5" />}
+              size="lg"
+              variant="primary"
+              onClick={() => setMostrarOpcionesCarga((prev) => !prev)}
+            >
+              Carga Masiva
+            </ButtonIcon>
+
+            {mostrarOpcionesCarga && (
+              <div className="absolute right-0 mt-2 bg-white border border-gray-300 shadow-md rounded-md z-50 w-48">
+                {["cliente", "administrador"].map((tipo) => (
+                  <button
+                    key={tipo}
+                    className="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm capitalize"
+                    onClick={() => {
+                      setTipoCargaMasiva(tipo as TipoCarga);
+                      setMostrarOpcionesCarga(false);
+                      setTimeout(() => document.getElementById("csvUpload")?.click(), 0);
+                    }}
+                  >
+                    Cargar {tipo}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            <input
+              id="csvUpload"
+              type="file"
+              accept=".csv"
+              className="hidden"
+              onChange={(e) => handleCSVUpload(e, tipoCargaMasiva!)} // usás el `!` porque tipo está seteado antes
+            />
+          </div>
         </div>
       </div>
 
