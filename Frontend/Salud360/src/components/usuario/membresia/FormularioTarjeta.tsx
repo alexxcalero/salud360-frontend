@@ -21,6 +21,7 @@ interface Props {
   cancelHandler: () => void;
   submitBtnContent: ReactNode;
   resetFormOnSubmit?: boolean;
+  disabled?: boolean;
 }
 
 const FormularioTarjeta = ({
@@ -29,6 +30,7 @@ const FormularioTarjeta = ({
   cancelHandler,
   submitBtnContent,
   resetFormOnSubmit = false,
+  disabled = false,
 }: Props) => {
   const { setLoading } = useLoading();
   const { callErrorDialog } = useDialog();
@@ -80,19 +82,32 @@ const FormularioTarjeta = ({
       tipo: displayTipo,
       ncuenta: Number(displayNumeroTarjeta.replace(/\D/g, "")),
       cvv: Number(cvvDisplay),
-      vencimiento: DateTime.fromObject({
-        month: Number(mesInput) ?? 0,
-        year: Number(anioInput) ?? 0,
-      }).toFormat("y-LL"),
+      vencimiento:
+        DateTime.fromObject({
+          month: Number(mesInput) ?? 0,
+          year: (Number(anioInput) ?? 0) + 2000,
+        }).toISO({ includeOffset: false }) ?? undefined,
+      usuario: {
+        idUsuario: usuario.idCliente, // Como es posible que esto pide idCliente, pero lo lea como idUsuario? :v
+      },
     }),
     [displayNumeroTarjeta, cvvDisplay, mesInput, anioInput, displayTipo]
   );
 
   const submitHandler = async (e: FormEvent) => {
     e.preventDefault();
-    setLoading(true); // Establece el estado de carga
+
+    if (DateTime.fromISO(newCard.vencimiento ?? "") < DateTime.now()) {
+      callErrorDialog({
+        title: "Fecha de vencimiento inválida",
+        description:
+          "La fecha de vencimiento no puede ser anterior a la fecha actual.",
+      });
+      return;
+    }
 
     try {
+      setLoading(true); // Establece el estado de carga
       submitHandlerParam(newCard);
 
       // Limpiar los campos del formulario después de agregar el método de pago
@@ -143,6 +158,7 @@ const FormularioTarjeta = ({
             value="visa"
             onChange={() => {}}
             className="hidden"
+            disabled={disabled}
           />
 
           <label htmlFor="metodo-mastercard">
@@ -179,6 +195,8 @@ const FormularioTarjeta = ({
           required={true}
           placeholder="5555-4444-3333-2222"
           maxLength={19}
+          minLength={19}
+          disabled={disabled}
         />
         <Input
           name="nombre-titular"
@@ -202,6 +220,9 @@ const FormularioTarjeta = ({
               value={mesInput}
               setValue={setMesInput}
               placeholder="MM"
+              disabled={disabled}
+              min={0}
+              max={12}
             />
             <p>/</p>
             <Input
@@ -211,15 +232,24 @@ const FormularioTarjeta = ({
               value={anioInput}
               setValue={setAnioInput}
               placeholder="AA"
+              disabled={disabled}
+              min={DateTime.now().year % 100}
             />
           </div>
           <Input
             name="cvv"
             label="CVV"
-            type="number"
+            type="text"
             placeholder="CVV"
             value={cvvDisplay}
-            setValue={setCvvDisplay}
+            setValue={(val) => {
+              const numericValue = val.replace(/\D/g, "");
+              setCvvDisplay(numericValue);
+            }}
+            disabled={disabled}
+            required={true}
+            maxLength={3}
+            minLength={3}
           />
         </div>
         <div className="flex justify-end gap-2 mt-4">

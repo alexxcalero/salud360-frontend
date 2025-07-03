@@ -1,4 +1,5 @@
 export interface IUsuario {
+  idUsuario?: number;
   nombres?: string;
   apellidos?: string;
   correo?: string;

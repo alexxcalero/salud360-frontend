@@ -27,6 +27,7 @@ const PasarelaExito = () => {
           ¡Se afilió correctamente a la comunidad{" "}
           {comunidad.nombre ?? "{{ Mostrar nombre }}"}!
         </h1>
+        
         <div className="flex gap-4 justify-center">
           <Button
             variant="outline"

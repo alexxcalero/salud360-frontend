@@ -30,6 +30,7 @@ const MetodoTarjeta = ({
       <Progression currentStep={1} steps={3} />
       <div className="mt-4">
         <FormularioTarjeta
+          disabled={Boolean(medioDePago)}
           defaultValues={medioDePago}
           submitHandler={async (data) => {
             const nuevoMedioDePago =
