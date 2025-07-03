@@ -19,7 +19,9 @@ function CardLocal({local}: Props){
 
     const updateLayout = () => {
         const width = window.innerWidth;
+        console.log("El innerWidth es:", width)
         setIsLaptop(width < 1540);
+        console.log ("setIsLaptop debe ser", width < 1540)
         console.log("Estamos en laptop?", isLaptop)
     }
 

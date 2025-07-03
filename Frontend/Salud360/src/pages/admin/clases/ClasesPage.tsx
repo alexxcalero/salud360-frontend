@@ -128,7 +128,7 @@ export default function ClasesPage() {
 
           {/* Botón de carga masiva */}
           <div className="flex items-center">
-            <ButtonIcon icon={<FolderPlus className="w-6 h-6" />} size="lg" variant="primary" className="ml-2">
+            <ButtonIcon icon={<FolderPlus className="w-6 h-6" />} size="lg" variant="primary">
               <label htmlFor="csvUpload" className="cursor-pointer">Carga masiva</label>
             </ButtonIcon>
             <input

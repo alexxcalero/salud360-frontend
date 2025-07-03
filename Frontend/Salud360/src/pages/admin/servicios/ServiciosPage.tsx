@@ -192,10 +192,12 @@ function ServiciosPage() {
         </div>
 
         <div className="col-span-8 flex justify-end">
-          <ButtonIcon icon={<FolderPlus className="w-6 h-6" />} size="lg" variant="primary" onClick={() => navigate("/admin/servicios/crear")}>Agregar servicio</ButtonIcon>
-          <ButtonIcon icon={<FolderPlus className="w-6 h-6" />} size="lg" variant="primary" className="ml-2">
-                        <label htmlFor="csvUpload" className="cursor-pointer">Carga masiva</label>
-          </ButtonIcon>
+          <div className="flex flex-row gap-4">
+            <ButtonIcon icon={<FolderPlus className="w-6 h-6" />} size="lg" variant="primary" onClick={() => navigate("/admin/servicios/crear")}>Agregar servicio</ButtonIcon>
+            <ButtonIcon icon={<FolderPlus className="w-6 h-6" />} size="lg" variant="primary">
+                          <label htmlFor="csvUpload" className="cursor-pointer">Carga masiva</label>
+            </ButtonIcon>
+          </div>
           <input
               id="csvUpload"
               type="file"

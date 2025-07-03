@@ -14,7 +14,7 @@ import { useNavigate } from "react-router";
 interface Testimonio {
   idTestimonio: number;
   comentario: string;
-  autor: {
+  cliente: {
     nombres: string;
     apellidos: string;
   };
@@ -117,7 +117,7 @@ function CalificacionesPage() {
                 className: "w-10",
             },
             { content: testimonio.idTestimonio, className: "w-16" },
-            { content: `${testimonio.autor.nombres} ${testimonio.autor.apellidos}`, className: "w-1/4 text-left" },
+            { content: `${testimonio.cliente.nombres} ${testimonio.cliente.apellidos}`, className: "w-1/4 text-left" },
             { content: testimonio.comentario, className: "w-1/3 text-left" },
             {
                 content: <StarRating rating={testimonio.calificacion} />,
