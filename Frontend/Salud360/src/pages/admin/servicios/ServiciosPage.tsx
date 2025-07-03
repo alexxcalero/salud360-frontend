@@ -8,6 +8,7 @@ import TableHeader from "@/components/admin/TableHeader";
 import TableBody from "@/components/admin/TableBody";
 import ModalError from "@/components/ModalError";
 import ModalExito from "@/components/ModalExito";
+import ModalValidacion from "@/components/ModalValidacion";
 import { baseAPI } from "@/services/baseAPI";
 
 export interface Servicio {
@@ -25,6 +26,7 @@ function ServiciosPage() {
   const [servicioSeleccionado, setServicioSeleccionado] = useState<any>();
   const [showModalExito, setShowModalExito] = useState(false);
   const [showModalError, setShowModalError] = useState(false);
+  const [showModalValidacion, setShowModalValidacion] = useState(false);
   //const [search, setSearch] = useState("");
   const [paginaActual, setPaginaActual] = useState(1);
 
@@ -148,6 +150,34 @@ function ServiciosPage() {
   ]);
 
   
+  // PARA LA CARGA MASIVA
+    const handleCSVUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+        const response = await baseAPI.post("/servicios/cargaMasiva", formData, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+        auth: {
+            username: "admin",
+            password: "admin123"
+        }
+        });
+
+        setShowModalExito(true);
+        fetchServicios(); // Recargar la lista
+    } catch (error) {
+        console.error("Error al cargar el archivo CSV", error);
+        setShowModalValidacion(true);
+    }
+    };
+
+
 
   return (
     <div className="w-full px-6 py-4 overflow-auto">
@@ -162,8 +192,20 @@ function ServiciosPage() {
         </div>
 
         <div className="col-span-8 flex justify-end">
-          <ButtonIcon icon={<FolderPlus className="w-6 h-6" />} size="lg" variant="primary" onClick={() => navigate("/admin/servicios/crear")}>Agregar servicio</ButtonIcon>
-        </div>
+          <div className="flex flex-row gap-4">
+            <ButtonIcon icon={<FolderPlus className="w-6 h-6" />} size="lg" variant="primary" onClick={() => navigate("/admin/servicios/crear")}>Agregar servicio</ButtonIcon>
+            <ButtonIcon icon={<FolderPlus className="w-6 h-6" />} size="lg" variant="primary">
+                          <label htmlFor="csvUpload" className="cursor-pointer">Carga masiva</label>
+            </ButtonIcon>
+          </div>
+          <input
+              id="csvUpload"
+              type="file"
+              accept=".csv"
+              onChange={handleCSVUpload}
+              className="hidden"
+             />
+          </div>
       </div>
 
       {/* Tabla */}
@@ -196,6 +238,36 @@ function ServiciosPage() {
       </div>
 
 
+      {/* Modal CARGA MASIVA */}
+                {showModalExito && (
+                <>
+                    <div className="fixed inset-0 bg-black/60 z-40" />
+                    <div className="fixed inset-0 z-50 flex items-center justify-center">
+                        <ModalExito
+                            modulo="Carga masiva correcta"
+                            detalle="Se registró de manera exitosa los servicios mediante el archivo CSV"
+                            onConfirm={() => {
+                                setShowModalExito(false);
+                                fetchServicios();
+                            }}
+                        />
+                    </div>
+                </>
+            )}
+
+            {/* Modal CARGA MASIVA */}
+            {showModalValidacion && (
+                <>
+                    <div className="fixed inset-0 bg-black/60 z-40" />
+                    <div className="fixed inset-0 z-50 flex items-center justify-center">
+                        <ModalValidacion
+                            titulo="Error en la carga masiva"
+                            mensaje="No se pudieron registrar los servicios mediante el archivo CSV. Revise los encabezados del archivo"
+                            onClose={() => setShowModalValidacion(false)}
+                        />
+                    </div>
+                </>
+            )}
 
       { servicioSeleccionado && (servicioSeleccionado.activo ?
         <>
