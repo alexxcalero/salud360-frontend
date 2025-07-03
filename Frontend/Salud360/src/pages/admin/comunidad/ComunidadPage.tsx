@@ -179,10 +179,12 @@ function ComunidadPage() {
           <InputIcon icon={<Search className="w-5 h-5" />} placeholder="Buscar comunidad" type="search" value={busqueda} onChange={(e) => setBusqueda(e.target.value)}/>
         </div>
         <div className="col-span-8 flex justify-end">
-          <ButtonIcon icon={<FolderPlus className="w-6 h-6" />} size="lg" variant="primary" onClick={() => navigate("/admin/comunidades/crear")}>Agregar comunidad</ButtonIcon>
-          <ButtonIcon icon={<FolderPlus className="w-6 h-6" />} size="lg" variant="primary" className="ml-2">
-                        <label htmlFor="csvUpload" className="cursor-pointer">Carga masiva</label>
-          </ButtonIcon>
+          <div className="flex flex-row gap-4">
+            <ButtonIcon icon={<FolderPlus className="w-6 h-6" />} size="lg" variant="primary" onClick={() => navigate("/admin/comunidades/crear")}>Agregar comunidad</ButtonIcon>
+            <ButtonIcon icon={<FolderPlus className="w-6 h-6" />} size="lg" variant="primary">
+                          <label htmlFor="csvUpload" className="cursor-pointer">Carga masiva</label>
+            </ButtonIcon>
+          </div>
               <input
               id="csvUpload"
               type="file"

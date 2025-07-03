@@ -9,6 +9,31 @@ function DashboardPage() {
   const [usuariosPorMes, setUsuariosPorMes] = useState<number[]>([]);
   const [topComunidades, setTopComunidades] = useState<{ nombre: string, cantMiembros: number }[]>([]);
 
+
+  
+  const [isLaptop, setIsLaptop] = useState(false);
+
+  const updateLayout = () => {
+    const width = window.innerWidth;
+    console.log("El innerWidth es:", width);
+    const shouldBeLaptop = width < 1540;
+    setIsLaptop(shouldBeLaptop);
+    console.log("setIsLaptop debe ser", shouldBeLaptop);
+    // No uses isLaptop aquí, aún no ha cambiado.
+  };
+
+  useEffect(() => {
+    updateLayout();
+    window.addEventListener("resize", updateLayout);
+    return () => window.removeEventListener("resize", updateLayout);
+  }, []);
+
+  useEffect(() => {
+    console.log("Estamos en laptop? (actualizado)", isLaptop);
+  }, [isLaptop]);
+
+
+
   const accesosRapidos = [
     { texto: "Crear Comunidad", ruta: "/admin/comunidades/crear" },
     { texto: "Crear Servicio", ruta: "/admin/servicios/crear" },
@@ -109,19 +134,19 @@ function DashboardPage() {
       {/* Métricas superiores */}
       <div className="grid grid-cols-4 gap-4 mb-6">
         <div className="bg-white p-4 rounded shadow text-center">
-          <p className="text-sm text-black font-bold">Usuarios</p>
+          <p className="text-2xl text-black font-semibold">Usuarios</p>
           <p className="text-2xl font-bold">{usuarios}</p>
         </div>
         <div className="bg-white p-4 rounded shadow text-center">
-          <p className="text-sm text-black font-bold">Comunidades</p>
+          <p className="text-2xl text-black font-semibold">Comunidades</p>
           <p className="text-2xl font-bold">{comunidades}</p>
         </div>
         <div className="bg-white p-4 rounded shadow text-center">
-          <p className="text-sm text-black font-bold">Médicos</p>
+          <p className="text-2xl text-black font-semibold">Médicos</p>
           <p className="text-2xl font-bold">{medicos}</p>
         </div>
         <div className="bg-white p-4 rounded shadow text-center">
-          <p className="text-sm text-black font-bold">Ganancias</p>
+          <p className="text-2xl text-black font-semibold">Ganancias</p>
           <p className="text-2xl font-bold">$10.3M</p>
         </div>
       </div>
@@ -132,7 +157,7 @@ function DashboardPage() {
           <h2 className="text-2xl font-bold text-center mt-2 mb-2">Usuarios Nuevos por Mes</h2>
           <iframe
             title="Gráfico de usuarios"
-            className="w-[1050px] h-[650px] border-none transform scale-[0.75] origin-mid"
+            className={`w-[1050px] h-[650px] border-none transform origin-mid ${isLaptop ? 'scale-[0.55] ' : 'scale-[0.75]' }`}
             src={urlGraficoUsuarios}
           />
         </div>
@@ -141,7 +166,7 @@ function DashboardPage() {
           <h2 className="text-2xl font-bold text-center mt-2 mb-2">Distribución de Membresías</h2>
           <iframe
             title="Distribución de membresías"
-            className="w-[1050px] h-[650px] border-none transform scale-[0.75] origin-mid"
+            className={`w-[1050px] h-[650px] border-none transform origin-mid ${isLaptop ? 'scale-[0.55] ' : 'scale-[0.75]' }`}
             src="https://quickchart.io/chart?c=%7B%22type%22%3A%22doughnut%22%2C%22options%22%3A%7B%22layout%22%3A%7B%22padding%22%3A0%7D%2C%22plugins%22%3A%7B%22legend%22%3A%7B%22position%22%3A%22top%22%2C%22align%22%3A%22center%22%7D%7D%7D%2C%22data%22%3A%7B%22labels%22%3A%5B%22Con%20Tope%22%2C%22Sin%20Tope%22%2C%22Inactivos%22%5D%2C%22datasets%22%3A%5B%7B%22data%22%3A%5B50%2C15%2C35%5D%2C%22backgroundColor%22%3A%5B%22%2336A2EB%22%2C%22%23FFCE56%22%2C%22%23FF6384%22%5D%7D%5D%7D%7D"
           />
         </div>
