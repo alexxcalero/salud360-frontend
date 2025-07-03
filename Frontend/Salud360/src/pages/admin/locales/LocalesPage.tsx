@@ -4,6 +4,7 @@ import ButtonIcon from "@/components/ButtonIcon";
 import InputIcon from "@/components/InputIcon";
 import ModalError from "@/components/ModalError";
 import ModalExito from "@/components/ModalExito";
+import ModalValidacion from "@/components/ModalValidacion";
 import UnderConstruction from "@/pages/UnderConstruction";
 import { baseAPI } from "@/services/baseAPI";
 import { Filter, FolderPlus, Info, Pencil, RotateCcw, Search, Trash2, UserPlus } from "lucide-react";
@@ -26,6 +27,7 @@ function LocalesPage() {
     const [localSeleccionado, setLocalSeleccionado] = useState<any>();
     const [showModalExito, setShowModalExito] = useState(false);
     const [showModalError, setShowModalError] = useState(false);
+    const [showModalValidacion, setShowModalValidacion] = useState(false);
     //const [search, setSearch] = useState("");
     const [paginaActual, setPaginaActual] = useState(1);
 
@@ -76,6 +78,34 @@ function LocalesPage() {
             })
             .catch(() => console.log("Error"));
     }
+
+    // PARA LA CARGA MASIVA
+    const handleCSVUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+        const response = await baseAPI.post("/locales/cargaMasiva", formData, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+        auth: {
+            username: "admin",
+            password: "admin123"
+        }
+        });
+
+        setShowModalExito(true);
+        fetchLocales(); // Recargar la lista
+    } catch (error) {
+        console.error("Error al cargar el archivo CSV", error);
+        setShowModalValidacion(true);
+    }
+    };
+
 
     const columns = [
     { label: <input type="checkbox" checked={selectAll} onChange={handleSelectAll} />, className: "w-10" },         // checkbox
@@ -169,7 +199,20 @@ function LocalesPage() {
 
                 <div className="col-span-8 flex justify-end">
                     <ButtonIcon icon={<FolderPlus className="w-6 h-6" />} size="lg" variant="primary" onClick={() => navigate("/admin/locales/crear")}>Agregar local</ButtonIcon>
+                    <ButtonIcon icon={<FolderPlus className="w-6 h-6" />} size="lg" variant="primary" className="ml-2">
+                        <label htmlFor="csvUpload" className="cursor-pointer">Carga masiva</label>
+                    </ButtonIcon>
+                    <input
+                    id="csvUpload"
+                    type="file"
+                    accept=".csv"
+                    onChange={handleCSVUpload}
+                    className="hidden"
+                    />
                 </div>
+
+
+                
             </div>
 
             {/* Tabla */}
@@ -200,6 +243,36 @@ function LocalesPage() {
                 </button>
             </div>
 
+            {/* Modal CARGA MASIVA */}
+                {showModalExito && (
+                <>
+                    <div className="fixed inset-0 bg-black/60 z-40" />
+                    <div className="fixed inset-0 z-50 flex items-center justify-center">
+                        <ModalExito
+                            modulo="Carga masiva correcta"
+                            detalle="Se registró de manera exitosa los locales mediante el archivo CSV"
+                            onConfirm={() => {
+                                setShowModalExito(false);
+                                fetchLocales();
+                            }}
+                        />
+                    </div>
+                </>
+            )}
+
+            {/* Modal CARGA MASIVA */}
+            {showModalValidacion && (
+                <>
+                    <div className="fixed inset-0 bg-black/60 z-40" />
+                    <div className="fixed inset-0 z-50 flex items-center justify-center">
+                        <ModalValidacion
+                            titulo="Error en la carga masiva"
+                            mensaje="No se pudieron registrar los locales mediante el archivo CSV. El servicio que seleccionó no existe"
+                            onClose={() => setShowModalValidacion(false)}
+                        />
+                    </div>
+                </>
+            )}
 
             {localSeleccionado && (localSeleccionado.activo ?
                 <>
@@ -251,6 +324,8 @@ function LocalesPage() {
                         </>
                     )}
                 </>
+
+                
 
             )}
 

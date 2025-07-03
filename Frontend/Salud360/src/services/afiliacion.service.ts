@@ -39,7 +39,6 @@ export const afiliarPorPasarelaAPI = async (
     afiliacion,
     fechaPago: DateTime.now().toISO({ includeOffset: false }),
   };
-  console.log(pagoARg);
   const pago = await postPagoAPI(pagoARg);
 
   // Paso 3: Actualizar medio de pago
