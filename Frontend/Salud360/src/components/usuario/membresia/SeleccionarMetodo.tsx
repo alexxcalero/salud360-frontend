@@ -13,6 +13,7 @@ import { IMembresia } from "@/models/membresia";
 import { getAllMediosDePagosByUsuarioAPI } from "@/services/medioDePago.service";
 import { AuthContext } from "@/hooks/AuthContext";
 import { IMedioDePago } from "@/models/medioDePago";
+import { clearPendingMembership } from "@/lib/pendingMembership";
 
 const SeleccionarMetodo = ({
   comunidad,
@@ -43,6 +44,7 @@ const SeleccionarMetodo = ({
   const { usuario } = useContext(AuthContext);
   useEffect(() => {
     fetch(async () => {
+      clearPendingMembership();
       const mediosDePagos = await getAllMediosDePagosByUsuarioAPI(
         usuario.idCliente
       );
@@ -81,7 +83,7 @@ const SeleccionarMetodo = ({
           onChange={setSelectedMedioDePagoInput}
           options={mediosDePago.map((m) => ({
             value: m.idMedioDePago?.toString() ?? "",
-            content: `**** **** **** ${m.ncuenta?.toString().slice(12, 16)}`,
+            content: `**** **** **** ${m.ncuenta?.toString().slice(-4)}`,
           }))}
           htmlFor=""
           disabled={activeOption !== "guardado"}

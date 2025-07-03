@@ -11,12 +11,25 @@ import { getAllClasesAPI } from "@/services/clasesAdmin.service";
 import { getAllLocalesAPI } from "@/services/locales.service";
 import { CircleDot } from "lucide-react";
 import { DateTime } from "luxon";
+import { baseAPI } from "@/services/baseAPI"
 import { useCallback, useEffect, useMemo, useState } from "react";
 import colors from "tailwindcss/colors";
+
+import ModalError from "@/components/ModalError";
+import ModalExito from "@/components/ModalExito";
+import ModalValidacion from "@/components/ModalValidacion";
+import ButtonIcon from "@/components/ButtonIcon";
+import { Filter, FolderPlus, Info, Pencil, RotateCcw, Search, Trash2, UserPlus } from "lucide-react";
+
 
 export default function ClasesPage() {
   const [locales, setLocales] = useState<localType[]>([]);
   const [localInput, setLocalInput] = useState("");
+
+  const [showModalExito, setShowModalExito] = useState(false);
+  const [showModalValidacion, setShowModalValidacion] = useState(false);
+    
+  const [clases, setClases] = useState<claseDTOType[]>([]);
 
   const localSeleccionado = useMemo(
     () => locales.find(({ idLocal }) => idLocal?.toString() === localInput),
@@ -70,16 +83,63 @@ export default function ClasesPage() {
     []
   );
 
+
+
+
+  // PARA LA CARGA MASIVA
+      const handleCSVUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0];
+      if (!file) return;
+  
+      const formData = new FormData();
+      formData.append("file", file);
+  
+      try {
+          const response = await baseAPI.post("/clases/cargaMasiva", formData, {
+          headers: {
+              "Content-Type": "multipart/form-data",
+          },
+          auth: {
+              username: "admin",
+              password: "admin123"
+          }
+          });
+  
+          setShowModalExito(true);
+      } catch (error) {
+          console.error("Error al cargar el archivo CSV", error);
+          setShowModalValidacion(true);
+      }
+      };
+
+
+
   return (
     <>
       <div className="grid grid-rows-[auto_1fr] min-h-0 min-w-0 gap-2">
         <div className="w-full flex flex-col gap-4 px-8 py-8 text-left">
+          <div className="flex items-center justify-between mb-4">
           <div>
             <h1 className="text-4xl font-bold mb-2">Clases</h1>
-            <h2 className="text-lg text-gray-700 mb-2">
+            <h2 className="text-lg text-gray-700">
               Seleccione un local para crear y editar clases
             </h2>
           </div>
+
+          {/* Botón de carga masiva */}
+          <div className="flex items-center">
+            <ButtonIcon icon={<FolderPlus className="w-6 h-6" />} size="lg" variant="primary">
+              <label htmlFor="csvUpload" className="cursor-pointer">Carga masiva</label>
+            </ButtonIcon>
+            <input
+              id="csvUpload"
+              type="file"
+              accept=".csv"
+              onChange={handleCSVUpload}
+              className="hidden"
+            />
+          </div>
+        </div>
           <div className="self-stretch">
             <SelectLabel
               htmlFor="local"
@@ -95,6 +155,38 @@ export default function ClasesPage() {
           </div>
           <hr className="border mt-4" />
         </div>
+
+
+        {/* Modal CARGA MASIVA */}
+                {showModalExito && (
+                <>
+                    <div className="fixed inset-0 bg-black/60 z-40" />
+                    <div className="fixed inset-0 z-50 flex items-center justify-center">
+                        <ModalExito
+                            modulo="Carga masiva correcta"
+                            detalle="Se registró de manera exitosa las clases mediante el archivo CSV"
+                            onConfirm={() => {
+                                setShowModalExito(false);
+                                
+                            }}
+                        />
+                    </div>
+                </>
+            )}
+
+            {/* Modal CARGA MASIVA */}
+            {showModalValidacion && (
+                <>
+                    <div className="fixed inset-0 bg-black/60 z-40" />
+                    <div className="fixed inset-0 z-50 flex items-center justify-center">
+                        <ModalValidacion
+                            titulo="Error en la carga masiva"
+                            mensaje="No se pudieron registrar las clases mediante el archivo CSV. Verifique las relgas de negocio y la existencia de los locales"
+                            onClose={() => setShowModalValidacion(false)}
+                        />
+                    </div>
+                </>
+            )}
 
         <div className="px-8 min-h-0 min-w-0">
           {localSeleccionado !== undefined ? (

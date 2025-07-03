@@ -8,6 +8,7 @@ import TableHeader from "@/components/admin/TableHeader";
 import TableBody from "@/components/admin/TableBody";
 import ModalExito from "@/components/ModalExito";
 import ModalError from "@/components/ModalError";
+import ModalValidacion from "@/components/ModalValidacion";
 import ModalRestauracion from "@/components/ModalRestauracion";
 import { baseAPI } from "@/services/baseAPI";
 
@@ -17,7 +18,7 @@ function ComunidadPage() {
   const [comunidadSeleccionada, setComunidadSeleccionada] = useState<any>();
   const [showModalExito, setShowModalExito] = useState(false);
   const [showModalError, setShowModalError] = useState(false);
-  
+  const [showModalValidacion, setShowModalValidacion] = useState(false);
   //const [showModalRestauracion, setShowModalRestauracion] = useState(false);
   const [paginaActual, setPaginaActual] = useState(1);
 
@@ -140,6 +141,35 @@ function ComunidadPage() {
     },
   ]);
 
+
+  // PARA LA CARGA MASIVA
+    const handleCSVUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+        const response = await baseAPI.post("/comunidades/cargaMasiva", formData, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+        auth: {
+            username: "admin",
+            password: "admin123"
+        }
+        });
+
+        setShowModalExito(true);
+        fetchComunidades(); // Recargar la lista
+    } catch (error) {
+        console.error("Error al cargar el archivo CSV", error);
+        setShowModalValidacion(true);
+    }
+    };
+
+
   
   return (
     <div className="w-full px-6 py-4 overflow-auto">
@@ -149,7 +179,19 @@ function ComunidadPage() {
           <InputIcon icon={<Search className="w-5 h-5" />} placeholder="Buscar comunidad" type="search" value={busqueda} onChange={(e) => setBusqueda(e.target.value)}/>
         </div>
         <div className="col-span-8 flex justify-end">
-          <ButtonIcon icon={<FolderPlus className="w-6 h-6" />} size="lg" variant="primary" onClick={() => navigate("/admin/comunidades/crear")}>Agregar comunidad</ButtonIcon>
+          <div className="flex flex-row gap-4">
+            <ButtonIcon icon={<FolderPlus className="w-6 h-6" />} size="lg" variant="primary" onClick={() => navigate("/admin/comunidades/crear")}>Agregar comunidad</ButtonIcon>
+            <ButtonIcon icon={<FolderPlus className="w-6 h-6" />} size="lg" variant="primary">
+                          <label htmlFor="csvUpload" className="cursor-pointer">Carga masiva</label>
+            </ButtonIcon>
+          </div>
+              <input
+              id="csvUpload"
+              type="file"
+              accept=".csv"
+              onChange={handleCSVUpload}
+              className="hidden"
+            />
         </div>
       </div>
 
@@ -183,6 +225,36 @@ function ComunidadPage() {
       </div>
 
 
+      {/* Modal CARGA MASIVA */}
+                {showModalExito && (
+                <>
+                    <div className="fixed inset-0 bg-black/60 z-40" />
+                    <div className="fixed inset-0 z-50 flex items-center justify-center">
+                        <ModalExito
+                            modulo="Carga masiva correcta"
+                            detalle="Se registró de manera exitosa los locales mediante el archivo CSV"
+                            onConfirm={() => {
+                                setShowModalExito(false);
+                                fetchComunidades();
+                            }}
+                        />
+                    </div>
+                </>
+            )}
+
+      {/* Modal CARGA MASIVA */}
+        {showModalValidacion && (
+            <>
+              <div className="fixed inset-0 bg-black/60 z-40" />
+              <div className="fixed inset-0 z-50 flex items-center justify-center">
+                     <ModalValidacion
+                       titulo="Error en la carga masiva"
+                       mensaje="No se pudieron registrar los locales mediante el archivo CSV. Nose q fue"
+                       onClose={() => setShowModalValidacion(false)}
+                   />
+              </div>
+            </>
+        )}
 
       {comunidadSeleccionada && (comunidadSeleccionada.activo ?
         <>
