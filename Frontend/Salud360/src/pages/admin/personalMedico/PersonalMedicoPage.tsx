@@ -31,6 +31,8 @@ function PersonalMedicoPage() {
   const [medicoSeleccionado, setMedicoSeleccionado] = useState<any>();
   const [showModalExito, setShowModalExito] = useState(false);
   const [showModalError, setShowModalError] = useState(false);
+ 
+
   const [paginaActual, setPaginaActual] = useState(1);
   const [busqueda, setBusqueda] = useState("");
 
@@ -80,6 +82,32 @@ function PersonalMedicoPage() {
       setShowModalError(false);
     });
   };
+
+  //carga masivve
+  const handleCSVUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const file = event.target.files?.[0];
+  if (!file) return;
+
+  const formData = new FormData();
+  formData.append("file", file);
+
+  try {
+    await baseAPI.post("/admin/medicos/cargaMasiva", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      auth: {
+        username: "admin",
+        password: "admin123",
+      },
+    });
+    setShowModalExito(true);
+    fetchMedicos();
+  } catch (error) {
+    console.error("Error al cargar el archivo CSV", error);
+    setShowModalError(true);
+  }
+};
 
   const columns = [
     { label: <input type="checkbox" checked={selectAll} onChange={handleSelectAll} />, className: "w-10" },
@@ -158,6 +186,16 @@ function PersonalMedicoPage() {
           <ButtonIcon icon={<UserPlus className="w-6 h-6" />} size="lg" variant="primary" onClick={() => navigate("/admin/personalMedico/crear")}>
             Agregar médico
           </ButtonIcon>
+          <ButtonIcon icon={<UserPlus className="w-6 h-6" />} size="lg" variant="primary" className="ml-2">
+            <label htmlFor="csvUpload" className="cursor-pointer">Carga masiva</label>
+          </ButtonIcon>
+          <input
+            id="csvUpload"
+            type="file"
+            accept=".csv"
+            onChange={handleCSVUpload}
+            className="hidden"
+          />
         </div>
       </div>
 
@@ -183,8 +221,8 @@ function PersonalMedicoPage() {
             <div className="fixed inset-0 bg-black/60 z-40" />
             <div className="fixed inset-0 z-50 flex items-center justify-center">
             <ModalExito
-                modulo="¡Médico editado correctamente!"
-                detalle="El médico fue actualizado correctamente."
+                modulo="¡Médico/s editado correctamente!"
+                detalle="El campo médico fue actualizado correctamente."
                 onConfirm={() => {
                 setShowModalExito(false);
                 fetchMedicos();
