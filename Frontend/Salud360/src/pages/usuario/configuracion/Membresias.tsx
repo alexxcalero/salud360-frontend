@@ -34,7 +34,7 @@ const Membresias = () => {
   const [showModalExitoReactivar, setShowModalExitoReactivar] = useState(false);
 
   const { usuario, logout, loading } = useContext(AuthContext);
-
+  const [diasSuspension, setDiasSuspension] = useState(1);
   if (loading || !usuario) return null;
 
   const id = usuario.idCliente;
@@ -127,15 +127,20 @@ const Membresias = () => {
       .catch(() => console.log("Error"));
   };
 
-  const handleSuspender = (afiliacion: any) => {
+  const handleSuspender = async  (afiliacion: any) => {
     setAfiliacionActual(afiliacion);
     setMembresiaActual(afiliacion.membresia);
+    setComunidadActual(afiliacion.comunidad); // ✔️ Ya viene desde el backend
     setShowModalSuspender(true);
   };
 
   const handleSuspenderAfiliacion = (): void => {
     baseAPI
-      .put(`/afiliaciones/${afiliacionActual.idAfiliacion}/suspender`)
+      .put(`/afiliaciones/${afiliacionActual.idAfiliacion}/suspender`, null, {
+        params: {
+          dias: diasSuspension,
+        },
+      })
       .then(() => {
         setShowModalExitoSuspender(true);
         setShowModalSuspender(false);
@@ -252,15 +257,50 @@ const Membresias = () => {
         <>
           <div className="fixed inset-0 bg-black/60 z-40" />
           <div className="fixed inset-0 z-50 flex items-center justify-center">
-            <ModalError
-              modulo="¿Estás seguro de que quieres suspender tu membresía?"
-              detalle={`Membresía: ${membresiaActual.nombre}`}
-              buttonConfirm="Suspender"
-              onConfirm={() => {
-                handleSuspenderAfiliacion();
-              }}
-              onCancel={() => setShowModalSuspender(false)}
-            />
+            <div className="bg-white rounded-2xl shadow-xl w-[500px] p-8 space-y-6">
+              <h2 className="text-2xl font-bold text-red-600">
+                ¿Estás seguro de que quieres suspender tu membresía?
+              </h2>
+
+              <p className="text-gray-700 text-lg">
+                Comunidad: <span className="font-semibold">{comunidadActual?.nombre}</span>
+              </p>
+
+              <div className="flex flex-col gap-2 items-center text-center">
+                <label htmlFor="dias" className="font-medium text-gray-800">
+                  ¿Cuántos días deseas suspender?
+                </label>
+                <input
+                  type="number"
+                  id="dias"
+                  min={1}
+                  max={7}
+                  value={diasSuspension}
+                  onChange={(e) => {
+                    const value = parseInt(e.target.value);
+                    if (!isNaN(value) && value >= 1 && value <= 7) {
+                      setDiasSuspension(value);
+                    }
+                  }}
+                  className="border border-gray-300 rounded-md px-4 py-2 w-24"
+                />
+              </div>
+
+              <div className="flex flex-col gap-4 mt-6 w-full">
+                <button
+                  className="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-3 rounded-md w-full transition"
+                  onClick={() => handleSuspenderAfiliacion()}
+                >
+                  Suspender
+                </button>
+                <button
+                  className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-3 rounded-md w-full transition"
+                  onClick={() => setShowModalSuspender(false)}
+                >
+                  Volver
+                </button>
+              </div>
+            </div>
           </div>
         </>
       )}

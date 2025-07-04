@@ -15,6 +15,7 @@ import { baseAPI } from "@/services/baseAPI";
 import { AuthContext } from "@/hooks/AuthContext";
 import Membresias from "../usuario/configuracion/Membresias";
 import useUsuarioForm from "@/hooks/useUsuarioForm";
+import { useRef } from "react"; // para direccionar a membresia :v
 
 function DetalleComunidad(){
 
@@ -32,6 +33,7 @@ function DetalleComunidad(){
         setUsuarioAPI
     } = useUsuarioForm();
 
+    const membresiasRef = useRef<HTMLDivElement>(null);
 
     const fetchComunidad = () => {
     baseAPI.get(`/comunidades/${id}`, {
@@ -134,7 +136,8 @@ function DetalleComunidad(){
                             </div>
 
                             <div className="inline-block w-48">
-                                <Button size="lg" className="w-full" onClick={() => navigate("/RegistroUsuario")}>Suscríbete</Button>
+                                <Button size="lg" className="w-full" onClick={() => membresiasRef.current?.scrollIntoView({ behavior: "smooth" })}> 
+                                    Suscríbete </Button>
                             </div>  
 
                         </div>
@@ -176,7 +179,9 @@ function DetalleComunidad(){
                     </div>
                 </section>
 
-                <section className="relative bg-[#2A86FF] overflow-visible mb-36">
+                <section 
+                    ref={membresiasRef}
+                    className="relative bg-[#2A86FF] overflow-visible mb-36">
                     <img src={abstractImage} alt="abstraction" className="inset-0 w-full h-[650px] object-cover opacity-5" />
                     <div className="absolute inset-0 flex flex-col items-center py-8">
                         <h1 className="text-white">PAQUETES DE MEMBRESÍA</h1>
@@ -191,9 +196,9 @@ function DetalleComunidad(){
                                 </p>
                                 <a
                                     href="/usuario/configuracion/membresias"
-                                    className="text-sm text-white hover:underline font-semibold mt-1 inline-block"
+                                    className="text-sm text-white hover:underline font-semibold italic mt-1 inline-block"
                                 >
-                                    Click para gestionar tu membresía.
+                                    Click aquí para gestionar tu membresía.
                                 </a>
                             </div>
                         }
