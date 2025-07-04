@@ -26,7 +26,7 @@ function Comunidades(){
                                 <p>En Salud360 creemos que el crecimiento personal se potencia cuando compartimos metas, intereses y experiencias con otros.</p>
                                 <br />
                                 <p>Nuestras comunidades están pensadas para conectar personas que buscan mejorar su bienestar físico, mental y emocional. Ya sea que estés dando tus primeros pasos en el mundo del fitness, quieras retomar hábitos saludables o busques motivación constante, aquí encontrarás el entorno ideal.
-                                    </p>
+                                </p>
                                 <br />  
                                 <p>Únete, comparte, aprende y crece junto a quienes también han decidido transformar su vida.</p>
                             </div>

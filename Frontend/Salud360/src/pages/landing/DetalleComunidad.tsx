@@ -12,12 +12,13 @@ import Imagen from "@/assets/detalleComunidadX.png"
 import CardMembresia from "@/components/landing/CardMembresía";
 import { IComunidad } from "@/models/comunidad";
 import { baseAPI } from "@/services/baseAPI";
+import { useRef } from "react"; // para direccionar a membresia :v
 
 function DetalleComunidad(){
 
     const [comunidad, setComunidad] = useState<IComunidad>({});
     const {id} = useParams();
-    
+    const membresiasRef = useRef<HTMLDivElement>(null);
 
     const fetchComunidad = () => {
     baseAPI.get(`/comunidades/${id}`, {
@@ -92,7 +93,8 @@ function DetalleComunidad(){
                             </div>
 
                             <div className="inline-block w-48">
-                                <Button size="lg" className="w-full" onClick={() => navigate("/RegistroUsuario")}>Suscríbete</Button>
+                                <Button size="lg" className="w-full" onClick={() => membresiasRef.current?.scrollIntoView({ behavior: "smooth" })}> 
+                                    Suscríbete </Button>
                             </div>  
 
                         </div>
@@ -134,7 +136,9 @@ function DetalleComunidad(){
                     </div>
                 </section>
 
-                <section className="relative bg-[#2A86FF] overflow-visible mb-20">
+                <section 
+                    ref={membresiasRef}
+                    className="relative bg-[#2A86FF] overflow-visible mb-20">
                     <img src={abstractImage} alt="abstraction" className="inset-0 w-full h-[650px] object-cover opacity-5" />
                     <div className="absolute inset-0 flex flex-col items-center py-8">
                         <h1 className="text-white">PAQUETES DE MEMBRESÍA</h1>
