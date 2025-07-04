@@ -31,6 +31,9 @@ export default function ClasesPage() {
     
   const [clases, setClases] = useState<claseDTOType[]>([]);
 
+  const [forceReload, setForceReload] = useState(false);
+  const [mensajeError, setMensajeError] = useState("");
+  
   const localSeleccionado = useMemo(
     () => locales.find(({ idLocal }) => idLocal?.toString() === localInput),
     [localInput, locales]
@@ -46,6 +49,19 @@ export default function ClasesPage() {
       setLocales(data);
     });
   }, []);
+
+  //Para la recarga luego de la carga masvia
+  useEffect(() => {
+    if (localSeleccionado) {
+      getAllClasesAPI().then(data => {
+        const clasesFiltradas = data?.filter(
+          ({ local }) =>
+            local?.idLocal === localSeleccionado.idLocal
+        ) ?? [];
+        setClases(clasesFiltradas);
+      });
+    }
+  }, [localSeleccionado]);
 
   const registrar = useCallback(
     ({
@@ -106,9 +122,17 @@ export default function ClasesPage() {
           });
   
           setShowModalExito(true);
-      } catch (error) {
-          console.error("Error al cargar el archivo CSV", error);
+      } catch (error: any) {
+        if (error.response?.status === 409) {
+          setMensajeError(error.response.data.message); // conflicto de horario
           setShowModalValidacion(true);
+        } else if (error.response?.status === 400) {
+          setMensajeError(error.response.data.message); // duración incorrecta
+          setShowModalValidacion(true);
+        } else {
+          setMensajeError("Revise el formato del CSV y reglas de negocio");
+          setShowModalValidacion(true);
+        }
       }
       };
 
@@ -167,7 +191,7 @@ export default function ClasesPage() {
                             detalle="Se registró de manera exitosa las clases mediante el archivo CSV"
                             onConfirm={() => {
                                 setShowModalExito(false);
-                                
+                                setForceReload(prev => !prev);
                             }}
                         />
                     </div>
@@ -181,7 +205,7 @@ export default function ClasesPage() {
                     <div className="fixed inset-0 z-50 flex items-center justify-center">
                         <ModalValidacion
                             titulo="Error en la carga masiva"
-                            mensaje="No se pudieron registrar las clases mediante el archivo CSV. Verifique las relgas de negocio y la existencia de los locales"
+                            mensaje={mensajeError}
                             onClose={() => setShowModalValidacion(false)}
                         />
                     </div>
@@ -199,7 +223,7 @@ export default function ClasesPage() {
                       local?.idLocal !== undefined
                   ) ?? []
                 }
-                fetchDataDependences={[localSeleccionado]}
+                fetchDataDependences={[localSeleccionado,forceReload]}
                 getRangeDateFromData={(d) =>
                   d.fecha && d.horaFin && d.horaInicio
                     ? ([
