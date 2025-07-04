@@ -5,6 +5,7 @@ import { useInternalModals } from "@/hooks/useInternalModals";
 import { reservaType } from "@/schemas/reserva";
 import { deleteReservaAPI } from "@/services/reservas.service";
 import { Ban } from "lucide-react";
+import { DateTime } from "luxon";
 import { useContext } from "react";
 
 const ConfirmReservaForm = ({ reserva }: { reserva: reservaType }) => {
@@ -14,6 +15,17 @@ const ConfirmReservaForm = ({ reserva }: { reserva: reservaType }) => {
   return (
     <>
       <Button
+        disabled={Boolean(
+          reserva.fechaMaxCancelacion &&
+            reserva.horaMaxCancelacion &&
+            DateTime.fromISO(reserva.fechaMaxCancelacion)
+              .set({
+                hour: DateTime.fromISO(reserva.horaMaxCancelacion).hour,
+                minute: DateTime.fromISO(reserva.horaMaxCancelacion).minute,
+              })
+              .diffNow()
+              .as("minutes") < 0
+        )}
         variant="danger"
         onClick={() => {
           callAlertDialog({

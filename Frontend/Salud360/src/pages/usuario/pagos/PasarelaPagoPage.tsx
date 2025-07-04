@@ -1,7 +1,9 @@
+import Button from "@/components/Button";
 import DetallesMembresia from "@/components/usuario/membresia/DetallesMembresia";
 import MetodoPlin from "@/components/usuario/membresia/metodos/MetodoPlin";
 import MetodoTarjeta from "@/components/usuario/membresia/metodos/MetodoTarjeta";
 import MetodoYape from "@/components/usuario/membresia/metodos/MetodoYape";
+import Progression from "@/components/usuario/membresia/Progression";
 import { IComunidad } from "@/models/comunidad";
 import { IMedioDePago } from "@/models/medioDePago";
 import { IMembresia } from "@/models/membresia";
@@ -69,6 +71,30 @@ const PasarelaPagoPage = () => {
         )}
         {metodo === "yape" && (
           <MetodoYape comunidad={comunidad} membresia={membresia} />
+        )}
+        {metodo === "efectivo" && (
+          <div>
+            <Progression currentStep={1} steps={3} />
+
+            <div className="flex flex-col justify-center gap-4">
+              <h2 className="text-lg font-semibold text-center">
+                Pagar con efectivo
+              </h2>
+              <p className="text-center text-neutral-600">
+                Para pagar con efectivo, por favor visita nuestra oficina
+                principal o contacta a nuestro equipo de soporte para más
+                detalles.
+              </p>
+              <div className="flex justify-center">
+                <Button
+                  onClick={() => navigate("/usuario")}
+                  className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+                >
+                  Continuar
+                </Button>
+              </div>
+            </div>
+          </div>
         )}
       </div>
     </div>

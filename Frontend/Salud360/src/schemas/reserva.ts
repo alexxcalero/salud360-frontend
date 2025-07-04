@@ -37,6 +37,9 @@ export const reservaSchema = z.object({
   //Para la descarga de arcchivos
   descripcion: z.string().optional().nullable(),
   nombreArchivo: z.string().optional().nullable(),
+  // Para lo de max FechaHora Cancelación
+  fechaMaxCancelacion: z.string().optional().nullable(),
+  horaMaxCancelacion: z.string().optional().nullable(),
 });
 
 export type reservaType = z.infer<typeof reservaSchema>;

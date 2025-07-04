@@ -12,6 +12,8 @@ import { cn } from "@/lib/utils";
 import { ClaseEstado } from "@/models/enums/clase";
 import ReservarClaseForm from "./form/ReservarClase";
 import CancelarClaseForm from "./form/CancelarClase";
+import { useContext } from "react";
+import { AuthContext } from "@/hooks/AuthContext";
 
 export function ComunidadClaseCard({
   clase,
@@ -21,9 +23,13 @@ export function ComunidadClaseCard({
   collapsed?: boolean;
 }) {
   const { id } = useParams();
-  console.group("AAAAA");
-  console.log(clase.clientes);
-  console.groupEnd();
+
+  const { usuario } = useContext(AuthContext);
+  if (
+    clase.clientes?.findIndex((c) => c.idCliente === usuario.idCliente) !== -1
+  )
+    return;
+
   return (
     <>
       <HoverCard openDelay={300}>
@@ -103,13 +109,9 @@ export function ComunidadClaseCard({
               {clase.clientes && clase.clientes.length !== 0 && (
                 <div className="bg-green-200 border-1 border-green-600 rounded-md p-4 mt-4">
                   <strong className="text-green-800">
-                    Clase ya reservada por:
+                    Clase ya está reservada por {clase.clientes.length}{" "}
+                    {clase.clientes.length === 1 ? "cliente" : "clientes"}
                   </strong>
-                  {clase.clientes.map((client) => (
-                    <p className="text-green-600" key={client.idCliente}>
-                      {client?.nombres} {client?.apellidos} - {client?.correo}
-                    </p>
-                  ))}
                 </div>
               )}
             </div>
@@ -122,16 +124,6 @@ export function ComunidadClaseCard({
                 <CancelarClaseForm clase={clase} id={id} />
               )}
             </div>
-            <p>
-              <span className="text-lg">
-                {clase.fecha?.toFormat("DDDD", { locale: "es" })}
-              </span>
-              <br />
-              {clase.horaInicio?.toFormat("TTTT", {
-                locale: "es",
-              })}{" "}
-              - {clase.horaFin?.toFormat("TTTT", { locale: "es" })}
-            </p>
           </div>
         </HoverCardContent>
       </HoverCard>
