@@ -10,6 +10,8 @@ import ConfirmReservaForm from "./form/ConfirmReserva";
 import { ReservaEnum } from "@/models/enums/reserva";
 import Button from "../Button";
 import { useDialog } from "@/hooks/dialogContext";
+import Time from "../time";
+import { DateTime } from "luxon";
 
 export function ReservaCard({
   reserva,
@@ -53,7 +55,19 @@ export function ReservaCard({
           </BaseCard>
         </HoverCardTrigger>
         <HoverCardContent className="w-max">
+          {/** Mostrar fecha y hora */}
           <div className="p-2 flex flex-col gap-2">
+            {reserva.fechaMaxCancelacion && reserva.horaMaxCancelacion && (
+              <div>
+                <Time
+                  type="datetime"
+                  dateTime={DateTime.fromISO(reserva.fechaMaxCancelacion).set({
+                    hour: DateTime.fromISO(reserva.horaMaxCancelacion).hour,
+                    minute: DateTime.fromISO(reserva.horaMaxCancelacion).minute,
+                  })}
+                />
+              </div>
+            )}
             {/* mOSTRAR DESCRIPCIÓN SI TIENE */}
             {reserva.descripcion && (
               <p className="mb-2 text-sm text-gray-700">

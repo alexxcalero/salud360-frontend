@@ -35,6 +35,17 @@ const ReservarClaseForm = ({
               });
               return true;
             }
+            console.log({
+              cliente: {
+                idCliente: usuario.idCliente,
+              },
+              clase: {
+                idClase: clase.idClase,
+              },
+              comunidad: {
+                idComunidad: Number(id),
+              },
+            });
             const result = await postReservarAPI({
               cliente: {
                 idCliente: usuario.idCliente,

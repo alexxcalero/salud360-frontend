@@ -23,3 +23,8 @@ export const getMedioDePagoByIdAPI = async (idMedioDePago: number) => {
   const response = await baseAPI.get(`mediosDePago/${idMedioDePago}`);
   return response.data as IMedioDePago;
 };
+
+export const verificarMedioDePagoAPI = async (medioDePago: IMedioDePago) => {
+  const response = await baseAPI.post("mediosDePago/verificar", medioDePago);
+  return response.data as boolean;
+};

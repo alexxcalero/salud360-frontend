@@ -12,4 +12,10 @@ export interface IReserva {
   clase?: IClase;
   citaMedica?: ICitaMedica;
   comunidad?: IComunidad;
+  // Esto es lo de Alex
+  fechaMaxCancelacion?: string;
+  horaMaxCancelacion?: string;
+  // Supongo que esto es lo de Roller
+  descripcion?: string;
+  nombreArchivo?: string;
 }

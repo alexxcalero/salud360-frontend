@@ -7,13 +7,21 @@ import Input from "@/components/input/Input";
 import { useDialog } from "@/hooks/dialogContext";
 import { useLoading } from "@/hooks/LoadingContext";
 import { DateTime } from "luxon";
-import { FormEvent, ReactNode, useContext, useMemo, useState } from "react";
+import {
+  FormEvent,
+  ReactNode,
+  useContext,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import TarjetaSkeleton from "./metodos/TarjetaSkeleton";
 import { cn } from "@/lib/utils";
 import MastercardIcon from "@/assets/method-mastercard.svg";
 import VisaIcon from "@/assets/method-visa.svg";
 import { AuthContext } from "@/hooks/AuthContext";
 import { IMedioDePago } from "@/models/medioDePago";
+import { verificarMedioDePagoAPI } from "@/services/medioDePago.service";
 
 interface Props {
   defaultValues?: IMedioDePago;
@@ -35,12 +43,16 @@ const FormularioTarjeta = ({
   const { setLoading } = useLoading();
   const { callErrorDialog } = useDialog();
 
+  const [submitBtnDisabled, setSubmitBtnDisabled] = useState<boolean>(false);
+  const dobleFactorVerificationSuperEpic = useRef<boolean>(false);
+
   // const [displayTipo, setDisplayTipo] = useState<string>(
   //   defaultValues?.tipo ?? ""
   // );
   const [displayNumeroTarjeta, setDisplayNumeroTarjeta] = useState<string>(
     defaultValues?.ncuenta
       ?.toString()
+      .replace(/\D/g, "")
       .match(/.{1,4}/g)
       ?.join("-") ?? ""
   );
@@ -97,6 +109,10 @@ const FormularioTarjeta = ({
   const submitHandler = async (e: FormEvent) => {
     e.preventDefault();
 
+    if (dobleFactorVerificationSuperEpic.current) return;
+    dobleFactorVerificationSuperEpic.current = true;
+    setSubmitBtnDisabled(true);
+
     if (DateTime.fromISO(newCard.vencimiento ?? "") < DateTime.now()) {
       callErrorDialog({
         title: "Fecha de vencimiento inválida",
@@ -104,6 +120,21 @@ const FormularioTarjeta = ({
           "La fecha de vencimiento no puede ser anterior a la fecha actual.",
       });
       return;
+    }
+
+    if (defaultValues) {
+      const verificacion = await verificarMedioDePagoAPI({
+        ...newCard,
+        idMedioDePago: defaultValues.idMedioDePago,
+      });
+      if (!verificacion) {
+        callErrorDialog({
+          title: "Datos incorrectos",
+          description:
+            "Debe ingresar el cvv y la fecha de vencimiento correctos.",
+        });
+        return;
+      }
     }
 
     try {
@@ -123,6 +154,8 @@ const FormularioTarjeta = ({
       callErrorDialog({ title: "Error al agregar el método de pago" });
     } finally {
       setLoading(false);
+      setSubmitBtnDisabled(false);
+      dobleFactorVerificationSuperEpic.current = false;
     }
   };
 
@@ -220,7 +253,7 @@ const FormularioTarjeta = ({
               value={mesInput}
               setValue={setMesInput}
               placeholder="MM"
-              disabled={disabled}
+              // disabled={disabled}
               min={0}
               max={12}
             />
@@ -232,7 +265,7 @@ const FormularioTarjeta = ({
               value={anioInput}
               setValue={setAnioInput}
               placeholder="AA"
-              disabled={disabled}
+              // disabled={disabled}
               min={DateTime.now().year % 100}
             />
           </div>
@@ -246,7 +279,7 @@ const FormularioTarjeta = ({
               const numericValue = val.replace(/\D/g, "");
               setCvvDisplay(numericValue);
             }}
-            disabled={disabled}
+            // disabled={disabled}
             required={true}
             maxLength={3}
             minLength={3}
@@ -256,7 +289,9 @@ const FormularioTarjeta = ({
           <Button type="button" variant="outline" onClick={cancelHandler}>
             Cancelar
           </Button>
-          <Button type="submit">{submitBtnContent}</Button>
+          <Button disabled={submitBtnDisabled} type="submit">
+            {submitBtnContent}
+          </Button>
         </div>
       </form>
     </div>
