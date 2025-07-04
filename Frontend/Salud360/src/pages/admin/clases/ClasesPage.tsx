@@ -130,7 +130,7 @@ export default function ClasesPage() {
           setMensajeError(error.response.data.message); // duración incorrecta
           setShowModalValidacion(true);
         } else {
-          setMensajeError("Revise el formato del CSV y reglas de negocio");
+          setMensajeError("Revise el formato del CSV, reglas de negocio y la existencia de los locales seleccionados");
           setShowModalValidacion(true);
         }
       }
