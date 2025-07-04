@@ -1,4 +1,4 @@
-import  { useEffect, useState} from "react";
+import  { useContext, useEffect, useState} from "react";
 import heroImage from "@/assets/heroComunidades.png"
 import detalleComunidadImage1 from "@/assets/detalleComunidad1.png"
 import HeroDetalleComunidad from "@/components/landing/HeroDetalleComunidad";
@@ -12,12 +12,26 @@ import Imagen from "@/assets/detalleComunidadX.png"
 import CardMembresia from "@/components/landing/CardMembresía";
 import { IComunidad } from "@/models/comunidad";
 import { baseAPI } from "@/services/baseAPI";
+import { AuthContext } from "@/hooks/AuthContext";
+import Membresias from "../usuario/configuracion/Membresias";
+import useUsuarioForm from "@/hooks/useUsuarioForm";
 
 function DetalleComunidad(){
+
+    const {usuario, loading} = useContext(AuthContext);
+    if (loading) return null;
 
     const [comunidad, setComunidad] = useState<IComunidad>({});
     const {id} = useParams();
     
+    const idCliente = usuario.idCliente;
+
+    const {
+        comunidades,
+        afiliaciones,
+        setUsuarioAPI
+    } = useUsuarioForm();
+
 
     const fetchComunidad = () => {
     baseAPI.get(`/comunidades/${id}`, {
@@ -35,35 +49,45 @@ function DetalleComunidad(){
       })
       .catch(err => console.error("Error cargando comunidad", err));
     }
-
-    
     useEffect(() => {
         fetchComunidad();
     }, []);
 
+    const fetchUsuario = () => {
+        baseAPI.get(`/admin/clientes/${idCliente}`, {
+          auth: {
+            username: "admin",
+            password: "admin123"
+          }
+        })
+          .then(res => {
+            console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
+            setUsuarioAPI(res.data)
+            console.log("$$*$$$$****Usuario del back:", res.data);
+            //setLoading(false);
+          })
+          .catch(err => {
+            console.error("Error cargando el usuario", err);
+            //setLoading(false);
+          });
+    }
+    useEffect(() => {
+        fetchUsuario();
+    }, []);
+
+
     const imagen = comunidad.imagen;
 
-  const imagenFinal =
+    const imagenFinal =
     imagen && (imagen.startsWith("http") || imagen.startsWith("data:"))
       ? imagen
       : imagen
         ? `http://localhost:8080/api/archivo/${imagen}`
         : "https://png.pngtree.com/png-clipart/20201224/ourmid/pngtree-panda-bamboo-bamboo-shoots-simple-strokes-cartoon-with-pictures-small-fresh-png-image_2625172.jpg";
 
-
-    //console.log("Comunidad:", comunidad);
-    console.log("Servicios de la comunidad:", comunidad.servicios);
-
-
-    //console.log("Membresía 2:", membresias);
-
-    comunidad?.servicios?.map((servicio: any, _: number) => (
-        console.log("LA DESCRIPCIÓN es:", servicio.descripcion)
-    ))
-
     
+    console.log("@@@@@@En landing comunidad, el usuario es: ", usuario);
     
-
 
     useEffect(() => {
         window.scrollTo(0, 0); //Para que apenas cargue aparezca en el tope de la página.
@@ -74,6 +98,24 @@ function DetalleComunidad(){
     }, [comunidad])
 
     const navigate = useNavigate();
+    const idsMembresias = comunidad.membresias?.map((m: any) => m.idMembresia);
+
+    var afiliacionActiva
+    var idMembresiaActiva = 0;
+    var tieneMembresia = false;
+
+    if (usuario != null){
+        afiliacionActiva = afiliaciones?.find((a: any) => 
+            a.estado === 'Activado' && idsMembresias?.includes(a.membresia?.idMembresia)
+        )
+        idMembresiaActiva = afiliacionActiva?.membresia?.idMembresia ?? 0;
+        tieneMembresia = idMembresiaActiva != 0;
+    }
+
+    console.log("El usuario tiene una membresía:", tieneMembresia)
+    console.log("El id de la membresía activa es:", idMembresiaActiva)
+
+
 
     return(
         <div>
@@ -134,18 +176,50 @@ function DetalleComunidad(){
                     </div>
                 </section>
 
-                <section className="relative bg-[#2A86FF] overflow-visible mb-20">
+                <section className="relative bg-[#2A86FF] overflow-visible mb-36">
                     <img src={abstractImage} alt="abstraction" className="inset-0 w-full h-[650px] object-cover opacity-5" />
                     <div className="absolute inset-0 flex flex-col items-center py-8">
                         <h1 className="text-white">PAQUETES DE MEMBRESÍA</h1>
 
+                        {tieneMembresia &&
+                            <div className="text-center mt-4 flex flex-col gap-4">
+                                <p className="text-xl text-white font-medium">
+                                    🔒 Ya tienes una membresía activa en esta comunidad.
+                                </p>
+                                <p className="text-lg text-white font-medium">
+                                    Para adquirir una nueva membresía, primero debes cancelar tu membresía actual.
+                                </p>
+                                <a
+                                    href="/usuario/configuracion/membresias"
+                                    className="text-sm text-white hover:underline font-semibold mt-1 inline-block"
+                                >
+                                    Click para gestionar tu membresía.
+                                </a>
+                            </div>
+                        }
+
+                        
+
                         <div className="flex flex-row m-8 gap-12">
-                            {/*CUANDO FUNCIONE REEMPLAZAR POR EL CODIGO DE ABAJO */}
-                            {comunidad?.membresias?.map((membresia: any, i: number) => (
-                                <div key={i}>
-                                    <CardMembresia membresia={membresia} comunidad={comunidad} servicios={comunidad.servicios}/>
-                                </div>
-                            ))}
+
+                            {comunidad?.membresias?.map((membresia: any, i: number) => {
+                            
+                                console.log("idMembresiaActiva:", idMembresiaActiva, " membresia.idMembresia:", membresia.idMembresia)
+                                console.log("idMembresiaActiva == membresia.idMembresia", idMembresiaActiva == membresia.idMembresia)
+                                
+                                const esMembresiaActiva = usuario && idMembresiaActiva === membresia.idMembresia;
+
+                                console.log("esMembresiaActiva es:", esMembresiaActiva)
+
+                                return(
+                                    <div key={i}>
+                                        <CardMembresia membresia={membresia} comunidad={comunidad} servicios={comunidad.servicios}
+                                        readOnly={tieneMembresia} hideButtons={true} activa={esMembresiaActiva}/>
+                                    </div>) 
+                            })}
+
+
+
                         </div>
 
                     </div>

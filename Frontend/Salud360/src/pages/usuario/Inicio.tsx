@@ -114,11 +114,11 @@ function Inicio(){
     });
 
     const accesosRapidos = [
-        [IdCard, "Mis membresías", `${cantComunidades} activas`, "configuracion/membresias"],
-        [PersonStanding, "Mis comunidades", `${cantComunidades} activas`, "comunidades"],
-        [Settings, "Mi configuración", `${cantComunidades} activas`, "configuracion"],
-        [CreditCard, "Mi historial de pago", `${cantComunidades} activas`, "configuracion/historial-pagos"],
-        [Calendar, "Mi calendario y reservas", `${cantComunidades} activas`, "calendarioYReservas"],
+        [IdCard, "Mis membresías", `${cantComunidades} membresías activas.`, "configuracion/membresias"],
+        [PersonStanding, "Mis comunidades", `${cantComunidades} comunidades.`, "comunidades"],
+        [Settings, "Mi configuración", `Configura tu perfil.`, "configuracion"],
+        [CreditCard, "Mi historial de pago", `Administra tus pagos.`, "configuracion/historial-pagos"],
+        [Calendar, "Mi calendario y reservas", `Observa tus reservas.`, "calendarioYReservas"],
     ]
 
     return (
