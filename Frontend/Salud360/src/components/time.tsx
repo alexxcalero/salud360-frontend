@@ -14,7 +14,7 @@ const Time = ({
         undefined
       }
     >
-      {dateTime?.toFormat(type === "datetime" ? "D" : "t")}
+      {dateTime?.toFormat(type === "datetime" ? "DDDD t" : "t")}
     </time>
   );
 };
