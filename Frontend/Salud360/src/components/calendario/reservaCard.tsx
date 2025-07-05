@@ -21,6 +21,14 @@ export function ReservaCard({
   collapsed?: boolean;
 }) {
   const { callErrorDialog } = useDialog();
+  const fechaActual = DateTime.now();
+  const fechaMaxCancelacionReserva = DateTime.fromISO(
+    reserva.fechaMaxCancelacion ?? DateTime.now().toISO()
+  ).set({
+    hour: DateTime.fromISO(reserva.horaMaxCancelacion ?? "00:00").hour,
+    minute: DateTime.fromISO(reserva.horaMaxCancelacion ?? "00:00").minute,
+  });
+
   return (
     <>
       <HoverCard openDelay={300}>
@@ -57,48 +65,92 @@ export function ReservaCard({
         <HoverCardContent className="w-max">
           {/** Mostrar fecha y hora */}
           <div className="p-2 flex flex-col gap-2">
-            {reserva.fechaMaxCancelacion && reserva.horaMaxCancelacion && (
-              <div>
-                <Time
-                  type="datetime"
-                  dateTime={DateTime.fromISO(reserva.fechaMaxCancelacion).set({
-                    hour: DateTime.fromISO(reserva.horaMaxCancelacion).hour,
-                    minute: DateTime.fromISO(reserva.horaMaxCancelacion).minute,
-                  })}
-                />
-              </div>
-            )}
-            {/* mOSTRAR DESCRIPCIÓN SI TIENE */}
-            {reserva.descripcion && (
-              <p className="mb-2 text-sm text-gray-700">
-                <strong>Descripción médica:</strong> {reserva.descripcion}
-              </p>
-            )}
+            <strong role="heading">
+              Reserva de {reserva.clase && "clase"}{" "}
+              {reserva.citaMedica && "Cita médica"}
+            </strong>
+            {reserva.estado !== ReservaEnum.cancelada && (
+              <>
+                {reserva.fechaMaxCancelacion &&
+                  reserva.horaMaxCancelacion &&
+                  (fechaActual < fechaMaxCancelacionReserva ? (
+                    <div className="text-sm text-yellow-600 bg-yellow-500/20 p-4 rounded-md border-1 border-yellow-700">
+                      Puede cancelar hasta antes de{" "}
+                      <Time
+                        type="datetime"
+                        dateTime={fechaMaxCancelacionReserva}
+                      />
+                      <br />
+                      <span>Quedan</span>
+                      <strong>
+                        {fechaMaxCancelacionReserva
+                          .diff(fechaActual, [
+                            "days",
+                            "hours",
+                            "minutes",
+                            "seconds",
+                          ])
+                          .toFormat(
+                            " d 'días' h 'horas' m 'minutos' s 'segundos'"
+                          )}
+                      </strong>
+                    </div>
+                  ) : (
+                    <div className="text-sm text-red-600 bg-red-500/20 p-4 rounded-md border-1 border-red-700">
+                      <strong>
+                        No puede cancelar esta reserva, ya que ha pasado el
+                        tiempo límite.
+                      </strong>
+                    </div>
+                  ))}
+                <p className="text-sm text-gray-600">
+                  Fecha y hora de inicio:{" "}
+                  {reserva.clase?.fecha?.toFormat("DDDD", { locale: "es" }) ??
+                    reserva.citaMedica?.fecha?.toFormat("DDDD", {
+                      locale: "es",
+                    })}
+                  {reserva.clase?.horaInicio?.toFormat(" t", {
+                    locale: "es",
+                  }) ??
+                    reserva.citaMedica?.horaInicio?.toFormat(" t", {
+                      locale: "es",
+                    })}
+                </p>
+                {/* mOSTRAR DESCRIPCIÓN SI TIENE */}
+                {reserva.descripcion && (
+                  <p className="mb-2 text-sm text-gray-700">
+                    <strong>Descripción médica:</strong> {reserva.descripcion}
+                  </p>
+                )}
 
-            {/* BOTON DE DESCARGA DE ARCHIVO SI SUBIO UNO */}
-            {reserva.nombreArchivo ? (
-              <Button
-                variant="primary"
-                className="mt-2"
-                onClick={async () => {
-                  try {
-                    const res = await fetch(
-                      `/api/reservas/archivo-url/${reserva.nombreArchivo}`
-                    );
-                    const url = await res.text();
-                    window.open(url, "_blank");
-                  } catch (e) {
-                    console.error("Error al obtener el archivo:", e);
-                    callErrorDialog({ title: "No se pudo abrir el archivo." });
-                  }
-                }}
-              >
-                Descargar archivo médico
-              </Button>
-            ) : (
-              <p className="mt-2 text-sm text-gray-600">
-                No se adjuntó ningún archivo médico.
-              </p>
+                {/* BOTON DE DESCARGA DE ARCHIVO SI SUBIO UNO */}
+                {reserva.nombreArchivo ? (
+                  <Button
+                    variant="primary"
+                    className="mt-2"
+                    onClick={async () => {
+                      try {
+                        const res = await fetch(
+                          `/api/reservas/archivo-url/${reserva.nombreArchivo}`
+                        );
+                        const url = await res.text();
+                        window.open(url, "_blank");
+                      } catch (e) {
+                        console.error("Error al obtener el archivo:", e);
+                        callErrorDialog({
+                          title: "No se pudo abrir el archivo.",
+                        });
+                      }
+                    }}
+                  >
+                    Descargar archivo médico
+                  </Button>
+                ) : (
+                  <p className="mt-2 text-sm text-gray-600">
+                    No se adjuntó ningún archivo médico.
+                  </p>
+                )}
+              </>
             )}
 
             <div className="flex gap-4 mt-2">
