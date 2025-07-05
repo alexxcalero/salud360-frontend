@@ -31,6 +31,9 @@ export default function RegistrarCitaMedicasPage() {
   const [showModalValidacion, setShowModalValidacion] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
   
+  const [forceReload, setForceReload] = useState(false);
+  const [mensajeError, setMensajeError] = useState("");
+
   const medicoSeleccionado = useMemo(
     () => medicos.find(({ idMedico }) => idMedico?.toString() === medicoInput),
     [medicoInput, medicos]
@@ -108,9 +111,17 @@ export default function RegistrarCitaMedicasPage() {
             });
     
             setShowModalExito(true);
-        } catch (error) {
-            console.error("Error al cargar el archivo CSV", error);
+        } catch (error: any) {
+          if (error.response?.status === 409) {
+            setMensajeError(error.response.data.message); // conflicto de horario
             setShowModalValidacion(true);
+          } else if (error.response?.status === 400) {
+            setMensajeError(error.response.data.message); // duración incorrecta
+            setShowModalValidacion(true);
+          } else {
+            setMensajeError("Revise el formato del CSV, reglas de negocio y la existencia tanto del servicio y medico seleccionado");
+            setShowModalValidacion(true);
+          }
         }
         };
   
@@ -172,7 +183,7 @@ export default function RegistrarCitaMedicasPage() {
                             detalle="Se registró de manera exitosa las clases mediante el archivo CSV"
                             onConfirm={() => {
                                 setShowModalExito(false);
-                                
+                                setForceReload(prev => !prev);
                                 
                             }}
                         />
@@ -187,7 +198,7 @@ export default function RegistrarCitaMedicasPage() {
                     <div className="fixed inset-0 z-50 flex items-center justify-center">
                         <ModalValidacion
                             titulo="Error en la carga masiva"
-                            mensaje="No se pudieron registrar las clases mediante el archivo CSV. Verifique las relgas de negocio y la existencia de los médicos"
+                            mensaje={mensajeError}
                             onClose={() => setShowModalValidacion(false)}
                         />
                     </div>
@@ -220,7 +231,7 @@ export default function RegistrarCitaMedicasPage() {
                     medico?.idMedico !== undefined
                 ) ?? []
               }
-              fetchDataDependences={[medicoSeleccionado]}
+              fetchDataDependences={[medicoSeleccionado,forceReload]}
               cards={{
                 day: (d) => <AdminCitaMedicaCard citaMedica={d} />,
                 week: (d) => <AdminCitaMedicaCard citaMedica={d} />,

@@ -19,18 +19,21 @@ const PasarelaExito = () => {
     <div className="w-full h-full flex justify-center items-center">
       <title>Pasarela de pagos</title>
 
-      <div className="flex flex-col bg-white shadow-md max-w-150 p-4 m-4 gap-4 items-center">
+      <div className="flex flex-col bg-white shadow-md max-w-150 p-8 m-4 gap-4 items-center">
         <div className="aspect-1/1 h-18 bg-green-400 rounded-full flex justify-center items-center w-min">
           <Check color="white" size={38} />
         </div>
-        <h1>
+        <h1>¡Afilición exitosa!</h1>
+        <h2 className="text-2xl font-bold mb-2">Ahora eres miembro de la <span className="text-[#2A86FF] italic">{comunidad.nombre ?? "{{ Mostrar nombre }}"}.</span></h2>
+        {/*<h1>
           ¡Se afilió correctamente a la comunidad{" "}
           {comunidad.nombre ?? "{{ Mostrar nombre }}"}!
-        </h1>
+        </h1>*/}
         
         <div className="flex gap-4 justify-center">
           <Button
             variant="outline"
+            size="lg"
             onClick={() => {
               if (!boleta.pdf) {
                 createToast("error", {
@@ -58,6 +61,7 @@ const PasarelaExito = () => {
             <Download /> Descargar boleta
           </Button>
           <Button
+            size="lg"
             onClick={() => {
               navigate(
                 `/usuario/comunidades/detalle/${comunidad.idComunidad}/`,

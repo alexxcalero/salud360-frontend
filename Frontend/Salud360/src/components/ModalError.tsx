@@ -4,12 +4,13 @@
 interface Props{
   modulo?: string;
   detalle?: string;
+  detalle2?: string;
   buttonConfirm?: string;
   onConfirm: () => void;
   onCancel: () => void;
 }
 
-function ModalError({modulo="", detalle="", buttonConfirm="Eliminar", onConfirm, onCancel}: Props) {
+function ModalError({modulo="", detalle="", detalle2="", buttonConfirm="Eliminar", onConfirm, onCancel}: Props) {
   return (
       <div className="bg-white p-8 rounded-2xl shadow-md max-w-md w-full text-center">
         {/* Icono de advertencia */}
@@ -24,6 +25,8 @@ function ModalError({modulo="", detalle="", buttonConfirm="Eliminar", onConfirm,
 
         {/* Detalle del elemento */}
         <p className="mb-6">{detalle}</p>
+
+        <p className="text-sm mb-6">{detalle2}</p>
 
         {/* Botones */}
         <div className="flex flex-col space-y-3">

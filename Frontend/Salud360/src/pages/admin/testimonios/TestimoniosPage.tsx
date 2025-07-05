@@ -110,6 +110,16 @@ function CalificacionesPage() {
     const testimoniosPaginados = testimoniosOrdenados.slice(
         (paginaActual - 1) * registrosPorPagina, paginaActual * registrosPorPagina);
 
+
+        console.log("Los testimonios paginados son:", testimoniosPaginados)
+
+    testimoniosPaginados.map((testimonio: any) => {
+        console.log("EL ID DEL TESTIMONI0:", testimonio.idTestimonio)
+        console.log("testimonio.cliente es:", testimonio.cliente)
+        console.log("testimonio.cliente.nombres es:", testimonio.cliente.nombres)
+        console.log("testimonio.cliente.apellidos es:", testimonio.cliente.apellidos)
+    })    
+
     const rows = testimoniosPaginados
         .map((testimonio: any) => [
             {

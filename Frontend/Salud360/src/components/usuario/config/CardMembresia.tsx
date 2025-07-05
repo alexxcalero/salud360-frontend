@@ -93,7 +93,7 @@ const CardMembresia = ({
         {state === "Activado" && (
           <>
             
-            <Button variant="danger" size="lg" className="mr-2 rounded-sm" onClick={onSuspender}>
+            <Button variant="outlineDanger" size="lg" className="mr-2 rounded-sm" onClick={onSuspender}>
               <CircleMinus />
               Suspender
             </Button>
@@ -101,7 +101,7 @@ const CardMembresia = ({
         )}
         {state === "Suspendido" && (
           <>
-            <Button size="lg" className="mr-2 rounded-sm" onClick={onReactivar}>
+            <Button size="lg" className="mr-2 rounded-sm bg-green-600 hover:bg-green-700 text-white" onClick={onReactivar}>
               <Plus />
               Reactivar
             </Button>

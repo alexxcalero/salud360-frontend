@@ -22,12 +22,7 @@ import type { NuevoTestimonio } from "@/services/testimonioService";
 
 
 function DetalleComunidad(){
-
-
-
-
-
-
+  
     const {comunidad} = useComunidad();
     const { usuario } = useContext(AuthContext);
   
@@ -170,14 +165,14 @@ function DetalleComunidad(){
                 comentario,
                 calificacion,
                 idComunidad: comunidad.idComunidad ,
-                autor: { idCliente: usuario.idCliente }
+                cliente: { idCliente: usuario.idCliente }
               });
 
               await crearTestimonio({
                 comentario,
                 calificacion,
                 idComunidad: comunidad.idComunidad,
-                autor: {
+                cliente: {
                   idCliente: usuario.idCliente,
                 },
               });
@@ -211,7 +206,7 @@ function DetalleComunidad(){
                 comentario,
                 calificacion,
                 idComunidad: comunidad.idComunidad,
-                autor: {
+                cliente: {
                   idCliente: usuario.idCliente,
                 },
               });

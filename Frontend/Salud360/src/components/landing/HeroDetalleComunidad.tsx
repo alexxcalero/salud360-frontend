@@ -7,7 +7,7 @@ interface Props{
 
 function HeroDetalleComunidad({image, title}: Props){
     
-  console.log("Alex Calero", image)
+  //console.log("Alex Calero", image)
   return (
         <section className="relative w-full h-[735px]">
             <img

@@ -431,7 +431,7 @@ VALUES
 INSERT INTO ingesoft.mediodepago (id_medio_de_pago, id_cliente, ncuenta, cvv, vencimiento, tipo, activo, fecha_creacion, fecha_desactivacion)
 VALUES (1, 1, 12345678, 123, '2026-06-30 23:59:59', 'tarjeta_credito', true, now(), NULL);
 
-INSERT INTO ingesoft.afiliacion (id_afiliacion, id_cliente, id_medio_de_pago, id_membresia, fecha_afiliacion, fecha_desafiliacion, fecha_reactivacion, estado) VALUES (1, 1, 1, 1, now(), NULL, NULL, 'Activa');
+INSERT INTO ingesoft.afiliacion (id_afiliacion, id_cliente, id_medio_de_pago, id_membresia, fecha_afiliacion, fecha_desafiliacion, fecha_reactivacion, estado) VALUES (1, 1, 1, 1, now(), NULL, NULL, 'Activado');
 
 INSERT INTO ingesoft.comunidad_cliente (id_cliente, id_comunidad)
 VALUES (1, 1);

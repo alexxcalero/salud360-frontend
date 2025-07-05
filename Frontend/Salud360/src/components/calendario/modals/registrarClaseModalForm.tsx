@@ -130,8 +130,7 @@ const RegistrarClaseModalForm = ({
               <div className="p-4 bg-blue-700/10 border-1 border-blue-500 rounded-md text-blue-500">
                 <p>
                   La <strong>capacidad total</strong> de alumnos será{" "}
-                  <strong>asignada automáticamente</strong>
-                  por el sistema
+                  <strong>asignada automáticamente</strong>{" "}por el sistema.
                 </p>
               </div>
               <Input

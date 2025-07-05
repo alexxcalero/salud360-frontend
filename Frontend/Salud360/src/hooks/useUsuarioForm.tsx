@@ -19,6 +19,7 @@ function useUsuarioForm(){
     const [notiPorCorreo, setNotiPorCorreo] = useState(false);
     const [notiPorSMS, setNotiPorSMS] = useState(false);
     const [notiPorWhatsApp, setNotiPorWhatsApp] = useState(false);
+    const [afiliaciones, setAfiliaciones] = useState([]);
     
     const setUsuarioAPI = (usuario: any) => {
 
@@ -40,6 +41,8 @@ function useUsuarioForm(){
         setNotiPorCorreo(usuario.notificacionPorCorreo || false);
         setNotiPorWhatsApp(usuario.notificacionPorWhatsApp || false);
         setNotiPorSMS(usuario.notificacionPorSMS || false);
+        setAfiliaciones(usuario.afiliaciones || [])
+        
     }
 
     return{
@@ -60,6 +63,7 @@ function useUsuarioForm(){
         notiPorCorreo, setNotiPorCorreo,
         notiPorSMS, setNotiPorSMS,
         notiPorWhatsApp, setNotiPorWhatsApp,
+        afiliaciones, setAfiliaciones,
         setUsuarioAPI
   };
 }

@@ -249,7 +249,7 @@ function ComunidadPage() {
               <div className="fixed inset-0 z-50 flex items-center justify-center">
                      <ModalValidacion
                        titulo="Error en la carga masiva"
-                       mensaje="No se pudieron registrar los locales mediante el archivo CSV. Nose q fue"
+                       mensaje="No se pudieron registrar los locales mediante el archivo CSV. Revise los servicios seleccionados"
                        onClose={() => setShowModalValidacion(false)}
                    />
               </div>

@@ -1,5 +1,7 @@
 //import React from "react";
 
+import { Check } from "lucide-react";
+
 interface Props{
   modulo?: string;
   detalle?: string;
@@ -12,9 +14,11 @@ function ModalExito({modulo="", detalle="", onConfirm}: Props) {
         {/* Círculo con check */}
         <div className="flex justify-center mb-4">
           <div className="bg-green-500 rounded-full w-16 h-16 flex items-center justify-center">
-            <span className="text-white text-3xl font-bold">✔</span>
+            <Check color="white" size={38} />
           </div>
         </div>
+
+        
 
         {/* Título */}
         <h2 className="text-2xl font-bold mb-2">{modulo}</h2>

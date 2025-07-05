@@ -12,6 +12,7 @@ function Inicio(){
 
     const {usuario, loading} = useContext(AuthContext)
     const [comunidadRandom, setComunidadRandom] = useState<any>([]);
+    const [comunidadesActivas, setComunidadesActivas] = useState(0);
       
     if (loading || !usuario) return null;
 
@@ -38,7 +39,6 @@ function Inicio(){
 
     const fetchComunidadAleatoria = () => {
         //console.log("El id del cliente a enviar es:", id)
-
         baseAPI.get("/cliente/aleatoria", {
             params: {
                 idCliente: id
@@ -75,11 +75,32 @@ function Inicio(){
           });
           
     }
+
+    const fetchComunidadesActivas = () => {
+        baseAPI.get(`/cliente/comunidades-activas`, {
+            params: {
+                idCliente: id,
+            },
+            auth: {
+            username: "admin",
+            password: "admin123",
+            },
+        })
+        .then((res) => {
+            console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
+            setComunidadesActivas(res.data.length)
+            console.log("Comunidadessssss:", res.data);
+        })
+        .catch((error) => {
+            console.error("Error al obtener comunidades activas:", error);
+        });
+    }
     
 
     useEffect(() => {
         fetchComunidadAleatoria()
         fetchUsuario()
+        fetchComunidadesActivas()
         window.scrollTo(0, 0); //Para que apenas cargue aparezca en el tope de la página.
     }, []);
 
@@ -101,6 +122,9 @@ function Inicio(){
 
     //const tipoDocumento = rawTipoDocumento?.nombre;
     //const cantComunidades = usuario.comunidades.length;
+
+    console.log("Las comunidades activas son:", comunidades)
+
     const cantComunidades = comunidades.length;
     const fechaCreacion = new Date(rawFechaCreacion).toLocaleDateString("es-PE", {
             day: "2-digit",
@@ -114,11 +138,11 @@ function Inicio(){
     });
 
     const accesosRapidos = [
-        [IdCard, "Mis membresías", `${cantComunidades} activas`, "configuracion/membresias"],
-        [PersonStanding, "Mis comunidades", `${cantComunidades} activas`, "comunidades"],
-        [Settings, "Mi configuración", `${cantComunidades} activas`, "configuracion"],
-        [CreditCard, "Mi historial de pago", `${cantComunidades} activas`, "configuracion/historial-pagos"],
-        [Calendar, "Mi calendario y reservas", `${cantComunidades} activas`, "calendarioYReservas"],
+        [IdCard, "Mis membresías", `${comunidadesActivas} membresías activas.`, "configuracion/membresias"],
+        [PersonStanding, "Mis comunidades", `${comunidadesActivas} comunidades.`, "comunidades"],
+        [Settings, "Mi configuración", `Configura tu perfil.`, "configuracion"],
+        [CreditCard, "Mi historial de pago", `Administra tus pagos.`, "configuracion/historial-pagos"],
+        [Calendar, "Mi calendario y reservas", `Observa tus reservas.`, "calendarioYReservas"],
     ]
 
     return (

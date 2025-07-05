@@ -86,6 +86,7 @@ import DetalleTestimonio from "./pages/admin/testimonios/DetalleTestimonio";
 import SeleccionarTipo from "./pages/admin/usuarios/SeleccionarTipo";
 import CrearAdmin from "./pages/admin/usuarios/CrearAdmin";
 import PasarelaExito from "./pages/usuario/pagos/PasarelaExitoTmr";
+import { ComunidadProtectedRoute } from "./components/ProtectedComunidadRoute";
 
 const CLIENT_ID =
   "442103352631-urj3v36db8bhki2cg4vu6c2q404dkko7.apps.googleusercontent.com";
@@ -136,7 +137,7 @@ createRoot(document.getElementById("root")!).render(
                       <Route path="comunidades">
                         <Route index element={<ComunidadesUsuario />} />
                         <Route path="explorarComunidades" element={<ExplorarComunidades />} />
-                          <Route path="detalle/:id" element={<ComunidadProvider> <DetalleComunidadLayout /> </ComunidadProvider>}>
+                          <Route path="detalle/:id" element={<ComunidadProtectedRoute><ComunidadProvider> <DetalleComunidadLayout /> </ComunidadProvider> </ComunidadProtectedRoute>}>
                             <Route index element={<DetalleComunidadUsuario />}></Route>
                             <Route path="horarios" element={<DetalleComunidadHorario/>}></Route>
                             <Route path="reservas" element={<DetalleComunidadReservas/>}></Route>
