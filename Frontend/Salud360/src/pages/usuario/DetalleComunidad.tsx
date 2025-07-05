@@ -165,14 +165,14 @@ function DetalleComunidad(){
                 comentario,
                 calificacion,
                 idComunidad: comunidad.idComunidad ,
-                autor: { idCliente: usuario.idCliente }
+                cliente: { idCliente: usuario.idCliente }
               });
 
               await crearTestimonio({
                 comentario,
                 calificacion,
                 idComunidad: comunidad.idComunidad,
-                autor: {
+                cliente: {
                   idCliente: usuario.idCliente,
                 },
               });
@@ -206,7 +206,7 @@ function DetalleComunidad(){
                 comentario,
                 calificacion,
                 idComunidad: comunidad.idComunidad,
-                autor: {
+                cliente: {
                   idCliente: usuario.idCliente,
                 },
               });

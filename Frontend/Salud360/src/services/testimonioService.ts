@@ -1,6 +1,6 @@
 import { baseAPI } from "./baseAPI";
 
-interface Autor {
+interface Cliente {
   idCliente: number;
 }
 
@@ -9,7 +9,7 @@ export interface NuevoTestimonio {
   comentario: string;
   calificacion: number;
   idComunidad: number;
-  autor: Autor;
+  cliente: Cliente;
 }
 
 export const crearTestimonio = async (testimonio: NuevoTestimonio) => {

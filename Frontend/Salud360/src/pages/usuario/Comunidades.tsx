@@ -254,7 +254,7 @@ function Comunidades(){
                 <>
                     <div className="fixed inset-0 bg-black/60 z-40" />
                     <div className="fixed inset-0 z-50 flex items-center justify-center">
-                        <ModalError modulo="¿Estás seguro de que quieres abandonar la comunidad?" detalle={`Comunidad: ${comunidadActual.nombre}`} buttonConfirm="Aceptar" onConfirm={() => {
+                        <ModalError modulo="¿Estás seguro de que quieres abandonar la comunidad?" detalle={`Comunidad: ${comunidadActual.nombre}`} detalle2={"Se cancelarán todas tus reservas."} buttonConfirm="Aceptar" onConfirm={() => {
                         handleCancelarAfiliacion();
                         }} onCancel={() => setShowModalCancelar(false)} />
                     </div>
