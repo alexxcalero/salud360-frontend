@@ -112,17 +112,23 @@ export default function RegistrarCitaMedicasPage() {
     
             setShowModalExito(true);
         } catch (error: any) {
-          if (error.response?.status === 409) {
+          const mensajeBackend = error.response?.data?.message || "";
+          if (error.response?.status === 409 ||(mensajeBackend.includes("Cruce entre citas nuevas en el archivo CSV en la fecha")||mensajeBackend.includes("se cruza con una ya existente en la fecha"))) {
             setMensajeError(error.response.data.message); // conflicto de horario
-            setShowModalValidacion(true);
-          } else if (error.response?.status === 400) {
+          } else if (error.response?.status === 400 && mensajeBackend.includes("deben durar exactamente 1 hora")) {
             setMensajeError(error.response.data.message); // duración incorrecta
-            setShowModalValidacion(true);
-          } else {
-            setMensajeError("Revise el formato del CSV, reglas de negocio y la existencia tanto del servicio y medico seleccionado");
-            setShowModalValidacion(true);
+          } else if (error.response?.status === 400 && mensajeBackend.includes("Header name") && mensajeBackend.includes("not found")) {
+            setMensajeError("El archivo CSV no tiene los encabezados esperados: fecha, hora_inicio, hora_fin, id_medico, id_servicio"); 
+          }else if (error.response?.status === 500 && mensajeBackend.includes("Médico con ID ") && mensajeBackend.includes("no encontrado")) {
+            setMensajeError(error.response.data.message);
+          } else if (error.response?.status === 500 && mensajeBackend.includes("Servicio con ID ") && mensajeBackend.includes("no encontrado")) {
+            setMensajeError(error.response.data.message);
+          }else {
+            setMensajeError("Verifique que todos los campos del CSV estén correctamente llenados.");
+            
           }
-        }
+          setShowModalValidacion(true);
+         }
         };
   
 

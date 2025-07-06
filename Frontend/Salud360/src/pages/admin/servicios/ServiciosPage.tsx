@@ -100,6 +100,8 @@ function ServiciosPage() {
   const serviciosPaginados = serviciosOrdenados.slice(
   (paginaActual - 1) * registrosPorPagina, paginaActual * registrosPorPagina);
 
+  const [mensajeError, setMensajeError] = useState("");
+
   const rows = serviciosPaginados
   .map((servicio: any) => [
     {
@@ -171,10 +173,21 @@ function ServiciosPage() {
 
         setShowModalExito(true);
         fetchServicios(); // Recargar la lista
-    } catch (error) {
-        console.error("Error al cargar el archivo CSV", error);
+    } catch (error: any) {
+        const mensajeBackend = error.response?.data?.message || "";
+        if (error.response?.status === 409) {
+          setMensajeError(error.response.data.message);
+        } else 
+          if (error.response?.status === 400 && mensajeBackend.includes("Header name") && mensajeBackend.includes("not found")) {
+          setMensajeError("El archivo CSV no tiene los encabezados esperados: nombre, descripcion, tipo.");
+        } else if (  error.response?.status === 500 &&  (    mensajeBackend.includes("java.lang") ||    mensajeBackend.includes("DataIntegrityViolationException") ||    mensajeBackend.includes("not-null property references a null")  )) {
+          setMensajeError("Verifique que todos los campos del CSV estén correctamente llenados.");
+        } else {
+          setMensajeError("Verifique que todos los campos del CSV estén correctamente llenados.");
+        }
+
         setShowModalValidacion(true);
-    }
+      }
     };
 
 
@@ -262,7 +275,7 @@ function ServiciosPage() {
                     <div className="fixed inset-0 z-50 flex items-center justify-center">
                         <ModalValidacion
                             titulo="Error en la carga masiva"
-                            mensaje="No se pudieron registrar los servicios mediante el archivo CSV. Revise los encabezados del archivo"
+                            mensaje={mensajeError}
                             onClose={() => setShowModalValidacion(false)}
                         />
                     </div>
