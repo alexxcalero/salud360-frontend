@@ -21,7 +21,7 @@ function ComunidadPage() {
   const [showModalValidacion, setShowModalValidacion] = useState(false);
   //const [showModalRestauracion, setShowModalRestauracion] = useState(false);
   const [paginaActual, setPaginaActual] = useState(1);
-
+  const [showModalErrorMiembros, setShowModalErrorMiembros] = useState(false); // new for update
   const navigate = useNavigate();
 
   //Para la funcionalidad de búsqueda:
@@ -125,10 +125,17 @@ function ComunidadPage() {
           <Info className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => navigate(`/admin/comunidades/detalle/${comunidad.idComunidad}`)} />
           <Pencil className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => navigate(`/admin/comunidades/editar/${comunidad.idComunidad}`)} />
           {comunidad.activo ?
-            <Trash2 className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => {
-              setComunidadSeleccionada(comunidad);
-              setShowModalError(true);
-            }}/>
+            <Trash2
+              className="w-5 h-5 text-[#2A86FF] cursor-pointer"
+              onClick={() => {
+                setComunidadSeleccionada(comunidad);
+                if (comunidad.cantMiembros > 0) {
+                  setShowModalErrorMiembros(true);
+                } else {
+                  setShowModalError(true); // Modal de confirmación normal
+                }
+              }}
+            />
             :
             <RotateCcw className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => {
               setComunidadSeleccionada(comunidad);
@@ -256,6 +263,21 @@ function ComunidadPage() {
             </>
         )}
 
+      {showModalErrorMiembros && (
+        <>
+          <div className="fixed inset-0 bg-black/60 z-40" />
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <ModalError
+              modulo="No se puede eliminar la comunidad"
+              detalle="La comunidad aún tiene miembros inscritos. Debe estar vacía para poder eliminarla."
+              buttonConfirm="Aceptar"
+              onConfirm={() => setShowModalErrorMiembros(false)}
+              onCancel={() => setShowModalErrorMiembros(false)}
+            />
+          </div>
+        </>
+      )}
+
       {comunidadSeleccionada && (comunidadSeleccionada.activo ?
         <>
           {showModalError && (
@@ -305,6 +327,8 @@ function ComunidadPage() {
               </div>
             </>
           )}
+
+          
         </>
 
       )}

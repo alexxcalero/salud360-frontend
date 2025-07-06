@@ -6,6 +6,7 @@ import { useRef, useState } from "react";
 //import ModalError from "@/components/ModalError";
 import ModalValidacion from "@/components/ModalValidacion";
 import DropImage from "@/components/DropImage";
+import ModalError from "@/components/ModalError";
 
 interface Servicio {
   idServicio: number;
@@ -47,7 +48,7 @@ interface Props {
   imagen: File | null;
   setImagen: (file: File | null) => void;
   readOnly?: boolean;
-
+  readOnlyPrecios?: boolean;
   //Para la imagen
     onImagenSeleccionada?: (file: File) => void;
     imagenActual?: string | null;
@@ -73,10 +74,12 @@ function ComunidadForm({
   setNuevasMembresias,
   imagen,
   setImagen,
-  readOnly = false,onImagenSeleccionada = () => {},imagenActual = null
+  readOnly = false,onImagenSeleccionada = () => {},imagenActual = null,
+  readOnlyPrecios = false,
 }: Props) {
 
   const navigate = useNavigate();
+  
 
   //PARA LA IMAGEN RELACIONAD AL LOCAL
       const [imagenSeleccionada, setImagenSeleccionada] = useState<File | null>(null); 
@@ -131,14 +134,22 @@ function ComunidadForm({
     return true;
   };
 
-  const toggle = (id: number, selected: number[], setSelected: (val: number[]) => void) => {
-    if (readOnly) return;
+  const toggle = (
+    id: number,
+    selected: number[] | undefined,
+    setSelected: (val: number[]) => void
+  ) => {
+    if (readOnly || !Array.isArray(selected)) return;
+
     setSelected(
       selected.includes(id)
         ? selected.filter(item => item !== id)
         : [...selected, id]
     );
+    console.log("TOGGLE →", { id, selected });
   };
+
+  
 
   const [showModalValidacion, setShowModalValidacion] = useState(false);
   const [mensajeError, setMensajeError] = useState("");
@@ -162,17 +173,24 @@ function ComunidadForm({
 
   const handleChangeMembresia = (index: number, field: string, value: any) => {
     const updated = [...nuevasMembresias];
+    const membresia = updated[index];
 
-    // Si se está cambiando el valor de "conTope"
     if (field === "conTope") {
-      updated[index]["conTope"] = value;
-      updated[index]["maxReservas"] = value ? 0 : -1; // si tiene tope: inicia en 0, sino -1
+      const nuevoValor = value === true || value === "true";
+
+      // Bloqueo si es membresía existente, hay usuarios y se intenta activar el tope
+      if (readOnlyPrecios && membresia.esExistente && !membresia.conTope && nuevoValor) {
+        return; // No hacer cambios
+      }
+
+      membresia.conTope = nuevoValor;
+      membresia.maxReservas = nuevoValor ? 0 : -1;
     } else {
-      // Si es maxReservas y el campo conTope es false, forzamos -1
-      if (field === "maxReservas" && !updated[index].conTope) {
-        updated[index][field] = -1;
+      // Si el campo es maxReservas pero conTope está en false, forzamos -1
+      if (field === "maxReservas" && !membresia.conTope) {
+        membresia[field] = -1;
       } else {
-        updated[index][field] = value;
+        membresia[field] = value;
       }
     }
 
@@ -188,6 +206,8 @@ function ComunidadForm({
     updated.splice(index, 1);
     setNuevasMembresias(updated);
   };
+
+  
 
   return (
     <div className="w-full px-10 py-6">
@@ -265,7 +285,12 @@ function ComunidadForm({
                     </select>
                   </td>
                   <td className="p-2">
-                    <select value={m.conTope ? "true" : "false"} onChange={(e) => handleChangeMembresia(index, "conTope", e.target.value === "true")} className="border p-1 rounded w-full" disabled={readOnly}>
+                    <select
+                      value={m.conTope ? "true" : "false"}
+                      onChange={(e) => handleChangeMembresia(index, "conTope", e.target.value === "true")}
+                      className="border p-1 rounded w-full"
+                      disabled={readOnly || m.esExistente}
+                    >
                       <option value="true">Sí</option>
                       <option value="false">No</option>
                     </select>
@@ -295,14 +320,27 @@ function ComunidadForm({
                     </td>
                   )}
                   <td className="p-2">
-                    <input type="number" value={m.precio} min={0} onChange={(e) => handleChangeMembresia(index, "precio", Math.max(0, parseFloat(e.target.value)))} className="border p-1 rounded w-full" disabled={readOnly} />
+                    <input
+                      type="number"
+                      value={m.precio}
+                      min={0}
+                      onChange={(e) => handleChangeMembresia(index, "precio", Math.max(0, parseFloat(e.target.value)))}
+                      className="border p-1 rounded w-full"
+                      disabled={readOnly || readOnlyPrecios}
+                    />
                   </td>
                   <td className="p-2">
                     <input type="text" value={m.descripcion} onChange={(e) => handleChangeMembresia(index, "descripcion", e.target.value)} className="border p-1 rounded w-full" disabled={readOnly} />
                   </td>
                   <td className="p-2 text-center">
-                    {!readOnly && (
-                      <button type="button" onClick={() => handleRemoveMembresia(index)} className="text-gray-600 hover:text-red-600">🗑️</button>
+                    {!readOnly && !readOnlyPrecios && (
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveMembresia(index)}
+                        className="text-gray-600 hover:text-red-600"
+                      >
+                        🗑️
+                      </button>
                     )}
                   </td>
                 </tr>
@@ -356,6 +394,8 @@ function ComunidadForm({
         )}
       </div>
 
+      
+
       {showModalValidacion && (
         <>
           <div className="fixed inset-0 bg-black/60 z-40" />
@@ -368,6 +408,8 @@ function ComunidadForm({
           </div>
         </>
       )}
+
+      
 
     </div>
     
