@@ -11,6 +11,7 @@ import ModalError from "@/components/ModalError";
 import ModalValidacion from "@/components/ModalValidacion";
 import ModalRestauracion from "@/components/ModalRestauracion";
 import { baseAPI } from "@/services/baseAPI";
+import { useToasts } from "@/hooks/ToastContext";
 
 function ComunidadPage() {
   const [selectAll, setSelectAll] = useState(false);
@@ -21,6 +22,7 @@ function ComunidadPage() {
   const [showModalValidacion, setShowModalValidacion] = useState(false);
   //const [showModalRestauracion, setShowModalRestauracion] = useState(false);
   const [paginaActual, setPaginaActual] = useState(1);
+  const { createToast } = useToasts();
 
   const navigate = useNavigate();
 
@@ -47,7 +49,16 @@ function ComunidadPage() {
         setShowModalExito(true);
         setShowModalError(false);
       })
-      .catch(() => console.log("Error eliminando comunidad"));
+      .catch((err) => {
+        const mensaje = err?.response?.data?.message || "Error al eliminar comunidad."
+        console.log("Error eliminando comunidad:", mensaje)
+
+        createToast("error", {
+          title: "Error eliminando comunidad",
+          description: mensaje,
+        });
+
+      });
   };
 
   const handleReactivarComunidad = (): void => {

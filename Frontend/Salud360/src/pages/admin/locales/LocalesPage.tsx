@@ -5,6 +5,7 @@ import InputIcon from "@/components/InputIcon";
 import ModalError from "@/components/ModalError";
 import ModalExito from "@/components/ModalExito";
 import ModalValidacion from "@/components/ModalValidacion";
+import { useToasts } from "@/hooks/ToastContext";
 import UnderConstruction from "@/pages/UnderConstruction";
 import { baseAPI } from "@/services/baseAPI";
 import { Filter, FolderPlus, Info, Pencil, RotateCcw, Search, Trash2, UserPlus } from "lucide-react";
@@ -30,6 +31,7 @@ function LocalesPage() {
     const [showModalValidacion, setShowModalValidacion] = useState(false);
     //const [search, setSearch] = useState("");
     const [paginaActual, setPaginaActual] = useState(1);
+    const { createToast } = useToasts();
 
     //Para la funcionalidad de búsqueda:
     const [busqueda, setBusqueda] = useState("");
@@ -66,7 +68,16 @@ function LocalesPage() {
                 setShowModalExito(true);
                 setShowModalError(false)
             })
-            .catch(() => console.log("Error"));
+            .catch((err) => {
+                const mensaje = err?.response?.data?.message || "Error al eliminar comunidad."
+                console.log("Error eliminando comunidad:", mensaje)
+
+                createToast("error", {
+                title: "Error eliminando comunidad",
+                description: mensaje,
+                });
+
+            });
     }
 
     const handleReactivarLocal = (): void => {
