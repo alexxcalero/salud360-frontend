@@ -29,7 +29,11 @@ function DropImage({ onFileSelect, previewUrl }: DropImageProps) {
       <label className="cursor-pointer text-gray-500">
         <input name='imagen-comunidad' type="file" accept="image/*" className="hidden" onChange={handleDrop} />
         {preview ? (
-          <img src={preview} alt="Preview" className="max-h-48 w-auto object-contain rounded-md"/>
+          <img
+            src={preview}
+            alt="Preview"
+            className="h-64 w-auto object-contain rounded-xl shadow-md"
+          />
         ) : (
           <>
             <p>📎 Arrastra una imagen aquí o haz clic para buscar</p>

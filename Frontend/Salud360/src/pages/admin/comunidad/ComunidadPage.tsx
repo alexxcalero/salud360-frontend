@@ -11,7 +11,6 @@ import ModalError from "@/components/ModalError";
 import ModalValidacion from "@/components/ModalValidacion";
 import ModalRestauracion from "@/components/ModalRestauracion";
 import { baseAPI } from "@/services/baseAPI";
-import { useToasts } from "@/hooks/ToastContext";
 
 function ComunidadPage() {
   const [selectAll, setSelectAll] = useState(false);
@@ -22,8 +21,7 @@ function ComunidadPage() {
   const [showModalValidacion, setShowModalValidacion] = useState(false);
   //const [showModalRestauracion, setShowModalRestauracion] = useState(false);
   const [paginaActual, setPaginaActual] = useState(1);
-  const { createToast } = useToasts();
-
+  const [showModalErrorMiembros, setShowModalErrorMiembros] = useState(false); // new for update
   const navigate = useNavigate();
 
   //Para la funcionalidad de búsqueda:
@@ -49,16 +47,7 @@ function ComunidadPage() {
         setShowModalExito(true);
         setShowModalError(false);
       })
-      .catch((err) => {
-        const mensaje = err?.response?.data?.message || "Error al eliminar comunidad."
-        console.log("Error eliminando comunidad:", mensaje)
-
-        createToast("error", {
-          title: "Error eliminando comunidad",
-          description: mensaje,
-        });
-
-      });
+      .catch(() => console.log("Error eliminando comunidad"));
   };
 
   const handleReactivarComunidad = (): void => {
@@ -136,10 +125,17 @@ function ComunidadPage() {
           <Info className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => navigate(`/admin/comunidades/detalle/${comunidad.idComunidad}`)} />
           <Pencil className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => navigate(`/admin/comunidades/editar/${comunidad.idComunidad}`)} />
           {comunidad.activo ?
-            <Trash2 className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => {
-              setComunidadSeleccionada(comunidad);
-              setShowModalError(true);
-            }}/>
+            <Trash2
+              className="w-5 h-5 text-[#2A86FF] cursor-pointer"
+              onClick={() => {
+                setComunidadSeleccionada(comunidad);
+                if (comunidad.cantMiembros > 0) {
+                  setShowModalErrorMiembros(true);
+                } else {
+                  setShowModalError(true); // Modal de confirmación normal
+                }
+              }}
+            />
             :
             <RotateCcw className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => {
               setComunidadSeleccionada(comunidad);
@@ -267,6 +263,21 @@ function ComunidadPage() {
             </>
         )}
 
+      {showModalErrorMiembros && (
+        <>
+          <div className="fixed inset-0 bg-black/60 z-40" />
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <ModalError
+              modulo="No se puede eliminar la comunidad"
+              detalle="La comunidad aún tiene miembros inscritos. Debe estar vacía para poder eliminarla."
+              buttonConfirm="Aceptar"
+              onConfirm={() => setShowModalErrorMiembros(false)}
+              onCancel={() => setShowModalErrorMiembros(false)}
+            />
+          </div>
+        </>
+      )}
+
       {comunidadSeleccionada && (comunidadSeleccionada.activo ?
         <>
           {showModalError && (
@@ -316,6 +327,8 @@ function ComunidadPage() {
               </div>
             </>
           )}
+
+          
         </>
 
       )}
