@@ -92,7 +92,7 @@ const FormularioTarjeta = ({
   const newCard = useMemo<IMedioDePago>(
     () => ({
       tipo: displayTipo,
-      ncuenta: Number(displayNumeroTarjeta.replace(/\D/g, "")),
+      ncuenta: Number(displayNumeroTarjeta.replace(/\D/g, "")).toString(),
       cvv: Number(cvvDisplay),
       vencimiento:
         DateTime.fromObject({
