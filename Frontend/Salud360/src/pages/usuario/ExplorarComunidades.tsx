@@ -53,7 +53,7 @@ function ExplorarComunidades(){
     return(
         <section className="flex flex-col gap-16">
             <title>Explorar comunidades</title>
-            <div className="w-full flex flex-col gap-4 justify-center p-8">
+            <div className="w-full flex flex-col gap-4 justify-center py-8 px-32">
                 <div className="flex gap-4 justify-between items-center">
                   <h1>Explorar Comunidades</h1>
                   <NavLink to="/usuario/comunidades/">

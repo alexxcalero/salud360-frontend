@@ -127,6 +127,9 @@ function EditarComunidad() {
       const membresiasInvalidas = nuevasMembresias.some((m) => {
         const esNueva = !m.idMembresia;
 
+        console.log("Estamos aqui:", m.tipo)
+        console.log("La membresía es:", m)
+
         const camposObligatorios = [
           m.nombre?.trim(),
           m.tipo?.trim(),

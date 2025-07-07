@@ -8,6 +8,7 @@ import { AlertTriangle } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 import ModalError from "@/components/ModalError";
 import ModalExito from "@/components/ModalExito";
+import { useToasts } from "@/hooks/ToastContext";
 
 /*interface MembresiaFake {
   comunidad: string;
@@ -35,6 +36,9 @@ const Membresias = () => {
 
   const { usuario, logout, loading } = useContext(AuthContext);
   const [diasSuspension, setDiasSuspension] = useState(1);
+
+  const { createToast } = useToasts();
+
   if (loading || !usuario) return null;
 
   const id = usuario.idCliente;
@@ -145,7 +149,17 @@ const Membresias = () => {
         setShowModalExitoSuspender(true);
         setShowModalSuspender(false);
       })
-      .catch(() => console.log("Error"));
+      .catch((err) => {
+        const mensaje = err?.response?.data?.message || "Error al suspender membresía."
+        console.log("Error al suspender membresía:", mensaje)
+
+        createToast("error", {
+            title: "Error al suspender membresía",
+            description: mensaje,
+        });
+
+
+    });
   };
 
   const handleReactivar = (afiliacion: any) => {

@@ -8,6 +8,7 @@ import { useNavigate, useParams } from "react-router";
 import CardMembresiaLanding from "@/components/landing/CardMembresía";
 import ModalError from "@/components/ModalError";
 import ModalExito from "@/components/ModalExito";
+import { useToasts } from "@/hooks/ToastContext";
 
 function DetalleComunidadMembresia() {
   const [_comunidad, setComunidad] = useState<IComunidad>();
@@ -34,6 +35,8 @@ function DetalleComunidadMembresia() {
   const [showModalExitoSuspender, setShowModalExitoSuspender] = useState(false);
 
   //const { id: idComunidad } = useParams();
+
+  const { createToast } = useToasts();
 
   const { usuario, loading } = useContext(AuthContext);
   const [afiliacion, setAfiliacion] = useState<any>();
@@ -104,7 +107,17 @@ function DetalleComunidadMembresia() {
         setShowModalExitoSuspender(true);
         setShowModalSuspender(false);
       })
-      .catch(() => console.log("Error"));
+      .catch((err) => {
+        const mensaje = err?.response?.data?.message || "Error al suspender membresía."
+        console.log("Error al suspender membresía:", mensaje)
+
+        createToast("error", {
+            title: "Error al suspender membresía",
+            description: mensaje,
+        });
+
+
+    });
   };
   
   console.log ("_comunidad es:", _comunidad, " y membresía es:", membresia, "ambos son:", _comunidad && membresia)
