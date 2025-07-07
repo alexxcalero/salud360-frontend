@@ -128,6 +128,8 @@ function LocalesPage() {
 
         } else if(error.response?.status === 400 && mensajeBackend.includes("Header name") && mensajeBackend.includes("not found") ){
            setMensajeError("El archivo CSV no tiene los encabezados esperados: nombre, direccion, telefono, tipo_servicio, id_servicio, descripcion");    
+        }else if(error.response?.status === 400 && mensajeBackend.includes("Debe tener exactamente 9 dígitos numéricos")){
+           setMensajeError("El teléfono no es válido. Debe tener exactamente 9 dígitos numéricos.");
         }   else {
             setMensajeError("Verifique que todos los campos del CSV estén correctamente llenados.");
         }
