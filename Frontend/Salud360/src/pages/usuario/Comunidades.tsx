@@ -209,12 +209,10 @@ function Comunidades(){
             <title>Mis comunidades</title>
             <div className="flex flex-row justify-between items-center py-8 px-32 ">
                 <h1>Mis comunidades</h1>
-                {(tieneInactivas || (!tieneComunidades && tieneInactivas)) && (
-                    <div className="flex flex-row justify-around gap-4">
-                        <p>{activo ? "Activas" : "Inactivas"}</p>
-                        <Switch checked={activo} onCheckedChange={setActivo} className="data-[state=checked]:bg-blue-500 bg-gray-300 transition-colors duration-300"/>
-                    </div>
-                    )}
+                <div className="flex flex-row justify-around gap-4">
+                    <p>{activo ? "Activas" : "Inactivas"}</p>
+                    <Switch checked={activo} onCheckedChange={setActivo} className="data-[state=checked]:bg-blue-500 bg-gray-300 transition-colors duration-300"/>
+                </div>
                 <NavLink to="/usuario/comunidades/explorarComunidades"><Button size="lg" className="w-64">Explorar Más</Button></NavLink>
             </div>
 

@@ -5,6 +5,8 @@ import { AuthContext } from "@/hooks/AuthContext";
 import axios from "axios";
 import { Section } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
+import { NavLink } from "react-router";
+import Button from "@/components/Button";
 
 function ExplorarComunidades(){
 
@@ -52,7 +54,12 @@ function ExplorarComunidades(){
         <section className="flex flex-col gap-16">
             <title>Explorar comunidades</title>
             <div className="w-full flex flex-col gap-4 justify-center p-8">
-                <h1>Explorar Comunidades</h1>
+                <div className="flex gap-4 justify-between items-center">
+                  <h1>Explorar Comunidades</h1>
+                  <NavLink to="/usuario/comunidades/">
+                    <Button size="lg" className="w-64">Comunidades activas</Button>
+                  </NavLink>
+                </div>
                 <hr/>
             </div>
 
