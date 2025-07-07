@@ -15,6 +15,7 @@ export const putMedioDePagoAPI = async (medioDePago: IMedioDePago) => {
 };
 
 export const postMedioDePagoAPI = async (medioDePago: IMedioDePago) => {
+  console.log(medioDePago);
   const response = await baseAPI.post("mediosDePago", medioDePago);
   return response.data as IMedioDePago;
 };

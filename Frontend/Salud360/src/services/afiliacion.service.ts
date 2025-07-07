@@ -21,6 +21,9 @@ export const afiliarPorPasarelaAPI = async (
   usuario: IUsuario,
   medioDePago: IMedioDePago
 ) => {
+  console.group("Afiliación por pasarela");
+  console.log("Inicio");
+  console.groupEnd();
   // Paso 1: Afiliar
   const afiliacionArg: IAfiliacion = {
     comunidad,
@@ -31,6 +34,9 @@ export const afiliarPorPasarelaAPI = async (
     fechaAfiliacion: DateTime.now().toISO({ includeOffset: false }),
   };
   const afiliacion = await postAfiliacionDTO(afiliacionArg);
+  console.group("Afiliación por pasarela");
+  console.log("Post paso 1");
+  console.groupEnd();
 
   // Paso 2: Realizar pago
   const pagoARg: IPago = {
@@ -40,6 +46,9 @@ export const afiliarPorPasarelaAPI = async (
     fechaPago: DateTime.now().toISO({ includeOffset: false }),
   };
   const pago = await postPagoAPI(pagoARg);
+  console.group("Afiliación por pasarela");
+  console.log("Post paso 2");
+  console.groupEnd();
 
   // Paso 3: Actualizar medio de pago
   // const _p = await getMedioDePagoByIdAPI(medioDePago.idMedioDePago ?? -1);
@@ -57,6 +66,9 @@ export const afiliarPorPasarelaAPI = async (
 
   // Paso 4: Generar boleta
   const reporteBoleta = await postBoletaAPI(pago);
+  console.group("Afiliación por pasarela");
+  console.log("Post paso 3");
+  console.groupEnd();
 
   // Paso 5: Disfruta
   //   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@

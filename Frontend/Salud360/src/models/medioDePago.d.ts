@@ -3,7 +3,7 @@ import { IUsuario } from "./usuario";
 export interface IMedioDePago {
   idMedioDePago?: number;
   tipo?: string;
-  ncuenta?: number;
+  ncuenta?: string;
   vencimiento?: string;
   cvv?: number;
   activo?: boolean;
