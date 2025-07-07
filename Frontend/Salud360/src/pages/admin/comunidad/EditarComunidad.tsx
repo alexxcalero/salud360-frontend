@@ -38,6 +38,7 @@ function EditarComunidad() {
 
   const [showModalErrorValidacion, setShowModalErrorValidacion] = useState(false);
 
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -69,7 +70,14 @@ function EditarComunidad() {
           setServicios(comunidad.servicios.map((s: any) => s.idServicio));
           setMembresiasSeleccionadas(comunidad.membresias?.map((m: any) => m.idMembresia));
           setLocalesSeleccionados(comunidad.locales?.map((l: any) => l.idLocal));
-          setNuevasMembresias((prev) => prev.length === 0 ? comunidad.membresias || [] : prev);
+          setNuevasMembresias((prev) =>
+            prev.length === 0
+              ? (comunidad.membresias || []).map((m: any) => ({
+                  ...m,
+                  readOnly: m.cantUsuarios > 0, // ← ✅ aquí se marca
+                }))
+              : prev
+          );
           setImagenActual(comunidad.imagen || null);
           setDatosCargados(true);
         }
@@ -116,18 +124,47 @@ function EditarComunidad() {
         return;
       }
 
+      const membresiasInvalidas = nuevasMembresias.some((m) => {
+        const esNueva = !m.idMembresia;
+
+        const camposObligatorios = [
+          m.nombre?.trim(),
+          m.tipo?.trim(),
+          m.descripcion?.trim(),
+          m.precio,
+          m.cantUsuarios,
+          m.maxReservas,
+        ];
+
+        // Si es nueva y al menos un campo está vacío → inválida
+        return (
+          esNueva &&
+          camposObligatorios.some(
+            (valor) =>
+              valor === undefined ||
+              valor === null ||
+              valor === "" ||
+              (typeof valor === "number" && isNaN(valor))
+          )
+        );
+      });
+
+      if (membresiasInvalidas) {
+        setMensajeError("No puede guardar membresías con campos vacíos. Complete todos los campos requeridos.");
+        setShowModalErrorValidacion(true);
+        return;
+      }
+
       const payload: any = {
         nombre,
         descripcion,
         proposito,
         servicios: servicios.map(id => ({ idServicio: id })), // ← este es el correcto
         membresias: nuevasMembresias.map((m) => {
-          // Si hay miembros y esta membresía ya existe → solo referenciarla
-          if (bloquearPrecios && m.idMembresia) {
+          if (m.idMembresia && m.readOnly) {
             return { idMembresia: m.idMembresia };
           }
 
-          // Si no hay miembros o es una membresía nueva → enviar completa
           return {
             ...(m.idMembresia ? { idMembresia: m.idMembresia } : {}),
             nombre: m.nombre,

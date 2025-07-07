@@ -268,34 +268,54 @@ function ComunidadForm({
               </tr>
             </thead>
             <tbody>
-              {nuevasMembresias.map((m, index) => (
-                <tr key={index} className="border-t">
-                  <td className="p-2">
-                    <input type="text" value={m.nombre} onChange={(e) => handleChangeMembresia(index, "nombre", e.target.value)} className="border p-1 rounded w-full" disabled={readOnly} />
-                  </td>
-                  <td className="p-2">
-                    <select
-                      value={m.tipo}
-                      onChange={(e) => handleChangeMembresia(index, "tipo", e.target.value)}
-                      className="border p-1 rounded w-full"
-                      disabled={readOnly}
-                    >
-                      <option value="Mensual">Mensual</option>
-                      <option value="Anual">Anual</option>
-                    </select>
-                  </td>
-                  <td className="p-2">
-                    <select
-                      value={m.conTope ? "true" : "false"}
-                      onChange={(e) => handleChangeMembresia(index, "conTope", e.target.value === "true")}
-                      className="border p-1 rounded w-full"
-                      disabled={readOnly || m.esExistente}
-                    >
-                      <option value="true">Sí</option>
-                      <option value="false">No</option>
-                    </select>
-                  </td>
-                  {/* Mostrar Cant. Usuarios solo si readOnly === true */}
+              
+            {nuevasMembresias.map((m, index) => {
+  const isPrecioDisabled = readOnly || (m.cantUsuarios && m.cantUsuarios > 0);
+  const precioClass = isPrecioDisabled ? "bg-gray-100 text-gray-500 cursor-not-allowed" : "";
+
+  const isNombreDisabled = readOnly || m.readOnly;
+  const nombreClass = isNombreDisabled ? "bg-gray-100 text-gray-500 cursor-not-allowed" : "";
+
+  const isTipoDisabled = readOnly || m.readOnly;
+  const tipoClass = isTipoDisabled ? "bg-gray-100 text-gray-500 cursor-not-allowed" : "";
+
+  const isDescripcionDisabled = readOnly || m.readOnly;
+  const descripcionClass = isDescripcionDisabled ? "bg-gray-100 text-gray-500 cursor-not-allowed" : "";
+
+  return (
+    <tr key={index} className="border-t">
+      <td className="p-2">
+        <input
+          type="text"
+          value={m.nombre}
+          onChange={(e) => handleChangeMembresia(index, "nombre", e.target.value)}
+          className={`border p-1 rounded w-full ${nombreClass}`}
+          disabled={isNombreDisabled}
+        />
+      </td>
+      <td className="p-2">
+        <select
+          value={m.tipo}
+          onChange={(e) => handleChangeMembresia(index, "tipo", e.target.value)}
+          className={`border p-1 rounded w-full ${tipoClass}`}
+          disabled={isTipoDisabled}
+        >
+          <option value="Mensual">Mensual</option>
+          <option value="Anual">Anual</option>
+        </select>
+      </td>
+      <td className="p-2">
+        <select
+          value={m.conTope ? "true" : "false"}
+          onChange={(e) => handleChangeMembresia(index, "conTope", e.target.value === "true")}
+          className="border p-1 rounded w-full"
+          disabled={readOnly || m.esExistente || m.readOnly}
+        >
+          <option value="true">Sí</option>
+          <option value="false">No</option>
+        </select>
+      </td>
+
                   {readOnly && (
                     <td className="p-2">
                       <input
@@ -307,7 +327,7 @@ function ComunidadForm({
                       />
                     </td>
                   )}
-                  {/* Mostrar Max. Reservas solo si readOnly === true */}
+
                   {readOnly && (
                     <td className="p-2">
                       <input
@@ -319,32 +339,47 @@ function ComunidadForm({
                       />
                     </td>
                   )}
+
                   <td className="p-2">
                     <input
                       type="number"
                       value={m.precio}
                       min={0}
-                      onChange={(e) => handleChangeMembresia(index, "precio", Math.max(0, parseFloat(e.target.value)))}
-                      className="border p-1 rounded w-full"
-                      disabled={readOnly || readOnlyPrecios}
+                      onChange={(e) =>
+                        handleChangeMembresia(index, "precio", Math.max(0, parseFloat(e.target.value)))
+                      }
+                      className={`border p-1 rounded w-full ${precioClass}`}
+                      disabled={isPrecioDisabled}
                     />
                   </td>
                   <td className="p-2">
-                    <input type="text" value={m.descripcion} onChange={(e) => handleChangeMembresia(index, "descripcion", e.target.value)} className="border p-1 rounded w-full" disabled={readOnly} />
+                    <input
+                      type="text"
+                      value={m.descripcion}
+                      onChange={(e) => handleChangeMembresia(index, "descripcion", e.target.value)}
+                      className={`border p-1 rounded w-full ${descripcionClass}`}
+                      disabled={isDescripcionDisabled}
+                    />
                   </td>
                   <td className="p-2 text-center">
-                    {!readOnly && !readOnlyPrecios && (
+                    {!readOnly && (!m.cantUsuarios || m.cantUsuarios === 0) && (
                       <button
                         type="button"
                         onClick={() => handleRemoveMembresia(index)}
                         className="text-gray-600 hover:text-red-600"
+                        title="Eliminar membresía"
                       >
                         🗑️
                       </button>
                     )}
                   </td>
                 </tr>
-              ))}
+              );
+            })}
+
+
+              
+
             </tbody>
           </table>
         </div>
