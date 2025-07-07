@@ -188,7 +188,7 @@ function ComunidadPage() {
         setMensajeError("Hay un error con los datos del CSV. Verifica que todos los campos estén correctamente llenados.");
       } else 
           if (error.response?.status === 400 && mensajeBackend.includes("Header name") && mensajeBackend.includes("not found")) {
-          setMensajeError("El archivo CSV no tiene los encabezados esperados: nombre, descripcion, proposito, id_servicios");  
+          setMensajeError("El archivo CSV no tiene los encabezados esperados: nombre, descripcion, proposito, id_servicios,membresías");  
       } else if(error.response?.status === 400 && mensajeBackend.includes("se esperan 5 campos separados")){
            setMensajeError(error.response.data.message);
       }else if(error.response?.status === 400 && mensajeBackend.includes("Cada comunidad debe tener al menos una membresía asociada")){
