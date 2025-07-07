@@ -41,6 +41,8 @@ function InicioPerfil() {
       idCliente
     } = usuario;
 
+    console.log("Usuario en idUsuario:", usuario);
+
     const {
         nombres, setNombres,
         apellidos, setApellidos,
@@ -131,7 +133,7 @@ function InicioPerfil() {
       return false;
     }
 
-    if (!tipoDoc || tipoDoc.trim() === "") {
+    if (!tipoDoc || tipoDoc === "") {
       setMensajeValidacion("Debe seleccionar un tipo de documento.");
       setShowModalValidacion(true);
       return false;

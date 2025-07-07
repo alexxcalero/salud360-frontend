@@ -4,6 +4,57 @@ Repositorio del proyecto desarrollado a lo largo del curso de Ingeniería de Sof
 
 > Leer la CONTRIBUTING.md
 
+## Ejecución
+
+Debe tener los siguientes requisitos:
+
+- node: 22.15.0
+- npm: 10.9.2
+
+Debe ir a la carpeta principal
+
+```bash
+cd Frontend/Salud360
+```
+
+Instalar todos los paquetes mediante resolución de dependecias, debido a los conflictos internos de algunas
+
+```bash
+npm i --legacy-peer-deps
+```
+
+Probarlo
+
+```bash
+npm run dev
+```
+
+## Depliegue
+
+Debe ir a la carpeta principal
+
+```bash
+cd Frontend/Salud360
+```
+
+Instalar todos los paquetes mediante resolución de dependecias, debido a los conflictos internos de algunas
+
+```bash
+npm i --legacy-peer-deps
+```
+
+Debe cambiar en la configuración `Frontend/Salud360/src/lib/config.ts`, la ruta al host y puerto backend
+
+```ts
+export const Config = {
+  BACKEND_HOST: "http://localhost:8080",
+};
+```
+
+```bash
+npm run build
+```
+
 ## Testing
 
 Siempre verificar que se encuentra en la carpeta de `Frontend/Salud360`
@@ -19,6 +70,7 @@ npm i --legacy-peer-deps
 ```
 
 Instalar chromium
+
 ```bash
 npx playwright install
 ```

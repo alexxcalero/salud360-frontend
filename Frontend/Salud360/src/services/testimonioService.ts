@@ -1,3 +1,4 @@
+import { IComunidad } from "@/models/comunidad";
 import { baseAPI } from "./baseAPI";
 
 interface Cliente {
@@ -8,7 +9,8 @@ export interface NuevoTestimonio {
   idTestimonio?: number;
   comentario: string;
   calificacion: number;
-  idComunidad: number;
+  idComunidad?: number;
+  comunidad?: IComunidad;
   cliente: Cliente;
 }
 

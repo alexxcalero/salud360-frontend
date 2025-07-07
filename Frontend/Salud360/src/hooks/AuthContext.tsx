@@ -37,6 +37,8 @@ export const AuthProvider = ({children}: any) => {
 
     //Para recuperar la imagen en caso se actualice:
     const actualizarUsuario = (nuevoUsuario: any) => {
+        nuevoUsuario.idUsuario = usuario.idUsuario; // Mantiene el ID del usuario
+        nuevoUsuario.idCliente = usuario.idCliente; // Mantiene el ID del cliente
         setUsuario(nuevoUsuario);
         localStorage.setItem("activeUser", JSON.stringify(nuevoUsuario));
     }

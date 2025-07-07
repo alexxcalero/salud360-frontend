@@ -171,7 +171,9 @@ function DetalleComunidad(){
               await crearTestimonio({
                 comentario,
                 calificacion,
-                idComunidad: comunidad.idComunidad,
+                comunidad: {
+                  idComunidad: comunidad.idComunidad
+                },
                 cliente: {
                   idCliente: usuario.idCliente,
                 },
