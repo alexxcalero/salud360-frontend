@@ -18,7 +18,7 @@ const DetallesMembresia = ({
     membresia.idMembresia?.toString()
   );
   return (
-    <div className="bg-white flex gap-3 flex-col">
+    <div className="bg-white flex gap-3 flex-col h-full">
       <SelectLabel
         label="Cambiar membresía"
         options={
@@ -45,11 +45,23 @@ const DetallesMembresia = ({
       />
       <hr />
 
-      <h2 className="text-left">{membresia.nombre}</h2>
+      <div className="h-full flex flex-col gap-2">
+        <h2 className="text-left">{membresia.nombre}</h2>
 
-      <p className="text-left">{membresia.descripcion}</p>
+        <p className="text-left">{membresia.descripcion}</p>
 
-      <div className="pb-2 border-b-1 border-neutral-400 w-full text-left">
+        <p className="text-left">Servicios incluídos:</p>
+        <ul className="list-disc pl-6">
+          {comunidad?.servicios?.map((servicio: any, i: number) => (
+            <li key={i} className="text-left">
+              {servicio.nombre}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div className="pb-2 w-full text-left justify-self-end flex flex-col gap-3">
+        <hr />
         <h3 className="w-full">
           Total{" "}
           <span className="text-end">
@@ -61,7 +73,7 @@ const DetallesMembresia = ({
         </h3>
       </div>
 
-      <div className="gap-2 items-end grid grid-cols-[1fr_auto]">
+      {/* <div className="gap-2 items-end grid grid-cols-[1fr_auto]">
         <Input
           name="codigo-promocional"
           label="Código promocional"
@@ -69,7 +81,7 @@ const DetallesMembresia = ({
           placeholder="Ingrese su código promocional"
         />
         <Button>Aplicar</Button>
-      </div>
+      </div> */}
     </div>
   );
 };
