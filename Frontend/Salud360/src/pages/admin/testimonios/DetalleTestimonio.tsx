@@ -26,7 +26,8 @@ function DetalleTestimonio(){
             .then(res => {
                 console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
                 setTestimonio(res.data)
-                setAutor(res.data.autor)
+                setAutor(res.data.cliente)
+                setComunidad(res.data.comunidad)
                 console.log("Testimonio:", res.data);
                 setLoading(false);
             })
@@ -42,6 +43,7 @@ function DetalleTestimonio(){
     }
 
     console.log("El autor es:", autor)
+    console.log("La comunidad es:", comunidad)
 
     function EstadoBadge({ activo }: { activo: boolean }) {
         const clases = activo
@@ -69,7 +71,7 @@ function DetalleTestimonio(){
     //los testimonios no se pueden crear ni editar, solo ver.
     return(
         <section className="w-full flex flex-col gap-8 px-20 py-14 text-left">
-                <h1 className="text-4xl font-bold mb-2">Detalles del testimonio</h1>
+                <h1 className="text-4xl font-bold mb-2">Detalles del testimonio:</h1>
                 <div className="flex flex-col gap-8">
                     <div>
                         <h3>Información del autor</h3>
@@ -85,7 +87,7 @@ function DetalleTestimonio(){
                         </div>
                     </div>
                     <div>
-                        <h3>Información del testimonio</h3>
+                        <h3>Información del testimonio:</h3>
 
                         <div className="grid grid-rows-2 gap-8 items-center w-full my-6">
                             <div className="row-span-1">
@@ -121,10 +123,10 @@ function DetalleTestimonio(){
 
                     </div>
                     <div>
-                        <h3>Comunidad relacionada</h3>
+                        <h3>Comunidad relacionada: <a href={`/admin/comunidades/detalle/${comunidad.idComunidad}`} className="text-[#2A86FF] italic hover:underline">{comunidad.nombre}.</a></h3>
+                        <p className="text-sm text-black font-semibold italic mt-1 inline-block">Click en el <span>nombre de la comunidad</span> para ver detalles de la comunidad.</p>
                     </div>
                 </div>
-            <UnderConstruction/>
         </section>
     );
 }

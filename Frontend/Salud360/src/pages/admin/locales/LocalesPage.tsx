@@ -5,6 +5,7 @@ import InputIcon from "@/components/InputIcon";
 import ModalError from "@/components/ModalError";
 import ModalExito from "@/components/ModalExito";
 import ModalValidacion from "@/components/ModalValidacion";
+import { useToasts } from "@/hooks/ToastContext";
 import UnderConstruction from "@/pages/UnderConstruction";
 import { baseAPI } from "@/services/baseAPI";
 import { Filter, FolderPlus, Info, Pencil, RotateCcw, Search, Trash2, UserPlus } from "lucide-react";
@@ -30,9 +31,12 @@ function LocalesPage() {
     const [showModalValidacion, setShowModalValidacion] = useState(false);
     //const [search, setSearch] = useState("");
     const [paginaActual, setPaginaActual] = useState(1);
+    const { createToast } = useToasts();
 
     //Para la funcionalidad de búsqueda:
     const [busqueda, setBusqueda] = useState("");
+
+    const [mensajeError, setMensajeError] = useState("");
 
     const fetchLocales = () => {
         baseAPI.get("/locales/admin", {
@@ -66,7 +70,16 @@ function LocalesPage() {
                 setShowModalExito(true);
                 setShowModalError(false)
             })
-            .catch(() => console.log("Error"));
+            .catch((err) => {
+                const mensaje = err?.response?.data?.message || "Error al eliminar comunidad."
+                console.log("Error eliminando comunidad:", mensaje)
+
+                createToast("error", {
+                title: "Error eliminando comunidad",
+                description: mensaje,
+                });
+
+            });
     }
 
     const handleReactivarLocal = (): void => {
@@ -100,9 +113,25 @@ function LocalesPage() {
 
         setShowModalExito(true);
         fetchLocales(); // Recargar la lista
-    } catch (error) {
-        console.error("Error al cargar el archivo CSV", error);
-        setShowModalValidacion(true);
+    } catch (error: any) {
+        const mensajeBackend = error.response?.data?.message || "";
+
+        if (error.response?.status === 409) {
+            setMensajeError(error.response.data.message);
+        } else if (
+            error.response?.status === 500 &&
+            error.response?.data?.message?.includes("java.lang.NumberFormatException")
+        ) {
+            setMensajeError("El ID del servicio debe ser un número entero válido.");
+        } else if (  error.response?.status === 500 &&  (mensajeBackend.includes("java.lang") ||    mensajeBackend.includes("DataIntegrityViolationException") ||    mensajeBackend.includes("not-null property references a null")  )) {
+          setMensajeError("Verifique que todos los campos del CSV estén correctamente llenados.");
+
+        } else if(error.response?.status === 400 ){
+           setMensajeError("Verifique que todos los campos del CSV estén correctamente llenados.");    
+        }   else {
+            setMensajeError("Verifique que todos los campos del CSV estén correctamente llenados.");
+        }
+        setShowModalValidacion(true);;
     }
     };
 
@@ -269,7 +298,7 @@ function LocalesPage() {
                     <div className="fixed inset-0 z-50 flex items-center justify-center">
                         <ModalValidacion
                             titulo="Error en la carga masiva"
-                            mensaje="No se pudieron registrar los locales mediante el archivo CSV. El servicio que seleccionó no existe"
+                            mensaje={mensajeError}
                             onClose={() => setShowModalValidacion(false)}
                         />
                     </div>

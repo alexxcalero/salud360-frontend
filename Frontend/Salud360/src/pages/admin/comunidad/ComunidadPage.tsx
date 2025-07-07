@@ -21,7 +21,7 @@ function ComunidadPage() {
   const [showModalValidacion, setShowModalValidacion] = useState(false);
   //const [showModalRestauracion, setShowModalRestauracion] = useState(false);
   const [paginaActual, setPaginaActual] = useState(1);
-
+  const [showModalErrorMiembros, setShowModalErrorMiembros] = useState(false); // new for update
   const navigate = useNavigate();
 
   //Para la funcionalidad de búsqueda:
@@ -84,6 +84,8 @@ function ComunidadPage() {
   const comunidadesPaginadas = comunidadesOrdenadas.slice(
   (paginaActual - 1) * registrosPorPagina, paginaActual * registrosPorPagina);
 
+  const [mensajeError, setMensajeError] = useState("");
+
   const rows = comunidadesPaginadas
   .map((comunidad: any) => [
     {
@@ -125,10 +127,17 @@ function ComunidadPage() {
           <Info className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => navigate(`/admin/comunidades/detalle/${comunidad.idComunidad}`)} />
           <Pencil className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => navigate(`/admin/comunidades/editar/${comunidad.idComunidad}`)} />
           {comunidad.activo ?
-            <Trash2 className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => {
-              setComunidadSeleccionada(comunidad);
-              setShowModalError(true);
-            }}/>
+            <Trash2
+              className="w-5 h-5 text-[#2A86FF] cursor-pointer"
+              onClick={() => {
+                setComunidadSeleccionada(comunidad);
+                if (comunidad.cantMiembros > 0) {
+                  setShowModalErrorMiembros(true);
+                } else {
+                  setShowModalError(true); // Modal de confirmación normal
+                }
+              }}
+            />
             :
             <RotateCcw className="w-5 h-5 text-[#2A86FF] cursor-pointer" onClick={() => {
               setComunidadSeleccionada(comunidad);
@@ -163,10 +172,36 @@ function ComunidadPage() {
 
         setShowModalExito(true);
         fetchComunidades(); // Recargar la lista
-    } catch (error) {
-        console.error("Error al cargar el archivo CSV", error);
-        setShowModalValidacion(true);
-    }
+    } catch (error: any) {
+      console.error("Error al cargar el archivo CSV", error);
+      const mensajeBackend = error.response?.data?.message || "";
+      if (error.response?.status === 409) {
+        setMensajeError(error.response.data.message);
+      } else if (
+        error.response?.status === 500 &&
+        error.response?.data?.message?.includes("Servicio con ID")
+      ) {
+        setMensajeError("Uno de los IDs de servicios no existe en la base de datos.");
+      } else if (
+        error.response?.status === 500 &&(    mensajeBackend.includes("java.lang") ||    mensajeBackend.includes("DataIntegrityViolationException") ||    mensajeBackend.includes("not-null property references a null")  )
+      ) {
+        setMensajeError("Hay un error con los datos del CSV. Verifica que todos los campos estén correctamente llenados.");
+      } else 
+          if (error.response?.status === 400 && mensajeBackend.includes("Header name") && mensajeBackend.includes("not found")) {
+          setMensajeError("El archivo CSV no tiene los encabezados esperados: nombre, descripcion, proposito, id_servicios");  
+      } else if(error.response?.status === 400 && mensajeBackend.includes("se esperan 5 campos separados")){
+           setMensajeError(error.response.data.message);
+      }else if(error.response?.status === 400 && mensajeBackend.includes("Cada comunidad debe tener al menos una membresía asociada")){
+           setMensajeError(error.response.data.message);
+           
+    }else if(error.response?.status === 400 ){
+           setMensajeError("Verifique que todos los campos del CSV estén correctamente llenados."); 
+      }else {
+        setMensajeError("Verifique que todos los campos del CSV estén correctamente llenados.");
+      }
+
+      setShowModalValidacion(true);
+      }
     };
 
 
@@ -249,12 +284,27 @@ function ComunidadPage() {
               <div className="fixed inset-0 z-50 flex items-center justify-center">
                      <ModalValidacion
                        titulo="Error en la carga masiva"
-                       mensaje="No se pudieron registrar los locales mediante el archivo CSV. Revise los servicios seleccionados"
+                       mensaje={mensajeError}
                        onClose={() => setShowModalValidacion(false)}
                    />
               </div>
             </>
         )}
+
+      {showModalErrorMiembros && (
+        <>
+          <div className="fixed inset-0 bg-black/60 z-40" />
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <ModalError
+              modulo="No se puede eliminar la comunidad"
+              detalle="La comunidad aún tiene miembros inscritos. Debe estar vacía para poder eliminarla."
+              buttonConfirm="Aceptar"
+              onConfirm={() => setShowModalErrorMiembros(false)}
+              onCancel={() => setShowModalErrorMiembros(false)}
+            />
+          </div>
+        </>
+      )}
 
       {comunidadSeleccionada && (comunidadSeleccionada.activo ?
         <>
@@ -305,6 +355,8 @@ function ComunidadPage() {
               </div>
             </>
           )}
+
+          
         </>
 
       )}

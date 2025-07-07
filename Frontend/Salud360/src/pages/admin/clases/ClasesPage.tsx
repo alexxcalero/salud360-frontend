@@ -123,16 +123,21 @@ export default function ClasesPage() {
   
           setShowModalExito(true);
       } catch (error: any) {
-        if (error.response?.status === 409) {
+        
+      const mensajeBackend = error.response?.data?.message || "";
+        if (error.response?.status === 409 ||(mensajeBackend.includes("Cruce entre clases nuevas en el archivo CSV en la fecha")||mensajeBackend.includes("se cruza con una ya existente en la fecha"))) {
           setMensajeError(error.response.data.message); // conflicto de horario
-          setShowModalValidacion(true);
-        } else if (error.response?.status === 400) {
+        } else if (error.response?.status === 400 && mensajeBackend.includes("debe durar exactamente 1 hora")) {
           setMensajeError(error.response.data.message); // duración incorrecta
-          setShowModalValidacion(true);
+        } else if (error.response?.status === 400 && mensajeBackend.includes("Header name") && mensajeBackend.includes("not found")) {
+          setMensajeError("El archivo CSV no tiene los encabezados esperados: nombre, descripcion, fecha, hora_inicio, hora_fin, id_local"); 
+        }else if (error.response?.status === 500 && mensajeBackend.includes("Local con ID ") && mensajeBackend.includes("no encontrado")) {
+          setMensajeError(error.response.data.message);
         } else {
-          setMensajeError("Revise el formato del CSV, reglas de negocio y la existencia de los locales seleccionados");
-          setShowModalValidacion(true);
+          setMensajeError("Verifique que todos los campos del CSV estén correctamente llenados.");
+          
         }
+        setShowModalValidacion(true);
       }
       };
 

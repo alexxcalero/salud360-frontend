@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import axios from "axios";
-
+import ModalError from "@/components/ModalError";
 import useComunidadForm from "@/hooks/useComunidadForm";
 import ComunidadForm from "@/components/admin/comunidades/ComunidadForm";
 import { baseAPI } from "@/services/baseAPI";
@@ -37,6 +37,9 @@ function CrearComunidad() {
 
   const [serviciosDisponibles, setServiciosDisponibles] = useState<any[]>([]);
 
+  const [showModalErrorValidacion, setShowModalErrorValidacion] = useState(false);
+  const [mensajeError, setMensajeError] = useState("");
+
   // ✅ Aquí se mantiene el estado de membresías nuevas y se pasa correctamente al form
   const [nuevasMembresias, setNuevasMembresias] = useState<Item[]>([]);
 
@@ -59,6 +62,19 @@ function CrearComunidad() {
   }, []);
 
   const handleCrearComunidad = async () => {
+
+    if (servicios.length === 0) {
+      setMensajeError("Debe seleccionar al menos un servicio.");
+      setShowModalErrorValidacion(true);
+      return;
+    }
+
+    if (nuevasMembresias.length === 0 && membresiasSeleccionadas.length === 0) {
+      setMensajeError("Debe registrar o seleccionar al menos una membresía.");
+      setShowModalErrorValidacion(true);
+      return;
+    }
+
     try {
 
       console.log("Las membresias a enviar son:", nuevasMembresias)      
@@ -79,7 +95,8 @@ function CrearComunidad() {
           nombreArchivo = res.data.nombreArchivo;
         } catch (error) {
           console.error("Error al subir imagen:", error);
-          alert("No se pudo subir la imagen.");
+          setMensajeError("No se pudo subir la imagen. Verifique el formato o el tamaño del archivo.");
+          setShowModalErrorValidacion(true);
           return;
         }
       }
@@ -124,6 +141,7 @@ function CrearComunidad() {
     }
   };
 
+
   return (
     <div className="w-full px-10 py-8 text-left">
       <ComunidadForm
@@ -151,8 +169,27 @@ function CrearComunidad() {
         buttonText="Crear comunidad"
         onImagenSeleccionada={(file) => setImagenFile(file)}
       />
+
+       {showModalErrorValidacion && (
+          <>
+            <div className="fixed inset-0 bg-black/60 z-40" />
+            <div className="fixed inset-0 z-50 flex items-center justify-center">
+              <ModalError
+                modulo="Validación requerida"
+                detalle={mensajeError}
+                buttonConfirm="Aceptar"
+                onConfirm={() => setShowModalErrorValidacion(false)}
+                onCancel={() => setShowModalErrorValidacion(false)}
+              />
+            </div>
+          </>
+        )}
+
     </div>
+    
   );
+
+  
 }
 
 export default CrearComunidad;
