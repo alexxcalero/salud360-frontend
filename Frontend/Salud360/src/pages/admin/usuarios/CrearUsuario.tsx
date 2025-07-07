@@ -87,7 +87,7 @@ function CrearUsuario() {
       return false;
     }
 
-    console.log(tipoDoc);
+    //console.log(tipoDoc);
     if (!tipoDoc || tipoDoc === "") {
       setMensajeValidacion("Debe seleccionar un tipo de documento.");
       setShowModalValidacion(true);
@@ -148,7 +148,7 @@ function CrearUsuario() {
 
       //console.log("Rol: ", rol, "Genero: ", genero, "TipoDoc:", tipoDoc)
 
-      console.log(
+      /*console.log(
         "Nombres:",
         nombres,
         " Apellidos:",
@@ -165,7 +165,7 @@ function CrearUsuario() {
         contrasenha,
         " fechaNacimiento:",
         fechaNacimiento
-      );
+      );*/
 
       const response = await baseAPI.post(
         "/admin/clientes",
@@ -195,9 +195,9 @@ function CrearUsuario() {
         }
       );
 
-      console.log("Usuario creado:", response.data);
+      //console.log("Usuario creado:", response.data);
       //alert("Usuario creado exitosamente");
-      console.log("A punto de navegar a successCrear");
+      //console.log("A punto de navegar a successCrear");
       navigate("/admin/usuarios/successCrear", {
         state: { created: true },
       });

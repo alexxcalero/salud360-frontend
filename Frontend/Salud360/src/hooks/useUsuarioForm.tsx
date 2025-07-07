@@ -32,7 +32,7 @@ function useUsuarioForm(){
         setCorreo(usuario.correo || "");
         setGenero(usuario.sexo || "");
         setFechaNacimiento(usuario.fechaNacimiento || "");
-        console.log("LA CONTRASEñA ES:", usuario.contrasenha)
+        //console.log("LA CONTRASEñA ES:", usuario.contrasenha)
         setContrasenha("xxxxxxxx");
         setFechaCreacion(usuario.fechaCreacion || "");
         setFotoPerfil(usuario.fotoPerfil || "");

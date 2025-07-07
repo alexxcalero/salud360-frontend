@@ -46,9 +46,9 @@ function LocalesPage() {
             }
         })
             .then(res => {
-                console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
+                //console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
                 setLocales(res.data);
-                console.log("Locales:", res.data);
+                //console.log("Locales:", res.data);
             })
             .catch(err => console.error("Error cargando locales", err));
     }
@@ -72,7 +72,7 @@ function LocalesPage() {
             })
             .catch((err) => {
                 const mensaje = err?.response?.data?.message || "Error al eliminar comunidad."
-                console.log("Error eliminando comunidad:", mensaje)
+                //console.log("Error eliminando comunidad:", mensaje)
 
                 createToast("error", {
                 title: "Error eliminando comunidad",
@@ -83,7 +83,7 @@ function LocalesPage() {
     }
 
     const handleReactivarLocal = (): void => {
-        console.log("El id del local a reactivar es:", localSeleccionado.idLocal)
+        //console.log("El id del local a reactivar es:", localSeleccionado.idLocal)
         baseAPI.put(`/locales/${localSeleccionado.idLocal}/reactivar`)
             .then(() => {
                 setShowModalExito(true);

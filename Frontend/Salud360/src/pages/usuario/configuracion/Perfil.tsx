@@ -41,7 +41,7 @@ function InicioPerfil() {
       idCliente
     } = usuario;
 
-    console.log("Usuario en idUsuario:", usuario);
+   // console.log("Usuario en idUsuario:", usuario);
 
     const {
         nombres, setNombres,
@@ -65,9 +65,9 @@ function InicioPerfil() {
           }
         })
           .then(res => {
-            console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
+            //console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
             setUsuarioAPI(res.data);
-            console.log("Usuario:", res.data);
+           // console.log("Usuario:", res.data);
             setStaticNombres(res.data.nombres);
             setStaticApellidos(res.data.apellidos);
             setLoading(false);
@@ -180,8 +180,8 @@ function InicioPerfil() {
       return;
     }
     }
-    console.log("Genero en onSubmit:", genero);
-    console.log("TipoDoc en onSubmit:", tipoDoc);
+    //console.log("Genero en onSubmit:", genero);
+    //console.log("TipoDoc en onSubmit:", tipoDoc);
     try {
       
       const response = await baseAPI.put(
@@ -217,7 +217,7 @@ function InicioPerfil() {
       
 
       actualizarUsuario(response.data);
-      console.log("Perfil editado:", response.data);
+     // console.log("Perfil editado:", response.data);
       //alert("Usuario editado exitosamente");
       navigate("/usuario/configuracion/successEditar", {
           state: { created: true }
@@ -228,8 +228,8 @@ function InicioPerfil() {
     }
   };
 
-  console.log("Nombres:", nombres, " Apellidos:", apellidos, " numeroDocumento:", DNI, " Telefono:", telefono," correo:", correo, " sexo:", genero, " contraseña:", contrasenha, 
-    " fechaNacimiento:", fechaNacimiento, "Tipo documento:", tipoDoc);
+ /* console.log("Nombres:", nombres, " Apellidos:", apellidos, " numeroDocumento:", DNI, " Telefono:", telefono," correo:", correo, " sexo:", genero, " contraseña:", contrasenha, 
+    " fechaNacimiento:", fechaNacimiento, "Tipo documento:", tipoDoc);*/
 
 
   return (

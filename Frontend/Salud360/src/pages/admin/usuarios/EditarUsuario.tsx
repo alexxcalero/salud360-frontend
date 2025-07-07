@@ -44,10 +44,10 @@ function EditarUsuario(){
           }
         })
           .then(res => {
-            console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
+            //console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
             setUsuarioAPI(res.data);
             setImagenActual(res.data.fotoPerfil || null);
-            console.log("Usuario:", res.data);
+            //console.log("Usuario:", res.data);
             setLoading(false);
           })
           .catch(err => {
@@ -129,8 +129,8 @@ function EditarUsuario(){
     const handleEditarUsuario = async() => {
 
       
-      console.log("Genero en onSubmit de admin:", genero);
-      console.log("TipoDoc en onSubmit de admin:", tipoDoc);
+      //console.log("Genero en onSubmit de admin:", genero);
+      //console.log("TipoDoc en onSubmit de admin:", tipoDoc);
 
       if (!validarCampos()) {
             setShowModalValidacion(true);
@@ -190,7 +190,7 @@ function EditarUsuario(){
                 }
             );
 
-            console.log("Usuario editado:", response.data);
+            //console.log("Usuario editado:", response.data);
             //alert("Usuario editado exitosamente");
             navigate("/admin/usuarios/successEditar", {
                 state: { created: true }

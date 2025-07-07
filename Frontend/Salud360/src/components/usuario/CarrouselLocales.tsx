@@ -15,7 +15,7 @@ function CarrouselLocales({locales}: any){
     //const showButton = true;
     const totalSize = locales.length;
 
-    console.log("El innerwidth es:", window.innerWidth)
+    //console.log("El innerwidth es:", window.innerWidth)
 
     const handleNext = () => {
         if (currentIndex < locales.length - 1) {

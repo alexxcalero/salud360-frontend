@@ -13,8 +13,8 @@ export const getAllCitasMedicasByComunityAPI = async (idComunidad: number) => {
     .safeParse(response.data.map((c) => ({ ...c, tipo: "citaMedica" })));
 
   if (!parsed.success) {
-    console.log("Errores:");
-    console.log(parsed.error.format());
+   // console.log("Errores:");
+   // console.log(parsed.error.format());
   }
 
   return parsed.data?.filter((c) => c !== undefined);
@@ -29,8 +29,8 @@ export const getAllClasesByComunityAPI = async (idComunidad: number) => {
     .safeParse(response.data.map((c) => ({ ...c, tipo: "clase" })));
 
   if (!parsed.success) {
-    console.log("Errores:");
-    console.log(parsed.error.format());
+   // console.log("Errores:");
+  //  console.log(parsed.error.format());
   }
 
   return parsed.data?.filter((c) => c !== undefined);

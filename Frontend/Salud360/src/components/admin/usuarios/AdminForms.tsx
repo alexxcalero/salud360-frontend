@@ -60,7 +60,7 @@ function AdminForms({ nombres, setNombres = () =>{}, apellidos, setApellidos = (
       }
     })
       .then(res => {
-        console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
+        //console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
         
         const opciones = res.data.map((rolX: any) => ({
             value: rolX.idRol,
@@ -68,7 +68,7 @@ function AdminForms({ nombres, setNombres = () =>{}, apellidos, setApellidos = (
         }))
 
         setRoles(opciones)
-        console.log("Roles:", opciones);
+        //console.log("Roles:", opciones);
       })
       .catch(err => console.error("Error cargando roles", err));
     }
@@ -85,7 +85,7 @@ function AdminForms({ nombres, setNombres = () =>{}, apellidos, setApellidos = (
       }
     })
       .then(res => {
-        console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
+        //console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
         
         const opciones = res.data.map((tipoDocX: any) => ({
             value: tipoDocX.idTipoDocumento,
@@ -93,7 +93,7 @@ function AdminForms({ nombres, setNombres = () =>{}, apellidos, setApellidos = (
         }))
 
         setTipoDocumentos(opciones)
-        console.log("Tipo Documentos:", opciones);
+        //console.log("Tipo Documentos:", opciones);
       })
       .catch(err => console.error("Error cargando tipo documentos", err));
     }
@@ -107,7 +107,7 @@ function AdminForms({ nombres, setNombres = () =>{}, apellidos, setApellidos = (
         { value: "Femenino", content: "Femenino" }
     ]
 
-    console.log("Genero en UsuarioForms:", genero);
+    //console.log("Genero en UsuarioForms:", genero);
 
     /*const optionsSelect = [
         { value: "Homb", content: "Hombre" },

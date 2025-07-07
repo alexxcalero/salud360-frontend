@@ -54,11 +54,11 @@ function EditarMedico() {
         },
       })
       .then((res) => {
-        console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
+        //console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
         setMedicoAPI(res.data);
         setImagenActual(res.data.fotoPerfil || null);
 
-        console.log("Medico:", res.data);
+        //console.log("Medico:", res.data);
         
         setLoading(false);
       })

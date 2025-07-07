@@ -75,9 +75,42 @@ function CrearComunidad() {
       return;
     }
 
+    const membresiasInvalidas = nuevasMembresias.some((m) => {
+      const esNueva = !m.idMembresia;
+
+      console.log("Estamos aqui:", m.tipo)
+      console.log("La membresía es:", m)
+
+      const camposObligatorios = [
+        m.nombre?.trim(),
+        m.tipo?.trim(),
+        m.descripcion?.trim(),
+        m.precio,
+        m.cantUsuarios,
+        m.maxReservas,
+      ];
+
+      return (
+        esNueva &&
+        camposObligatorios.some(
+          (valor) =>
+            valor === undefined ||
+            valor === null ||
+            valor === "" ||
+            (typeof valor === "number" && isNaN(valor))
+        )
+      );
+    });
+
+    if (membresiasInvalidas) {
+      setMensajeError("No puede guardar membresías con campos vacíos. Complete todos los campos requeridos.");
+      setShowModalErrorValidacion(true);
+      return;
+    }
+
     try {
 
-      console.log("Las membresias a enviar son:", nuevasMembresias)      
+      //console.log("Las membresias a enviar son:", nuevasMembresias)      
 
       let nombreArchivo = null;
 
@@ -111,7 +144,7 @@ function CrearComunidad() {
         imagen: nombreArchivo,
       };
 
-      console.log("Enviando datos de comunidad:", requestBody);
+      //console.log("Enviando datos de comunidad:", requestBody);
 
       const response = await baseAPI.post("/comunidades", requestBody, {
         auth: {
@@ -123,9 +156,9 @@ function CrearComunidad() {
         }
       });
 
-      console.log("✅ Comunidad creada:", response.data);
+      //console.log("✅ Comunidad creada:", response.data);
       //alert("Usuario creado exitosamente");
-      console.log("A punto de navegar a successCrear")
+      //console.log("A punto de navegar a successCrear")
       navigate("/admin/comunidades/successCrear", {
         state: { created: true }
       });

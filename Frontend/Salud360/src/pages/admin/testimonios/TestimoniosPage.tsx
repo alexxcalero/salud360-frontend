@@ -44,9 +44,9 @@ function CalificacionesPage() {
             }
         })
             .then(res => {
-                console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
+                //console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
                 setTestimonions(res.data);
-                console.log("Testimonios:", res.data);
+                //console.log("Testimonios:", res.data);
             })
             .catch(err => console.error("Error cargando testimonios", err));
     }
@@ -111,13 +111,13 @@ function CalificacionesPage() {
         (paginaActual - 1) * registrosPorPagina, paginaActual * registrosPorPagina);
 
 
-        console.log("Los testimonios paginados son:", testimoniosPaginados)
+        //console.log("Los testimonios paginados son:", testimoniosPaginados)
 
     testimoniosPaginados.map((testimonio: any) => {
-        console.log("EL ID DEL TESTIMONI0:", testimonio.idTestimonio)
-        console.log("testimonio.cliente es:", testimonio.cliente)
-        console.log("testimonio.cliente.nombres es:", testimonio.cliente.nombres)
-        console.log("testimonio.cliente.apellidos es:", testimonio.cliente.apellidos)
+        //console.log("EL ID DEL TESTIMONI0:", testimonio.idTestimonio)
+        //console.log("testimonio.cliente es:", testimonio.cliente)
+        //console.log("testimonio.cliente.nombres es:", testimonio.cliente.nombres)
+        //console.log("testimonio.cliente.apellidos es:", testimonio.cliente.apellidos)
     })    
 
     const rows = testimoniosPaginados

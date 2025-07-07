@@ -113,7 +113,7 @@ const Membresias = () => {
     }).format(fecha);
   };
 
-  console.log("tieneAfiliaciones es:", tieneAfiliaciones);
+  //console.log("tieneAfiliaciones es:", tieneAfiliaciones);
 
   const handleDetalles = (afiliacion: any) => {
     setMembresiaActual(afiliacion.membresia);
@@ -143,7 +143,7 @@ const Membresias = () => {
   };
 
   const handleCancelarAfiliacion = (): void => {
-    console.log("&&&&&&&&ESTAMOS CANCELANDO, CON EL DELETE:");
+    //console.log("&&&&&&&&ESTAMOS CANCELANDO, CON EL DELETE:");
 
     console.log("El id actual:", afiliacionActual.idAfiliacion)
 

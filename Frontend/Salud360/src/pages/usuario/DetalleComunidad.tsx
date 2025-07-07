@@ -36,7 +36,7 @@ function DetalleComunidad(){
      // { value: "Rodrigo Roller", content: "Rodrigo Roller" },
     //];
 
-    console.log("$$$:", comunidad)
+    //console.log("$$$:", comunidad)
 
     const serviciosConLocales = comunidad.servicios.filter(
       (servicio: any) => servicio.locales && servicio.locales.length > 0
@@ -81,8 +81,8 @@ function DetalleComunidad(){
     }, [comunidad]);
 
     const tieneMedicos = medicos.length > 0
-    console.log("Los medicos son:", medicos)
-    console.log("Tiene medicos? Es:", tieneMedicos)
+    //console.log("Los medicos son:", medicos)
+    //console.log("Tiene medicos? Es:", tieneMedicos)
 
     const opcionesEspecialidades = Array.from(
       new Set(medicos.map((m) => m.especialidad))).map(

@@ -30,10 +30,10 @@ function DetalleLocal(){
           }
         })
           .then(res => {
-            console.log("Datos cargados en detalleLocal:", res.data); // VER ESTO EN LA CONSOLA
+            //console.log("Datos cargados en detalleLocal:", res.data); // VER ESTO EN LA CONSOLA
             setLocalAPI(res.data)
-            console.log("Servicio:", res.data);
-            console.log("idServicio:", res.data.servicio.idServicio);
+            //console.log("Servicio:", res.data);
+            //console.log("idServicio:", res.data.servicio.idServicio);
             setLoading(false);
             //setServiciosSeleccionados([res.data.servicio.idServicio]);
           })

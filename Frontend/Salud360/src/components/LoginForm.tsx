@@ -29,15 +29,15 @@ export default function LoginForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Datos enviados:", formData);
+    //console.log("Datos enviados:", formData);
     // Aquí puedes hacer una petición con Axios al backend
     setLoading(true);
     // await new Promise<string>((res) => setTimeout(() => res(""), 3000)) // throating
 
     try {
       const response = await loginRequest(formData.correo, formData.contraseña);
-      console.log("El response del inicio de sesión es:", response);
-      console.log("El token de response es:", response.token);
+      //console.log("El response del inicio de sesión es:", response);
+      //console.log("El token de response es:", response.token);
 
       const usuario = response.usuario;
       let activeUser = null;
@@ -56,15 +56,15 @@ export default function LoginForm() {
         console.error("❌ Usuario no contiene ni cliente ni administrador:", usuario);
       }
 
-      console.log("******activeUser contiene:", activeUser);
-      console.log("🧠 Usuario activo con ID:", activeUser.idUsuario);
+      //console.log("******activeUser contiene:", activeUser);
+      //console.log("🧠 Usuario activo con ID:", activeUser.idUsuario);
       
       const token = response.token;
       const idRol = activeUser.rol?.idRol;
 
       loginContext(activeUser, token); // ✅ ahora contiene idUsuario
 
-      console.log("el idRol es:", idRol);
+      //console.log("el idRol es:", idRol);
 
       setLoading(false);
       switch (idRol) {
@@ -123,7 +123,7 @@ export default function LoginForm() {
   //Uso de Google OAuth
   const loginGoogle = useGoogleLogin({
   onSuccess: async (tokenResponse) => {
-    console.log("✅ Login con Google OK:", tokenResponse);
+    //console.log("✅ Login con Google OK:", tokenResponse);
 
     try {
       // Obtener datos del perfil desde Google
@@ -134,7 +134,7 @@ export default function LoginForm() {
       });
 
       const profile = await res.json();
-      console.log("👤 Perfil de Google:", profile);
+      //console.log("👤 Perfil de Google:", profile);
 
       const correo = profile.email;
       const contraseña = "google123"; // contraseña fija para login por Google
@@ -142,8 +142,8 @@ export default function LoginForm() {
       setLoading(true);
 
       const response = await loginRequest(correo, contraseña);
-      console.log("El response del inicio de sesión es:", response);
-      console.log("El token de response es:", response.token);
+      //console.log("El response del inicio de sesión es:", response);
+      //console.log("El token de response es:", response.token);
 
       const usuario = response.usuario;
       let activeUser = null;
@@ -167,8 +167,8 @@ export default function LoginForm() {
 
       loginContext(activeUser, token);
 
-      console.log("🧠 Usuario activo:", activeUser);
-      console.log("🎫 Rol detectado:", idRol);
+      //console.log("🧠 Usuario activo:", activeUser);
+      //console.log("🎫 Rol detectado:", idRol);
 
       switch (idRol) {
         case 1:

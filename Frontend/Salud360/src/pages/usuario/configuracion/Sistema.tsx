@@ -159,7 +159,7 @@ const ConfigSistema = () => {
   const [modalExitoTipo, setModalExitoTipo] = useState("");
 
   const handleActualizarNotificaciones = async () => {
-    console.log("notiCorreo:", notiPorCorreo, "notiSMS:", notiPorSMS, "notiWhatsApp:", notiPorWhatsApp);
+    //console.log("notiCorreo:", notiPorCorreo, "notiSMS:", notiPorSMS, "notiWhatsApp:", notiPorWhatsApp);
 
 
     try {
@@ -191,7 +191,7 @@ const ConfigSistema = () => {
         }
       );
 
-      console.log("Respuesta del PUT:", response.data);
+     // console.log("Respuesta del PUT:", response.data);
       setModalExitoTipo("notificaciones");  // Establece el tipo de modal
       setModalExitoTexto("¡Notificaciones actualizadas correctamente!");
       setShowModalExito(true);

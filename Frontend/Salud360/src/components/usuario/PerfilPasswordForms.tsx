@@ -45,7 +45,7 @@ function PerfilPasswordForms({id}: Props){
                 }
             );
 
-            console.log("Contraseña actualizada:", response.data);
+            //console.log("Contraseña actualizada:", response.data);
             //alert("Usuario editado exitosamente");
             navigate("/usuario/configuracion/successCambiarContrasenha", {
                 state: { created: true }

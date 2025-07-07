@@ -56,8 +56,8 @@ function CalendarioMensual<Data>({
             <div key={i} className="grid grid-cols-subgrid col-span-full">
               {_dias.map((dia, index) => {
                 const matrizEvents = events[dia.toISODate() ?? ""];
-                console.log(events);
-                console.log(dia.toISODate());
+                //console.log(events);
+                //console.log(dia.toISODate());
                 return (
                   <div
                     key={index}

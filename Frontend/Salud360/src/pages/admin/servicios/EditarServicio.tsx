@@ -36,7 +36,7 @@ function EditarServicio(){
           }
         })
           .then(res => {
-            console.log("Datos cargados en editarServicio:", res.data); // VER ESTO EN LA CONSOLA
+            //console.log("Datos cargados en editarServicio:", res.data); // VER ESTO EN LA CONSOLA
             setServicioAPI(res.data)
             setLoading(false);
             setImagenActual(res.data.imagen || null);
@@ -107,7 +107,7 @@ function EditarServicio(){
         }
       }
 
-        console.log("El contenido de los locales a enviar es:", locales)
+        //console.log("El contenido de los locales a enviar es:", locales)
         try{
             const response = await baseAPI.put(`/servicios/${id}`, 
                 {
@@ -128,7 +128,7 @@ function EditarServicio(){
                 }
             );
 
-            console.log("A punto de navegar a successCrear")
+            //console.log("A punto de navegar a successCrear")
             navigate("/admin/servicios/successCrear", {
                 state: { created: true }
             });

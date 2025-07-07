@@ -126,7 +126,7 @@ function CrearMedico() {
 
     try {
       const sexo = genero;
-      console.log("Nombre de la imagen subida:", nombreArchivo);
+      //console.log("Nombre de la imagen subida:", nombreArchivo);
       const response = await baseAPI.post(
         "/admin/medicos",
         {
@@ -153,9 +153,9 @@ function CrearMedico() {
         }
       );
 
-      console.log("Medico creado:", response.data);
+      //console.log("Medico creado:", response.data);
       //alert("Medico creado exitosamente");
-      console.log("A punto de navegar a successCrear")
+      //console.log("A punto de navegar a successCrear")
       navigate("/admin/personalMedico/successCrear", {
           state: { created: true }
       });
