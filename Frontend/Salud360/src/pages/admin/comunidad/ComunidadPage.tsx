@@ -181,7 +181,7 @@ function ComunidadPage() {
         error.response?.status === 500 &&
         error.response?.data?.message?.includes("Servicio con ID")
       ) {
-        setMensajeError("Uno de los IDs de servicios no existe en la base de datos.");
+        setMensajeError(error.response.data.message);
       } else if (
         error.response?.status === 500 &&(    mensajeBackend.includes("java.lang") ||    mensajeBackend.includes("DataIntegrityViolationException") ||    mensajeBackend.includes("not-null property references a null")  )
       ) {

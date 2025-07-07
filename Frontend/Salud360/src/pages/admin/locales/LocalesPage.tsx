@@ -130,12 +130,14 @@ function LocalesPage() {
            setMensajeError("El archivo CSV no tiene los encabezados esperados: nombre, direccion, telefono, tipo_servicio, id_servicio, descripcion");    
         }else if(error.response?.status === 400 && mensajeBackend.includes("Debe tener exactamente 9 dígitos numéricos")){
            setMensajeError("El teléfono no es válido. Debe tener exactamente 9 dígitos numéricos.");
-        }   else {
+        }else if (error.response?.status === 500 && mensajeBackend.includes("Servicio con ID ") && mensajeBackend.includes("no encontrado")) {
+            setMensajeError(error.response.data.message);
+        }else {
             setMensajeError("Verifique que todos los campos del CSV estén correctamente llenados.");
-        }
+       }
         setShowModalValidacion(true);;
     }
-    };
+    }; 
 
 
     const columns = [
