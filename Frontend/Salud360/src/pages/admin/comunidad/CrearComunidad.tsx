@@ -75,6 +75,39 @@ function CrearComunidad() {
       return;
     }
 
+    const membresiasInvalidas = nuevasMembresias.some((m) => {
+      const esNueva = !m.idMembresia;
+
+      console.log("Estamos aqui:", m.tipo)
+      console.log("La membresía es:", m)
+
+      const camposObligatorios = [
+        m.nombre?.trim(),
+        m.tipo?.trim(),
+        m.descripcion?.trim(),
+        m.precio,
+        m.cantUsuarios,
+        m.maxReservas,
+      ];
+
+      return (
+        esNueva &&
+        camposObligatorios.some(
+          (valor) =>
+            valor === undefined ||
+            valor === null ||
+            valor === "" ||
+            (typeof valor === "number" && isNaN(valor))
+        )
+      );
+    });
+
+    if (membresiasInvalidas) {
+      setMensajeError("No puede guardar membresías con campos vacíos. Complete todos los campos requeridos.");
+      setShowModalErrorValidacion(true);
+      return;
+    }
+
     try {
 
       //console.log("Las membresias a enviar son:", nuevasMembresias)      

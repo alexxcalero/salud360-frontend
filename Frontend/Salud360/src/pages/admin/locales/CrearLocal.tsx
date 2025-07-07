@@ -39,6 +39,7 @@ function CrearLocal(){
 
         if (!telefono || !soloNumeros.test(telefono) || telefono.length !== 9) {
             setMensajeValidacion("El teléfono debe tener exactamente 9 dígitos numéricos.");
+            setShowModalValidacion(true);
             return false;
         }
 

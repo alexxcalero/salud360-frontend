@@ -171,8 +171,8 @@ const ConfigSistema = () => {
           correo,
           telefono,
           notificacionPorCorreo: notiPorCorreo,
-          notificacionPorSMS: notiPorSMS,
-          notificacionPorWhatsApp: notiPorWhatsApp,
+          notificacionPorSMS: false,
+          notificacionPorWhatsApp: false,
           sexo: genero,
           fechaNacimiento,
           direccion,
@@ -264,8 +264,8 @@ const ConfigSistema = () => {
           <span className="text-left block mb-2">
             Permitir notificaciones en:
           </span>
-          <ul className="flex flex-col gap-2 w-max items-start">
-            <li>
+          <ul className="flex flex-col gap-2 w-max items-start mt-4">
+            <li className="font-bold">
               <input
                 type="checkbox"
                 name=""
@@ -275,28 +275,6 @@ const ConfigSistema = () => {
                 onChange={(e) => setNotiPorCorreo(e.target.checked)}
               />{" "}
               <label>Correo electrónico</label>
-            </li>
-            <li>
-              <input
-                type="checkbox"
-                name=""
-                id=""
-                className="h-min mr-2"
-                checked={notiPorSMS}
-                onChange={(e) => setNotiPorSMS(e.target.checked)}
-              />{" "}
-              <label>SMS</label>
-            </li>
-            <li>
-              <input
-                type="checkbox"
-                name=""
-                id=""
-                className="h-min mr-2"
-                checked={notiPorWhatsApp}
-                onChange={(e) => setNotiPorWhatsApp(e.target.checked)}
-              />{" "}
-              <label>Whatsapp</label>
             </li>
           </ul>
           <div className="mt-8">

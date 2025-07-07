@@ -8,6 +8,7 @@ import { Switch } from "@/components/ui/switch";
 import { baseAPI } from "@/services/baseAPI";
 import ModalError from "@/components/ModalError";
 import ModalExito from "@/components/ModalExito";
+import { useToasts } from "@/hooks/ToastContext";
 
 /*
 export interface MembresiaResumenDTO {
@@ -57,6 +58,8 @@ function Comunidades(){
     if (loading || !usuario) return null;
 
     const id = usuario.idCliente;
+
+    const { createToast } = useToasts();
 
     //setComunidades(usuario.comunidades)
 
@@ -170,7 +173,17 @@ function Comunidades(){
         setShowModalExitoSuspender(true);
         setShowModalSuspender(false);
     })
-    .catch(() => console.log("Error"));
+    .catch((err) => {
+        const mensaje = err?.response?.data?.message || "Error al suspender membresía."
+        console.log("Error al suspender membresía:", mensaje)
+
+        createToast("error", {
+            title: "Error al suspender membresía",
+            description: mensaje,
+        });
+
+
+    });
 }
 
   const handleReactivar = (afiliacion: any, comunidad: any) => {
@@ -207,19 +220,23 @@ function Comunidades(){
     return(
         <section className="flex flex-col gap-16">
             <title>Mis comunidades</title>
-            <div className="flex flex-row justify-between items-center py-8 px-32 ">
-                <h1>Mis comunidades</h1>
-                <div className="flex flex-row justify-around gap-4">
+
+            <div className="w-full flex flex-col gap-4 justify-center py-8 px-32">
+                <div className="flex gap-4 justify-between items-center">
+                  <h1>Mis comunidades</h1>
+                  <div className="flex flex-row justify-around gap-4">
                     <p>{activo ? "Activas" : "Inactivas"}</p>
                     <Switch checked={activo} onCheckedChange={setActivo} className="data-[state=checked]:bg-blue-500 bg-gray-300 transition-colors duration-300"/>
+                    </div>
+                  <NavLink to="/usuario/comunidades/explorarComunidades"><Button size="lg" className="w-64">Explorar Más</Button></NavLink>
                 </div>
-                <NavLink to="/usuario/comunidades/explorarComunidades"><Button size="lg" className="w-64">Explorar Más</Button></NavLink>
+                <hr/>
             </div>
 
             {comunidadesAMostrar.length === 0 ? (
                 <div className="text-center flex flex-col items-center gap-4 mt-32">
                     <AlertTriangle className="text-red-500 w-32 h-32" />
-                    <h1>NO PERTENECES A NINGUNA COMUNIDAD.</h1>
+                    <h1>{activo ? 'NO PERTENECES A NINGUNA COMUNIDAD.' : 'NO TIENES COMUNIDADES INACTIVAS'}</h1>
                     <h3>Haz click en <span className="text-[#2A86FF] italic">Explorar Más</span> para ver las comunidades que tenemos para ti.</h3>
                 </div>
                 ) : (

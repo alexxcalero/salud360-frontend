@@ -74,6 +74,7 @@ function EditarComunidad() {
             prev.length === 0
               ? (comunidad.membresias || []).map((m: any) => ({
                   ...m,
+                  tipo: m.tipo ?? "Mensual", // lo del tipo pe
                   readOnly: m.cantUsuarios > 0, // ← ✅ aquí se marca
                 }))
               : prev
@@ -126,6 +127,9 @@ function EditarComunidad() {
 
       const membresiasInvalidas = nuevasMembresias.some((m) => {
         const esNueva = !m.idMembresia;
+
+        console.log("Estamos aqui:", m.tipo)
+        console.log("La membresía es:", m)
 
         const camposObligatorios = [
           m.nombre?.trim(),

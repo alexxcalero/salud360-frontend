@@ -43,7 +43,7 @@ const DetallePagoModal: React.FC<DetallePagoModalProps> = ({ pago, onClick }) =>
           <p><span className="font-semibold">Comunidad:</span> {comunidad.nombre}</p>
           <p><span className="font-semibold">Membresía:</span> {membresia.nombre}</p>
         </div>
-        <small>Para ver más detalles de la membresía, ir al apartado de <span className="text-[#2A86FF] italic">Membresías.</span> </small>
+        <small>Para ver más detalles de la membresía, ir al apartado de <span className="text-[#2A86FF] italic hover:underline"><a href="/usuario/configuracion/membresias">Membresías.</a></span> </small>
         <div><Button size='lg' variant='outline' onClick={onClick}>Volver</Button></div>
       </div>
   );

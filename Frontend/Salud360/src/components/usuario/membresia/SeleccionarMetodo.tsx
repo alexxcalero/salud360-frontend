@@ -22,7 +22,7 @@ const SeleccionarMetodo = ({
   comunidad: IComunidad;
   membresia: IMembresia;
 }) => {
-  const tipoDePago = useRef<
+  const [tipoDePago, setTipoDePago] = useState<
     "tarjeta" | "plin" | "yape" | "efectivo" | undefined
   >("tarjeta");
   const navigate = useNavigate();
@@ -111,9 +111,8 @@ const SeleccionarMetodo = ({
             name="tipoDePago"
             id="metodo-tarjeta"
             value="tarjeta"
-            defaultChecked={true}
-            onChange={() => {}}
-            onClick={() => (tipoDePago.current = "tarjeta")}
+            checked={tipoDePago === "tarjeta"}
+            onChange={(e) => setTipoDePago(e.target.value as any)}
             className="flex-none"
           />
           <label htmlFor="metodo-tarjeta">
@@ -136,9 +135,8 @@ const SeleccionarMetodo = ({
             name="tipoDePago"
             id="metodo-efectivo"
             value="efectivo"
-            defaultChecked={true}
-            onChange={() => {}}
-            onClick={() => (tipoDePago.current = "efectivo")}
+            checked={tipoDePago === "efectivo"}
+            onChange={(e) => setTipoDePago(e.target.value as any)}
             className="flex-none"
           />
           <label htmlFor="metodo-efectivo" className="flex gap-1">
@@ -189,22 +187,24 @@ const SeleccionarMetodo = ({
         </Button>
         <Button
           type="button"
+          disabled={
+            tipoDePago && !selectedMedioDePago && activeOption === "guardado"
+          }
           onClick={() => {
-            console.log({
-              tipo: activeOption,
-              comunidad,
-              membresia,
-              metodo: tipoDePago.current,
-              mediosDePagoSeleccionado: selectedMedioDePago,
-            });
-            if (!tipoDePago.current && !selectedMedioDePago) return;
+            if (!tipoDePago && !selectedMedioDePago) return;
+            if (
+              tipoDePago &&
+              !selectedMedioDePago &&
+              activeOption === "guardado"
+            )
+              return;
 
             navigate(`/usuario/pasarela-pagos/pago`, {
               state: {
                 tipo: activeOption,
                 comunidad,
                 membresia,
-                metodo: tipoDePago.current,
+                metodo: tipoDePago,
                 mediosDePagoSeleccionado: selectedMedioDePago,
               },
             });
