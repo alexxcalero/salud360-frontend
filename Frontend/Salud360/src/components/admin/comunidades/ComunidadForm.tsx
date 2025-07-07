@@ -160,7 +160,7 @@ function ComunidadForm({
       {
         nombre: "",
         conTope: true,
-        tipo: "",
+        tipo: "Anual",
         cantUsuarios: 0,
         maxReservas: 0,
         precio: 0,
@@ -295,7 +295,7 @@ function ComunidadForm({
       </td>
       <td className="p-2">
         <select
-          value={m.tipo}
+          value={m.tipo }
           onChange={(e) => handleChangeMembresia(index, "tipo", e.target.value)}
           className={`border p-1 rounded w-full ${tipoClass}`}
           disabled={isTipoDisabled}

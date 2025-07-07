@@ -74,6 +74,7 @@ function EditarComunidad() {
             prev.length === 0
               ? (comunidad.membresias || []).map((m: any) => ({
                   ...m,
+                  tipo: m.tipo ?? "Mensual", // lo del tipo pe
                   readOnly: m.cantUsuarios > 0, // ← ✅ aquí se marca
                 }))
               : prev
