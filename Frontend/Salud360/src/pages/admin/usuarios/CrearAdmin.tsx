@@ -102,7 +102,7 @@ function CrearAdmin() {
 
       //console.log("Rol: ", rol, "Genero: ", genero, "TipoDoc:", tipoDoc)
 
-      console.log(
+      /*console.log(
         "Nombres:",
         nombres,
         " Apellidos:",
@@ -117,7 +117,7 @@ function CrearAdmin() {
         sexo,
         " contraseña:",
         contrasenha
-      );
+      );*/
 
       const response = await baseAPI.post(
         "/admin",
@@ -144,9 +144,9 @@ function CrearAdmin() {
         }
       );
 
-      console.log("Admin creado:", response.data);
+      //console.log("Admin creado:", response.data);
       //alert("Usuario creado exitosamente");
-      console.log("A punto de navegar a successCrear");
+      //console.log("A punto de navegar a successCrear");
       navigate("/admin/usuarios/successCrearAdmin", {
         state: { created: true },
       });

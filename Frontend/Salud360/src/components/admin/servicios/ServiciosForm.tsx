@@ -42,7 +42,7 @@ function ServiciosForm({title, subtitle, nombre, setNombre = () =>{}, descripcio
 
     const [localesDisponibles, setLocalesDisponibles] = useState<Local[]>([]);
 
-    console.log("en ServiciosForms los locales del props son:", locales)
+    //console.log("en ServiciosForms los locales del props son:", locales)
 
     //Llamada Locales
     const fetchLocales = () => {
@@ -53,10 +53,10 @@ function ServiciosForm({title, subtitle, nombre, setNombre = () =>{}, descripcio
       }
     })
       .then(res => {
-        console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
+        //console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
 
         setLocalesDisponibles(res.data)
-        console.log("Locales:", localesDisponibles);
+        //console.log("Locales:", localesDisponibles);
       })
       .catch(err => console.error("Error cargando roles", err));
     }

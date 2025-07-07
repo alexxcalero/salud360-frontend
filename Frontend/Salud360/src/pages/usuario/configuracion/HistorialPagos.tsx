@@ -29,14 +29,14 @@ const HistorialPagos = () => {
 
   const fetchPagos = async () => {
     try {
-      console.log("El id del usuario es:", id);
+     // console.log("El id del usuario es:", id);
       const res = await baseAPI.get(`/pagos/${id}`, {
         auth: {
           username: "admin",
           password: "admin123",
         },
       });
-      console.log("Pagos del Usuario:", res.data);
+     // console.log("Pagos del Usuario:", res.data);
       setPagos(Array.isArray(res.data) ? res.data : [res.data]);
     } catch (error) {
       console.error("Error cargando Pagos", error);
@@ -66,7 +66,7 @@ const HistorialPagos = () => {
     }).format(nuevaFecha);
   };
 
-  console.log("tienePagos es:", tienePagos);
+ // console.log("tienePagos es:", tienePagos);
 
   const handleDetalles = (pago: any) => {
     setPagoActual(pago);

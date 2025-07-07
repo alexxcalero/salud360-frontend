@@ -162,7 +162,7 @@ export default function RegisterForm() {
     }
 
     setLoading(true);
-    console.log("Formulario a enviar:", formData);
+    //console.log("Formulario a enviar:", formData);
 
     // conexión a axios
     try {
@@ -207,8 +207,8 @@ export default function RegisterForm() {
         },
         reserva: null,
       });
-      console.log("✅ Usuario creado");
-      console.log("A punto de navegar a successCrear");
+      //("✅ Usuario creado");
+      //console.log("A punto de navegar a successCrear");
       navigate("/RegistroExitoso", {
         state: { created: true },
       });
@@ -233,7 +233,7 @@ export default function RegisterForm() {
         },
       })
       .then((res) => {
-        console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
+        //console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
 
         const opciones = res.data.map((tipoDocX: any) => ({
           value: tipoDocX.idTipoDocumento,
@@ -241,7 +241,7 @@ export default function RegisterForm() {
         }));
 
         setTipoDocumentos(opciones);
-        console.log("Tipo Documentos:", opciones);
+        //console.log("Tipo Documentos:", opciones);
       })
       .catch((err) => console.error("Error cargando tipo documentos", err));
   };
@@ -256,7 +256,7 @@ export default function RegisterForm() {
 
   const registerGoogle = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
-      console.log("👉 tokenResponse:", tokenResponse);
+      //console.log("👉 tokenResponse:", tokenResponse);
 
       try {
         const { access_token } = tokenResponse;
@@ -272,7 +272,7 @@ export default function RegisterForm() {
         );
 
         const userData = res.data;
-        console.log("✅ Datos de Google:", userData);
+        //console.log("✅ Datos de Google:", userData);
 
         // Completar el formulario con datos obtenidos
         const nuevosDatos = {

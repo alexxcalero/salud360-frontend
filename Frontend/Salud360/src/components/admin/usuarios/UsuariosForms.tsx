@@ -73,7 +73,7 @@ function UsuariosForms({title="", subtitle="", nombres, setNombres = () =>{}, ap
       }
     })
       .then(res => {
-        console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
+        //console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
         
         const opciones = res.data.map((rolX: any) => ({
             value: rolX.idRol,
@@ -81,7 +81,7 @@ function UsuariosForms({title="", subtitle="", nombres, setNombres = () =>{}, ap
         }))
 
         setRoles(opciones)
-        console.log("Roles:", opciones);
+        //console.log("Roles:", opciones);
       })
       .catch(err => console.error("Error cargando roles", err));
     }
@@ -98,7 +98,7 @@ function UsuariosForms({title="", subtitle="", nombres, setNombres = () =>{}, ap
       }
     })
       .then(res => {
-        console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
+        //console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
         
         const opciones = res.data.map((tipoDocX: any) => ({
             value: tipoDocX.idTipoDocumento,
@@ -106,7 +106,7 @@ function UsuariosForms({title="", subtitle="", nombres, setNombres = () =>{}, ap
         }))
 
         setTipoDocumentos(opciones)
-        console.log("Tipo Documentos:", opciones);
+        //console.log("Tipo Documentos:", opciones);
       })
       .catch(err => console.error("Error cargando tipo documentos", err));
     }
@@ -124,16 +124,16 @@ function UsuariosForms({title="", subtitle="", nombres, setNombres = () =>{}, ap
 
 
     if (contrasenha !== undefined){
-      console.log("Estamos en el if:", contrasenha === undefined)
+      //console.log("Estamos en el if:", contrasenha === undefined)
       readOnlyContrasenha = false 
     }
     else{
-      console.log("Estamos en el else:", contrasenha === undefined)
+      //console.log("Estamos en el else:", contrasenha === undefined)
       readOnlyContrasenha = true;
       contrasenha = "xxxxxxxx";
     }
 
-    console.log("Genero en UsuarioForms:", genero);
+    //console.log("Genero en UsuarioForms:", genero);
 
     /*const optionsSelect = [
         { value: "Homb", content: "Hombre" },

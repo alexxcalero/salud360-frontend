@@ -53,9 +53,9 @@ function DetalleUsuario(){
           }
         })
           .then(res => {
-            console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
+            //console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
             setUsuarioAPI(res.data)
-            console.log("Usuario:", res.data);
+            //console.log("Usuario:", res.data);
             setLoading(false);
           })
           .catch(err => {

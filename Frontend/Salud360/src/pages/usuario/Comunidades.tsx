@@ -71,9 +71,9 @@ function Comunidades(){
             },
         })
         .then((res) => {
-            console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
+            //console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
             setComunidades(res.data);
-            console.log("Comunidadessssss:", res.data);
+           // console.log("Comunidadessssss:", res.data);
         })
         .catch((error) => {
             console.error("Error al obtener comunidades activas:", error);
@@ -87,7 +87,7 @@ function Comunidades(){
         }})
         .then((response) => {
             setAfiliaciones(response.data);
-            console.log("Afiliaciones cargadas:", afiliaciones);
+            //console.log("Afiliaciones cargadas:", afiliaciones);
         })
         .catch((error) => {
             console.error("Error al obtener afiliaciones:", error);
@@ -105,9 +105,9 @@ function Comunidades(){
             },
         })
         .then((res) => {
-            console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
+            //console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
             setComunidadesInactivas(res.data);
-            console.log("Comunidades inactivas:", res.data);
+            //console.log("Comunidades inactivas:", res.data);
         })
         .catch((error) => {
             console.error("Error al obtener comunidades inactivas:", error);
@@ -135,7 +135,7 @@ function Comunidades(){
     const [diasSuspension, setDiasSuspension] = useState(1);
 
     const handleCancelar = (afiliacion: any, comunidad: any) => {
-    console.log("HOLAAAAAAAAAAAAAAAAAAAAAAAAA", afiliacion)
+    //console.log("HOLAAAAAAAAAAAAAAAAAAAAAAAAA", afiliacion)
     setAfiliacionActual(afiliacion)
     setMembresiaActual(afiliacion.membresia)
     setComunidadActual(comunidad)
@@ -143,7 +143,7 @@ function Comunidades(){
   };
 
   const handleCancelarAfiliacion = (): void => {
-    console.log("&&&&&&&&ESTAMOS CANCELANDO, CON EL DELETE:")
+    //console.log("&&&&&&&&ESTAMOS CANCELANDO, CON EL DELETE:")
 
     baseAPI.delete(`/afiliaciones/${afiliacionActual.idAfiliacion}`)
     .then(() => {

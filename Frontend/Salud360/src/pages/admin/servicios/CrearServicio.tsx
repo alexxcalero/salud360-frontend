@@ -58,7 +58,7 @@ function CrearServicio(){
             return;
         }
 
-        console.log("El contenido de los locales a enviar es:", locales)
+        //console.log("El contenido de los locales a enviar es:", locales)
 
         //PARA IMAGEN IGUALMENTE
         let nombreArchivo = null;
@@ -101,7 +101,7 @@ function CrearServicio(){
                 }
             );
 
-            console.log("A punto de navegar a successCrear")
+            //console.log("A punto de navegar a successCrear")
             navigate("/admin/servicios/successCrear", {
                 state: { created: true }
             });

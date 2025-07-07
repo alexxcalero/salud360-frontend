@@ -32,9 +32,9 @@ function AuditoriasPage(){
       }
     })
       .then(res => {
-        console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
+        //console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
         setAuditorias(res.data);
-        console.log("Auditorias:", res.data);
+        //console.log("Auditorias:", res.data);
       })
       .catch(err => console.error("Error cargando auditorias", err));
   }

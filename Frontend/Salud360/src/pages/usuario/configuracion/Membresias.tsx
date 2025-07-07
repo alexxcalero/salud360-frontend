@@ -41,14 +41,14 @@ const Membresias = () => {
 
   const fetchComunidad = async () => {
     try {
-      console.log("El id del usuario es:", id);
+    //  console.log("El id del usuario es:", id);
       const res = await baseAPI.get(`/cliente/${id}/afiliaciones-cliente`, {
         auth: {
           username: "admin",
           password: "admin123",
         },
       });
-      console.log("Afiliaciones del Usuario:", res.data);
+    //  console.log("Afiliaciones del Usuario:", res.data);
       setAfiliaciones(Array.isArray(res.data) ? res.data : [res.data]);
     } catch (error) {
       console.error("Error cargando Afiliaciones", error);
@@ -86,7 +86,7 @@ const Membresias = () => {
     }).format(fecha);
   };
 
-  console.log("tieneAfiliaciones es:", tieneAfiliaciones);
+  //console.log("tieneAfiliaciones es:", tieneAfiliaciones);
 
   const handleDetalles = (afiliacion: any) => {
     setMembresiaActual(afiliacion.membresia);
@@ -116,7 +116,7 @@ const Membresias = () => {
   };
 
   const handleCancelarAfiliacion = (): void => {
-    console.log("&&&&&&&&ESTAMOS CANCELANDO, CON EL DELETE:");
+    //console.log("&&&&&&&&ESTAMOS CANCELANDO, CON EL DELETE:");
 
     baseAPI
       .delete(`/afiliaciones/${afiliacionActual.idAfiliacion}`)

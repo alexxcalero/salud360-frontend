@@ -182,8 +182,8 @@ function EditarComunidad() {
       if (nombreArchivo) {
         payload.imagen = nombreArchivo;
       }
-      console.log("Payload final:", JSON.stringify(payload, null, 2));
-      console.log("PAYLOAD A ENVIAR:", JSON.stringify(payload, null, 2));
+      //console.log("Payload final:", JSON.stringify(payload, null, 2));
+      //console.log("PAYLOAD A ENVIAR:", JSON.stringify(payload, null, 2));
 
       const response = await baseAPI.put(`/comunidades/${id}`, payload, {
         auth: {
@@ -195,9 +195,9 @@ function EditarComunidad() {
         }
       });
 
-      console.log("✅ Comunidad editada:", response.data);
+      //console.log("✅ Comunidad editada:", response.data);
       //alert("Usuario creado exitosamente");
-      console.log("A punto de navegar a successCrear")
+      //console.log("A punto de navegar a successCrear")
       navigate("/admin/comunidades/successEditar", {
         state: { created: true }
       });

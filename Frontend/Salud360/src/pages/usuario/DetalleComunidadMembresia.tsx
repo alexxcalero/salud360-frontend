@@ -24,7 +24,7 @@ function DetalleComunidadMembresia() {
     });
   }, []);
   
-  console.log("En DetalleComunidadMembresia la comunidad es:", _comunidad)
+  //console.log("En DetalleComunidadMembresia la comunidad es:", _comunidad)
   
   const [showModalCancelar, setShowModalCancelar] = useState(false);
   const [showModalSuspender, setShowModalSuspender] = useState(false);
@@ -50,8 +50,8 @@ function DetalleComunidadMembresia() {
         }
       })
         .then(res => {
-          console.log("&& Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
-          console.log("&& Afiliaciones:", res.data);
+          //console.log("&& Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
+          //console.log("&& Afiliaciones:", res.data);
 
           const afiliacionActual = res.data.find((afiliacion: any) => {
             //console.log("afiliacion.comunidad.idComunidad", afiliacion.comunidad.idComunidad, "estado:", afiliacion.estado.toLowerCase());
@@ -68,7 +68,7 @@ function DetalleComunidadMembresia() {
             setAfiliacion(afiliacionActual);
             setMembresia(afiliacionActual.membresia);
           } else {
-            console.log("No se encontró una afiliación activa para esta comunidad");
+            //console.log("No se encontró una afiliación activa para esta comunidad");
             navigate("/usuario/comunidades", {
                 state: { created: true },
               });
@@ -83,7 +83,7 @@ function DetalleComunidadMembresia() {
   }, []);
 
   const handleCancelarAfiliacion = (): void => {
-    console.log("&&&&&&&&ESTAMOS CANCELANDO, CON EL DELETE:")
+    //console.log("&&&&&&&&ESTAMOS CANCELANDO, CON EL DELETE:")
 
     baseAPI.delete(`/afiliaciones/${afiliacion.idAfiliacion}`)
     .then(() => {
@@ -107,7 +107,7 @@ function DetalleComunidadMembresia() {
       .catch(() => console.log("Error"));
   };
   
-  console.log ("_comunidad es:", _comunidad, " y membresía es:", membresia, "ambos son:", _comunidad && membresia)
+  //console.log ("_comunidad es:", _comunidad, " y membresía es:", membresia, "ambos son:", _comunidad && membresia)
 
   return (
     <section className="flex flex-col gap-8 items-center my-8">

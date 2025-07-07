@@ -40,7 +40,7 @@ const PasarelaPagoPage = () => {
   }
 
   const [membresia, setMembresia] = useState(membresiaParam);
-  console.log(mediosDePagoSeleccionado);
+  //console.log(mediosDePagoSeleccionado);
 
   return (
     <div className="w-full h-full flex justify-center items-center">

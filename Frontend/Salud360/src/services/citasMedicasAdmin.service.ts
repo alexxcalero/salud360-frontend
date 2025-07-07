@@ -48,7 +48,7 @@ export const getAllCitasMedicasAPI = async () => {
   const response = await baseAPI.get(`/citas-medicas`);
 
   const parsed = z.array(extendedCitaMedicaSchema).parse(response.data);
-  console.log(parsed);
+  //console.log(parsed);
 
   if (response.status !== 200) throw new Error("Respuesta inválida de la API");
 

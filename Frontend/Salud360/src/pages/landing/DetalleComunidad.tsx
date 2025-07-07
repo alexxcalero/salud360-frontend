@@ -45,7 +45,7 @@ function DetalleComunidad(){
       .then(res => {
         //console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
         setComunidad(res.data);
-        console.log("Comunidad:", res.data);
+        //console.log("Comunidad:", res.data);
         //console.log("Servicios de la comunidad 1:", res.data.servicios);
         //console.log("Servicios de la comunidad 2:", servicios);
       })
@@ -63,9 +63,9 @@ function DetalleComunidad(){
           }
         })
           .then(res => {
-            console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
+            //console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
             setUsuarioAPI(res.data)
-            console.log("$$*$$$$****Usuario del back:", res.data);
+            //console.log("$$*$$$$****Usuario del back:", res.data);
             //setLoading(false);
           })
           .catch(err => {
@@ -88,7 +88,7 @@ function DetalleComunidad(){
         : "https://png.pngtree.com/png-clipart/20201224/ourmid/pngtree-panda-bamboo-bamboo-shoots-simple-strokes-cartoon-with-pictures-small-fresh-png-image_2625172.jpg";
 
     
-    console.log("@@@@@@En landing comunidad, el usuario es: ", usuario);
+    //console.log("@@@@@@En landing comunidad, el usuario es: ", usuario);
     
 
     useEffect(() => {
@@ -114,8 +114,8 @@ function DetalleComunidad(){
         tieneMembresia = idMembresiaActiva != 0;
     }
 
-    console.log("El usuario tiene una membresía:", tieneMembresia)
-    console.log("El id de la membresía activa es:", idMembresiaActiva)
+    //console.log("El usuario tiene una membresía:", tieneMembresia)
+    //console.log("El id de la membresía activa es:", idMembresiaActiva)
 
 
 
@@ -209,12 +209,12 @@ function DetalleComunidad(){
 
                             {comunidad?.membresias?.map((membresia: any, i: number) => {
                             
-                                console.log("idMembresiaActiva:", idMembresiaActiva, " membresia.idMembresia:", membresia.idMembresia)
-                                console.log("idMembresiaActiva == membresia.idMembresia", idMembresiaActiva == membresia.idMembresia)
+                                //console.log("idMembresiaActiva:", idMembresiaActiva, " membresia.idMembresia:", membresia.idMembresia)
+                                //console.log("idMembresiaActiva == membresia.idMembresia", idMembresiaActiva == membresia.idMembresia)
                                 
                                 const esMembresiaActiva = usuario && idMembresiaActiva === membresia.idMembresia;
 
-                                console.log("esMembresiaActiva es:", esMembresiaActiva)
+                               // console.log("esMembresiaActiva es:", esMembresiaActiva)
 
                                 return(
                                     <div key={i}>

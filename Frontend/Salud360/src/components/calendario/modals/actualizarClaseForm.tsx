@@ -102,7 +102,7 @@ const ActualizarClaseModalForm = ({
       fecha: dateInput.toISODate(),
     };
 
-    console.log(uploadData);
+    //console.log(uploadData);
 
     fetch(async () => {
       await putClaseAPI(uploadData);

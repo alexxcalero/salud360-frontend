@@ -133,8 +133,8 @@ const RegistrarCitaModalForm = ({
       ),
     };
 
-    console.log("Webada");
-    console.log(uploadData);
+    //console.log("Webada");
+    //console.log(uploadData);
     fetch(async () => {
       await postCitaMedicaAPI(uploadData);
       setOpen(false);

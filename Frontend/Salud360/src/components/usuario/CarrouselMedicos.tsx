@@ -28,7 +28,7 @@ function CarrouselMedicos({medicos}: Props){
         }
     };
 
-    console.log("En carrouselMedicos, los medicos son:", medicos)
+    //console.log("En carrouselMedicos, los medicos son:", medicos)
 
     return(
         <section>

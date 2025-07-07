@@ -7,8 +7,8 @@ export const getAllClienteReservasAPI = async (idCliente: number) => {
   const parsed = z.array(reservaSchema).safeParse(response.data);
 
   if (!parsed.success) {
-    console.log("Errores:");
-    console.log(parsed.error.format());
+   // console.log("Errores:");
+   // console.log(parsed.error.format());
   }
 
   return parsed.data;

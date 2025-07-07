@@ -43,9 +43,9 @@ function DetalleMedico() {
         },
       })
       .then((res) => {
-        console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
+        //console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
         setMedicoAPI(res.data);
-        console.log("Medico:", res.data);
+        //console.log("Medico:", res.data);
         setLoading(false);
       })
       .catch((err) => {
