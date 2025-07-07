@@ -187,6 +187,7 @@ function PersonalMedicoPage() {
 
   return (
     <div className="w-full px-6 py-4 overflow-auto">
+      <title>Personal Médico</title>
       <div className="grid grid-cols-12 gap-4 items-center mb-4">
         <div className="col-span-4">
           <InputIcon icon={<Search className="w-5 h-5" />} placeholder="Buscar médicos" type="search" value={busqueda} onChange={(e) => setBusqueda(e.target.value)} />

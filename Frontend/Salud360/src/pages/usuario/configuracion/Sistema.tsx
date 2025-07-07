@@ -257,6 +257,7 @@ const ConfigSistema = () => {
 
   return (
     <div className="flex flex-col gap-4 p-8">
+      <title>Sistema</title>
       <h1 className="text-left mb-4">Configuración de sistema</h1>
 
       <section>

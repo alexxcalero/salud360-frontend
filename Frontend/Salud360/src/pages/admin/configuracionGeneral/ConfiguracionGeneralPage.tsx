@@ -43,6 +43,7 @@ function ConfiguracionGeneralPage() {
 
   return (
     <div className="w-full px-8 py-8 text-left">
+      <title>Configuración General</title>
       <h1 className="text-4xl font-bold mb-2">Configuración General</h1>
       <h2 className="text-lg text-gray-700 mb-6">Valores configurables aplicados en los procesos del sistema.</h2>
 

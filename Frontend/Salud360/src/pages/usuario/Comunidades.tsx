@@ -53,6 +53,8 @@ function Comunidades(){
     const [showModalExitoSuspender, setShowModalExitoSuspender] = useState(false);
     const [showModalExitoReactivar, setShowModalExitoReactivar] = useState(false);
 
+    const [maxDias, setMaxDias] = useState(0);
+
     const {usuario, logout, loading} = useContext(AuthContext);
     //const [afiliaciones, setAfiliaciones] = useState<AfiliacionResumenDTO[]>([]);
     if (loading || !usuario) return null;
@@ -117,9 +119,27 @@ function Comunidades(){
         });
     }
 
+    const fetchMaxDias = () => {
+        baseAPI.get(`/reglas/max-dias-suspension`, {
+            auth: {
+                username: "admin",
+                password: "admin123",
+            },
+        })
+        .then((res) => {
+            console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
+            setMaxDias(res.data.maxDiasSuspension);
+            console.log("Días Máximos:", res.data);
+        })
+        .catch((error) => {
+            console.error("Error al obtener Días Máximos:", error);
+        });
+    }
+
     const refreshDatos = () => {
         fetchComunidades();
         fetchAfiliaciones();
+        fetchMaxDias();
         fetchComunidadesInactivas();
     };
 
@@ -293,15 +313,16 @@ function Comunidades(){
                     <label htmlFor="dias" className="font-medium text-gray-800">
                         ¿Cuántos días deseas suspender?
                     </label>
+                    <label htmlFor="texto" className="text-sm">El número máximo de días para suspender es: <span className="text-[#2A86FF] font-bold">{maxDias}</span></label>
                     <input
                         type="number"
                         id="dias"
                         min={1}
-                        max={7}
+                        max={maxDias}
                         value={diasSuspension}
                         onChange={(e) => {
                         const value = parseInt(e.target.value);
-                        if (!isNaN(value) && value >= 1 && value <= 7) {
+                        if (!isNaN(value) && value >= 1 && value <= maxDias) {
                             setDiasSuspension(value);
                         }
                         }}

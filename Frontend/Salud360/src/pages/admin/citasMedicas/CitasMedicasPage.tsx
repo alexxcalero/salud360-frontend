@@ -136,7 +136,7 @@ export default function RegistrarCitaMedicasPage() {
 
   return (
     <>
-      <title>Citas médicas</title>
+      <title>Citas Médicas</title>
       <div className="grid grid-rows-[auto_1fr] min-h-0 min-w-0 gap-2">
         <div className="w-full flex flex-col gap-4 px-8 py-8 text-left">
           <div className="flex items-center justify-between mb-4">

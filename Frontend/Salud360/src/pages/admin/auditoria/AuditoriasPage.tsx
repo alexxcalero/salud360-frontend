@@ -129,6 +129,7 @@ function AuditoriasPage(){
 
   return (
     <div className="w-full px-6 py-4 overflow-auto">
+      <title>Auditorías</title>
       <div className="grid grid-cols-12 gap-4 items-center mb-4">
         <div className="col-span-4">
           <InputIcon icon={<Search className="w-5 h-5" />} value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Buscar registros" type="search" />

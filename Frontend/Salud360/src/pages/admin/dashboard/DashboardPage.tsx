@@ -156,6 +156,7 @@ function DashboardPage() {
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
+      <title>Dashboard</title>
       <h1 className="text-3xl font-bold mb-6 text-center">Admin Dashboard</h1>
 
       <div className="grid grid-cols-4 gap-4 mb-6">
@@ -174,7 +175,7 @@ function DashboardPage() {
         <div className="bg-white p-4 rounded shadow text-center">
           <p className="text-2xl text-black font-semibold">Ganancias</p>
           <p className="text-2xl font-bold">
-            S/ {gananciasTotales.toLocaleString("es-PE", { maximumFractionDigits: 0 })}
+            S/. {gananciasTotales.toLocaleString("es-PE", { maximumFractionDigits: 0 })}
           </p>
         </div>
       </div>
@@ -215,7 +216,7 @@ function DashboardPage() {
                     : `${comunidad.cantMiembros} miembros`}
                 </span>
                 <span className="text-blue-600 font-semibold text-sm">
-                  S/ {comunidad.recaudado.toLocaleString("es-PE", { maximumFractionDigits: 0 })}
+                  <span className="text-black">Ganancias estimadas:</span> S/. {comunidad.recaudado.toLocaleString("es-PE", { maximumFractionDigits: 0 })}
                 </span>
               </div>
             </li>
