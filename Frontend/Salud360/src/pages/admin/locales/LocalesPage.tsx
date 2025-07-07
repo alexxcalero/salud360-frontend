@@ -126,8 +126,8 @@ function LocalesPage() {
         } else if (  error.response?.status === 500 &&  (mensajeBackend.includes("java.lang") ||    mensajeBackend.includes("DataIntegrityViolationException") ||    mensajeBackend.includes("not-null property references a null")  )) {
           setMensajeError("Verifique que todos los campos del CSV estén correctamente llenados.");
 
-        } else if(error.response?.status === 400 ){
-           setMensajeError("Verifique que todos los campos del CSV estén correctamente llenados.");    
+        } else if(error.response?.status === 400 && mensajeBackend.includes("Header name") && mensajeBackend.includes("not found") ){
+           setMensajeError("El archivo CSV no tiene los encabezados esperados: nombre, direccion, telefono, tipo_servicio, id_servicio, descripcion");    
         }   else {
             setMensajeError("Verifique que todos los campos del CSV estén correctamente llenados.");
         }
