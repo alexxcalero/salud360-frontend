@@ -109,7 +109,8 @@ const CalendarioComunidad = ({
           );
           const clases = await getAllClasesByComunityAPI(Number(id) ?? 0);
           const reservas = await getAllUserReservasByComunity(
-            usuario.idCliente
+            usuario.idCliente,
+            Number(id)
           );
 
           if (!citasMedicas || !clases || !reservas)
