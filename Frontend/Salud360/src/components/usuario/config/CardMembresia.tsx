@@ -68,16 +68,19 @@ const CardMembresia = ({
           </div>
         </div>
 
+          {state !== "Cancelado" && (
+              <p className="text-left text-md text-neutral-600 group-data-[state='canceled']:text-neutral-400 block mt-2">
+                Fecha de renovación:{" "}
+                <time
+                  dateTime={fechaRenovacion}
+                  className="text-neutral-800 group-data-[state='canceled']:text-neutral-500"
+                >
+                  {fechaRenovacion}
+                </time>
+              </p>
+            )}
 
-        <p className="text-left text-md text-neutral-600 group-data-[state='canceled']:text-neutral-400 block mt-2">
-          Fecha de renovación:{" "}
-          <time
-            dateTime={fechaRenovacion}
-            className="text-neutral-800 group-data-[state='canceled']:text-neutral-500"
-          >
-            {fechaRenovacion}
-          </time>
-        </p>
+        
 
 
       </div>

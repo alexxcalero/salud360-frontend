@@ -43,17 +43,39 @@ const Membresias = () => {
 
   const id = usuario.idCliente;
 
-  const fetchComunidad = async () => {
+  const fetchAfiliaciones = async () => {
     try {
       console.log("El id del usuario es:", id);
-      const res = await baseAPI.get(`/cliente/${id}/afiliaciones-cliente`, {
+      const resAfiliaciones = await baseAPI.get(`/cliente/${id}/afiliaciones-cliente`, {
         auth: {
           username: "admin",
           password: "admin123",
         },
       });
-      console.log("Afiliaciones del Usuario:", res.data);
-      setAfiliaciones(Array.isArray(res.data) ? res.data : [res.data]);
+      console.log("Afiliaciones del Usuario:", resAfiliaciones.data);
+
+      const resPeriodos = await baseAPI.get("/periodos", {
+        auth: {
+          username: "admin",
+          password: "admin123",
+        },
+      });
+
+      //Para colocar el periodo de renovación dentro de la afiliación:
+      const afiliaciones = Array.isArray(resAfiliaciones.data) ? resAfiliaciones.data : [resAfiliaciones.data];
+      const periodos = resPeriodos.data;
+
+      const afiliacionesConFecha = afiliaciones.map((af) => {
+        const periodoRelacionado = periodos.find(p => p.afiliacion.idAfiliacion === af.idAfiliacion);
+        return {
+          ...af,
+          fechaFin: periodoRelacionado?.fechaFin || null,
+        };
+      });
+
+      console.log("Afiliaciones con fechaFin:", afiliacionesConFecha);
+      setAfiliaciones(afiliacionesConFecha);
+
     } catch (error) {
       console.error("Error cargando Afiliaciones", error);
     } finally {
@@ -61,8 +83,9 @@ const Membresias = () => {
     }
   };
 
+
   useEffect(() => {
-    fetchComunidad();
+    fetchAfiliaciones();
   }, []);
 
   const tieneAfiliaciones = !waiting && afiliaciones.length > 0;
@@ -121,6 +144,8 @@ const Membresias = () => {
 
   const handleCancelarAfiliacion = (): void => {
     console.log("&&&&&&&&ESTAMOS CANCELANDO, CON EL DELETE:");
+
+    console.log("El id actual:", afiliacionActual.idAfiliacion)
 
     baseAPI
       .delete(`/afiliaciones/${afiliacionActual.idAfiliacion}`)
@@ -195,7 +220,7 @@ const Membresias = () => {
                       precio={afiliacion.membresia.precio as number}
                       fechaRenovacion={
                         formatFecha(
-                          afiliacion.membresia.fechaCreacion
+                          afiliacion.fechaFin
                         ) as string
                       }
                       state={
@@ -345,7 +370,7 @@ const Membresias = () => {
               detalle="La membresía fue suspendida correctamente"
               onConfirm={() => {
                 setShowModalExitoSuspender(false);
-                fetchComunidad();
+                fetchAfiliaciones();
               }}
             />
           </div>
@@ -361,7 +386,7 @@ const Membresias = () => {
               detalle="La membresía fue cancelada correctamente"
               onConfirm={() => {
                 setShowModalExitoCancelar(false);
-                fetchComunidad();
+                fetchAfiliaciones();
               }}
             />
           </div>
@@ -377,7 +402,7 @@ const Membresias = () => {
               detalle="La membresía fue reactivada correctamente"
               onConfirm={() => {
                 setShowModalExitoReactivar(false);
-                fetchComunidad();
+                fetchAfiliaciones();
               }}
             />
           </div>
