@@ -10,6 +10,7 @@ import InputIcon from "@/components/InputIcon";
 import ButtonIcon from "@/components/ButtonIcon";
 import ModalExito from "@/components/ModalExito";
 import ModalError from "@/components/ModalError";
+import ModalValidacion from "@/components/ModalValidacion";
 import { baseAPI } from "@/services/baseAPI";
 
 interface Medico {
@@ -40,6 +41,14 @@ function PersonalMedicoPage() {
   const location = useLocation();
 
   const handleSelectAll = () => setSelectAll(!selectAll);
+
+  const [showModalValidacion, setShowModalValidacion] = useState(false);
+  const [modalValidacionContenido, setModalValidacionContenido] = useState({
+    titulo: "",
+    mensaje: "",
+  });
+
+
 
   const fetchMedicos = () => {
     baseAPI
@@ -103,11 +112,19 @@ function PersonalMedicoPage() {
     });
     setShowModalExito(true);
     fetchMedicos();
-  } catch (error) {
+    } catch (error: any) {
     console.error("Error al cargar el archivo CSV", error);
-    setShowModalError(true);
+    const mensaje =
+      error?.response?.data?.message ||
+      "Verifique que todos los campos del CSV estén correctamente llenados.";
+    setModalValidacionContenido({
+      titulo: "Error en la carga masiva",
+      mensaje: mensaje,
+    });
+    setShowModalValidacion(true);
   }
 };
+
 
   const columns = [
     { label: <input type="checkbox" checked={selectAll} onChange={handleSelectAll} />, className: "w-10" },
@@ -284,6 +301,21 @@ function PersonalMedicoPage() {
         </>
 
       )}
+
+      {showModalValidacion && (
+        <>
+          <div className="fixed inset-0 bg-black/60 z-40" />
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <ModalValidacion
+              titulo={modalValidacionContenido.titulo}
+              mensaje={modalValidacionContenido.mensaje}
+              onClose={() => setShowModalValidacion(false)}
+            />
+          </div>
+        </>
+      )}
+
+
 
     </div>
   );

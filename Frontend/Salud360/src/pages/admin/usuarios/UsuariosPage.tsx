@@ -8,6 +8,7 @@ import InputIcon from "@/components/InputIcon";
 import ButtonIcon from "@/components/ButtonIcon";
 import ModalExito from "@/components/ModalExito";
 import ModalError from "@/components/ModalError";
+import ModalValidacion from "@/components/ModalValidacion";
 import { baseAPI } from "@/services/baseAPI";
 import { ChevronDown } from "lucide-react";
 
@@ -39,7 +40,9 @@ function UsuariosPage() {
   type TipoCarga = "cliente" | "administrador";
   const [tipoCargaMasiva, setTipoCargaMasiva] = useState<TipoCarga | null>(null);
   const [mostrarOpcionesCarga, setMostrarOpcionesCarga] = useState(false);
-
+  const [showModalValidacion, setShowModalValidacion] = useState(false);
+  const [mensajeError, setMensajeError] = useState("");
+  const [mensajeExito, setMensajeExito] = useState("");
 
   const fetchUsuarios = () => {
     baseAPI.get("/admin/clientes", {
@@ -82,27 +85,63 @@ function UsuariosPage() {
   };
 
   const handleCSVUpload = async (event: React.ChangeEvent<HTMLInputElement>, tipo: keyof typeof endpointMap) => {
-    const file = event.target.files?.[0];
-    if (!file || !tipo) return;
+  const file = event.target.files?.[0];
+  if (!file || !tipo) return;
 
-    const endpoint = endpointMap[tipo];
-    const formData = new FormData();
-    formData.append("file", file);
+  const endpoint = endpointMap[tipo];
+  const formData = new FormData();
+  formData.append("file", file);
 
-    try {
-      await baseAPI.post(endpoint, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-        auth: { username: "admin", password: "admin123" },
-      });
+  try {
+    await baseAPI.post(endpoint, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+      auth: { username: "admin", password: "admin123" },
+    });
+    setMensajeExito("¡Usuario registrado correctamente!");
+    setShowModalExito(true);
+    fetchUsuarios();
+  } catch (error: any) {
+  const mensajeBackend = error.response?.data?.message || "";
 
-      setShowModalExito(true);
-      fetchUsuarios(); // o fetch dinámico si querés por tipo
-    } catch (error) {
-      setShowModalError(true);
-    }
+  if (error.response?.status === 409) {
+    setMensajeError(mensajeBackend);
+  } else if (
+    error.response?.status === 500 &&
+    mensajeBackend.includes("correo")
+  ) {
+    setMensajeError(mensajeBackend); // ejemplo: "Ya existe un usuario registrado con ese correo."
+  } else if (
+    error.response?.status === 500 &&
+    mensajeBackend.includes("integridad de datos")
+  ) {
+    setMensajeError("Error interno al guardar los clientes. Verifica duplicados.");
+  } else if (
+    error.response?.status === 400 &&
+    mensajeBackend.includes("TipoDocumento con ID")
+  ) {
+    setMensajeError("El tipo de documento especificado no existe.");
+  } else if (
+    error.response?.status === 400 &&
+    mensajeBackend.includes("Usuario con ID")
+  ) {
+    setMensajeError("El ID del usuario no existe. Verifique los datos.");
+  } else if (
+    error.response?.status === 400 &&
+    mensajeBackend.includes("El teléfono")
+  ) {
+    setMensajeError(mensajeBackend);
+  } else {
+    setMensajeError("Verifique que todos los campos del CSV estén correctamente llenados.");
+  }
 
-    setTipoCargaMasiva(null);
-  };
+  setShowModalValidacion(false);
+  setTimeout(() => setShowModalValidacion(true), 10);
+}
+
+
+  setTipoCargaMasiva(null);
+};
+
 
 
   const handleReactivarUsuario = (): void => {
@@ -321,7 +360,35 @@ function UsuariosPage() {
           )}
         </>
 
+
+
       )}
+
+      {showModalValidacion && (
+        <>
+          <div className="fixed inset-0 bg-black/60 z-40" />
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <ModalValidacion
+              titulo="Error en la carga masiva"
+              mensaje={mensajeError}
+              onClose={() => setShowModalValidacion(false)}
+            />
+          </div>
+        </>
+      )}
+
+      {showModalExito && (
+            <>
+              <div className="fixed inset-0 bg-black/60 z-40" />
+              <div className="fixed inset-0 z-50 flex items-center justify-center">
+                <ModalExito modulo={mensajeExito} detalle="El archivo fue procesado correctamente" onConfirm={() => {
+                  setShowModalExito(false);
+                  fetchUsuarios();
+                }} />
+              </div>
+            </>
+      )}
+
 
 
       {/*XDDDDDD */}
