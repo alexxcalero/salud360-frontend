@@ -41,7 +41,7 @@ function CarrouselTestimonios({ testimonios, usuario, onEdit, onDelete, onAddCli
           </button>
         )}
 
-        <div className="w-full max-w-[1400px] mx-auto overflow-hidden py-8">
+        <div className="w-full max-w-[690px] mx-auto overflow-hidden py-8">
           <div
             className="flex transition-transform duration-500"
             style={{
