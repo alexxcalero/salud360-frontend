@@ -24,11 +24,11 @@ function DetalleTestimonio(){
             }
         })
             .then(res => {
-                console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
+                //console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
                 setTestimonio(res.data)
                 setAutor(res.data.cliente)
                 setComunidad(res.data.comunidad)
-                console.log("Testimonio:", res.data);
+                //console.log("Testimonio:", res.data);
                 setLoading(false);
             })
             .catch(err => {
@@ -42,8 +42,8 @@ function DetalleTestimonio(){
         return <p>Cargando testimonio...</p>; // o un spinner
     }
 
-    console.log("El autor es:", autor)
-    console.log("La comunidad es:", comunidad)
+    //console.log("El autor es:", autor)
+    //console.log("La comunidad es:", comunidad)
 
     function EstadoBadge({ activo }: { activo: boolean }) {
         const clases = activo

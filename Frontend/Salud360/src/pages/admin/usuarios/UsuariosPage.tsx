@@ -52,9 +52,9 @@ function UsuariosPage() {
       }
     })
       .then(res => {
-        console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
+        //console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
         setUsuarios(res.data);
-        console.log("Usuarios:", res.data);
+        //console.log("Usuarios:", res.data);
       })
       .catch(err => console.error("Error cargando usuarios", err));
   }
@@ -145,7 +145,7 @@ function UsuariosPage() {
 
 
   const handleReactivarUsuario = (): void => {
-    console.log("El id del usuario a reactivar es:", usuarioSeleccionado.idCliente)
+    //("El id del usuario a reactivar es:", usuarioSeleccionado.idCliente)
     baseAPI.put(`/admin/clientes/${usuarioSeleccionado.idCliente}/reactivar`)
     .then(() => {
       setShowModalExito(true);

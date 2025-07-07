@@ -15,7 +15,7 @@ function CardMedico({medico}: Props){
             : `http://localhost:8080/api/archivo/${fotoPerfil}`)
         : "https://png.pngtree.com/png-clipart/20201224/ourmid/pngtree-panda-bamboo-bamboo-shoots-simple-strokes-cartoon-with-pictures-small-fresh-png-image_2625172.jpg";
 
-    console.log("En CardMedico, el médico es:", medico)
+    //console.log("En CardMedico, el médico es:", medico)
 
     return(
         <div className="w-[330px] h-[500px] grid grid-rows-3 rounded-sm border shadow-xl">

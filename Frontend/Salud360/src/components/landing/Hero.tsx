@@ -10,7 +10,7 @@ function Hero(){
       
     if (loading) return null;
 
-    console.log("En el hero, usuario es:", usuario)
+    //console.log("En el hero, usuario es:", usuario)
 
     const navigate = useNavigate();
 

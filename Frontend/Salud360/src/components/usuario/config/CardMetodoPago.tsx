@@ -26,7 +26,7 @@ const CardMetodoPago = ({
 
   // Función para eliminar el método de pago
   const eliminarMetodoPago = () => {
-    console.log(id);  // Verifica el valor de id aquí
+    //console.log(id);  // Verifica el valor de id aquí
     baseAPI.delete(`/mediosDePago/${id}`, {
         auth: { username: "admin", password: "admin123" }
     })

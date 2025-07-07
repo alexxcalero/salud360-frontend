@@ -38,9 +38,9 @@ function ServiciosPage() {
       }
     })
       .then(res => {
-        console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
+        //console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
         setServicios(res.data);
-        console.log("Servicios:", res.data);
+        //console.log("Servicios:", res.data);
       })
       .catch(err => console.error("Error cargando servicios", err));
   }
@@ -69,7 +69,7 @@ function ServiciosPage() {
   }
 
   const handleReactivarServicio = (): void => {
-    console.log("El id del servicio a reactivar es:", servicioSeleccionado.idServicio)
+    //console.log("El id del servicio a reactivar es:", servicioSeleccionado.idServicio)
     baseAPI.put(`/servicios/${servicioSeleccionado.idServicio}/reactivar`)
     .then(() => {
       setShowModalExito(true);

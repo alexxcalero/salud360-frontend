@@ -141,7 +141,7 @@ export const getCalendarData = async (): Promise<
 };
 
 export const reservarCitaMedica = async (idCitaMedica: number) => {
-  console.log(idCitaMedica);
+  //console.log(idCitaMedica);
   return true;
 };
 

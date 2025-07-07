@@ -110,7 +110,7 @@ function CrearComunidad() {
 
     try {
 
-      console.log("Las membresias a enviar son:", nuevasMembresias)      
+      //console.log("Las membresias a enviar son:", nuevasMembresias)      
 
       let nombreArchivo = null;
 
@@ -144,7 +144,7 @@ function CrearComunidad() {
         imagen: nombreArchivo,
       };
 
-      console.log("Enviando datos de comunidad:", requestBody);
+      //console.log("Enviando datos de comunidad:", requestBody);
 
       const response = await baseAPI.post("/comunidades", requestBody, {
         auth: {
@@ -156,9 +156,9 @@ function CrearComunidad() {
         }
       });
 
-      console.log("✅ Comunidad creada:", response.data);
+      //console.log("✅ Comunidad creada:", response.data);
       //alert("Usuario creado exitosamente");
-      console.log("A punto de navegar a successCrear")
+      //console.log("A punto de navegar a successCrear")
       navigate("/admin/comunidades/successCrear", {
         state: { created: true }
       });

@@ -6,8 +6,8 @@ export default function SuccessRegisterPage() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  console.log("DESDE USUARIO SUCCESS, NO USE EFFECT EL VALOR DE LOCATION.state ES:", location.state)
-  console.log("DESDE USUARIO SUCCESS, NO USE EFFECT EL VALOR DE LOCATION.state.created ES:", location.state?.created)
+  //console.log("DESDE USUARIO SUCCESS, NO USE EFFECT EL VALOR DE LOCATION.state ES:", location.state)
+  //console.log("DESDE USUARIO SUCCESS, NO USE EFFECT EL VALOR DE LOCATION.state.created ES:", location.state?.created)
 
   useEffect(() => {
     // Redirección si se accede directamente

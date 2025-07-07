@@ -44,8 +44,8 @@ export const getAllClasesAPI = async () => {
   const parsed = z.array(claseDTOSchema).safeParse(response.data);
 
   if (!parsed.success) {
-    console.log("Errores:");
-    console.log(parsed.error.format());
+    //console.log("Errores:");
+    //console.log(parsed.error.format());
   }
 
   if (response.status !== 200) throw new Error("Respuesta inválida de la API");

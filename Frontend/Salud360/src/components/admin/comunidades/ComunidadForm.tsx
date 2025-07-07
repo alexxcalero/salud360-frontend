@@ -146,7 +146,7 @@ function ComunidadForm({
         ? selected.filter(item => item !== id)
         : [...selected, id]
     );
-    console.log("TOGGLE →", { id, selected });
+    //console.log("TOGGLE →", { id, selected });
   };
 
   

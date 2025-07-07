@@ -27,9 +27,9 @@ function DetalleServicio(){
           }
         })
           .then(res => {
-            console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
+            //console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
             setServicioAPI(res.data)
-            console.log("Servicio:", res.data);
+            //console.log("Servicio:", res.data);
             setLoading(false);
             setLocalesSeleccionados(res.data.locales.map((l: any) => l.idLocal));
           })

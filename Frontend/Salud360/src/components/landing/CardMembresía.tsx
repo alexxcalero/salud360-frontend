@@ -26,11 +26,11 @@ CardMembresia({membresia, comunidad, servicios, readOnly = false, hideButtons = 
   const navigate = useNavigate();
   const {usuario} = useContext(AuthContext)
   
-  console.log("readOnly", readOnly)
-  console.log("hideButtons", hideButtons)
-  console.log("inactiva", inactiva)
+  //console.log("readOnly", readOnly)
+  //console.log("hideButtons", hideButtons)
+  //console.log("inactiva", inactiva)
 
-  console.log("Total:", readOnly && hideButtons && activa)
+  //console.log("Total:", readOnly && hideButtons && activa)
   
   return (
     <div className={`${(readOnly && hideButtons && !activa) ? 'relative' : ''}`}>

@@ -10,8 +10,8 @@ export const AuthProvider = ({children}: any) => {
     useEffect(() => {
         const storedUser = localStorage.getItem("activeUser")
         const storedToken = localStorage.getItem("authToken")
-        console.log("***Stored user:", storedUser)
-        console.log("***Stored token:", storedToken)
+        //console.log("***Stored user:", storedUser)
+        //console.log("***Stored token:", storedToken)
 
         try {
             if (storedUser && storedToken) {

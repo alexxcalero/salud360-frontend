@@ -37,10 +37,10 @@ function EditarLocal(){
           }
         })
           .then(res => {
-            console.log("Datos cargados en detalleLocal:", res.data); // VER ESTO EN LA CONSOLA
+            //console.log("Datos cargados en detalleLocal:", res.data); // VER ESTO EN LA CONSOLA
             setLocalAPI(res.data)
-            console.log("Servicio:", res.data);
-            console.log("idServicio:", res.data.servicio.idServicio);
+            //console.log("Servicio:", res.data);
+            //console.log("idServicio:", res.data.servicio.idServicio);
             setLoading(false);
             setImagenActual(res.data.imagen); //Para que no se loquee si no se sube imagen
             //setServiciosSeleccionados([res.data.servicio.idServicio]);
@@ -107,7 +107,7 @@ function EditarLocal(){
             setShowModalValidacion(true);
             return;
         }
-        console.log("El contenido de los servicios a enviar es:", servicios)
+        //console.log("El contenido de los servicios a enviar es:", servicios)
         //Para la imagen:
         let nombreArchivo = imagenActual;
 
@@ -153,7 +153,7 @@ function EditarLocal(){
                 }
             );
 
-            console.log("A punto de navegar a successCrear")
+            //console.log("A punto de navegar a successCrear")
             navigate("/admin/locales/successEditar", {
                 state: { created: true }
             });

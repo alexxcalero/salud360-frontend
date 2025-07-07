@@ -50,7 +50,7 @@ function LocalesForms({title, subtitle, nombre, setNombre = () =>{}, telefono, s
 
     const [serviciosDisponibles, setServiciosDisponibles] = useState<Servicio[]>([]);
 
-    console.log("en LocalesForms los servicios del props son:", servicios)
+    //console.log("en LocalesForms los servicios del props son:", servicios)
 
     //Llamada Locales
     const fetchServicios = () => {
@@ -61,10 +61,10 @@ function LocalesForms({title, subtitle, nombre, setNombre = () =>{}, telefono, s
       }
     })
       .then(res => {
-        console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
+        //console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
 
         setServiciosDisponibles(res.data)
-        console.log("Servicios:", serviciosDisponibles);
+        //console.log("Servicios:", serviciosDisponibles);
       })
       .catch(err => console.error("Error cargando servicios", err));
     }
@@ -86,8 +86,8 @@ function LocalesForms({title, subtitle, nombre, setNombre = () =>{}, telefono, s
     }
     };
     
-    console.log("Disponibles:", serviciosDisponibles);
-    console.log("IDs seleccionados:", servicios);
+    //console.log("Disponibles:", serviciosDisponibles);
+    //console.log("IDs seleccionados:", servicios);
         
     return (
         <div className="w-full px-10 py-6">

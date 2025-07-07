@@ -65,7 +65,7 @@ function PersonalMedicoForms({title="", subtitle="", nombres, setNombres = () =>
       }
     })
       .then(res => {
-        console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
+        //console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
         
         const opciones = res.data.map((tipoDocX: any) => ({
             value: tipoDocX.idTipoDocumento,
@@ -73,7 +73,7 @@ function PersonalMedicoForms({title="", subtitle="", nombres, setNombres = () =>
         }))
 
         setTipoDocumentos(opciones)
-        console.log("Tipo Documentos:", opciones);
+        //console.log("Tipo Documentos:", opciones);
       })
       .catch(err => console.error("Error cargando tipo documentos", err));
     }

@@ -49,9 +49,9 @@ function Inicio(){
             }
         })
             .then(res => {
-                console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
+                //console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
                 setComunidadRandom(res.data);
-                console.log("*********Comunidad aleatoria:", res.data);
+                //console.log("*********Comunidad aleatoria:", res.data);
             })
             .catch(err => console.error("Error cargando comunidad random", err));
     }
@@ -64,9 +64,9 @@ function Inicio(){
           }
         })
           .then(res => {
-            console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
+            //console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
             setUsuarioAPI(res.data)
-            console.log("$$*$$$$****Usuario del back:", res.data);
+           // console.log("$$*$$$$****Usuario del back:", res.data);
             //setLoading(false);
           })
           .catch(err => {
@@ -87,9 +87,9 @@ function Inicio(){
             },
         })
         .then((res) => {
-            console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
+          //  console.log("Datos cargados:", res.data); // VER ESTO EN LA CONSOLA
             setComunidadesActivas(res.data.length)
-            console.log("Comunidadessssss:", res.data);
+         //   console.log("Comunidadessssss:", res.data);
         })
         .catch((error) => {
             console.error("Error al obtener comunidades activas:", error);
@@ -123,7 +123,7 @@ function Inicio(){
     //const tipoDocumento = rawTipoDocumento?.nombre;
     //const cantComunidades = usuario.comunidades.length;
 
-    console.log("Las comunidades activas son:", comunidades)
+   // console.log("Las comunidades activas son:", comunidades)
 
     const cantComunidades = comunidades.length;
     const fechaCreacion = new Date(rawFechaCreacion).toLocaleDateString("es-PE", {

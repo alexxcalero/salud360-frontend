@@ -27,7 +27,7 @@ const CardMembresia = ({
 
 
 
-  console.log("Dentro del card el precio es:", precio)
+  //console.log("Dentro del card el precio es:", precio)
 
   return (
     <div
