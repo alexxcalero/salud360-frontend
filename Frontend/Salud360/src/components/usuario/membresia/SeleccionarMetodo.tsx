@@ -189,6 +189,11 @@ const SeleccionarMetodo = ({
         </Button>
         <Button
           type="button"
+          disabled={
+            tipoDePago.current &&
+            !selectedMedioDePago &&
+            activeOption === "guardado"
+          }
           onClick={() => {
             console.log({
               tipo: activeOption,
@@ -198,6 +203,12 @@ const SeleccionarMetodo = ({
               mediosDePagoSeleccionado: selectedMedioDePago,
             });
             if (!tipoDePago.current && !selectedMedioDePago) return;
+            if (
+              tipoDePago.current &&
+              !selectedMedioDePago &&
+              activeOption === "guardado"
+            )
+              return;
 
             navigate(`/usuario/pasarela-pagos/pago`, {
               state: {
