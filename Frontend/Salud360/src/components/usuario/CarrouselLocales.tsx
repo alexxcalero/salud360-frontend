@@ -10,12 +10,14 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 function CarrouselLocales({locales}: any){
 
     const [currentIndex, setCurrentIndex] = useState(0);
-    const cardWidth = 1500;
+    //const cardWidth = 1500;
     const xMargin = 20;
     //const showButton = true;
     const totalSize = locales.length;
 
-    //console.log("El innerwidth es:", window.innerWidth)
+    console.log("El innerwidth es:", window.innerWidth)
+
+    const cardWidth = window.innerWidth < 1540 ? 900 : 1500
 
     const handleNext = () => {
         if (currentIndex < locales.length - 1) {
@@ -37,7 +39,7 @@ function CarrouselLocales({locales}: any){
                     <ChevronLeft />
                 </button>
 
-                <div className="overflow-hidden w-full max-w-[1520px] mx-auto">
+                <div className={`overflow-hidden w-full ${window.innerWidth < 1540 ? `max-w-[900px]` : 'max-w-[1520px]'} mx-auto`}>
                     <div
                         className="flex transition-transform duration-500"
                         style={{
