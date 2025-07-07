@@ -9,6 +9,7 @@ import { IPago } from "@/models/pago";
 import { postBoletaAPI } from "./reporte.service";
 import { DateTime } from "luxon";
 import { IMedioDePago } from "@/models/medioDePago";
+import { putMedioDePagoAPI } from "./medioDePago.service";
 
 export const postAfiliacionDTO = async (afiliacion: IAfiliacion) => {
   const response = await baseAPI.post("/afiliaciones", afiliacion);
@@ -46,23 +47,17 @@ export const afiliarPorPasarelaAPI = async (
     fechaPago: DateTime.now().toISO({ includeOffset: false }),
   };
   const pago = await postPagoAPI(pagoARg);
-  console.group("Afiliación por pasarela");
-  console.log("Post paso 2");
-  console.groupEnd();
 
   // Paso 3: Actualizar medio de pago
-  // const _p = await getMedioDePagoByIdAPI(medioDePago.idMedioDePago ?? -1);
-  // const medioDePagoArg: IMedioDePago = {
-  //   ..._p,
-  //   cvv: medioDePago.cvv,
-  //   vencimiento: medioDePago.vencimiento,
-  //   totalGastado: (_p.totalGastado ?? 0) + (medioDePago.totalGastado ?? 0),
-  //   usuario,
-  // };
-  // console.group("MedioDePago");
-  // console.log(_p);
-  // console.groupEnd();
-  // putMedioDePagoAPI(medioDePagoArg);
+  const medioDePagoArg: IMedioDePago = {
+    idMedioDePago: medioDePago.idMedioDePago,
+    totalGastado: (membresia.precio ?? 0) + (medioDePago.totalGastado ?? 0),
+    usuario,
+  };
+  console.group("MedioDePago");
+  console.log(medioDePagoArg);
+  console.groupEnd();
+  putMedioDePagoAPI(medioDePagoArg);
 
   // Paso 4: Generar boleta
   const reporteBoleta = await postBoletaAPI(pago);
